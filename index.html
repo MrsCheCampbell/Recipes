@@ -50,7 +50,7 @@
   --font-hand: "Caveat", "Bradley Hand", cursive;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
   --radius: 14px;
-  --nav-h: 70px;
+  --nav-h: 49px;
   --ease: cubic-bezier(.2, .8, .2, 1);
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
@@ -234,14 +234,15 @@ img.ill { display: block; }
   padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); border-top: 1px solid var(--line); }
 .nav::before { content: ""; position: absolute; left: 0; right: 0; top: -5px; height: 4px;
   background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 4px 4px; }
-.nav .in { display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
-.nav a { display: grid; justify-items: center; align-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: .76rem; font-weight: 700; position: relative; transition: color .2s; }
-.nav a svg.i, .nav a .navart { width: 30px; height: 30px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
+.nav .in { display: grid; grid-template-columns: repeat(6, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
+.nav a { display: grid; justify-items: center; align-content: center; gap: 1px; text-decoration: none; color: var(--muted); font-size: .66rem; letter-spacing: -.01em; white-space: nowrap; font-weight: 700; position: relative; transition: color .2s; }
+.nav a svg.i, .nav a .navart { width: 27px; height: 27px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
 .nav a:not(.on) .navart { filter: saturate(.35); opacity: .7; }
 .nav a.on { color: var(--accent); }
-.nav a.on svg.i, .nav a.on .navart { transform: translateY(-2px) scale(1.1); }
-.nav a.on::after { content: ""; position: absolute; bottom: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.nav .count { position: absolute; top: 8px; left: calc(50% + 7px); background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-style: normal; font-size: .64rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
+.nav a.on svg.i, .nav a.on .navart { transform: translateY(-1px) scale(1.08); }
+.nav a.on::after { content: ""; position: absolute; bottom: 1px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.nav .count.dot { min-width: 16px; height: 16px; font-size: .58rem; box-shadow: 0 0 0 2px var(--surface); animation: pop .4s var(--ease); }
+.nav .count { position: absolute; top: 1px; left: calc(50% + 5px); background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-style: normal; font-size: .64rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
 
 /* ---------- Recipe page ---------- */
 .hero { position: relative; overflow: hidden; padding: calc(68px + env(safe-area-inset-top, 0px)) 22px 46px;
@@ -684,6 +685,54 @@ a.chip { text-decoration: none; color: inherit; }
 .evphotos .page-th.add { display: grid; place-items: center; border: 1.5px dashed var(--line); transform: none; border-color: var(--line); background: transparent; box-shadow: none; color: var(--accent); }
 .evphotos .page-th.add svg.i { width: 28px; height: 28px; }
 .center { text-align: center; } .small { font-size: .85rem; }
+/* ---- Cave (wines) ---- */
+.h2ill, .mill { width: 26px; height: 26px; vertical-align: -5px; object-fit: contain; }
+.sheet .menu button .mill { width: 24px; height: 24px; }
+.hometabs.four { grid-template-columns: repeat(4, 1fr); } .hometabs.four button { font-size: .9rem; padding: 0 2px; }
+.wsearch { margin-top: 16px; }
+.wdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px color-mix(in srgb, var(--c) 50%, transparent); flex: none; }
+.winegrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; padding-block: 18px 30px; }
+.winecard { display: grid; gap: 10px; text-decoration: none; color: inherit; }
+.wlabel { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: grid; place-items: center; background: var(--surface-2); border: 6px solid var(--polaroid); border-bottom-width: 18px; box-shadow: var(--shadow); transform: rotate(-1.4deg); }
+.winecard:nth-child(even) .wlabel { transform: rotate(1.2deg); }
+.wlabel.art { background: color-mix(in srgb, var(--c) 16%, var(--surface)); } .wlabel .ill { width: 52%; height: auto; }
+.thumb.art { background: color-mix(in srgb, var(--c) 16%, var(--surface)); } .thumb.art .ill { width: 70%; }
+.winecard .min { display: grid; gap: 3px; } .winecard b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; line-height: 1.2; overflow-wrap: anywhere; }
+.winecard .meta { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.winecard .stars-mini svg.i { width: 14px; height: 14px; color: var(--honey); }
+.wine-hero { display: grid; justify-items: center; }
+.wlabelbig { max-width: 250px; padding-bottom: 22px; } .wlabelbig img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; cursor: zoom-in; }
+.wine-hero .addphoto { width: 100%; padding: 34px 12px; }
+.seg.wcols { grid-template-columns: repeat(5, 1fr); }
+.seg.wcols button { display: grid; justify-items: center; gap: 5px; border: 0; background: transparent; border-radius: 9px; padding: 9px 2px; font-weight: 700; font-size: .78rem; color: var(--muted); }
+.seg.wcols button[aria-checked="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.chip.pchip { padding-right: 4px; gap: 2px; } .chip.pchip a { color: inherit; text-decoration: none; }
+.chip.pchip button { border: 0; background: none; width: 30px; height: 30px; display: grid; place-items: center; padding: 0; color: var(--muted); }
+.chip.pchip button svg.i { width: 15px; height: 15px; }
+/* ---- Feed intro (before the family is set up) ---- */
+.fsel-native { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0; pointer-events: none; }
+.fsel { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 0 12px 0 14px; min-height: 50px; font-size: 1rem; font-weight: 700; text-align: left; transition: border-color .2s, transform .15s var(--ease); }
+.fsel span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fsel svg.i { width: 20px; height: 20px; flex: none; color: var(--accent); }
+.fsel:active { transform: scale(.98); } .fsel:focus-visible { border-color: var(--ink); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+.fsel.pill { width: auto; max-width: 13em; min-height: 42px; border-radius: 999px; padding: 0 10px 0 14px; font-size: .88rem; }
+.fopts { display: grid; max-height: 60vh; overflow: auto; margin: 0 -4px; padding: 0 4px; }
+.fopts h3 { margin: 14px 0 4px; }
+.fopt { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; border: 0; border-bottom: 1px solid var(--rule); background: none; text-align: left; font-size: 1.05rem; padding: 0 4px; color: var(--ink); }
+.fopt[aria-pressed="true"] { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.2rem; color: var(--accent); }
+.fopt svg.i { width: 22px; height: 22px; color: var(--accent); }
+.sheet.filters { gap: 14px; padding-bottom: 0; }
+.fgroup { display: grid; gap: 8px; } .fgroup .wrapchips { gap: 7px; } .fgroup .chip { min-height: 36px; font-size: .86rem; }
+.fbar { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0 calc(16px + env(safe-area-inset-bottom, 0px)); margin-top: 4px; grid-template-columns: 1fr 1.4fr; box-shadow: 0 -10px 14px -10px rgba(36,28,22,.18); }
+.fbar .btn { white-space: nowrap; font-size: .95rem; padding-inline: .7em; }
+.composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
+.composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.composer .icon-btn { width: 40px; height: 40px; } .composer .mill { width: 26px; height: 26px; }
+.post.fresh { box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent); }
+.feedintro { display: grid; gap: 14px; padding-block: 18px 30px; }
+.feedintro .panel p { margin: 0; }
+.post.sample { opacity: .9; pointer-events: none; position: relative; }
+.post.sample::after { content: attr(data-label); position: absolute; top: 14px; right: 14px; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border: 1px dashed var(--line); border-radius: 4px; padding: 3px 6px; }
 </style>
 </head>
 <body>
@@ -709,6 +758,7 @@ const I = {
   mic: `<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>`,
   x: `<path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/>`,
   plus: `<path d="M12 5v14M5 12h14"/>`,
+  chev: `<path d="m7 9.5 5 5 5-5"/>`,
   // open cookbook with a ribbon bookmark
   book: `<path d="M3 5.6c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8V19c-3-1.2-6-1.2-9 .8-3-2-6-2-9-.8Z"/><path d="M12 6.4v13.4"/><path d="M15.6 4.9v6.2l1.5-1.1 1.5 1.1V4.7" ${F} opacity=".9"/>`,
   heart: `<path d="M12 20s-7.5-4.4-7.5-10.1A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.5 2.4C19.5 15.6 12 20 12 20Z" ${F}/><path d="M7.9 9.4a1.9 1.9 0 0 1 1.5-1.2" stroke="var(--surface)" opacity=".75"/>`,
@@ -787,7 +837,7 @@ const artHTML = (r, cls) => { const c = catOf(r); return `<div class="${cls} art
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
 const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
-const OCCASIONS = ['friends','family','momsbday','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
+const OCCASIONS = ['friends','family','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
 const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
 const KASHRUT = ['meat','dairy','parve'];
 
@@ -796,7 +846,7 @@ const STR = {
     appName: "La Cuisine d'Abe",
     hello: ['Bonne nuit', 'Bonjour', 'Bon après-midi', 'Bonsoir'], shabbatShalom: 'Chabbat Chalom',
     nav: { list: 'Recettes', fav: 'Favoris', fridge: 'Frigo', shop: 'Courses', more: 'Plus' },
-    searchPh: 'Chercher : poulet, cannelle, Pessah…', voice: 'Chercher à la voix', clear: 'Effacer',
+    searchPh: 'Chercher', voice: 'Chercher à la voix', clear: 'Effacer',
     all: 'Toutes', favorites: 'Favoris', filters: 'Filtres', quick: 'Rapide (≤ 30 min)', pesachOk: 'Cacher pour Pessah',
     sort: { az: 'De A à Z', recent: 'Ajoutées récemment', cooked: 'Les plus cuisinées', rating: 'Les mieux notées', time: 'Les plus rapides' },
     nRecipes: n => n === 0 ? 'Aucune recette' : n === 1 ? '1 recette' : `${n} recettes`,
@@ -807,7 +857,7 @@ const STR = {
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
     cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', cocktails: 'Cocktails', other: 'Autre' },
     hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot',
-      friends: 'Recevoir des amis', family: 'Repas de famille', momsbday: 'Anniversaire de Maman', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
+      friends: 'Recevoir des amis', family: 'Repas de famille', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
       hotday: 'Jour de canicule', coldday: 'Jour de grand froid', rainyday: 'Jour de pluie', spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver', garden: 'Du potager' },
     kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
     kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
@@ -824,11 +874,11 @@ const STR = {
     importTitle: 'Remplir automatiquement', importLinkHint: 'Collez le lien d’une recette (Marmiton, 750g, un blog…) et l’appli essaie de tout remplir.',
     importBtn: 'Importer depuis le lien', importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : copiez le texte de la recette ci-dessous.',
     pasteHint: 'Ou collez tout le texte d’une recette (d’un e-mail, d’un message…) :', pasteBtn: 'Remplir avec ce texte', pasteOk: 'C’est rempli. Vérifiez et enregistrez.',
-    title: 'Nom de la recette', titlePh: 'ex : Couscous de Mamie', link: 'Lien (site, vidéo…)', category: 'Catégorie', kashrut: 'Cacheroute',
-    holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: 'ex : facile, marocain, famille', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
+    title: 'Nom de la recette', titlePh: '', link: 'Lien (site, vidéo…)', category: 'Catégorie', kashrut: 'Cacheroute',
+    holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
     ingF: 'Ingrédients', ingHint: 'Un ingrédient par ligne. Une ligne qui finit par « : » devient un titre (ex : « Pour la sauce : »).',
     stepsF: 'Étapes', stepsHint: 'Une étape par ligne. Les durées (« 20 min », « 1 h ») deviennent des minuteurs.',
-    notesF: 'Notes personnelles', notesPh: 'Astuces, souvenirs, ce qu’il faut changer la prochaine fois…', sourceF: 'Recette de (qui ?)', sourcePh: 'ex : Maman, Tante Esther',
+    notesF: 'Notes personnelles', notesPh: '', sourceF: 'Recette de (qui ?)', sourcePh: '',
     save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
     draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
     // shop
@@ -867,15 +917,15 @@ const STR = {
     pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
     occSeasons: 'Saisons, météo & potager', seasonRail: { spring: 'Recettes de printemps', summer: 'Recettes d’été', autumn: 'Recettes d’automne', winter: 'Recettes d’hiver' },
     wxHot: (d, c) => `Il fait ${d}° à ${c} : de quoi se rafraîchir`, wxCold: (d, c) => `Il fait ${d}° à ${c} : de quoi se réchauffer`, wxRain: c => `Il pleut à ${c} : un bon petit plat`,
-    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', occJewish: 'Fêtes juives', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: 'ex : Anniversaire de Léa, Dîner du dimanche',
+    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', occJewish: 'Fêtes juives', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: '',
     occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
     occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
     collection: n => `Recueil · ${String(n).padStart(3, '0')}`, added: 'Ajoutée',
     tabFeed: 'La famille', tabBook: 'Mon livre', searchFamily: 'Toute la famille', addedBy: n => `Ajoutée par ${n}`, famStars: (a, n) => `Famille : ${a} sur 5 (${n} avis)`,
     audMeOnly: 'Visible par moi seul(e)', audSeenBy: n => `Visible par ${n}`, audPrivateShort: 'Partage restreint', recommend: 'Recommander', inMyBook: 'Dans mon livre', addToBook: 'Ajouter à mon livre',
     removeFromBook: 'Retirer de mon livre', removedFromBook: 'Retirée de votre livre', addedToBook: 'Ajoutée à votre livre', copyToMine: 'Copier pour la modifier',
-    comments: 'Commentaires', commentPh: 'Un mot sur cette recette… (vous l’avez essayée ?)', triedIt: 'Je l’ai essayée', noComments: 'Pas encore de commentaire.', commentSent: 'Commentaire publié',
-    recommendTo: 'Recommander à…', nobodyYet: 'Personne d’autre dans la famille pour l’instant.', recoNote: 'Un petit mot (facultatif)', recoNotePh: 'ex : Super facile, tu vas adorer !',
+    comments: 'Commentaires', commentPh: 'Un commentaire', triedIt: 'Je l’ai essayée', noComments: 'Pas encore de commentaire.', commentSent: 'Commentaire publié',
+    recommendTo: 'Recommander à…', nobodyYet: 'Personne d’autre dans la famille pour l’instant.', recoNote: 'Un petit mot (facultatif)', recoNotePh: '',
     recoSent: n => `Recommandée à ${n}`, recoFor: n => `${n} vous recommande`, recoLater: 'Plus tard', you: 'Vous', postedAgo: a => `a ajouté une recette · ${a}`, like: 'J’aime',
     feedEmptyT: 'Le fil est encore vide', feedEmpty: 'Quand quelqu’un de la famille ajoute une recette, elle apparaît ici.',
     agoNow: 'à l’instant', agoMin: n => `il y a ${n} min`, agoH: n => `il y a ${n} h`, agoYesterday: 'hier', agoD: n => `il y a ${n} jours`,
@@ -886,13 +936,13 @@ const STR = {
     famMembers: 'La famille', nRecipesBy: n => n === 1 ? '1 recette' : `${n} recettes`, inMyFeed: 'Dans mon fil', famInvite: 'Inviter quelqu’un', famInviteHint: 'Envoyez le lien par WhatsApp, SMS ou e-mail. La personne choisit son nom et son avatar, et tout ce qui existe déjà reste en place.',
     yourProfile: 'Mon profil', feedT: 'Le fil', feedShow: 'Afficher le fil de la famille sur l’accueil', famLeaveT: 'Quitter sur ce téléphone', famLeaveText: 'Vos recettes restent dans la famille. Pour revenir, il faudra un nouveau lien d’invitation.', famLeave: 'Quitter la famille', famLeaveQ: 'Quitter la famille sur ce téléphone ?',
     famCfgBad: 'Je ne trouve pas apiKey, projectId et appId dans ce texte.', famErr: 'La famille n’a pas pu être créée. Vérifiez la configuration et que la connexion anonyme est activée.',
-    famJoinBad: 'Ce lien d’invitation n’est pas valide.', invitation: 'Invitation', joinTitle: n => `Rejoindre « ${n} »`, yourNamePh: 'ex : Chloé, Maman, Papa', needName: 'Choisissez un prénom',
+    famJoinBad: 'Ce lien d’invitation n’est pas valide.', invitation: 'Invitation', joinTitle: n => `Rejoindre « ${n} »`, yourNamePh: '', needName: 'Choisissez un prénom',
     welcomeFam: n => `Bienvenue dans « ${n} » !`, famJoinErr: 'Impossible de rejoindre. Vérifiez la connexion internet, ou demandez un nouveau lien.',
     migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone vont dans votre livre familial. Qui peut les voir ? (Modifiable ensuite, recette par recette.)',
     migrateAll: 'Toute la famille', migrateMe: 'Moi seul(e) pour l’instant', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
-    familyShare: 'Partage avec la famille', noteF: 'Un petit mot pour le fil', notePh: 'ex : Testée ce soir, un régal !', whoSees: 'Qui peut la voir ?', audAll: 'Toute la famille', audMe: 'Moi seul(e)', audSome: 'Choisir',
+    familyShare: 'Partage avec la famille', noteF: 'Un petit mot pour le fil', notePh: '', whoSees: 'Qui peut la voir ?', audAll: 'Toute la famille', audMe: 'Moi seul(e)', audSome: 'Choisir',
     audSomeHint: 'Touchez les personnes qui peuvent la voir. Les autres ne la verront pas.', famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans La Cuisine d’Abe, pour voir et partager nos recettes :`,
-    fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter : œufs, poireaux, reste de poulet…', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
+    fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
     fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
     haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
     askClaude: 'Demander des idées à Claude', askAgain: 'Redemander à Claude', claudeThinking: 'Claude regarde votre frigo et cherche des recettes…', claudeSec: s => `${s} s`,
@@ -913,7 +963,7 @@ const STR = {
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
     lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
-    lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: 'ex : l’année de notre mariage',
+    lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: '',
     lockSaved: 'Code enregistré', lockRedo: 'Petite mise à jour : choisissez à nouveau votre code. Vos recettes ne changent pas.', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
     lockChange: 'Changer le code', lockRemove: 'Retirer le code', lockAdd: 'Ajouter un code', lockRemoveQ: 'Retirer le code d’accès ?', lockRemoved: 'Code retiré', lockNow: 'Verrouiller maintenant', erase: 'Effacer', later: 'Plus tard',
   },
@@ -921,7 +971,7 @@ const STR = {
     appName: "Abe's Kitchen",
     hello: ['Good night', 'Good morning', 'Good afternoon', 'Good evening'], shabbatShalom: 'Shabbat Shalom',
     nav: { list: 'Recipes', fav: 'Favorites', fridge: 'Fridge', shop: 'Shopping', more: 'More' },
-    searchPh: 'Search: chicken, cinnamon, Pesach…', voice: 'Search by voice', clear: 'Clear',
+    searchPh: 'Search', voice: 'Search by voice', clear: 'Clear',
     all: 'All', favorites: 'Favorites', filters: 'Filters', quick: 'Quick (≤ 30 min)', pesachOk: 'Kosher for Pesach',
     sort: { az: 'A to Z', recent: 'Recently added', cooked: 'Most cooked', rating: 'Top rated', time: 'Quickest' },
     nRecipes: n => n === 0 ? 'No recipes' : n === 1 ? '1 recipe' : `${n} recipes`,
@@ -932,7 +982,7 @@ const STR = {
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', cocktails: 'Cocktails', other: 'Other' },
     hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot',
-      friends: 'Having friends over', family: 'Family dinner', momsbday: 'Mom’s birthday', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+      friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
       hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
     kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
     kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
@@ -948,11 +998,11 @@ const STR = {
     importTitle: 'Fill in automatically', importLinkHint: 'Paste a recipe link (a website, a blog…) and the app tries to fill everything in.',
     importBtn: 'Import from link', importing: 'Importing…', importOk: 'Recipe imported! Check it and save.', importFail: 'This site can’t be read. The link is kept: paste the recipe text below instead.',
     pasteHint: 'Or paste the full text of a recipe (from an email, a message…):', pasteBtn: 'Fill in from this text', pasteOk: 'Filled in. Check it and save.',
-    title: 'Recipe name', titlePh: 'e.g. Grandma’s couscous', link: 'Link (website, video…)', category: 'Category', kashrut: 'Kashrut',
-    holidays: 'Holidays', tags: 'Keywords', tagsPh: 'e.g. easy, Moroccan, family', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
+    title: 'Recipe name', titlePh: '', link: 'Link (website, video…)', category: 'Category', kashrut: 'Kashrut',
+    holidays: 'Holidays', tags: 'Keywords', tagsPh: '', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
     ingF: 'Ingredients', ingHint: 'One ingredient per line. A line ending with “:” becomes a heading (e.g. “For the sauce:”).',
     stepsF: 'Steps', stepsHint: 'One step per line. Times like “20 min” or “1 hour” become timers.',
-    notesF: 'Personal notes', notesPh: 'Tips, memories, what to change next time…', sourceF: 'Recipe from (who?)', sourcePh: 'e.g. Mom, Aunt Esther',
+    notesF: 'Personal notes', notesPh: '', sourceF: 'Recipe from (who?)', sourcePh: '',
     save: 'Save', saved: 'Saved', needTitle: 'Give the recipe a name',
     draftFound: 'An unsaved draft was found.', restore: 'Restore', discard: 'Discard',
     shopTitle: 'Shopping list', shopAddPh: 'Add an item…', shopEmpty: 'The list is empty. On a recipe, tap “Add to shopping list”.',
@@ -987,15 +1037,15 @@ const STR = {
     pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
     occSeasons: 'Seasons, weather & garden', seasonRail: { spring: 'Spring recipes', summer: 'Summer recipes', autumn: 'Autumn recipes', winter: 'Winter recipes' },
     wxHot: (d, c) => `It’s ${d}° in ${c}: something to cool down`, wxCold: (d, c) => `It’s ${d}° in ${c}: something to warm up`, wxRain: c => `It’s raining in ${c}: some comfort food`,
-    occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', occJewish: 'Jewish holidays', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: 'e.g. Léa’s birthday, Sunday dinner',
+    occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', occJewish: 'Jewish holidays', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: '',
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
     tabFeed: 'Family', tabBook: 'My book', searchFamily: 'Whole family', addedBy: n => `Added by ${n}`, famStars: (a, n) => `Family: ${a} of 5 (${n} ratings)`,
     audMeOnly: 'Only you can see it', audSeenBy: n => `Seen by ${n}`, audPrivateShort: 'Limited sharing', recommend: 'Recommend', inMyBook: 'In my book', addToBook: 'Add to my book',
     removeFromBook: 'Remove from my book', removedFromBook: 'Removed from your book', addedToBook: 'Added to your book', copyToMine: 'Copy to edit it',
-    comments: 'Comments', commentPh: 'A word about this recipe… (did you try it?)', triedIt: 'I tried it', noComments: 'No comments yet.', commentSent: 'Comment posted',
-    recommendTo: 'Recommend to…', nobodyYet: 'Nobody else in the family yet.', recoNote: 'A little note (optional)', recoNotePh: 'e.g. Super easy, you’ll love it!',
+    comments: 'Comments', commentPh: 'Add a comment', triedIt: 'I tried it', noComments: 'No comments yet.', commentSent: 'Comment posted',
+    recommendTo: 'Recommend to…', nobodyYet: 'Nobody else in the family yet.', recoNote: 'A little note (optional)', recoNotePh: '',
     recoSent: n => `Recommended to ${n}`, recoFor: n => `${n} recommends`, recoLater: 'Later', you: 'You', postedAgo: a => `added a recipe · ${a}`, like: 'Like',
     feedEmptyT: 'The feed is empty for now', feedEmpty: 'When someone in the family adds a recipe, it shows up here.',
     agoNow: 'just now', agoMin: n => `${n} min ago`, agoH: n => `${n} h ago`, agoYesterday: 'yesterday', agoD: n => `${n} days ago`,
@@ -1006,13 +1056,13 @@ const STR = {
     famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Send the link by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
     yourProfile: 'My profile', feedT: 'Feed', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
     famCfgBad: 'I can’t find apiKey, projectId and appId in this text.', famErr: 'The family couldn’t be created. Check the configuration and that anonymous sign-in is enabled.',
-    famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: 'e.g. Chloé, Mom, Dad', needName: 'Choose a name',
+    famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: '', needName: 'Choose a name',
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone go into your family book. Who can see them? (You can change it later, recipe by recipe.)',
     migrateAll: 'The whole family', migrateMe: 'Only me for now', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
-    familyShare: 'Sharing with the family', noteF: 'A little note for the feed', notePh: 'e.g. Made it tonight, so good!', whoSees: 'Who can see it?', audAll: 'Whole family', audMe: 'Only me', audSome: 'Choose',
+    familyShare: 'Sharing with the family', noteF: 'A little note for the feed', notePh: '', whoSees: 'Who can see it?', audAll: 'Whole family', audMe: 'Only me', audSome: 'Choose',
     audSomeHint: 'Tap the people who can see it. Everyone else won’t.', famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in La Cuisine d’Abe to see and share our recipes:`,
-    fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add: eggs, leeks, leftover chicken…', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
+    fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
     askClaude: 'Ask Claude for ideas', askAgain: 'Ask Claude again', claudeThinking: 'Claude is looking in your fridge and searching for recipes…', claudeSec: s => `${s}s`,
@@ -1033,7 +1083,7 @@ const STR = {
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
-    lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: 'e.g. the year we married',
+    lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
     lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
     lockChange: 'Change the code', lockRemove: 'Remove the code', lockAdd: 'Add a code', lockRemoveQ: 'Remove the passcode?', lockRemoved: 'Code removed', lockNow: 'Lock now', erase: 'Delete', later: 'Later',
   }
@@ -1047,18 +1097,18 @@ Object.assign(STR.fr, {
   newEvent: 'Nouvelle soirée', newGuest: 'Nouveaux invités',
   eventsEmptyT: 'Un carnet tout neuf', eventsEmpty: 'Préparez Thanksgiving, un dîner entre amis ou l’anniversaire de Maman : les idées de menu, ce qui a été fait, et le souvenir de la soirée. Tout reste là pour l’an prochain.',
   guestsEmptyT: 'Le livre des invités', guestsEmpty: 'Pour chaque couple d’amis, ce que vous leur avez servi : pour ne pas refaire le même plat, ou refaire leur préféré.',
-  untitled: 'Soirée sans titre', unnamedGuests: 'Invités sans nom', evTitlePh: 'Thanksgiving, dîner avec les Dupont…',
+  untitled: 'Soirée sans titre', unnamedGuests: 'Invités sans nom', evTitlePh: 'Quelle occasion ?',
   evDate: 'Date', evOcc: 'Occasion', evGuests: 'Les invités', addGuests: 'Ajouter des invités',
   servedBefore: 'Déjà servi à ces invités', servedNone: 'Rien de noté pour l’instant. Cochez les plats faits dans le menu, ils apparaîtront ici la prochaine fois.',
   servedTimes: (n, d) => `${n} fois · dernière le ${d}`, inMenu: 'au menu', addToMenu: 'Ajouter au menu',
   menu: 'Le menu', menuEmpty: 'Ajoutez les recettes auxquelles vous pensez, puis cochez ce que vous avez fait.',
-  addRecipes: 'Des recettes', otherDishPh: 'Autre plat (le fromage de Sarah…)', reuseMenu: (title, y) => `Reprendre le menu de « ${title} » (${y})`,
-  made: 'Fait', verdicts: { loved: 'Adoré', ok: 'Bien', meh: 'Bof' }, itemNotePh: 'Une note…',
-  evening: 'La soirée', eveningPh: 'Comment ça s’est passé, qui a aimé quoi, ce qu’on refera…',
+  addRecipes: 'Des recettes', otherDishPh: 'Autre plat', reuseMenu: (title, y) => `Reprendre le menu de « ${title} » (${y})`,
+  made: 'Fait', verdicts: { loved: 'Adoré', ok: 'Bien', meh: 'Bof' }, itemNotePh: 'Note',
+  evening: 'La soirée', eveningPh: '',
   privateNote: 'Ce carnet est à vous : personne d’autre ne le voit.',
   delEvent: 'Supprimer cette soirée', delEventQ: title => `Supprimer « ${title} » ?`,
-  guestPickT: 'Qui vient ?', guestNewPh: 'Les Dupont, Sarah et Marc…', dinnerWith: name => `Dîner avec ${name}`,
-  guestNamePh: 'Les Dupont, Sarah et Marc…', guestNotes: 'À savoir', guestNotesPh: 'Allergies, ce qu’ils adorent, ce qu’ils n’aiment pas…',
+  guestPickT: 'Qui vient ?', guestNewPh: 'Nom', dinnerWith: name => `Dîner avec ${name}`,
+  guestNamePh: 'Nom', guestNotes: 'À savoir', guestNotesPh: '',
   planWith: 'Organiser une soirée avec eux', servedToThem: 'Ce qu’on leur a servi', theirEvenings: 'Leurs soirées', noEveningsYet: 'Pas encore de soirée.',
   delGuest: 'Supprimer ces invités', delGuestQ: name => `Supprimer « ${name} » du livre des invités ? Leurs soirées restent.`,
   nEvenings: n => `${n} soirée${n > 1 ? 's' : ''}`, lastOn: d => `dernière le ${d}`, nDishes: n => `${n} plat${n > 1 ? 's' : ''}`, nMade: n => `${n} fait${n > 1 ? 's' : ''}`,
@@ -1066,10 +1116,10 @@ Object.assign(STR.fr, {
   madeIt: 'J’ai cuisiné', madeItQ: 'J’ai cuisiné…', madeItSub: 'Une photo, un mot, la recette. Et c’est dans le fil.', madeItToo: 'Moi aussi', madeItStamp: 'Fait maison',
   fabQ: 'Qu’est-ce qu’on ajoute ?', newRecipeChoice: 'Une nouvelle recette', newRecipeSub: 'À taper, depuis un lien, une photo de livre…',
   cookT: title => `J’ai cuisiné « ${title} »`, cookPhotoOnlyT: 'Une photo pour la famille', cookPhotoBtn: 'Prendre ou choisir une photo',
-  cookNote: 'Un mot ?', cookNotePh: 'Moins de sucre, tout le monde en a repris…', cookEvent: 'Pour une soirée ?', cookPost: 'Publier',
+  cookNote: 'Un mot ?', cookNotePh: '', cookEvent: 'Pour une soirée ?', cookPost: 'Publier',
   cookVisAll: 'Toute la famille le verra.', cookVisSome: names => `Visible seulement par : ${names}, comme la recette.`, cookVisMe: 'Visible par vous seul, comme la recette.',
   cookLocal: 'Rangé avec la recette, sur ce téléphone.', cookPosted: 'Publié dans le fil', cookNoRecipe: 'Sans recette, juste une photo',
-  pickRecipeT: 'Quelle recette ?', pickSearchPh: 'Chercher une recette…', pickDone: n => n ? `Ajouter (${n})` : 'Ajouter',
+  pickRecipeT: 'Quelle recette ?', pickSearchPh: 'Chercher', pickDone: n => n ? `Ajouter (${n})` : 'Ajouter',
   madeByFam: 'Fait par la famille', madeByMe: 'Mes essais', nTimes: n => `${n} fois`, cookedVerb: 'a cuisiné', photoVerb: 'a partagé une photo',
   delCookQ: 'Supprimer cette photo et ce mot ?', reusedN: n => n ? `${n} plat${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} au menu` : 'Tout est déjà au menu',
 });
@@ -1082,18 +1132,18 @@ Object.assign(STR.en, {
   newEvent: 'New event', newGuest: 'New guests',
   eventsEmptyT: 'A brand-new notebook', eventsEmpty: 'Plan Thanksgiving, dinner with friends or Mom’s birthday: menu ideas, what got made, and how the evening went. It all stays here for next year.',
   guestsEmptyT: 'The guest book', guestsEmpty: 'For each couple of friends, what you served them: so you don’t repeat a dish, or so you can make their favourite again.',
-  untitled: 'Untitled event', unnamedGuests: 'Unnamed guests', evTitlePh: 'Thanksgiving, dinner with the Smiths…',
+  untitled: 'Untitled event', unnamedGuests: 'Unnamed guests', evTitlePh: 'What’s the occasion?',
   evDate: 'Date', evOcc: 'Occasion', evGuests: 'Guests', addGuests: 'Add guests',
   servedBefore: 'Already served to these guests', servedNone: 'Nothing noted yet. Tick the dishes you made in the menu and they’ll show up here next time.',
   servedTimes: (n, d) => `${n} time${n > 1 ? 's' : ''} · last on ${d}`, inMenu: 'on the menu', addToMenu: 'Add to the menu',
   menu: 'The menu', menuEmpty: 'Add the recipes you’re thinking about, then tick what you made.',
-  addRecipes: 'Recipes', otherDishPh: 'Another dish (Sarah’s cheese board…)', reuseMenu: (title, y) => `Reuse the menu from “${title}” (${y})`,
-  made: 'Made', verdicts: { loved: 'Loved', ok: 'Good', meh: 'Meh' }, itemNotePh: 'A note…',
-  evening: 'The evening', eveningPh: 'How it went, who loved what, what to make again…',
+  addRecipes: 'Recipes', otherDishPh: 'Another dish', reuseMenu: (title, y) => `Reuse the menu from “${title}” (${y})`,
+  made: 'Made', verdicts: { loved: 'Loved', ok: 'Good', meh: 'Meh' }, itemNotePh: 'Note',
+  evening: 'The evening', eveningPh: '',
   privateNote: 'This notebook is yours: nobody else sees it.',
   delEvent: 'Delete this event', delEventQ: title => `Delete “${title}”?`,
-  guestPickT: 'Who’s coming?', guestNewPh: 'The Smiths, Sarah and Mark…', dinnerWith: name => `Dinner with ${name}`,
-  guestNamePh: 'The Smiths, Sarah and Mark…', guestNotes: 'Good to know', guestNotesPh: 'Allergies, what they love, what they don’t…',
+  guestPickT: 'Who’s coming?', guestNewPh: 'Name', dinnerWith: name => `Dinner with ${name}`,
+  guestNamePh: 'Name', guestNotes: 'Good to know', guestNotesPh: '',
   planWith: 'Plan an evening with them', servedToThem: 'What we served them', theirEvenings: 'Their evenings', noEveningsYet: 'No evenings yet.',
   delGuest: 'Delete these guests', delGuestQ: name => `Remove “${name}” from the guest book? Their evenings stay.`,
   nEvenings: n => `${n} evening${n > 1 ? 's' : ''}`, lastOn: d => `last on ${d}`, nDishes: n => `${n} dish${n > 1 ? 'es' : ''}`, nMade: n => `${n} made`,
@@ -1101,14 +1151,41 @@ Object.assign(STR.en, {
   madeIt: 'I made it', madeItQ: 'I made something…', madeItSub: 'A photo, a word, the recipe. And it’s in the feed.', madeItToo: 'Me too', madeItStamp: 'Homemade',
   fabQ: 'What are we adding?', newRecipeChoice: 'A new recipe', newRecipeSub: 'Type it, from a link, a photo of a cookbook…',
   cookT: title => `I made “${title}”`, cookPhotoOnlyT: 'A photo for the family', cookPhotoBtn: 'Take or choose a photo',
-  cookNote: 'A word?', cookNotePh: 'Less sugar, everyone had seconds…', cookEvent: 'For an event?', cookPost: 'Post',
+  cookNote: 'A word?', cookNotePh: '', cookEvent: 'For an event?', cookPost: 'Post',
   cookVisAll: 'The whole family will see it.', cookVisSome: names => `Only seen by: ${names}, like the recipe.`, cookVisMe: 'Only you will see it, like the recipe.',
   cookLocal: 'Kept with the recipe, on this phone.', cookPosted: 'Posted to the feed', cookNoRecipe: 'No recipe, just a photo',
-  pickRecipeT: 'Which recipe?', pickSearchPh: 'Search a recipe…', pickDone: n => n ? `Add (${n})` : 'Add',
+  pickRecipeT: 'Which recipe?', pickSearchPh: 'Search', pickDone: n => n ? `Add (${n})` : 'Add',
   madeByFam: 'Made by the family', madeByMe: 'My attempts', nTimes: n => `${n} time${n > 1 ? 's' : ''}`, cookedVerb: 'made this', photoVerb: 'shared a photo',
   delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
 });
 STR.en.nav.carnets = 'Notebooks';
+STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family'; STR.fr.sortBy = 'Trier par'; STR.en.sortBy = 'Sort by';
+Object.assign(STR.fr, { newPosts: n => `${n} nouveauté${n > 1 ? 's' : ''} dans la famille`, composerPh: 'Une photo à partager ?', photoPost: 'Une photo, juste comme ça', photoPostSub: 'Au restaurant, chez des amis, une assiette trop belle ou trop drôle.', cookPlace: 'Où ?', choose: 'Choisir', anyF: 'Tout', filtersShow: n => n ? `Voir ${n} recette${n > 1 ? 's' : ''}` : 'Aucune recette' });
+Object.assign(STR.en, { newPosts: n => `${n} new in the family`, composerPh: 'A photo to share?', photoPost: 'Just a photo', photoPostSub: 'At a restaurant, at friends’, a plate too pretty or too funny not to share.', cookPlace: 'Where?', choose: 'Choose', anyF: 'Any', filtersShow: n => n ? `Show ${n} recipe${n > 1 ? 's' : ''}` : 'No recipes' });
+Object.assign(STR.fr, {
+  occOne: { birthday: 'Anniversaire' },
+  tabWines: 'Cave', allWines: 'Tous', newWine: 'Nouveau vin', unnamedWine: 'Vin sans nom',
+  winesEmptyT: 'La cave', winesEmpty: 'Photographiez l’étiquette des vins que vous aimez, avec une note. Vous saurez lequel c’était, à quelle soirée et avec quel plat.',
+  snapLabel: 'Photographier l’étiquette', wineNamePh: 'Nom du vin', wineColor: 'Couleur', wcol: { red: 'Rouge', white: 'Blanc', rose: 'Rosé', sparkling: 'Bulles', sweet: 'Doux' },
+  vintage: 'Millésime', appellation: 'Appellation', producer: 'Château ou domaine', wineRating: 'Note', wineNotes: 'Notes',
+  pairsWith: 'Avec quels plats', aRecipe: 'Une recette', drunkAt: 'Servi lors de', delWineQ: name => `Supprimer « ${name} » de la cave ?`,
+  wines: 'Les vins', aWine: 'Un vin', pairings: 'Accords :', pairWine: 'Accorder un vin', winesServed: 'Vins servis', pickWinesT: 'Quels vins ?',
+  feedIntroT: 'Le fil de la famille', feedIntro: 'Ici apparaissent les recettes et les photos de toute la famille : qui a cuisiné quoi, les cœurs, les commentaires, les recommandations.',
+  feedIntroHow: 'Pour l’activer, une personne crée la famille (une seule fois, environ 10 minutes), puis envoie un lien aux autres. Ceux qui reçoivent le lien n’ont qu’à toucher « Rejoindre ».',
+  feedIntroBtn: 'Créer ou rejoindre la famille', example: 'Exemple', exampleWho: 'Maman', exampleNote: 'Le gâteau de dimanche, tout le monde en a repris.',
+});
+Object.assign(STR.en, {
+  occOne: { birthday: 'Birthday' },
+  tabWines: 'Cellar', allWines: 'All', newWine: 'New wine', unnamedWine: 'Unnamed wine',
+  winesEmptyT: 'The cellar', winesEmpty: 'Snap the label of wines you like and add a note. You’ll know which one it was, at which evening, and with which dish.',
+  snapLabel: 'Snap the label', wineNamePh: 'Wine name', wineColor: 'Colour', wcol: { red: 'Red', white: 'White', rose: 'Rosé', sparkling: 'Sparkling', sweet: 'Sweet' },
+  vintage: 'Vintage', appellation: 'Appellation', producer: 'Château or estate', wineRating: 'Rating', wineNotes: 'Notes',
+  pairsWith: 'Goes with', aRecipe: 'A recipe', drunkAt: 'Served at', delWineQ: name => `Remove “${name}” from the cellar?`,
+  wines: 'The wines', aWine: 'A wine', pairings: 'Pairings:', pairWine: 'Pair a wine', winesServed: 'Wines served', pickWinesT: 'Which wines?',
+  feedIntroT: 'The family feed', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
+  feedIntroHow: 'To turn it on, one person creates the family (once, about 10 minutes), then sends the others a link. They just tap “Join”.',
+  feedIntroBtn: 'Create or join the family', example: 'Example', exampleWho: 'Mom', exampleNote: 'Sunday’s cake, everyone had seconds.',
+});
 
 // ---------- Small helpers ----------
 const $ = (s, el = document) => el.querySelector(s);
@@ -1186,10 +1263,15 @@ const customOcc = () => S.customOcc || [];
 const occLabel = (k, lang = S.lang) => STR[lang].hol[k] || customOcc().find(c => c.key === k)?.label || '';
 const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
 // Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
+// "Mom's birthday" was folded into Birthdays.
 function migrate(r) {
-  if (!('pesach' in r)) return false;
-  if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
-  delete r.pesach; return true;
+  let changed = false;
+  if ('pesach' in r) {
+    if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
+    delete r.pesach; changed = true;
+  }
+  if ((r.holidays || []).includes('momsbday')) { r.holidays = [...new Set(r.holidays.map(h => h === 'momsbday' ? 'birthday' : h))]; changed = true; }
+  return changed;
 }
 const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, sort: 'az', scroll: 0 };
 let shop = ls.get('shop', []);
@@ -1523,15 +1605,26 @@ function confirmBox(msg, yes, danger = true) {
 // ---------- Navigation ----------
 function navHTML(active) {
   const t = T().nav;
-  const items = [['', 'book', t.list, 'list'], ['carnets', 'notebook', t.carnets, 'carnets'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
+  const items = [['', 'book', t.list, 'list'], ['fil', 'feed', t.feed, 'fil'], ['carnets', 'notebook', t.carnets, 'carnets'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
   if (active === 'fav') active = 'carnets';
-  const NAV_ART = { book: 'nav-book', notebook: 'nav-notebook', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
-  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
+  const NAV_ART = { book: 'nav-book', feed: 'nav-feed', notebook: 'nav-notebook', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
+  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : k === 'fil' ? '<i class="count dot" id="feedCount" hidden></i>' : ''}</a>`).join('');
   updateNavCount();
 }
 function updateNavCount() {
-  const el = $('#shopCount'); if (!el) return;
-  const n = shop.filter(x => !x.done).length; el.hidden = !n; el.textContent = n;
+  const el = $('#shopCount'); if (el) { const n = shop.filter(x => !x.done).length; el.hidden = !n; el.textContent = n; }
+  const f = $('#feedCount'), u = feedUnread();
+  if (f) { f.hidden = !u; f.textContent = u > 9 ? '9+' : u; f.setAttribute('aria-label', T().newPosts(u)); }
+  try { if (u) navigator.setAppBadge?.(u); else navigator.clearAppBadge?.(); } catch {}
+}
+// New in the family feed since I last opened it (others' recipes and photos, and recommendations for me).
+function feedUnread() {
+  if (!FAM.on || S.feedOff) return 0;
+  const seen = ls.get('feedSeen', 0), muted = new Set(S.muted || []);
+  const other = id => id && id !== FAM.uid && !muted.has(id);
+  return FAM.all.filter(r => !r.sample && other(r.owner) && (r.createdAt || 0) > seen).length
+    + [...FAM.cooks.values()].filter(c => other(c.uid) && (c.at || 0) > seen).length
+    + FAM.recos.filter(x => !x.done && (x.at || 0) > seen).length;
 }
 
 let current = '';
@@ -1539,7 +1632,7 @@ function route() {
   const h = location.hash.replace(/^#\/?/, '');
   const [a = '', b = ''] = h.split('/').map(decodeURIComponent);
   if (current === 'list' || current === 'fav') L.scroll = window.scrollY;
-  flushEvent(); flushGuest();
+  flushEvent(); flushGuest(); flushWine();
   closeCook();
   $$('.scrim, .viewer').forEach(s => s.remove());
   $('#view').dataset.id = '';
@@ -1565,9 +1658,11 @@ function route() {
     return;
   }
   if (a === 'more') return renderMore();
+  if (a === 'fil') return renderFeed();
   if (a === 'carnets') return renderCarnets();
   if (a === 'carnet' && b) return renderEvent(b);
   if (a === 'invites' && b) return renderGuest(b);
+  if (a === 'vin' && b) return renderWine(b);
   return renderList(a === 'fav');
 }
 window.addEventListener('hashchange', route);
@@ -1605,7 +1700,6 @@ function datedOccasions(now = new Date()) {
   const thanks = y => { const d = new Date(y, 10, 1); d.setDate(1 + ((4 - d.getDay() + 7) % 7) + 21); return d; };
   let tg = thanks(today.getFullYear()); if (tg < today) tg = thanks(today.getFullYear() + 1);
   const list = [{ key: 'thanksgiving', date: tg }, { key: 'newyear', date: next('12-31') }];
-  if (S.occDates?.momsbday) list.push({ key: 'momsbday', date: next(S.occDates.momsbday) });
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
@@ -1755,26 +1849,38 @@ function chipsHTML() {
     (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
     chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));
 }
-const homeTabs = v => { const t = T(); return `<div class="hometabs" role="tablist"><button role="tab" data-act="homeview" data-v="feed" aria-selected="${v === 'feed'}">${ico('users')}${esc(t.tabFeed)}${FAM.recos.filter(x => !x.done).length ? `<i>${FAM.recos.filter(x => !x.done).length}</i>` : ''}</button><button role="tab" data-act="homeview" data-v="book" aria-selected="${v === 'book'}">${ico('book')}${esc(t.tabBook)}</button></div>`; };
+function composerHTML() {
+  const t = T();
+  return `<div class="composer">${avatarHTML(FAM.uid)}<button class="composer-in" data-act="photopost">${esc(t.composerPh)}</button>
+    <button class="icon-btn" data-act="photopost" aria-label="${esc(t.photoPost)}">${ico('camera')}</button><button class="icon-btn" data-act="cookpick" aria-label="${esc(t.madeItQ)}">${artImg('pan', 'mill')}</button></div>`;
+}
+function feedIntroHTML() {
+  const t = T();
+  return `<div class="feedintro">
+    <article class="post sample" data-label="${esc(t.example)}"><header><span class="av" style="--c:#C2452D" aria-hidden="true">${illus('mitt')}</span><div class="min"><b>${esc(t.exampleWho)}</b><span class="muted">${esc(t.cookedVerb)} · ${esc(t.agoYesterday)}</span></div></header>
+      <div class="post-photo"><div class="ph art" style="--c:${CAT_C.desserts}">${illus('desserts')}</div></div><p class="hand">${esc(t.exampleNote)}</p>
+      <div class="post-acts"><span class="pa on">${ico('heart')}<span>3</span></span><span class="pa">${ico('chat')}<span>2</span></span></div></article>
+    <section class="panel"><h2>${ico('users')} ${esc(t.feedIntroT)}</h2><p>${esc(t.feedIntro)}</p><p class="muted">${esc(t.feedIntroHow)}</p>
+      <a class="btn primary" href="#/famille">${ico('users')}${esc(t.feedIntroBtn)}</a></section></div>`;
+}
+let feedPrevSeen = 0;
 function renderFeed() {
-  current = 'feed'; navHTML('list');
+  if (current !== 'feed') feedPrevSeen = ls.get('feedSeen', 0);
+  current = 'feed'; navHTML('fil');
+  if (FAM.on && document.visibilityState !== 'hidden') { ls.set('feedSeen', Date.now()); updateNavCount(); }
   const t = T();
   $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
         <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
-        <h1 class="greet">${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span></h1>
-        ${calHTML()}
+        <h1 class="greet">${esc(t.tabFeed)}</h1>
       </header>
-      ${bannerHTML()}
-      ${homeTabs('feed')}
-      ${feedHTML()}
+      ${FAM.on ? composerHTML() + feedHTML() : feedIntroHTML()}
     </div>
     <button class="fab" data-act="fab">${ico('plus')}${esc(t.add)}</button>`;
 }
 function renderList(favOnly) {
   const was = current;
-  if (!favOnly && FAM.on && !S.feedOff && (S.homeView || 'feed') === 'feed') return renderFeed();
   current = favOnly ? 'fav' : 'list';
   if (favOnly) L.fav = true; else if (was === 'fav') L.fav = false;
   if (was !== 'recipe') L.scroll = 0;
@@ -1790,7 +1896,6 @@ function renderList(favOnly) {
         ${favOnly ? '' : calHTML()}
       </header>
       ${favOnly ? carnetTabs('fav') : bannerHTML()}
-      ${!favOnly && FAM.on && !S.feedOff ? homeTabs('book') : ''}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}
@@ -1804,7 +1909,7 @@ function renderList(favOnly) {
       <div class="listmeta"><span class="muted" id="count"></span>
         <span style="display:flex;gap:8px;align-items:center;min-width:0">
           <button class="icon-btn" data-act="surprise" aria-label="${esc(t.surprise)}" title="${esc(t.surprise)}" style="width:42px;height:42px;border:1px solid var(--line);background:var(--surface)">${ico('dice')}</button>
-          <select id="sort" aria-label="Tri">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
+          <select id="sort" aria-label="${esc(t.sortBy)}">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
         </span></div>
       <div id="railbox"></div>
       <div id="results"></div>
@@ -1879,23 +1984,58 @@ window.addEventListener('scroll', azVisibility, { passive: true });
 document.addEventListener('click', e => { if (e.target.closest('#az')) { azJump(e); setTimeout(() => $('.az-pop')?.remove(), 500); } });
 
 function openFilters() {
-  const t = T();
-  const opt = (v, label, sel) => `<option value="${v}" ${sel === v ? 'selected' : ''}>${esc(label)}</option>`;
-  sheet(`<h2>${esc(t.filters)}</h2>
-    <div class="form" style="padding:0">
-      <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat">${opt('', t.all, L.cat)}${CATS.map(c => opt(c, t.cat[c], L.cat)).join('')}</select></div>
-      <div class="field"><label for="fKash">${esc(t.kashrutF)}</label><select id="fKash">${opt('', t.all, L.kash)}${KASHRUT.map(k => opt(k, t.kashLong[k], L.kash)).join('')}</select></div>
-      <div class="field"><label for="fHol">${esc(t.occasions)}</label><select id="fHol">${opt('', t.all, L.hol)}
-        <optgroup label="${esc(t.occMoments)}">${generalOcc().map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
-        <optgroup label="${esc(t.occSeasons)}">${SEASONS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
-        <optgroup label="${esc(t.occJewish)}">${HOLIDAYS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup></select></div>
-      <label class="toggle">${esc(t.quick)}<input type="checkbox" id="fQuick" ${L.quick ? 'checked' : ''}></label>
-      <div class="row2"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">OK</button></div>
-    </div>`, (el, close) => {
-    el.querySelector('[data-x="ok"]').onclick = () => { L.cat = $('#fCat').value; L.kash = $('#fKash').value; L.hol = $('#fHol').value; L.quick = $('#fQuick').checked; close(); refreshList(); };
-    el.querySelector('[data-x="reset"]').onclick = () => { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); };
+  const t = T(), st = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick };
+  const group = (title, key, items) => `<div class="fgroup"><h3 class="eyebrow">${esc(title)}</h3><div class="wrapchips">${items.map(([v, label]) => `<button type="button" class="chip ${st[key] === v ? 'on' : ''}" data-f="${key}" data-v="${esc(v)}" aria-pressed="${st[key] === v}">${esc(label)}</button>`).join('')}</div></div>`;
+  const count = () => { const saved = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick }; Object.assign(L, st); const n = filtered().length; Object.assign(L, saved); return n; };
+  const body = () => `<h2>${esc(t.filters)}</h2>
+    ${group(t.category, 'cat', [['', t.anyF], ...CATS.filter(c => c === st.cat || recipes.some(r => r.category === c)).map(c => [c, t.cat[c]])])}
+    ${group(t.kashrutF, 'kash', [['', t.anyF], ...KASHRUT.map(k => [k, t.kashLong[k]])])}
+    ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
+    ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
+    ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
+    <div class="fgroup"><button type="button" class="chip ${st.quick ? 'on' : ''}" data-f="quick" aria-pressed="${st.quick}">${ico('clock')}${esc(t.quick)}</button></div>
+    <div class="row2 fbar"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">${esc(t.filtersShow(count()))}</button></div>`;
+  sheet(body(), (el, close) => {
+    el.classList.add('filters');
+    el.addEventListener('click', e => {
+      const c = e.target.closest('[data-f]');
+      if (c) { const k = c.dataset.f; if (k === 'quick') st.quick = !st.quick; else st[k] = st[k] === c.dataset.v && c.dataset.v ? '' : c.dataset.v; const y = el.scrollTop; el.innerHTML = '<div class="grab"></div>' + body(); el.scrollTop = y; return; }
+      const x = e.target.closest('[data-x]')?.dataset.x;
+      if (x === 'ok') { Object.assign(L, st); close(); refreshList(); }
+      if (x === 'reset') { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); }
+    });
   });
 }
+// Native drop-downs look like a web form: each <select> gets a button in the app's style that opens a list.
+// The <select> stays (hidden) as the value everything else reads.
+function fancySelects(root = document) {
+  for (const sel of root.querySelectorAll('select:not([data-fancy])')) {
+    sel.dataset.fancy = '1'; sel.classList.add('fsel-native'); sel.tabIndex = -1;
+    const lbl = sel.id ? document.querySelector(`label[for="${sel.id}"]`) : null;
+    const btn = document.createElement('button'); btn.type = 'button';
+    btn.className = 'fsel' + (sel.id === 'sort' ? ' pill' : '');
+    const name = (lbl?.textContent || sel.getAttribute('aria-label') || '').trim();
+    const draw = () => { btn.innerHTML = `<span>${esc(sel.selectedOptions[0]?.textContent || '—')}</span>${ico('chev')}`; btn.setAttribute('aria-label', [name, sel.selectedOptions[0]?.textContent].filter(Boolean).join(' : ')); };
+    draw(); sel.after(btn);
+    if (lbl) { lbl.removeAttribute('for'); lbl.addEventListener('click', () => btn.click()); }
+    sel.addEventListener('change', draw);
+    btn.addEventListener('click', () => pickOption(sel, name, draw));
+  }
+}
+function pickOption(sel, name, draw) {
+  const opt = o => `<button type="button" class="fopt" data-v="${esc(o.value)}" aria-pressed="${o.selected}">${esc(o.textContent)}${o.selected ? ico('check') : ''}</button>`;
+  const html = [...sel.children].map(n => n.tagName === 'OPTGROUP' ? `<h3 class="eyebrow">${esc(n.label)}</h3>${[...n.children].map(opt).join('')}` : opt(n)).join('');
+  sheet(`${name ? `<h2>${esc(name)}</h2>` : ''}<div class="fopts">${html}</div>`, (el, close) => {
+    el.querySelector('.fopt[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
+    el.addEventListener('click', e => {
+      const b = e.target.closest('.fopt'); if (!b) return;
+      close(); if (sel.value === b.dataset.v) return;
+      sel.value = b.dataset.v; draw();
+      sel.dispatchEvent(new Event('input', { bubbles: true })); sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  });
+}
+new MutationObserver(() => { if (document.querySelector('select:not([data-fancy])')) fancySelects(); }).observe(document.body, { childList: true, subtree: true });
 function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
 
 // Voice search (Chrome on Android)
@@ -1971,7 +2111,8 @@ function renderRecipe(r) {
       ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.notes)}</h2></div><div class="notes">${esc(r.notes)}</div></section>` : ''}
       ${ing || steps ? pagesHTML(r) : ''}
       <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small primary" data-act="cooked">${ico('camera')}${esc(t.madeIt)}</button>
-        ${eventsWith(r.id).length ? `<div class="served-line"><span>${esc(t.servedAt)}</span>${eventsWith(r.id).slice(0, 6).map(e => `<a href="#/carnet/${encodeURIComponent(e.id)}">${esc(evLabel(e))}${evLabel(e).includes(String(new Date(evTime(e)).getFullYear())) ? '' : ' · ' + new Date(evTime(e)).getFullYear()}</a>`).join('')}</div>` : ''}</div>
+        ${eventsWith(r.id).length ? `<div class="served-line"><span>${esc(t.servedAt)}</span>${eventsWith(r.id).slice(0, 6).map(e => `<a href="#/carnet/${encodeURIComponent(e.id)}">${esc(evLabel(e))}${evLabel(e).includes(String(new Date(evTime(e)).getFullYear())) ? '' : ' · ' + new Date(evTime(e)).getFullYear()}</a>`).join('')}</div>` : ''}
+        ${winesFor(r.id).length ? `<div class="served-line"><span>${esc(t.pairings)}</span>${winesFor(r.id).slice(0, 6).map(w => `<a href="#/vin/${encodeURIComponent(w.id)}">${esc(wineLabel(w))}</a>`).join('')}</div>` : ''}</div>
       ${madeSectionHTML(r)}
       ${FAM.on && FAM.raw.has(r.id) ? `<section class="section" id="commentsSec"><div class="section-h"><h2>${esc(t.comments)}</h2></div>
         <div id="comments">${commentsListHTML()}</div>
@@ -2008,6 +2149,7 @@ function recipeMenu(r) {
   sheet(`<h2>${esc(r.title)}</h2><div class="menu">
     ${isMine(r) ? `<button data-m="edit">${ico('edit')}${esc(t.edit)}</button>` : `<button data-m="dup">${ico('copy')}${esc(t.copyToMine)}</button>`}
     <button data-m="event">${ico('book')}${esc(t.addToEvent)}</button>
+    <button data-m="wine">${artImg('wine', 'mill')}${esc(t.pairWine)}</button>
     <button data-m="send">${ico('mail')}${esc(t.send)}</button>
     <button data-m="share">${ico('share')}${esc(t.share)}</button>
     <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
@@ -2019,6 +2161,9 @@ function recipeMenu(r) {
       if (m === 'edit') go('#/edit/' + r.id);
       if (m === 'share') shareText(r.title, recipeText(r));
       if (m === 'event') addToEventSheet(r);
+      if (m === 'wine') { const got = await pickWines({ title: t.pairWine, exclude: winesFor(r.id).map(w => w.id) }); if (!got) return;
+        for (const id of got.ids) { const w = PS.wines.get(id); if (w) { w.pairs = [...new Set([...(w.pairs || []), r.id])]; psPut('wines', w); } }
+        if (got.create) { const w = newWine(); w.pairs = [r.id]; psPut('wines', w); go('#/vin/' + w.id); } else { const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } }
       if (m === 'unbook') { setInBook(r.id, false); toast(t.removedFromBook); }
       if (m === 'send') sendRecipe(r);
       if (m === 'copy') { try { await navigator.clipboard.writeText(recipeText(r)); } catch {} toast(t.copied); }
@@ -2604,6 +2749,7 @@ async function famStart() {
   const u = FAM.auth.currentUser || await waitUser();
   if (!u) { FAM.on = false; return false; }
   FAM.uid = u.uid; FAM.on = true;
+  if (!ls.get('feedSeen', 0)) ls.set('feedSeen', Date.now());
   FAM.unsub.forEach(f => f()); FAM.unsub = [];
   let first = true, gotRecipes;
   const ready = new Promise(r => { gotRecipes = r; setTimeout(r, 2500); });
@@ -2622,6 +2768,7 @@ async function famStart() {
 }
 function famRecipe(d) {
   const o = FAM.saved.get(d.id) || {}, ratings = d.ratings || {}, vals = Object.values(ratings);
+  if ((d.holidays || []).includes('momsbday')) d = { ...d, holidays: [...new Set(d.holidays.map(h => h === 'momsbday' ? 'birthday' : h))] };
   return { ...d, favorite: !!o.favorite, cookCount: o.cookCount || 0, lastCooked: o.lastCooked || 0, rating: ratings[FAM.uid] || 0,
     famRating: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0, famCount: vals.length,
     hearts: d.hearts || {}, mine: d.owner === FAM.uid, inBook: d.owner === FAM.uid || !!o.inBook };
@@ -2773,7 +2920,8 @@ function feedHTML() {
     if (c) return cookPostHTML(c);
     const hearts = Object.keys(r.hearts || {}), liked = !!(r.hearts || {})[FAM.uid];
     const lock = !(r.audience || []).includes('all');
-    return `<article class="post">
+    const fresh = r.owner !== FAM.uid && (r.createdAt || 0) > feedPrevSeen;
+    return `<article class="post ${fresh ? 'fresh' : ''}">
       <header>${avatarHTML(r.owner)}<div class="min"><b>${esc(r.owner === FAM.uid ? t.you : member(r.owner).name)}</b><span class="muted">${esc(t.postedAgo(ago(r.createdAt || Date.now())))}</span></div>${lock ? `<span class="lockbadge" title="${esc(t.audPrivateShort)}">${ico('lock')}</span>` : ''}</header>
       <a class="post-photo" href="#/r/${encodeURIComponent(r.id)}">${r.photo || r.thumb ? `<img src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">` : artHTML(r, 'ph')}</a>
       <a class="post-title" href="#/r/${encodeURIComponent(r.id)}"><h3>${esc(r.title)}</h3></a>
@@ -2816,7 +2964,7 @@ function renderFamily() {
         <section class="panel"><h2>${esc(t.famCreateT)}</h2>
           <ol class="howto">${t.famSteps.map(s => `<li>${s}</li>`).join('')}</ol>
           <div class="field"><label for="cfgIn">${esc(t.famCfg)}</label><textarea class="input" id="cfgIn" rows="5" spellcheck="false" placeholder="const firebaseConfig = { apiKey: &quot;…&quot;, … }"></textarea></div>
-          <div class="field"><label for="famNameIn">${esc(t.famName)}</label><input class="input" id="famNameIn" value="${esc(t.famNameDefault)}"></div>
+          <div class="field"><label for="famNameIn">${esc(t.famName)}</label><input class="input" id="famNameIn"></div>
           <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}"></div>
           <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
           <button class="btn primary" data-act="famcreate">${esc(t.famCreateBtn)}</button></section>
@@ -2888,7 +3036,7 @@ async function famJoin() {
     await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, code: inv.k, joinedAt: Date.now() });
     famSaveLocal(inv.c, inv.f, inv.n || t.family, inv.k); S.name = name; saveSettings();
     await famStart(); await offerMigration();
-    history.replaceState(null, '', location.pathname + '#/');
+    history.replaceState(null, '', location.pathname + '#/fil');
     route(); toast(t.welcomeFam(inv.n || t.family));
   } catch (e) { console.warn(e); toast(t.famJoinErr); }
 }
@@ -2923,8 +3071,8 @@ async function famLeave() {
 // ---------- Personal notebooks (events, guests) and "I made it" posts ----------
 // Events and guest books are private to each person: on the phone, or in members/{me}/… in the family space.
 // "I made it" posts are shared with exactly the people who can see the recipe (see firestore.rules → cooks).
-const PS = { events: new Map(), guests: new Map(), cooks: new Map() };
-const PS_KINDS = ['events', 'guests', 'cooks'];
+const PS = { events: new Map(), guests: new Map(), cooks: new Map(), wines: new Map() };
+const PS_KINDS = ['events', 'guests', 'cooks', 'wines'];
 const plain = o => JSON.parse(JSON.stringify(o));
 async function psLoadLocal() {
   for (const k of PS_KINDS) { let arr = []; try { arr = (await DB.kvGet('ps_' + k)) || []; } catch {} PS[k] = new Map(arr.map(x => [x.id, x])); }
@@ -2942,7 +3090,7 @@ function psDel(kind, id) {
 }
 // Family mode: listen to my own notebooks, and to the "I made it" posts I'm allowed to see.
 function psListen() {
-  for (const kind of ['events', 'guests']) FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, kind), s => {
+  for (const kind of ['events', 'guests', 'wines']) FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, kind), s => {
     PS[kind] = new Map(); s.forEach(d => PS[kind].set(d.id, { ...d.data(), id: d.id })); psChanged();
   }, e => console.warn(e)));
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('cooks'), FB.where('audience', 'array-contains-any', ['all', FAM.uid])), s => {
@@ -2955,7 +3103,7 @@ function psChanged() { clearTimeout(psTimer); psTimer = setTimeout(() => { if (c
 async function psMigrate() {
   const flag = 'psMigrated_' + FAM.fid; if (ls.get(flag, false)) return;
   const local = {}; for (const k of PS_KINDS) { try { local[k] = (await DB.kvGet('ps_' + k)) || []; } catch { local[k] = []; } }
-  for (const k of ['events', 'guests']) for (const o of local[k]) { PS[k].set(o.id, o); quiet(FB.setDoc(fref('members', FAM.uid, k, o.id), plain(o))); }
+  for (const k of ['events', 'guests', 'wines']) for (const o of local[k]) { PS[k].set(o.id, o); quiet(FB.setDoc(fref('members', FAM.uid, k, o.id), plain(o))); }
   for (const c of local.cooks) {
     const src = c.rid && FAM.raw.get(c.rid);
     const nc = { ...c, uid: FAM.uid, rid: src ? c.rid : null, audience: src ? [...(src.audience || ['all'])] : [FAM.uid], hearts: {} };
@@ -2995,6 +3143,7 @@ function cookSheet(r) {
   const st = { photo: null, thumb: null };
   sheet(`<h2 class="cook-h">${esc(r ? t.cookT(r.title) : t.cookPhotoOnlyT)}</h2>
     <div class="cookphoto" id="ckPhoto"></div>
+    ${!r ? `<div class="field"><label for="ckPlace">${esc(t.cookPlace)}</label><input class="input" id="ckPlace" maxlength="80"></div>` : ''}
     <div class="field"><label for="ckNote">${esc(t.cookNote)}</label><textarea class="input hand-in" id="ckNote" rows="3" maxlength="1000" placeholder="${esc(t.cookNotePh)}"></textarea></div>
     ${evs.length ? `<div class="field"><label for="ckEv">${esc(t.cookEvent)}</label><select class="input" id="ckEv"><option value="">${esc(t.none)}</option>${evs.map(e => `<option value="${e.id}" ${pre && pre.id === e.id ? 'selected' : ''}>${esc(evLabel(e))} · ${esc(fmtDate(evTime(e), { day: 'numeric', month: 'short' }))}</option>`).join('')}</select></div>` : ''}
     <p class="hint" style="margin:0">${ico(FAM.on ? (visibilityText(r) === t.cookVisAll ? 'users' : 'lock') : 'book')} ${esc(visibilityText(r))}</p>
@@ -3016,18 +3165,19 @@ function cookSheet(r) {
       if (x === 'ok') {
         const note = el.querySelector('#ckNote').value.trim();
         if (!r && !st.photo && !note) { el.querySelector('#ckNote').focus(); return; }
-        const eid = el.querySelector('#ckEv')?.value || '';
+        const eid = el.querySelector('#ckEv')?.value || '', place = el.querySelector('#ckPlace')?.value.trim() || '';
         close();
-        await saveCook(r, { ...st, note, eid });
+        await saveCook(r, { ...st, note, eid, place });
       }
     });
   });
 }
-async function saveCook(r, { photo, thumb, note, eid }) {
+async function saveCook(r, { photo, thumb, note, eid, place }) {
   const t = T(), id = uid();
   const c = { id, uid: FAM.on ? FAM.uid : 'me', rid: r ? r.id : null, rtitle: r ? r.title : '', note: (note || '').slice(0, 1000), at: Date.now(), hearts: {} };
   if (photo) { c.photo = photo; c.thumb = thumb; }
   if (eid) c.eid = eid;
+  if (place) c.place = place.slice(0, 80);
   if (FAM.on) {
     c.audience = r && FAM.raw.get(r.id) ? [...(FAM.raw.get(r.id).audience || ['all'])] : ['all'];
     FAM.cooks.set(id, c); quiet(FB.setDoc(fref('cooks', id), plain(c)));
@@ -3103,8 +3253,9 @@ function madeSectionHTML(r) {
 }
 function cookPostHTML(c) {
   const t = T(), r = c.rid && byId(c.rid), hearts = Object.keys(c.hearts || {}), liked = !!(c.hearts || {})[FAM.uid];
-  return `<article class="post cookpost">
-    <header>${avatarHTML(c.uid)}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc((c.rid ? t.cookedVerb : t.photoVerb) + ' · ' + ago(c.at))}</span></div><span class="stamp">${esc(t.madeItStamp)}</span></header>
+  const fresh = c.uid !== FAM.uid && (c.at || 0) > feedPrevSeen;
+  return `<article class="post cookpost ${fresh ? 'fresh' : ''}">
+    <header>${avatarHTML(c.uid)}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc((c.rid ? t.cookedVerb : t.photoVerb) + (c.place ? ' · ' + c.place : '') + ' · ' + ago(c.at))}</span></div>${c.rid ? `<span class="stamp">${esc(t.madeItStamp)}</span>` : ''}</header>
     ${c.photo || c.thumb ? `<button class="post-photo" data-act="viewcook" data-id="${c.id}"><img src="${esc(c.photo || c.thumb)}" alt="" loading="lazy"></button>` : ''}
     ${c.note ? `<p class="hand">${esc(c.note)}</p>` : ''}
     ${r ? `<a class="cooktag" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<span class="min"><span class="eyebrow">${esc(t.theRecipe)}</span><b>${esc(r.title)}</b></span>${ico('arrow')}</a>` : ''}
@@ -3116,16 +3267,19 @@ function cookPostHTML(c) {
     </div>
   </article>`;
 }
-// The + button: a new recipe, or "I made something".
+async function cookPick() { const t = T(), pick = await pickRecipes({ title: t.pickRecipeT, allowNone: FAM.on }); if (pick) cookSheet(pick[0] || null); }
+// The + button: a new recipe, "I made something", or just a photo.
 function fabSheet() {
   const t = T();
   sheet(`<h2>${esc(t.fabQ)}</h2><div class="choice">
     <button data-x="cook">${artImg('pan')}<span class="min"><b>${esc(t.madeItQ)}</b><small>${esc(t.madeItSub)}</small></span></button>
+    ${FAM.on ? `<button data-x="photo">${artImg('nav-feed')}<span class="min"><b>${esc(t.photoPost)}</b><small>${esc(t.photoPostSub)}</small></span></button>` : ''}
     <button data-x="new">${artImg('mains')}<span class="min"><b>${esc(t.newRecipeChoice)}</b><small>${esc(t.newRecipeSub)}</small></span></button>
   </div>`, (el, close) => el.addEventListener('click', async e => {
     const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return; close();
     if (x === 'new') go('#/edit/new');
-    if (x === 'cook') { const pick = await pickRecipes({ title: t.pickRecipeT, allowNone: FAM.on }); if (pick) cookSheet(pick[0] || null); }
+    if (x === 'photo') cookSheet(null);
+    if (x === 'cook') cookPick();
   }));
 }
 // Choose one or several recipes (my book first; in a family, everything I can see).
@@ -3165,7 +3319,11 @@ function pickRecipes({ title, multi = false, allowNone = false, exclude = [] }) 
 // ---------- Carnets: events ----------
 const isoDay = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const evTime = e => e.date ? new Date(e.date + 'T12:00').getTime() : (e.createdAt || 0);
-const evLabel = e => e.title || (e.occ && occLabel(e.occ)) || T().untitled;
+const evLabel = e => {
+  if (e.title) return e.title;
+  const k = e.occ === 'momsbday' ? 'birthday' : e.occ, occ = k && (T().occOne[k] || occLabel(k)), who = (e.guests || []).map(guestName).filter(Boolean).join(', ');
+  return occ && who ? `${occ} · ${who}` : occ || (who && T().dinnerWith(who)) || T().untitled;
+};
 const eventsSorted = () => [...PS.events.values()].sort((a, b) => evTime(b) - evTime(a));
 const guestName = id => PS.guests.get(id)?.name || '';
 const itemKey = i => i.rid || 'x:' + norm(i.title);
@@ -3216,14 +3374,14 @@ function guestCardHTML(g) {
     <span class="meta"><span>${esc(t.nEvenings(evs.length))}</span>${evs[0] ? `<span>${esc(t.lastOn(fmtDate(evTime(evs[0]), { day: 'numeric', month: 'short', year: 'numeric' })))}</span>` : ''}</span>
     ${g.notes ? `<span class="hand small">${esc(g.notes.split('\n')[0])}</span>` : ''}</span></a>`;
 }
-const carnetTabs = v => { const t = T(); return `<div class="hometabs three" role="tablist">${[['events', t.tabEvents], ['guests', t.tabGuests], ['fav', t.favorites]].map(([k, l]) => `<button role="tab" data-act="ctab" data-v="${k}" aria-selected="${v === k}">${esc(l)}</button>`).join('')}</div>`; };
+const carnetTabs = v => { const t = T(); return `<div class="hometabs four" role="tablist">${[['events', t.tabEvents], ['guests', t.tabGuests], ['wines', t.tabWines], ['fav', t.favorites]].map(([k, l]) => `<button role="tab" data-act="ctab" data-v="${k}" aria-selected="${v === k}">${esc(l)}</button>`).join('')}</div>`; };
 function renderCarnets() {
   current = 'carnets'; navHTML('carnets');
-  const t = T(), tab = S.carnetTab === 'guests' ? 'guests' : 'events';
+  const t = T(), tab = ['guests', 'wines'].includes(S.carnetTab) ? S.carnetTab : 'events';
   const evs = eventsSorted(), today = isoDay(new Date());
   const up = evs.filter(e => (e.date || '') >= today).reverse(), past = evs.filter(e => (e.date || '') < today);
   const gs = [...PS.guests.values()].sort((a, b) => (evTime(guestEvents(b.id)[0] || {}) - evTime(guestEvents(a.id)[0] || {})) || collator().compare(a.name, b.name));
-  const body = tab === 'events'
+  const body = tab === 'wines' ? winesBodyHTML() : tab === 'events'
     ? (evs.length ? `${up.length ? `<h2 class="eyebrow list-h">${esc(t.upcoming)}</h2><div class="evlist">${up.map(evCardHTML).join('')}</div>` : ''}
         ${past.length ? `<h2 class="eyebrow list-h">${esc(t.memories)}</h2><div class="evlist">${past.map(evCardHTML).join('')}</div>` : ''}`
       : `<div class="empty">${artImg('teapot', 'ill-big')}<h2>${esc(t.eventsEmptyT)}</h2><p>${esc(t.eventsEmpty)}</p><button class="btn primary" data-act="newevent">${ico('plus')}${esc(t.newEvent)}</button></div>`)
@@ -3235,7 +3393,7 @@ function renderCarnets() {
     ${carnetTabs(tab)}
     ${body}
   </div>
-  ${(tab === 'events' ? evs.length : gs.length) ? `<button class="fab" data-act="${tab === 'events' ? 'newevent' : 'newguest'}">${ico('plus')}${esc(tab === 'events' ? t.newEvent : t.newGuest)}</button>` : ''}`;
+  ${(tab === 'events' ? evs.length : tab === 'wines' ? PS.wines.size : gs.length) ? `<button class="fab" data-act="${{ events: 'newevent', guests: 'newguest', wines: 'newwine' }[tab]}">${ico(tab === 'wines' ? 'camera' : 'plus')}${esc({ events: t.newEvent, guests: t.newGuest, wines: t.newWine }[tab])}</button>` : ''}`;
 }
 
 let curEv = null, evSaveT = null;
@@ -3282,6 +3440,9 @@ function renderEvent(id) {
         ${prev ? `<button class="btn small ghost" data-act="evreuse" data-from="${prev.id}">${ico('copy')}${esc(t.reuseMenu(evLabel(prev), new Date(evTime(prev)).getFullYear()))}</button>` : ''}
       </section>
 
+      <section class="panel"><h2>${artImg('wine', 'h2ill')} ${esc(t.wines)}</h2>
+        <div class="wrapchips">${winesRowHTML(e.wines || [])}<button class="chip" data-act="evwines">${ico('plus')}${esc(t.aWine)}</button></div></section>
+
       <section class="panel evening"><h2>${ico('chat')} ${esc(t.evening)}</h2>
         <textarea class="ruled hand-in" id="evNotes" rows="5" placeholder="${esc(t.eveningPh)}">${esc(e.notes || '')}</textarea>
         <div class="evphotos">${(e.photos || []).map((p, n) => `<span class="page-th"><img src="${esc(p)}" alt="" data-act="evview" data-i="${n}"><button class="rm" data-act="evphotorm" data-i="${n}" aria-label="${esc(t.del)}">${ico('x')}</button></span>`).join('')}
@@ -3320,7 +3481,7 @@ function guestPicker(e) {
       const c = ev.target.closest('[data-g]'); if (c) { sel.has(c.dataset.g) ? sel.delete(c.dataset.g) : sel.add(c.dataset.g); draw(); return; }
       if (ev.target.closest('[data-x="ok"]')) {
         const v = el.querySelector('#gpIn').value.trim(); if (v) { const g = { id: uid(), name: v.slice(0, 80), notes: '', createdAt: Date.now() }; psPut('guests', g); sel.add(g.id); }
-        close(); readEvent(); e.guests = [...sel]; if (!e.title && e.guests.length === 1 && !e.occ) e.title = t.dinnerWith(guestName(e.guests[0])); psPut('events', e); rerenderEvent();
+        close(); readEvent(); e.guests = [...sel]; psPut('events', e); rerenderEvent();
       }
     });
   });
@@ -3355,6 +3516,7 @@ function renderGuest(id) {
           <small>${esc(t.servedTimes(s.count, fmtDate(s.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small>${verdictBadge(bestVerdict(s.verdicts))}</span></div>`).join('')}</div>`
           : `<p class="muted" style="margin:0">${esc(t.servedNone)}</p>`}
       </section>
+      ${winesServedTo(id).length ? `<section class="panel"><h2>${artImg('wine', 'h2ill')} ${esc(t.winesServed)}</h2><div class="served">${winesServedTo(id).map(o => `<div class="srow">${wineThumb(o.w)}<span class="min"><b><a href="#/vin/${encodeURIComponent(o.w.id)}">${esc(wineLabel(o.w))}</a></b><small>${esc(t.servedTimes(o.count, fmtDate(o.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small></span></div>`).join('')}</div></section>` : ''}
       <section><h2 class="eyebrow list-h">${esc(t.theirEvenings)}</h2>
         ${evs.length ? `<div class="evlist">${evs.map(evCardHTML).join('')}</div>` : `<p class="muted">${esc(t.noEveningsYet)}</p>`}</section>
     </div>`;
@@ -3368,6 +3530,98 @@ document.addEventListener('input', e => {
   gSaveFn = () => { const g = PS.guests.get(p.dataset.id); if (!g || !$('#gName')) return; g.name = $('#gName').value.trim().slice(0, 80); g.notes = $('#gNotes').value.slice(0, 3000); psPut('guests', g); };
   clearTimeout(gSaveT); gSaveT = setTimeout(() => { gSaveT = null; gSaveFn(); }, 500);
 });
+
+// ---------- Cave: wine notes (private, like the other notebooks) ----------
+const WCOLS = ['red', 'white', 'rose', 'sparkling', 'sweet'];
+const WCOL_C = { red: '#7A1F2B', white: '#D9B44A', rose: '#E58C8A', sparkling: '#C9B98A', sweet: '#C27A1F' };
+const winesSorted = () => [...PS.wines.values()].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+const wineLabel = w => [w.name || T().unnamedWine, w.vintage].filter(Boolean).join(' ');
+const winesFor = rid => winesSorted().filter(w => (w.pairs || []).includes(rid));
+const eventsWithWine = wid => eventsSorted().filter(e => (e.wines || []).includes(wid));
+const wineThumb = (w, cls = 'thumb') => w.thumb || w.photo
+  ? `<img class="${cls}" src="${esc(w.thumb || w.photo)}" alt="" loading="lazy">`
+  : `<span class="${cls} art" style="--c:${WCOL_C[w.color] || '#7A1F2B'}">${artImg('wine')}</span>`;
+const wstars = n => n ? `<span class="stars-mini" aria-label="${n}/5">${ico('star').repeat(n)}</span>` : '';
+function newWine() { const w = { id: uid(), name: '', producer: '', appellation: '', vintage: '', color: '', rating: 0, notes: '', pairs: [], createdAt: Date.now() }; psPut('wines', w); return w; }
+function winesBodyHTML() {
+  const t = T(), all = winesSorted(), col = L.wcol || '', q = norm(L.wq || '').trim();
+  if (!all.length) return `<div class="empty">${artImg('wine', 'ill-big')}<h2>${esc(t.winesEmptyT)}</h2><p>${esc(t.winesEmpty)}</p><button class="btn primary" data-act="newwine">${ico('camera')}${esc(t.newWine)}</button></div>`;
+  const list = all.filter(w => (!col || w.color === col) && (!q || norm([w.name, w.producer, w.appellation, w.vintage, w.notes].join(' ')).includes(q)));
+  return `<div class="search wsearch" role="search">${ico('search', 'lead')}<input id="wq" type="search" autocomplete="off" value="${esc(L.wq || '')}" placeholder="${esc(t.searchPh)}" aria-label="${esc(t.searchPh)}"></div>
+    <div class="chips">${['', ...WCOLS].map(c => `<button class="chip ${col === c ? 'on' : ''}" data-act="wcol" data-c="${c}" aria-pressed="${col === c}">${c ? `<i class="wdot" style="--c:${WCOL_C[c]}"></i>` : ''}${esc(c ? t.wcol[c] : t.allWines)}</button>`).join('')}</div>
+    <div class="winegrid">${list.map(w => `<a class="winecard" href="#/vin/${encodeURIComponent(w.id)}">${wineThumb(w, 'wlabel')}
+      <span class="min"><b>${esc(w.name || t.unnamedWine)}</b><span class="meta">${w.color ? `<i class="wdot" style="--c:${WCOL_C[w.color]}"></i>` : ''}${esc([w.vintage, w.appellation].filter(Boolean).join(' · '))}</span>${wstars(w.rating)}</span></a>`).join('') || `<p class="muted">${esc(t.noResults)}</p>`}</div>`;
+}
+document.addEventListener('input', e => {
+  if (e.target.id !== 'wq') return;
+  L.wq = e.target.value; const pos = e.target.selectionStart; route(); const i = $('#wq'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch {} }
+});
+let curWine = null, wSaveT = null;
+function renderWine(id) {
+  const w = PS.wines.get(id); if (!w) return go('#/carnets');
+  curWine = w; current = 'vin'; navHTML('carnets');
+  const t = T(), evs = eventsWithWine(w.id);
+  $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.tabWines)}</h1>
+      <button class="icon-btn" data-act="winedel" aria-label="${esc(t.del)}">${ico('trash')}</button></div>
+    <div class="wrap stack" id="winePage">
+      <div class="wine-hero">${w.photo
+        ? `<figure class="polaroid tilt wlabelbig"><img src="${esc(w.photo)}" alt="" data-act="wineview"><button class="rm" data-act="winephotorm" aria-label="${esc(t.removePhoto)}">${ico('x')}</button></figure>`
+        : `<button class="addphoto" data-act="winephoto">${ico('camera')}<span>${esc(t.snapLabel)}</span></button>`}</div>
+      <textarea class="evtitle" id="wName" rows="1" placeholder="${esc(t.wineNamePh)}" aria-label="${esc(t.wineNamePh)}">${esc(w.name)}</textarea>
+      <div class="seg wcols" role="radiogroup" aria-label="${esc(t.wineColor)}">${WCOLS.map(c => `<button type="button" role="radio" data-act="winecolor" data-c="${c}" aria-checked="${w.color === c}"><i class="wdot" style="--c:${WCOL_C[c]}"></i>${esc(t.wcol[c])}</button>`).join('')}</div>
+      <div class="row2">
+        <div class="field"><label for="wVintage">${esc(t.vintage)}</label><input class="input" id="wVintage" inputmode="numeric" maxlength="4" value="${esc(w.vintage || '')}"></div>
+        <div class="field"><label for="wApp">${esc(t.appellation)}</label><input class="input" id="wApp" value="${esc(w.appellation || '')}"></div>
+      </div>
+      <div class="field"><label for="wProd">${esc(t.producer)}</label><input class="input" id="wProd" value="${esc(w.producer || '')}"></div>
+      <div class="stars" role="group" aria-label="${esc(t.wineRating)}">${[1, 2, 3, 4, 5].map(i => `<button data-act="winerate" data-v="${i}" class="${(w.rating || 0) >= i ? 'on' : ''}" aria-label="${i}/5">${ico('star')}</button>`).join('')}</div>
+      <div class="field"><label for="wNotes">${esc(t.wineNotes)}</label><textarea class="ruled hand-in" id="wNotes" rows="4">${esc(w.notes || '')}</textarea></div>
+      <section class="panel"><h2>${ico('book')} ${esc(t.pairsWith)}</h2>
+        <div class="wrapchips">${(w.pairs || []).map(byId).filter(Boolean).map(r => `<span class="chip pchip"><a href="#/r/${encodeURIComponent(r.id)}">${esc(r.title)}</a><button data-act="wineunpair" data-id="${r.id}" aria-label="${esc(t.del)}">${ico('x')}</button></span>`).join('')}
+          <button class="chip" data-act="winepair">${ico('plus')}${esc(t.aRecipe)}</button></div></section>
+      ${evs.length ? `<section><h2 class="eyebrow list-h">${esc(t.drunkAt)}</h2><div class="evlist">${evs.map(evCardHTML).join('')}</div></section>` : ''}
+    </div>`;
+  const ta = $('#wName'); const fit = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }; fit(); ta.addEventListener('input', fit);
+}
+function rerenderWine() { const y = window.scrollY; renderWine(curWine.id); window.scrollTo(0, y); }
+function readWine() {
+  const w = curWine; if (!w || !$('#winePage')) return;
+  w.name = $('#wName').value.trim().slice(0, 120); w.vintage = $('#wVintage').value.replace(/\D/g, '').slice(0, 4);
+  w.appellation = $('#wApp').value.trim().slice(0, 80); w.producer = $('#wProd').value.trim().slice(0, 80); w.notes = $('#wNotes').value.slice(0, 3000);
+}
+function flushWine() { if (wSaveT) { clearTimeout(wSaveT); wSaveT = null; readWine(); if (curWine) psPut('wines', curWine); } }
+document.addEventListener('input', e => { if (!e.target.closest('#winePage')) return; clearTimeout(wSaveT); wSaveT = setTimeout(() => { wSaveT = null; readWine(); if (curWine) psPut('wines', curWine); }, 500); });
+// Choose wines from the cave (for an evening or a recipe), or start a new one.
+function pickWines({ title, exclude = [] }) {
+  const t = T(), pool = winesSorted().filter(w => !exclude.includes(w.id)), sel = new Set();
+  return new Promise(res => {
+    let done = false;
+    sheet(`<h2>${esc(title)}</h2><div class="picklist" id="pwList">${pool.map(w => `<button class="pickrow" data-id="${w.id}" aria-pressed="false">${wineThumb(w)}<span class="min"><b>${esc(wineLabel(w))}</b><small>${esc([w.color && t.wcol[w.color], w.appellation].filter(Boolean).join(' · '))}</small></span><span class="tick">${ico('check')}</span></button>`).join('') || `<p class="muted" style="margin:0">${esc(t.winesEmptyT)}</p>`}</div>
+      <div class="btnrow"><button class="btn" data-x="new">${ico('camera')}${esc(t.newWine)}</button>${pool.length ? `<button class="btn primary" data-x="ok">${esc(t.pickDone(0))}</button>` : ''}</div>`, (el, cl) => {
+      el.addEventListener('click', e => {
+        const row = e.target.closest('.pickrow');
+        if (row) { const id = row.dataset.id; sel.has(id) ? sel.delete(id) : sel.add(id); row.classList.toggle('on', sel.has(id)); row.setAttribute('aria-pressed', sel.has(id)); const ok = el.querySelector('[data-x="ok"]'); if (ok) ok.textContent = t.pickDone(sel.size); return; }
+        const x = e.target.closest('[data-x]')?.dataset.x;
+        if (x === 'ok') { done = true; cl(); res({ ids: [...sel] }); }
+        if (x === 'new') { done = true; cl(); res({ ids: [...sel], create: true }); }
+      });
+    });
+    const obs = new MutationObserver(() => { if (!done && !$('#pwList')) { obs.disconnect(); res(null); } else if (done) obs.disconnect(); });
+    obs.observe(document.body, { childList: true });
+  });
+}
+function winesRowHTML(ids) {
+  return ids.map(id => PS.wines.get(id)).filter(Boolean).map(w => `<a class="chip person" href="#/vin/${encodeURIComponent(w.id)}"><i class="wdot" style="--c:${WCOL_C[w.color] || '#7A1F2B'}"></i>${esc(wineLabel(w))}</a>`).join('');
+}
+// Wines poured for these guests before (from the evenings they came to).
+function winesServedTo(gid) {
+  const out = new Map();
+  for (const e of eventsSorted()) if (e.guests.includes(gid)) for (const wid of e.wines || []) {
+    const w = PS.wines.get(wid); if (!w) continue;
+    const o = out.get(wid) || { w, count: 0, last: 0 }; o.count++; o.last = Math.max(o.last, evTime(e)); out.set(wid, o);
+  }
+  return [...out.values()].sort((a, b) => b.last - a.last);
+}
 
 // ---------- Sending recipes between phones ----------
 // A recipe travels inside a link (compressed into the address), sent by WhatsApp, SMS or e-mail.
@@ -3547,7 +3801,6 @@ function renderMore() {
     <a class="btn block" href="#/inbox">${ico('mail')}${esc(t.inbox)}${inbox.length ? ` (${inbox.length})` : ''}</a>
     <section class="panel"><h2>${esc(t.occasions)}</h2><p class="muted" style="margin:0">${esc(t.occText)}</p>
       <div class="occ-list">
-        <label class="occ-row"><span>${esc(occLabel('momsbday'))}</span><input class="input" type="date" data-occdate="momsbday" value="${S.occDates?.momsbday ? new Date().getFullYear() + '-' + S.occDates.momsbday : ''}"></label>
         ${customOcc().map(c => `<div class="occ-row"><span>${esc(c.label)}</span><input class="input" type="date" data-occdate="${c.key}" aria-label="${esc(c.label)}" value="${c.date ? new Date().getFullYear() + '-' + c.date : ''}">
           <button class="icon-btn" data-act="delocc" data-k="${c.key}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}
       </div>
@@ -3584,7 +3837,7 @@ function renderMore() {
 }
 async function exportBackup(share) {
   const t = T();
-  const data = JSON.stringify({ app: 'la-cuisine-d-abe', version: 1, exported: new Date().toISOString(), recipes, shop, events: [...PS.events.values()], guests: [...PS.guests.values()], cooks: FAM.on ? [] : [...PS.cooks.values()] }, null, 1);
+  const data = JSON.stringify({ app: 'la-cuisine-d-abe', version: 1, exported: new Date().toISOString(), recipes, shop, events: [...PS.events.values()], guests: [...PS.guests.values()], wines: [...PS.wines.values()], cooks: FAM.on ? [] : [...PS.cooks.values()] }, null, 1);
   const name = `recettes-abe-${new Date().toISOString().slice(0, 10)}.json`;
   const file = new File([data], name, { type: 'application/json' });
   if (share && navigator.canShare?.({ files: [file] })) {
@@ -3634,7 +3887,7 @@ function samples() {
     R({ title: fr ? 'Gâteau au miel et à la cannelle' : 'Honey & Cinnamon Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur', 'autumn', 'rainyday'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
       ingredients: fr ? '300 g de farine\n1 sachet de levure chimique\n1 c. à café de bicarbonate\n2 c. à café de cannelle\n½ c. à café de gingembre\n3 œufs\n200 g de miel\n150 g de sucre roux\n150 ml d’huile\n200 ml de thé fort refroidi\n1 zeste d’orange' : '300 g flour\n1 packet baking powder\n1 tsp baking soda\n2 tsp cinnamon\n½ tsp ginger\n3 eggs\n200 g honey\n150 g brown sugar\n150 ml oil\n200 ml strong cooled tea\n1 orange zest',
       steps: fr ? 'Préchauffer le four à 170 °C. Huiler un moule à cake.\nMélanger farine, levure, bicarbonate et épices.\nFouetter œufs, miel, sucre, huile, thé et zeste.\nIncorporer les ingrédients secs sans trop travailler.\nCuire 50 min, jusqu’à ce qu’une lame ressorte sèche.\nAttendre un jour avant de servir : il est encore meilleur. Chana tova !' : 'Preheat the oven to 170 °C. Oil a loaf pan.\nMix flour, baking powder, soda and spices.\nWhisk eggs, honey, sugar, oil, tea and zest.\nFold in the dry ingredients without overmixing.\nBake 50 min, until a knife comes out clean.\nWait a day before serving: it gets even better. Shana tova!' }, 5),
-    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'momsbday', 'birthday', 'autumn'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
+    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'birthday', 'autumn'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
       ingredients: fr ? '1 pâte feuilletée\n8 pommes (Golden ou Reinette)\n150 g de sucre\n80 g de beurre\n1 pincée de fleur de sel' : '1 sheet puff pastry\n8 apples (Golden or Reinette)\n150 g sugar\n80 g butter\n1 pinch flaky salt',
       steps: fr ? 'Préchauffer le four à 190 °C. Éplucher les pommes et les couper en quartiers.\nDans un moule allant sur le feu, faire un caramel blond avec le sucre, puis ajouter le beurre et la fleur de sel.\nRanger les pommes serrées sur le caramel, cuire 15 min à feu doux.\nCouvrir avec la pâte en rentrant les bords, piquer à la fourchette.\nEnfourner 30 min, jusqu’à ce que la pâte soit bien dorée.\nAttendre 5 min puis retourner d’un coup sur un plat. Servir tiède avec de la crème fraîche.' : 'Preheat the oven to 190 °C. Peel the apples and cut into quarters.\nIn an ovenproof pan, make a golden caramel with the sugar, then add the butter and salt.\nPack the apples tightly on the caramel and cook 15 min over low heat.\nCover with the pastry, tucking in the edges, and prick with a fork.\nBake 30 min, until the pastry is deep golden.\nWait 5 min, then turn it out in one go onto a plate. Serve warm with crème fraîche.' }, 6),
   ];
@@ -3648,13 +3901,29 @@ document.addEventListener('click', async e => {
   switch (act) {
     case 'new': go('#/edit/new'); break;
     case 'fab': fabSheet(); break;
+    case 'photopost': cookSheet(null); break;
+    case 'cookpick': cookPick(); break;
     case 'cookthis': { const x = byId(b.dataset.id); if (x) cookSheet(x); break; }
     case 'viewcook': cookViewer(b.dataset.id); break;
     case 'likecook': heartCook(b.dataset.id); famChanged(); break;
     case 'ctab': if (b.dataset.v === 'fav') go('#/fav'); else { S.carnetTab = b.dataset.v; saveSettings(); if (current === 'carnets') route(); else go('#/carnets'); } break;
+    case 'newwine': { const w = newWine(); go('#/vin/' + w.id); break; }
+    case 'wcol': L.wcol = b.dataset.c; route(); break;
+    case 'winecolor': if (curWine) { readWine(); curWine.color = curWine.color === b.dataset.c ? '' : b.dataset.c; psPut('wines', curWine); rerenderWine(); } break;
+    case 'winerate': if (curWine) { readWine(); const v = +b.dataset.v; curWine.rating = curWine.rating === v ? 0 : v; psPut('wines', curWine); rerenderWine(); } break;
+    case 'winephoto': if (curWine) { const w = curWine; const [f] = await pickFile(); if (!f) break; try { readWine(); w.photo = await compress(f, 900, 0.76); w.thumb = await compress(f, 320, 0.72); psPut('wines', w); if (curWine === w && current === 'vin') rerenderWine(); } catch { toast('Photo ?'); } break; }
+    case 'winephotorm': if (curWine) { readWine(); delete curWine.photo; delete curWine.thumb; psPut('wines', curWine); rerenderWine(); } break;
+    case 'wineview': if (curWine?.photo) viewImage(curWine.photo); break;
+    case 'winedel': if (curWine && await confirmBox(t.delWineQ(wineLabel(curWine)), t.del)) { clearTimeout(wSaveT); wSaveT = null; const id = curWine.id; psDel('wines', id); for (const e of PS.events.values()) if ((e.wines || []).includes(id)) { e.wines = e.wines.filter(x => x !== id); psPut('events', e); } curWine = null; go('#/carnets'); } break;
+    case 'winepair': if (curWine) { const w = curWine; readWine(); const got = await pickRecipes({ title: t.pairsWith, multi: true, exclude: w.pairs || [] }); if (got && got.length) { w.pairs = [...new Set([...(w.pairs || []), ...got.map(x => x.id)])]; psPut('wines', w); if (curWine === w && current === 'vin') rerenderWine(); } } break;
+    case 'wineunpair': if (curWine) { readWine(); curWine.pairs = (curWine.pairs || []).filter(x => x !== b.dataset.id); psPut('wines', curWine); rerenderWine(); } break;
+    case 'evwines': if (curEv) { const ev = curEv; readEvent(); psPut('events', ev); const got = await pickWines({ title: t.pickWinesT, exclude: ev.wines || [] }); if (!got) break;
+      ev.wines = [...new Set([...(ev.wines || []), ...got.ids])];
+      if (got.create) { const w = newWine(); ev.wines.push(w.id); psPut('events', ev); go('#/vin/' + w.id); break; }
+      psPut('events', ev); if (curEv === ev && current === 'carnet') rerenderEvent(); break; }
     case 'newevent': { const e = newEvent(); go('#/carnet/' + e.id); break; }
     case 'newguest': { const g = { id: uid(), name: '', notes: '', createdAt: Date.now() }; psPut('guests', g); go('#/invites/' + g.id); break; }
-    case 'planwith': { const g = PS.guests.get(b.dataset.id); if (!g) break; flushGuest(); const e = newEvent({ guests: [g.id], title: g.name ? t.dinnerWith(g.name) : '' }); go('#/carnet/' + e.id); break; }
+    case 'planwith': { const g = PS.guests.get(b.dataset.id); if (!g) break; flushGuest(); const e = newEvent({ guests: [g.id] }); go('#/carnet/' + e.id); break; }
     case 'guestdel': { const g = PS.guests.get(b.dataset.id); if (!g || !(await confirmBox(t.delGuestQ(g.name || t.unnamedGuests), t.del))) break;
       gSaveT && clearTimeout(gSaveT); gSaveT = null; psDel('guests', g.id); for (const e of PS.events.values()) if (e.guests.includes(g.id)) { e.guests = e.guests.filter(x => x !== g.id); psPut('events', e); } go('#/carnets'); break; }
     case 'evguests': if (curEv) guestPicker(curEv); break;
@@ -3697,7 +3966,6 @@ document.addEventListener('click', async e => {
     case 'share': if (r) shareText(r.title, recipeText(r)); break;
     case 'units': if (r) { S.units = b.dataset.u; saveSettings(); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'send': if (r) sendRecipe(r); break;
-    case 'homeview': S.homeView = b.dataset.v; saveSettings(); L.scroll = 0; route(); window.scrollTo(0, 0); break;
     case 'scope': L.scope = L.scope === 'family' ? '' : 'family'; refreshList(); break;
     case 'like': toggleHeart(b.dataset.id); break;
     case 'bookmark': { const x = FAM.all.find(y => y.id === b.dataset.id); if (x) { setInBook(x.id, !x.inBook); toast(!x.inBook ? t.addedToBook : t.removedFromBook); } break; }
@@ -3794,8 +4062,7 @@ document.addEventListener('change', e => {
   const od = e.target.dataset?.occdate;
   if (od) {
     const mmdd = (e.target.value || '').slice(5);
-    if (od === 'momsbday') S.occDates = { ...(S.occDates || {}), momsbday: mmdd };
-    else S.customOcc = customOcc().map(c => c.key === od ? { ...c, date: mmdd } : c);
+    S.customOcc = customOcc().map(c => c.key === od ? { ...c, date: mmdd } : c);
     saveSettings(); toast(T().saved);
   }
   if (e.target.id === 'sort') { L.sort = e.target.value; renderResults(); }
