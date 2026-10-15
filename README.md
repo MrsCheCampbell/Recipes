@@ -73,7 +73,10 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Look**
-- Styled like grandma's recipe book: a red gingham valance, cream paper, recipe photos as taped polaroids on a gingham tablecloth, ruled recipe cards, handwritten-style headings, typewriter labels, and his notes on a sticky note. Ingredients and steps stay in a very legible font.
+- Grandma's recipe box, re-engineered: gingham with a perforated tear-off edge, paper grain, recipe photos as taped polaroids on a gingham tablecloth, ruled recipe cards with crop marks, a catalogue number on every recipe (N° 001 is the first one he added), thumb-index tabs for A–Z, and his notes on a sticky note.
+- Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
+- Every icon is drawn for the app (market basket, whisk, sieve, chef's hat, egg timer…), and recipes without a photo get an illustration for their category (soup bowl, braided loaf, cake slice, fish, carrot…). No emoji anywhere.
+- Motion: pages slide in, polaroids drop onto the tablecloth, ticked ingredients get crossed out with a drawn line. Turned off automatically if the phone asks for reduced motion.
 
 **Comfort & safety**
 - Large text by default (three sizes), light and dark modes, big tap targets.
