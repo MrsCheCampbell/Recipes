@@ -83,6 +83,16 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **Backup**: send a backup file to email or Google Drive, and restore it on a new phone. The app reminds him once a month.
 - Six example recipes (challah, roast chicken, shakshuka, ratatouille, honey cake, tarte Tatin), removable in one tap.
 
+## Frigo: what can I make?
+
+The **Frigo** tab (the little fridge in the bottom bar):
+
+1. Add what you have (type it, or tap the common ones). It's remembered for next time.
+2. **Dans votre livre** instantly lists your own recipes that fit, ranked by how much you have (the ring shows the %), then by your stars, favorites and how often you've cooked them, with what's missing. Salt, pepper, oil and water don't count as missing.
+3. **Demander des idées à Claude**: Claude reads your fridge, your best recipes, the season and the weather, writes a short suggestion, picks from your book, and searches the web for 3–5 real recipe pages (French sites first when the app is in French). Each idea has **Voir le site** and **Enregistrer**, which opens the normal new-recipe form with the link and imports it.
+
+Claude needs an API key: create one at console.anthropic.com → API keys, then paste it in *Plus → Claude*. The key is stored only on that phone and requests go straight from the phone to Anthropic (Claude Opus 5.5 with web search). Each request costs a few cents; you can set a monthly spending limit in the Console. Only links Claude actually found in its search are shown.
+
 ## Sending recipes to each other
 
 Each phone keeps its own recipe book. To share one:
@@ -95,5 +105,5 @@ Set your own name in *Plus → Réglages → Prénom affiché* so the inbox says
 
 ## Tech
 
-No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed). Data lives in the phone's IndexedDB.
+No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed), and `vendor/anthropic/` (the official Anthropic TypeScript SDK 0.130.0, bundled for the browser, MIT, loaded only when Claude is asked). Data lives in the phone's IndexedDB.
 Link import goes through public CORS proxies (allorigins, corsproxy.io, codetabs) because browsers can't read other sites directly. If a site blocks them, the link is still saved and he can paste the text instead.

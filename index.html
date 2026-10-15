@@ -240,7 +240,7 @@ main.enter { animation: enter .32s var(--ease); }
   padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); border-top: 1px solid var(--line); }
 .nav::before { content: ""; position: absolute; left: 0; right: 0; top: -5px; height: 4px;
   background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 4px 4px; }
-.nav .in { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
+.nav .in { display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
 .nav a { display: grid; justify-items: center; align-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: .76rem; font-weight: 700; position: relative; transition: color .2s; }
 .nav a svg.i { width: 27px; height: 27px; transition: transform .25s var(--ease); }
 .nav a.on { color: var(--accent); }
@@ -368,6 +368,24 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .more-box .in { display: grid; gap: 16px; padding: 0 14px 14px; }
 .savebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px); border-top: 1px solid var(--line); padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
 .savebar .in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+
+/* ---------- Fridge & Claude ---------- */
+.pantry .chip svg.i { width: 15px; height: 15px; margin-left: 2px; opacity: .7; }
+.pantry .chip.add { border-style: dashed; background: transparent; }
+.match { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--ink);
+  background: radial-gradient(closest-side, var(--surface) 78%, transparent 80%), conic-gradient(var(--accent) calc(var(--p) * 1%), var(--line) 0); }
+.match { display: flex; align-items: baseline; justify-content: center; padding-top: 14px; }
+.match small { font-family: var(--font-mono); font-size: .55rem; }
+.claude-box { display: grid; gap: 12px; }
+.thinking { justify-items: center; text-align: center; }
+.whisk svg.i { width: 44px; height: 44px; color: var(--accent); animation: whisk 1s ease-in-out infinite; transform-origin: 50% 85%; }
+@keyframes whisk { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
+.claude-ans h3.eyebrow { margin-top: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+.claude-summary { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.4; margin: 0; }
+.idea { display: grid; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.idea h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; }
+.idea .meta { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.panel h2 svg.i, .catrow svg.i { color: var(--accent); vertical-align: -3px; }
 
 /* ---------- Inbox (airmail) ---------- */
 .mast-r { display: inline-flex; align-items: center; gap: 10px; }
@@ -567,6 +585,10 @@ const I = {
   iosShare: `<path d="M12 14.5v-11M8.5 7 12 3.5 15.5 7"/><path d="M8.5 10H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1.5"/>`,
   // cookbook page with a camera lens
   bookCam: `<path d="M3 6c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8v12.5c-3-1.2-6-1.2-9 .8-3-2-6-2-9-.8Z"/><path d="M12 6.8v13.3"/><circle cx="16.6" cy="12.6" r="2.5"/><path d="M5.5 10h3.5M5.5 13h3.5" opacity=".6"/>`,
+  // fridge with a little heart magnet
+  fridge: `<rect x="5.5" y="2.5" width="13" height="19" rx="2.6"/><path d="M5.5 9.5h13M8.5 5.4v2M8.5 12.4v3"/><path d="M14.6 14.6s-1.6-.9-1.6-2a.8.8 0 0 1 1.6-.4.8.8 0 0 1 1.6.4c0 1.1-1.6 2-1.6 2Z" ${F}/><path d="M7.5 21.5v1M16.5 21.5v1"/>`,
+  // sparkle, for Claude's ideas
+  spark: `<path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7Z"/><path d="M19 15.5c.25 1.6 1 2.35 2.5 2.5-1.5.25-2.25 1-2.5 2.5-.25-1.5-1-2.25-2.5-2.5 1.5-.15 2.25-.9 2.5-2.5Z" ${F}/>`,
   // envelope sealed with a heart
   mail: `<rect x="3" y="5.5" width="18" height="13" rx="2.4"/><path d="m3.6 7.2 8.4 6 8.4-6"/><path d="M12 17.3s-2-1.1-2-2.5a1 1 0 0 1 2-.5 1 1 0 0 1 2 .5c0 1.4-2 2.5-2 2.5Z" ${F}/>`,
   // cute pot with a face, for the empty state
@@ -613,7 +635,7 @@ const STR = {
   fr: {
     appName: "La Cuisine d'Abe",
     hello: ['Bonne nuit', 'Bonjour', 'Bon après-midi', 'Bonsoir'], shabbatShalom: 'Chabbat Chalom',
-    nav: { list: 'Recettes', fav: 'Favoris', shop: 'Courses', more: 'Plus' },
+    nav: { list: 'Recettes', fav: 'Favoris', fridge: 'Frigo', shop: 'Courses', more: 'Plus' },
     searchPh: 'Chercher : poulet, cannelle, Pessah…', voice: 'Chercher à la voix', clear: 'Effacer',
     all: 'Toutes', favorites: 'Favoris', filters: 'Filtres', quick: 'Rapide (≤ 30 min)', pesachOk: 'Cacher pour Pessah',
     sort: { az: 'De A à Z', recent: 'Ajoutées récemment', cooked: 'Les plus cuisinées', rating: 'Les mieux notées', time: 'Les plus rapides' },
@@ -689,6 +711,15 @@ const STR = {
     occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
     occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
     collection: n => `Recueil · ${String(n).padStart(3, '0')}`, added: 'Ajoutée',
+    fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter : œufs, poireaux, reste de poulet…', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
+    fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
+    haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
+    askClaude: 'Demander des idées à Claude', askAgain: 'Redemander à Claude', claudeThinking: 'Claude regarde votre frigo et cherche des recettes…', claudeSec: s => `${s} s`,
+    claudeSummary: 'L’avis de Claude', claudeFromBook: 'Dans votre livre', claudeNew: 'Nouvelles idées', openSite: 'Voir le site', saveIdea: 'Enregistrer', claudeUses: 'Utilise', claudeOld: d => `Réponse du ${d}`,
+    claudeNoKey: 'Pour demander des idées à Claude, ajoutez une clé dans Plus → Claude.', claudeSetup: 'Configurer Claude', claudeErr: 'Claude n’a pas pu répondre. Vérifiez la connexion internet et la clé, puis réessayez.',
+    claudeErrKey: 'La clé n’est pas acceptée. Vérifiez-la dans Plus → Claude.', claudeRefused: 'Claude n’a pas pu répondre à cette demande.', claudeOffline: 'Pas de connexion internet.',
+    claudePanel: 'Claude', claudeText: 'Claude peut proposer des recettes à partir de ce que vous avez : il regarde votre livre et cherche de nouvelles idées sur internet. Il faut une clé (console.anthropic.com → API keys). Elle reste sur ce téléphone. Chaque demande coûte quelques centimes.',
+    claudeKey: 'Clé Claude', claudeKeySaved: 'Clé enregistrée', claudeKeyRemove: 'Retirer la clé', claudeKeyOn: 'Claude est prêt.', claudeKeyOff: 'Aucune clé pour l’instant.',
     inbox: 'Boîte de réception', parAvion: 'Par avion', inboxEmpty: 'Rien pour l’instant. Quand quelqu’un vous envoie une recette depuis son appli, elle arrive ici.',
     fromWho: n => `De la part de ${n}`, receivedOn: d => `reçue le ${d}`, keep: 'Garder', toss: 'Supprimer', kept: 'Ajoutée à vos recettes', tossed: 'Recette supprimée',
     send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli La Cuisine d’Abe :`,
@@ -708,7 +739,7 @@ const STR = {
   en: {
     appName: "Abe's Kitchen",
     hello: ['Good night', 'Good morning', 'Good afternoon', 'Good evening'], shabbatShalom: 'Shabbat Shalom',
-    nav: { list: 'Recipes', fav: 'Favorites', shop: 'Shopping', more: 'More' },
+    nav: { list: 'Recipes', fav: 'Favorites', fridge: 'Fridge', shop: 'Shopping', more: 'More' },
     searchPh: 'Search: chicken, cinnamon, Pesach…', voice: 'Search by voice', clear: 'Clear',
     all: 'All', favorites: 'Favorites', filters: 'Filters', quick: 'Quick (≤ 30 min)', pesachOk: 'Kosher for Pesach',
     sort: { az: 'A to Z', recent: 'Recently added', cooked: 'Most cooked', rating: 'Top rated', time: 'Quickest' },
@@ -779,6 +810,15 @@ const STR = {
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
+    fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add: eggs, leeks, leftover chicken…', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
+    fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
+    haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
+    askClaude: 'Ask Claude for ideas', askAgain: 'Ask Claude again', claudeThinking: 'Claude is looking in your fridge and searching for recipes…', claudeSec: s => `${s}s`,
+    claudeSummary: 'Claude’s take', claudeFromBook: 'In your book', claudeNew: 'New ideas', openSite: 'Open the site', saveIdea: 'Save', claudeUses: 'Uses', claudeOld: d => `Answer from ${d}`,
+    claudeNoKey: 'To ask Claude for ideas, add a key in More → Claude.', claudeSetup: 'Set up Claude', claudeErr: 'Claude couldn’t answer. Check the internet connection and the key, then try again.',
+    claudeErrKey: 'The key wasn’t accepted. Check it in More → Claude.', claudeRefused: 'Claude couldn’t answer this request.', claudeOffline: 'No internet connection.',
+    claudePanel: 'Claude', claudeText: 'Claude can suggest recipes from what you have: it looks through your book and searches the web for new ideas. It needs a key (console.anthropic.com → API keys). The key stays on this phone. Each request costs a few cents.',
+    claudeKey: 'Claude key', claudeKeySaved: 'Key saved', claudeKeyRemove: 'Remove the key', claudeKeyOn: 'Claude is ready.', claudeKeyOff: 'No key yet.',
     inbox: 'Inbox', parAvion: 'Par avion', inboxEmpty: 'Nothing yet. When someone sends you a recipe from their app, it lands here.',
     fromWho: n => `From ${n}`, receivedOn: d => `received ${d}`, keep: 'Keep it', toss: 'Delete', kept: 'Added to your recipes', tossed: 'Recipe deleted',
     send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your La Cuisine d’Abe app:`,
@@ -1208,7 +1248,7 @@ function confirmBox(msg, yes, danger = true) {
 // ---------- Navigation ----------
 function navHTML(active) {
   const t = T().nav;
-  const items = [['', 'book', t.list, 'list'], ['fav', 'heart', t.fav, 'fav'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
+  const items = [['', 'book', t.list, 'list'], ['fav', 'heart', t.fav, 'fav'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
   $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}>${ico(i)}<span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
   updateNavCount();
 }
@@ -1232,6 +1272,7 @@ function route() {
   if (a === 'edit') return renderEdit(b === 'new' ? null : byId(b));
   if (a === 'shop') return renderShop();
   if (a === 'inbox') return renderInbox(false);
+  if (a === 'frigo') return renderFridge();
   if (a === 'recu' && b) {
     receiveCode(b, true).then(ok => {
       const ios = isIOS && !installed();
@@ -2016,6 +2057,162 @@ async function readBookPages(files) {
   toast(t.ocrOk);
 }
 
+// ---------- Fridge: what can I make? ----------
+let pantry = ls.get('pantry', []);
+const savePantry = () => ls.set('pantry', pantry);
+const QUICK_FR = ['œufs', 'beurre', 'oignons', 'ail', 'tomates', 'pommes de terre', 'pâtes', 'riz', 'poulet', 'crème', 'fromage', 'citron', 'carottes', 'farine', 'lait', 'courgettes'];
+const QUICK_EN = ['eggs', 'butter', 'onions', 'garlic', 'tomatoes', 'potatoes', 'pasta', 'rice', 'chicken', 'cream', 'cheese', 'lemon', 'carrots', 'flour', 'milk', 'courgettes'];
+// Basics everyone has: a line made only of these (plus measures) doesn't count as missing.
+const STAPLE_W = new Set('sel poivre eau huile olive tournesol neutre fleur noir moulu salt pepper water oil black ground'.split(' '));
+const FILL_W = new Set('de du des la le les et a au aux d l c cs cc soupe cafe cuillere cuilleres pincee pincees gout filet peu un une quelques of and tbsp tsp pinch to taste cl ml g kg extra vierge virgin'.split(' '));
+const isStaple = n => { const w = n.split(/[^a-z]+/).filter(x => x && !FILL_W.has(x)); return w.length > 0 && w.every(x => STAPLE_W.has(x)); };
+const singular = w => w.replace(/(eaux|aux)$/, 'al').replace(/([^s])s$/, '$1').replace(/x$/, '');
+function pantryTerms() {
+  // each pantry item -> normalised forms, singular forms and known translations
+  return pantry.map(p => { const n = norm(p).trim(); const set = new Set([n, singular(n), ...expand(n), ...expand(singular(n))]); return [...set].filter(x => x.length > 1); });
+}
+// "2 sachets de levure boulangère (16 g)" -> "levure boulangère"
+const MEASURE = /^(?:(?:kg|g|gr|grammes?|cl|dl|ml|l|litres?|cups?|tasses?|tbsp|tsp|oz|lb|c\.?\s?à\s?(?:soupe|café)|cuill[eè]res?\s?à\s?(?:soupe|café)|sachets?|gousses?|branches?|brins?|pincées?|tranches?|boîtes?|verres?|bottes?|feuilles?|morceaux?|bouquets?|têtes?|filets?|noix|zestes?)\.?\s+)/i;
+const ingName = raw => { let x = raw.trim(); for (let i = 0; i < 2; i++) x = x.replace(MEASURE, '').replace(/^(de |d’|d'|du |des |of )/i, ''); return x.split(/[,(]/)[0].trim(); };
+function bookMatches() {
+  const terms = pantryTerms(); if (!terms.length) return [];
+  const out = [];
+  for (const r of recipes) {
+    const items = lines(r.ingredients).filter(l => !isHeading(l)).map(l => ({ raw: splitQty(l, 1).rest.trim(), n: norm(l) }));
+    const need = items.filter(x => !isStaple(norm(x.raw)));
+    if (!need.length) continue;
+    const has = x => terms.some(forms => forms.some(f => new RegExp('\\b' + f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(x.n)));
+    const have = need.filter(has), miss = need.filter(x => !has(x));
+    if (!have.length) continue;
+    const cover = have.length / need.length;
+    const score = cover * 100 + have.length * 5 + (r.rating || 0) * 3 + (r.favorite ? 5 : 0) + Math.min(r.cookCount || 0, 5);
+    if (cover < 0.3 && have.length < 2) continue;
+    out.push({ r, have: have.length, total: need.length, miss: miss.map(x => ingName(x.raw)).filter(Boolean), cover, score });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, 12);
+}
+let claudeBusy = false, claudeTimer = null;
+function renderFridge() {
+  current = 'frigo'; navHTML('frigo');
+  const t = T(), quick = (S.lang === 'en' ? QUICK_EN : QUICK_FR).filter(q => !pantry.some(p => norm(p) === norm(q)));
+  const last = ls.get('claudeLast', null);
+  $('#view').innerHTML = `<div class="wrap stack">
+    <header class="top" style="padding-top:8px"><div class="mast"><span>${esc(t.nav.fridge)}</span><span>${esc(String(pantry.length).padStart(2, '0'))}</span></div><h1 class="greet" style="font-style:italic">${esc(t.fridgeTitle)}</h1></header>
+    <form class="shop-add" id="pantryAdd"><input class="input" id="pantryIn" placeholder="${esc(t.fridgeAddPh)}" enterkeyhint="done" autocomplete="off"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    <div class="wrapchips pantry">${pantry.map((p, i) => `<button class="chip on" data-act="pantryrm" data-i="${i}">${esc(p)}${ico('x')}</button>`).join('')}${pantry.length ? `<button class="chip add" data-act="pantryclear">${esc(t.fridgeClear)}</button>` : ''}</div>
+    ${quick.length ? `<div><span class="eyebrow">${esc(t.fridgeQuick)}</span><div class="chips" style="flex-wrap:wrap">${quick.map(q => `<button class="chip" data-act="pantryquick" data-q="${esc(q)}">${ico('plus')}${esc(q)}</button>`).join('')}</div></div>` : ''}
+    <section class="section" style="margin-top:6px"><div class="section-h"><h2>${esc(t.inYourBook)}</h2></div><div id="bookMatches"></div></section>
+    <section class="claude-box" id="claudeBox"></section>
+  </div>`;
+  $('#pantryAdd').onsubmit = e => { e.preventDefault(); const v = $('#pantryIn').value; addPantry(v); };
+  drawBookMatches(); drawClaude(last);
+}
+function addPantry(v) {
+  const items = String(v).split(/[,;\n]| et | and /).map(x => x.trim()).filter(Boolean);
+  for (const it of items) if (!pantry.some(p => norm(p) === norm(it))) pantry.push(it);
+  savePantry(); renderFridge(); $('#pantryIn')?.focus();
+}
+function drawBookMatches() {
+  const t = T(), box = $('#bookMatches'); if (!box) return;
+  if (!pantry.length) { box.innerHTML = `<p class="muted" style="margin:0">${esc(t.fridgeEmpty)}</p>`; return; }
+  const m = bookMatches();
+  box.innerHTML = m.length ? `<div class="cards">${m.map(x => `<a class="card" href="#/r/${encodeURIComponent(x.r.id)}">${thumbHTML(x.r)}
+      <div class="min"><div class="meta"><span class="no">${esc(t.haveOf(x.have, x.total))}</span>${starsMini(x.r.rating)}</div><h3>${esc(x.r.title)}</h3>
+      <div class="meta">${x.miss.length ? `<span>${esc(t.missing)} : ${esc(x.miss.slice(0, 4).join(', '))}${x.miss.length > 4 ? '…' : ''}</span>` : `<span style="color:var(--parve)">${esc(t.nothingMissing)}</span>`}</div></div>
+      <div class="side"><span class="match" style="--p:${Math.round(x.cover * 100)}">${Math.round(x.cover * 100)}<small>%</small></span></div></a>`).join('')}</div>`
+    : `<p class="muted" style="margin:0">${esc(t.noBookMatch)}</p>`;
+}
+function drawClaude(res) {
+  const t = T(), box = $('#claudeBox'); if (!box) return;
+  const key = ls.get('claudeKey', '');
+  const ask = `<button class="btn primary block" data-act="askclaude" ${!pantry.length || claudeBusy ? 'disabled' : ''}>${ico('spark')}${esc(res ? t.askAgain : t.askClaude)}</button>`;
+  if (!key) { box.innerHTML = `<div class="panel"><h2>${ico('spark')} Claude</h2><p style="margin:0">${esc(t.claudeNoKey)}</p><a class="btn" href="#/more" data-goto="claude">${esc(t.claudeSetup)}</a></div>`; return; }
+  if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><div class="whisk">${ico('more')}</div><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
+  if (!res) { box.innerHTML = ask; return; }
+  if (res.error) { box.innerHTML = `<p class="banner" style="margin:0">${esc(res.error)}</p>${ask}`; return; }
+  const book = (res.fromBook || []).map(x => ({ ...x, r: byId(x.id) })).filter(x => x.r);
+  box.innerHTML = `<div class="panel claude-ans">
+      <div class="catrow"><span class="no">${ico('spark')} Claude</span><span>${esc(t.claudeOld(fmtDate(res.at, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })))}</span></div>
+      <h2>${esc(t.claudeSummary)}</h2><p class="claude-summary">${esc(res.summary || '')}</p>
+      ${book.length ? `<h3 class="eyebrow">${esc(t.claudeFromBook)}</h3><div class="cards">${book.map(x => `<a class="card" href="#/r/${encodeURIComponent(x.r.id)}">${thumbHTML(x.r)}<div class="min"><h3>${esc(x.r.title)}</h3><div class="meta" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem">${esc(x.why || '')}</div></div><div class="side"></div></a>`).join('')}</div>` : ''}
+      ${(res.newIdeas || []).length ? `<h3 class="eyebrow">${esc(t.claudeNew)}</h3>${res.newIdeas.map((x, i) => `<article class="idea">
+        <span class="eyebrow">${esc(x.site || hostOf(x.url))}${x.time ? ' · ' + esc(x.time) : ''}</span><h3>${esc(x.title)}</h3><p style="margin:0">${esc(x.why || '')}</p>
+        ${(x.uses || []).length ? `<div class="meta"><span>${esc(t.claudeUses)} : ${esc(x.uses.join(', '))}</span></div>` : ''}
+        ${(x.missing || []).length ? `<div class="meta"><span>${esc(t.missing)} : ${esc(x.missing.join(', '))}</span></div>` : ''}
+        <div class="row2"><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">${ico('link')}${esc(t.openSite)}</a><button class="btn primary" data-act="saveidea" data-i="${i}">${ico('download')}${esc(t.saveIdea)}</button></div></article>`).join('')}` : ''}
+    </div>${ask}`;
+}
+const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+// Claude, called from the phone with the user's own key (kept in this browser only).
+let AnthropicSDK = null;
+async function claudeClient() {
+  if (!AnthropicSDK) AnthropicSDK = (await import('./vendor/anthropic/anthropic-sdk.mjs')).default;
+  return new AnthropicSDK({ apiKey: ls.get('claudeKey', ''), dangerouslyAllowBrowser: true });
+}
+function claudePrompt() {
+  const kosher = recipes.filter(r => r.kashrut).length >= Math.max(2, recipes.length * 0.3);
+  const local = bookMatches().slice(0, 8);
+  const shortlist = [...new Set([...local.map(x => x.r), ...[...recipes].sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.cookCount || 0) - (a.cookCount || 0))])].slice(0, 60);
+  const book = shortlist.map(r => ({ id: r.id, title: r.title, category: r.category || undefined, rating: r.rating || 0, favorite: !!r.favorite, cooked: r.cookCount || 0,
+    ingredients: lines(r.ingredients).filter(l => !isHeading(l)).slice(0, 14).map(l => splitQty(l, 1).rest.trim()) }));
+  const season = seasonNow(), w = wx && Date.now() - wx.at < 3 * 3600e3 ? `${wx.temp}°C in ${wx.city}` : 'unknown';
+  const lang = S.lang === 'fr' ? 'French' : 'English';
+  const system = `You help a home cook decide what to make with what they have. Write everything for the cook in ${lang}, warmly and briefly, like a friend who cooks well.
+Use the web_search tool to find 3 to 5 real recipe pages that use the ingredients on hand${S.lang === 'fr' ? ' (prefer French-language recipe sites such as Marmiton, 750g, Cuisine AZ, Ricardo, Journal des Femmes, or good French blogs)' : ''}. Only suggest a page you actually found in your search results, and give its exact URL. Choose individual recipe pages, not home pages or lists.
+Also pick up to 4 of the cook's own saved recipes that fit, using their ids exactly as given. Favour the cook's highly rated and often-cooked recipes when the ingredients fit.
+${kosher ? 'Many of the cook\'s recipes are kosher, so prefer suggestions that fit kashrut: no pork or shellfish, and no meat cooked with dairy.\n' : ''}When you are done, reply with only one JSON object between <json> and </json>, with this shape:
+{"summary": "2 to 4 sentences: what to cook tonight and why", "fromBook": [{"id": "saved recipe id", "why": "one short sentence"}], "newIdeas": [{"title": "recipe name", "url": "https://...", "site": "site name", "why": "one short sentence", "uses": ["ingredients on hand it uses"], "missing": ["what they would need to buy"], "time": "approximate total time, e.g. 40 min"}]}`;
+  const user = `Ingredients on hand: ${pantry.join(', ')}.
+Season: ${season}. Current weather: ${w}. Date: ${new Date().toDateString()}.
+The cook's saved recipes (JSON): ${JSON.stringify(book)}
+The app's own ingredient matching found these as closest: ${local.map(x => `${x.r.title} (${x.have}/${x.total})`).join('; ') || 'none'}.`;
+  return { system, user };
+}
+async function askClaude() {
+  const t = T();
+  if (!navigator.onLine) { drawClaude({ error: t.claudeOffline }); return; }
+  claudeBusy = true; drawClaude(null);
+  const started = Date.now(); clearInterval(claudeTimer);
+  claudeTimer = setInterval(() => { const el = $('#claudeSec'); if (el) el.textContent = t.claudeSec(Math.round((Date.now() - started) / 1000)); }, 1000);
+  let res;
+  try {
+    const client = await claudeClient();
+    const { system, user } = claudePrompt();
+    const messages = [{ role: 'user', content: user }];
+    let msg;
+    for (let turn = 0; turn < 4; turn++) {
+      msg = await client.beta.messages.create({
+        model: 'claude-opus-5-5', max_tokens: 16000,
+        betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
+        output_config: { effort: 'medium' },
+        system, messages,
+        tools: [{ type: 'web_search_20260209', name: 'web_search', max_uses: 6 }],
+      });
+      if (msg.stop_reason !== 'pause_turn') break;
+      messages.push({ role: 'assistant', content: msg.content });  // let the server continue its search loop
+    }
+    if (msg.stop_reason === 'refusal') throw Object.assign(new Error('refusal'), { refusal: true });
+    // URLs Claude actually saw in search results: only those links are shown.
+    const seen = new Set();
+    for (const b of msg.content) if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) b.content.forEach(x => x.url && seen.add(x.url.replace(/\/$/, '')));
+    const text = msg.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    const json = (text.match(/<json>([\s\S]*?)<\/json>/) || [])[1] || (text.match(/\{[\s\S]*\}/) || [])[0];
+    const data = JSON.parse(json);
+    res = {
+      at: Date.now(), summary: String(data.summary || ''),
+      fromBook: (data.fromBook || []).filter(x => byId(x.id)).slice(0, 4),
+      newIdeas: (data.newIdeas || []).filter(x => /^https?:\/\//.test(x.url || '') && (!seen.size || seen.has(String(x.url).replace(/\/$/, '')))).slice(0, 5),
+    };
+    ls.set('claudeLast', res);
+  } catch (e) {
+    const status = e && e.status;
+    res = { error: e && e.refusal ? t.claudeRefused : status === 401 || status === 403 ? t.claudeErrKey : t.claudeErr };
+  }
+  claudeBusy = false; clearInterval(claudeTimer);
+  if (current === 'frigo') drawClaude(res);
+}
+
 // ---------- Sending recipes between phones ----------
 // A recipe travels inside a link (compressed into the address), sent by WhatsApp, SMS or e-mail.
 // Opening the link puts it in the receiver's inbox, where they keep it or delete it.
@@ -2168,6 +2365,7 @@ function convert(amount, unit, ingr) {
   }
 }
 function renderMore() {
+  setTimeout(() => { if (sessionStorage.getItem?.('abe:goto') === 'claude') { sessionStorage.removeItem('abe:goto'); $('#claudePanel')?.scrollIntoView({ block: 'start' }); } }, 50);
   current = 'more'; navHTML('more');
   const t = T();
   const nFav = recipes.filter(r => r.favorite).length, nCooked = recipes.reduce((a, r) => a + (r.cookCount || 0), 0);
@@ -2196,6 +2394,9 @@ function renderMore() {
           <button class="icon-btn" data-act="delocc" data-k="${c.key}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}
       </div>
       <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></section>
+    <section class="panel" id="claudePanel"><h2>${ico('spark')} ${esc(t.claudePanel)}</h2><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
+      ${ls.get('claudeKey', '') ? `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`
+        : `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div><button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`}</section>
     <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
       ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
         <button class="btn" data-act="locknow">${esc(t.lockNow)}</button>` : `<button class="btn primary" data-act="lockchange">${esc(t.lockAdd)}</button>`}</section>
@@ -2311,6 +2512,13 @@ document.addEventListener('click', async e => {
     case 'share': if (r) shareText(r.title, recipeText(r)); break;
     case 'units': if (r) { S.units = b.dataset.u; saveSettings(); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'send': if (r) sendRecipe(r); break;
+    case 'pantryrm': pantry.splice(+b.dataset.i, 1); savePantry(); renderFridge(); break;
+    case 'pantryclear': pantry = []; savePantry(); renderFridge(); break;
+    case 'pantryquick': addPantry(b.dataset.q); break;
+    case 'askclaude': askClaude(); break;
+    case 'saveidea': { const x = ls.get('claudeLast', {}).newIdeas?.[+b.dataset.i]; if (x) { pendingShare = { url: x.url, text: '', title: x.title }; go('#/edit/new'); } break; }
+    case 'claudekeysave': { const v = $('#claudeKeyIn').value.trim(); if (!v) break; ls.set('claudeKey', v); toast(t.claudeKeySaved); renderMore(); break; }
+    case 'claudekeyrm': ls.del('claudeKey'); renderMore(); break;
     case 'home': go('#/'); break;
     case 'keep': keepLetter(b.dataset.id); break;
     case 'toss': inbox = inbox.filter(y => y.id !== b.dataset.id); saveInbox(); toast(t.tossed); renderInbox(false); break;
@@ -2366,6 +2574,7 @@ document.addEventListener('click', async e => {
   }
 });
 document.addEventListener('click', e => {
+  if (e.target.closest('[data-goto="claude"]')) { try { sessionStorage.setItem('abe:goto', 'claude'); } catch {} }
   // Tap a converted quantity to peek at the original wording.
   const cv = e.target.closest('b.conv');
   if (cv) { e.preventDefault(); const o = cv.dataset.orig; cv.dataset.orig = cv.textContent; cv.textContent = o; return; }
