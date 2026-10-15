@@ -75,7 +75,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 **Look**
 - Grandma's recipe box, re-engineered: gingham with a perforated tear-off edge, paper grain, recipe photos as taped polaroids on a gingham tablecloth, ruled recipe cards with crop marks, a catalogue number on every recipe (N° 001 is the first one he added), thumb-index tabs for A–Z, and his notes on a sticky note.
 - Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
-- Every icon is drawn for the app (market basket, whisk, sieve, chef's hat, egg timer…), and recipes without a photo get an illustration for their category (soup bowl, braided loaf, cake slice, fish, carrot…). No emoji anywhere.
+- Illustrations (category drawings, family avatars, bottom bar, empty pages) are flat kitchen doodles in `art/`, one file per name, so a purchased set can be dropped in with the same file names. See [`art/README.md`](art/README.md). Small button icons are drawn in code. No emoji anywhere.
 - Motion: pages slide in, polaroids drop onto the tablecloth, ticked ingredients get crossed out with a drawn line. Turned off automatically if the phone asks for reduced motion.
 
 **Comfort & safety**

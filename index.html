@@ -186,14 +186,8 @@ main.enter { animation: enter .32s var(--ease); }
 
 /* ---------- Illustrated placeholders ---------- */
 .art { background: color-mix(in srgb, var(--c) 18%, var(--surface)) !important; color: var(--ink); }
-.art svg.ill { width: 74%; height: 74%; }
-.ill { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.ill .a { fill: color-mix(in srgb, var(--c) 62%, var(--polaroid)); }
-.ill .b { fill: color-mix(in srgb, var(--honey) 70%, var(--polaroid)); }
-.ill .c { fill: color-mix(in srgb, var(--accent) 80%, var(--polaroid)); }
-.ill .w { fill: var(--polaroid); }
-.ill .g { stroke: var(--leaf); }
-.ill .n { stroke: none; fill: currentColor; }
+.art .ill { width: 74%; height: 74%; object-fit: contain; }
+img.ill { display: block; }
 
 /* ---------- Recipe list ---------- */
 .letter { display: flex; align-items: baseline; gap: 12px; font-family: var(--font-display); font-style: italic; font-size: 2.2rem; color: var(--accent); padding: 18px 0 2px; scroll-margin-top: 160px; }
@@ -225,7 +219,7 @@ main.enter { animation: enter .32s var(--ease); }
 .empty { text-align: center; padding: 34px 8px; display: grid; gap: 14px; justify-items: center; }
 .empty h2 { font-style: italic; font-size: 1.7rem; }
 .empty p { max-width: 32ch; margin: 0; color: var(--muted); }
-.empty .ill-big { width: 120px; height: 120px; color: var(--ink); }
+.empty .ill-big { width: 120px; height: 120px; color: var(--ink); object-fit: contain; }
 
 .fab {
   position: fixed; z-index: 30; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
@@ -242,9 +236,10 @@ main.enter { animation: enter .32s var(--ease); }
   background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 4px 4px; }
 .nav .in { display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
 .nav a { display: grid; justify-items: center; align-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: .76rem; font-weight: 700; position: relative; transition: color .2s; }
-.nav a svg.i { width: 27px; height: 27px; transition: transform .25s var(--ease); }
+.nav a svg.i, .nav a .navart { width: 30px; height: 30px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
+.nav a:not(.on) .navart { filter: saturate(.35); opacity: .7; }
 .nav a.on { color: var(--accent); }
-.nav a.on svg.i { transform: translateY(-1px) scale(1.06); }
+.nav a.on svg.i, .nav a.on .navart { transform: translateY(-2px) scale(1.1); }
 .nav a.on::after { content: ""; position: absolute; bottom: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 .nav .count { position: absolute; top: 8px; left: calc(50% + 7px); background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-style: normal; font-size: .64rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
 
@@ -371,9 +366,8 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 
 /* ---------- Family ---------- */
 .av { display: inline-grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 50%; background: color-mix(in srgb, var(--c) 22%, var(--surface)); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px color-mix(in srgb, var(--c) 70%, transparent); color: var(--ink); overflow: hidden; }
-.av svg.ill { width: 78%; height: 78%; --c: inherit; }
+.av .ill { width: 74%; height: 74%; object-fit: contain; }
 .av.sm { width: 28px; height: 28px; } .av.xs { width: 22px; height: 22px; box-shadow: 0 0 0 1.5px var(--surface); }
-.av .ill .a { fill: color-mix(in srgb, var(--c) 55%, var(--polaroid)); }
 .hometabs { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; background: var(--surface-2); border-radius: 14px; padding: 3px; margin-top: 16px; }
 .hometabs button { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; background: transparent; border-radius: 11px; min-height: 44px; font-weight: 700; color: var(--muted); }
 .hometabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
@@ -385,7 +379,7 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .post-photo { display: block; background: var(--polaroid); padding: 8px 8px 26px; box-shadow: 0 1px 3px rgba(36,28,22,.12); transform: rotate(-.7deg); }
 .post:nth-child(even) .post-photo { transform: rotate(.6deg); }
 .post-photo img, .post-photo .ph { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: grid; place-items: center; }
-.post-photo .ph svg.ill { width: 46%; height: auto; }
+.post-photo .ph .ill { width: 46%; height: auto; }
 .post-title { color: inherit; text-decoration: none; } .post h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; }
 .hand { font-family: var(--font-hand); font-size: 1.35rem; line-height: 1.25; margin: 0; }
 .post-acts, .social { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -434,7 +428,7 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .match small { font-family: var(--font-mono); font-size: .55rem; }
 .claude-box { display: grid; gap: 12px; }
 .thinking { justify-items: center; text-align: center; }
-.whisk svg.i { width: 44px; height: 44px; color: var(--accent); animation: whisk 1s ease-in-out infinite; transform-origin: 50% 85%; }
+.whisk .ill { width: 56px; height: 56px; animation: whisk 1s ease-in-out infinite; transform-origin: 50% 85%; }
 @keyframes whisk { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
 .claude-ans h3.eyebrow { margin-top: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
 .claude-summary { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.4; margin: 0; }
@@ -662,26 +656,16 @@ const I = {
 const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="i ${cls}">${I[n] || ''}</svg>`;
 
 // ---------- Category illustrations (placeholders for recipes without a photo) ----------
-const ILL = {
-  soups: `<path class="a" d="M10 30h44a22 22 0 0 1-44 0Z"/><path d="M7 30h50M25 52h14"/><path d="M25 23c-3-4 3-6 0-10M32 23c-3-4 3-6 0-10M39 23c-3-4 3-6 0-10" opacity=".55"/><path d="m44 30 9-15"/><ellipse class="b" cx="54.6" cy="12" rx="2.6" ry="4" transform="rotate(32 54.6 12)"/>`,
-  breads: `<path class="a" d="M9 40c0-8 10-14 23-14s23 6 23 14c0 4-4 6-8 6H17c-4 0-8-2-8-6Z"/><path d="M19 29c3 4 3 11 0 16M32 26.5c3 5 3 13 0 19M45 29c3 4 3 11 0 16"/><circle class="n" cx="25" cy="33" r="1"/><circle class="n" cx="38" cy="32" r="1"/><circle class="n" cx="28" cy="40" r="1"/><circle class="n" cx="41" cy="39" r="1"/>`,
-  desserts: `<path class="a" d="M10 46V36l42-12v22Z"/><path class="w" d="M10 36 52 24v6L10 41Z"/><path d="M10 46h42"/><circle class="c" cx="43" cy="20" r="4.5"/><path d="M43 15.5c0-4 3-6.5 6.5-6.5"/>`,
-  pastries: `<path class="a" d="M7 40c4-14 16-20 25-20s21 6 25 20c-5 2-9 .5-12-3-3 3-8 4.5-13 4.5S22 40 19 37c-3 3.5-7 5-12 3Z"/><path d="M19.5 37c2-6 3-10 4.5-15M32 41.5V20M44.5 37c-2-6-3-10-4.5-15"/>`,
-  salads: `<path class="w" d="M9 34h46a23 19 0 0 1-46 0Z"/><path class="b g" d="M19 34c-2-9 4-15 13-15-1 9-6 14-13 15Z" style="fill:color-mix(in srgb,var(--leaf) 55%,var(--polaroid))"/><path class="g" d="M45 34c2-9-4-15-13-15 1 9 6 14 13 15Z" style="fill:color-mix(in srgb,var(--leaf) 40%,var(--polaroid))"/><circle class="c" cx="32" cy="30" r="4.5"/><path d="M7 34h50"/>`,
-  fish: `<path class="a" d="M8 32c8-10 22-12 34-6l12-8v28l-12-8C30 44 16 42 8 32Z"/><circle class="n" cx="18" cy="30" r="2"/><path d="M28 26c3 4 3 8 0 12M35 27c2 3 2 7 0 10" opacity=".6"/>`,
-  poultry: `<path class="a" d="M25 39C16 31 21 14 35 12c12-2 20 8 16 18-3 8-14 12-22 10Z"/><path d="m27 39-9 9" stroke-width="5" style="stroke:var(--polaroid)"/><path d="m27 39-9 9"/><circle class="w" cx="14.5" cy="47.5" r="3.6"/><circle class="w" cx="18.5" cy="51.5" r="3.6"/><path d="M33 20c4-2 8-1 10 2" opacity=".5"/>`,
-  meat: `<path class="a" d="M11 31c0-10 12-16 24-14s19 10 17 18-10 14-23 12S11 41 11 31Z"/><path d="M20 30c5-5 12-5 16 0" opacity=".55"/><circle class="w" cx="40" cy="31" r="4.5"/>`,
-  vegetarian: `<path class="a" d="M41 19 17 51c-2 2 0 4 2 2l26-28c4-4 0-10-4-6Z"/><path d="M27 41l3 3M33 33l3 3M23 47l2 2" opacity=".55"/><path class="g" d="M44 21c0-6 2-10 6-12M46 23c4-2 8-2 12 0M45 22c3-4 7-6 11-6"/>`,
-  sides: `<ellipse class="a" cx="26" cy="39" rx="14" ry="10"/><ellipse class="a" cx="42" cy="31" rx="11" ry="8"/><circle class="n" cx="21" cy="37" r="1.3"/><circle class="n" cx="29" cy="42" r="1.3"/><circle class="n" cx="44" cy="29" r="1.3"/>`,
-  starters: `<ellipse class="w" cx="32" cy="45" rx="24" ry="7"/><circle class="a" cx="21" cy="38" r="6.5"/><circle class="b" cx="33" cy="36" r="6.5"/><circle class="a" cx="45" cy="38" r="6.5"/><path d="M33 36V18"/><path class="c" d="m33 18 7 2.5-7 2.5Z"/>`,
-  mains: `<path d="M8 45h48"/><path class="a" d="M13 45a19 19 0 0 1 38 0Z"/><circle class="b" cx="32" cy="23" r="3.5"/><path d="M21 38a11 11 0 0 1 7-8" style="stroke:var(--polaroid)" opacity=".8"/>`,
-  sauces: `<rect class="a" x="20" y="22" width="24" height="28" rx="6"/><rect class="b" x="18" y="15" width="28" height="8" rx="2.5"/><path class="c" d="M32 42s-5-3-5-6.3a2.6 2.6 0 0 1 5-1.2 2.6 2.6 0 0 1 5 1.2C37 39 32 42 32 42Z"/>`,
-  drinks: `<path class="a" d="M14 28h30v8a15 15 0 0 1-30 0Z"/><path d="M44 31h4a5 5 0 0 1 0 10h-5M10 52h38"/><path d="M24 22c-2-3 2-4 0-7M32 22c-2-3 2-4 0-7" opacity=".55"/>`,
-  cocktails: `<path class="a" d="M12 16h40L32 37Z"/><path d="M32 37v15M22 53h20"/><path d="M15.5 19.5h33" opacity=".45"/><path d="m26 24 14-17"/><circle class="g" cx="27.5" cy="22.5" r="3.6" style="fill:color-mix(in srgb,var(--leaf) 60%,var(--polaroid))"/><path class="c" d="M46 16a6 6 0 0 1 12 0Z"/>`,
-  other: `<path d="M32 46V56"/><path class="a" d="M32 46c-8 0-12-9-12-16s5-12 12-12 12 5 12 12-4 16-12 16Z"/><path d="M32 46c-3 0-5-9-5-16s2-12 5-12 5 5 5 12-2 16-5 16Z"/><rect class="b" x="29" y="46" width="6" height="11" rx="3"/>`,
-};
+// Illustrations live in art/ as one file per name (see art/README.md).
+// To use purchased artwork, drop a file with the same name into art/, or point a name at another file here,
+// e.g. whisk: 'whisk.png'.
+const ART_FILES = {};
+const artSrc = name => 'art/' + (ART_FILES[name] || name + '.svg');
+const artImg = (name, cls = '') => `<img class="ill ${cls}" src="${artSrc(name)}" alt="" aria-hidden="true" loading="lazy" decoding="async">`;
+const ART_NAMES = new Set(['soups', 'salads', 'mains', 'meat', 'poultry', 'fish', 'vegetarian', 'sides', 'breads', 'desserts', 'pastries', 'sauces', 'drinks', 'cocktails', 'starters', 'other',
+  'whisk', 'teapot', 'kettle', 'mitt', 'apron', 'pan', 'pot', 'rollingpin', 'grater', 'spoon']);
+const illus = key => artImg(ART_NAMES.has(key) ? key : 'mains');
 const CAT_C = { soups: '#C9773A', breads: '#C49A4A', desserts: '#C26B7A', pastries: '#C9963A', salads: '#6E9A55', fish: '#4F86A8', poultry: '#C7823F', meat: '#A85543', vegetarian: '#D9822B', sides: '#B39256', starters: '#7C8F4E', mains: '#8C7A6B', sauces: '#B5412C', drinks: '#5E8C8A', cocktails: '#B04A6A', other: '#8C7A6B' };
-const illus = cat => `<svg viewBox="0 0 64 64" class="ill" aria-hidden="true">${ILL[cat] || ILL.mains}</svg>`;
 // No category? Guess one from the name so the drawing still fits.
 const GUESS = [[/cocktail|martini|mojito|spritz|margarita|negroni|daiquiri|sangria|punch|old fashioned|gin tonic|mimosa/, 'cocktails'], [/soupe|veloute|potage|bouillon|soup|gaspacho/, 'soups'], [/salade|salad|taboule/, 'salads'], [/tarte|croissant|madeleine|brioche|cookie|biscuit/, 'pastries'],
   [/gateau|cake|mousse|creme|flan|glace|sorbet|dessert|chocolat/, 'desserts'], [/pain|halla|challah|baguette|bread|focaccia/, 'breads'], [/poulet|dinde|canard|chicken|turkey|duck/, 'poultry'],
@@ -1357,7 +1341,8 @@ function confirmBox(msg, yes, danger = true) {
 function navHTML(active) {
   const t = T().nav;
   const items = [['', 'book', t.list, 'list'], ['fav', 'bookmark', t.fav, 'fav'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
-  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}>${ico(i)}<span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
+  const NAV_ART = { book: 'nav-book', bookmark: 'nav-saved', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
+  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
   updateNavCount();
 }
 function updateNavCount() {
@@ -1665,7 +1650,7 @@ function renderResults() {
   $('[data-act="clearq"]').hidden = !L.q;
   const az = $('#az'); az.hidden = true;
   if (!recipes.length) {
-    box.innerHTML = `<div class="empty">${ico('pot', 'ill-big')}
+    box.innerHTML = `<div class="empty">${artImg('pot', 'ill-big')}
       <h2>${esc(t.emptyTitle)}</h2><p>${esc(t.emptyText)}</p>
       <button class="btn primary" data-act="new">${ico('plus')}${esc(t.firstRecipe)}</button>
       <button class="btn" data-act="samples">${esc(t.loadSamples)}</button></div>`;
@@ -2291,7 +2276,7 @@ function drawClaude(res) {
   const key = ls.get('claudeKey', '');
   const ask = `<button class="btn primary block" data-act="askclaude" ${!pantry.length || claudeBusy ? 'disabled' : ''}>${ico('spark')}${esc(res ? t.askAgain : t.askClaude)}</button>`;
   if (!key) { box.innerHTML = `<div class="panel"><h2>${ico('spark')} Claude</h2><p style="margin:0">${esc(t.claudeNoKey)}</p><a class="btn" href="#/more" data-goto="claude">${esc(t.claudeSetup)}</a></div>`; return; }
-  if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><div class="whisk">${ico('more')}</div><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
+  if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><div class="whisk">${artImg('whisk')}</div><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
   if (!res) { box.innerHTML = ask; return; }
   if (res.error) { box.innerHTML = `<p class="banner" style="margin:0">${esc(res.error)}</p>${ask}`; return; }
   const book = (res.fromBook || []).map(x => ({ ...x, r: byId(x.id) })).filter(x => x.r);
@@ -2385,7 +2370,7 @@ const FAM = {
   uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], all: [], unsub: [], fb: null, db: null, auth: null,
 };
 let FB = null;
-const AV_KEYS = ['desserts', 'breads', 'soups', 'cocktails', 'pastries', 'salads', 'fish', 'poultry', 'vegetarian', 'sides', 'starters', 'sauces', 'drinks', 'mains', 'other'];
+const AV_KEYS = ['whisk', 'teapot', 'mitt', 'apron', 'pan', 'pot', 'kettle', 'rollingpin', 'grater', 'spoon', 'desserts', 'cocktails', 'breads', 'salads', 'vegetarian'];
 const AV_COLORS = ['#C2452D', '#3D6C97', '#4C7E59', '#B98316', '#8A4F9E', '#2F7F86', '#B5576F', '#6B5A4C'];
 const CONTENT = ['title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
 const member = id => FAM.members[id] || { name: T().someone, avatar: 'other', color: '#8C7A6B' };
@@ -2604,7 +2589,7 @@ function feedHTML() {
       </div>
     </article>`;
   }).join('');
-  return `<div class="feed">${recoHTML}${postHTML || `<div class="empty">${ico('pot', 'ill-big')}<h2>${esc(t.feedEmptyT)}</h2><p>${esc(t.feedEmpty)}</p></div>`}</div>`;
+  return `<div class="feed">${recoHTML}${postHTML || `<div class="empty">${artImg('pot', 'ill-big')}<h2>${esc(t.feedEmptyT)}</h2><p>${esc(t.feedEmpty)}</p></div>`}</div>`;
 }
 
 // ---------- Family page: create, join, members, settings ----------
@@ -2624,7 +2609,7 @@ function renderFamily() {
   current = 'famille'; navHTML('more');
   const t = T();
   if (!FAM.on) {
-    const st = { avatar: 'desserts', color: AV_COLORS[0] };
+    const st = { avatar: 'whisk', color: AV_COLORS[0] };
     $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.family)}</h1></div>
       <div class="wrap stack">
         <section class="panel"><h2>${esc(t.famIntroT)}</h2><p style="margin:0">${esc(t.famIntro)}</p></section>
@@ -2686,7 +2671,7 @@ function renderJoin(code) {
   const t = T(), inv = decodeInvite(code);
   if (!inv) { toast(t.famJoinBad); go('#/famille'); return; }
   if (FAM.on && FAM.fid === inv.f) { go('#/'); return; }
-  const st = { avatar: 'cocktails', color: AV_COLORS[1] };
+  const st = { avatar: 'teapot', color: AV_COLORS[1] };
   $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div><div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
     <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name && S.name !== 'Abe' ? S.name : '')}" placeholder="${esc(t.yourNamePh)}"></div>
