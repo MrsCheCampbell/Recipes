@@ -30,8 +30,8 @@ service cloud.firestore {
           && request.resource.data.code == resource.data.code;
         allow delete: if signedIn() && memberId == uid();
 
-        // Personal saved list: only its owner sees it.
-        match /saved/{rid} {
+        // Personal things only their owner sees: saved list, event notebooks, guest books.
+        match /{coll}/{docId} {
           allow read, write: if signedIn() && memberId == uid();
         }
       }
@@ -73,6 +73,35 @@ service cloud.firestore {
             && request.resource.data.text is string && request.resource.data.text.size() <= 2000;
           allow delete: if isMember(fid) && (resource.data.uid == uid() || recipe(fid, rid).owner == uid());
         }
+      }
+
+      // "I made it" posts: a photo and a note, usually tagged to a recipe.
+      // A tagged post is seen by exactly the people who can see the recipe,
+      // and the recipe's owner keeps it in step when they change who that is.
+      match /cooks/{id} {
+        allow read: if isMember(fid) && (resource.data.uid == uid() || resource.data.audience.hasAny(['all', uid()]));
+        allow create: if isMember(fid)
+          && request.resource.data.uid == uid()
+          && request.resource.data.hearts == {}
+          && request.resource.data.audience is list
+          && (request.resource.data.get('rid', null) == null
+              ? request.resource.data.audience.hasAny(['all', uid()])
+              : (canSee(recipe(fid, request.resource.data.rid))
+                 && request.resource.data.audience == recipe(fid, request.resource.data.rid).audience));
+        allow update: if isMember(fid) && (
+          (resource.data.uid == uid()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['note', 'photo', 'thumb', 'hearts'])
+            && request.resource.data.hearts.diff(resource.data.hearts).affectedKeys().hasOnly([uid()]))
+          || (resource.data.get('rid', null) != null
+            && recipe(fid, resource.data.rid).owner == uid()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['audience'])
+            && request.resource.data.audience == recipe(fid, resource.data.rid).audience)
+          || (resource.data.audience.hasAny(['all', uid()])
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['hearts'])
+            && request.resource.data.hearts.diff(resource.data.hearts).affectedKeys().hasOnly([uid()]))
+        );
+        allow delete: if isMember(fid) && (resource.data.uid == uid()
+          || (resource.data.get('rid', null) != null && recipe(fid, resource.data.rid).owner == uid()));
       }
 
       // "Recommended for you": only the sender and the recipient see it.

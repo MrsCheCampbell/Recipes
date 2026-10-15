@@ -88,6 +88,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 Everyone keeps their own book, and sees what the others are cooking.
 
 - **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
+- **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
 - **Ratings**: everyone rates with their own stars; the recipe shows the family average.
 - **Privacy, per recipe** (in the recipe form, "Qui peut la voir ?"): *Toute la famille*, *Moi seul(e)*, or *Choisir* exactly who (Mom's secret birthday cake can be hidden from you). This is enforced by the server rules, so a hidden recipe never even reaches the other phones.
@@ -113,6 +114,20 @@ The family's recipes live in your own free Firebase project (Google). Nobody els
 When joining, the app offers to bring the recipes already on that phone into the family (visible to everyone, or private for now).
 
 Notes: the Firebase web config isn't a secret (security comes from the rules). Accounts are tied to each phone; if someone leaves or resets their phone, they rejoin with a new invite link (their earlier recipes stay in the family). The free plan's limits (50,000 reads and 20,000 writes a day, 1 GB) are far beyond what a family uses.
+
+## Carnets: evenings and guests
+
+The **Carnets** tab (bottom bar) is private to each person, even in the family.
+
+- **Soirées (events)**: one page per evening: Thanksgiving, friends over, Mom's birthday. Give it a date and an occasion, add the guests, then build **the menu**: recipes you're considering (from your book or the family's), or any other dish typed in ("Sarah's cheese board"). On the night, tick what you actually made, mark it *Adoré / Bien / Bof*, and add a note per dish. **La soirée** is for notes about the evening and up to six photos. "J'ai cuisiné" photos tagged to that evening show up there too.
+- **Next year**: an evening with the same occasion offers **Reprendre le menu de « Thanksgiving 2025 »**, which copies last year's menu in one tap.
+- **Invités (guest book)**: one page per couple or group of friends: what to know about them (allergies, what they love), every evening with them, and **everything you've served them**, with how many times, when last, and whether it was loved. When you plan a new evening with them, **Déjà servi à ces invités** lists it right on the page, so you don't repeat a dish, or so you can make their favourite again. **Organiser une soirée avec eux** starts a new evening with them already invited.
+- On a recipe: *menu → Ajouter à une soirée*, and the recipe shows which evenings it was served at.
+- **Favoris** is now the third tab inside Carnets.
+
+Everything is in the backup file (*Plus → Sauvegarder*). In a family it is also stored in your own private space on the server, which only you can read.
+
+> **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts and the private notebooks.
 
 ## Frigo: what can I make?
 

@@ -574,6 +574,116 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
   .hero { background: none; padding: 0; }
   .polaroid { box-shadow: none; transform: none; max-width: 260px; }
 }
+/* ---- "I made it" posts and the recipe's photo panel ---- */
+.choice { display: grid; gap: 10px; }
+.choice button { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); transition: transform .15s var(--ease); }
+.choice button:active { transform: scale(.98); }
+.choice .ill { width: 60px; height: 60px; object-fit: contain; }
+.choice b { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; display: block; }
+.choice small { color: var(--muted); font-size: .9rem; }
+.cook-h { padding-right: 8px; }
+.cookphoto { display: grid; }
+.addphoto { display: grid; justify-items: center; gap: 4px; padding: 22px 12px; border: 1.5px dashed var(--line); border-radius: var(--radius); background: color-mix(in srgb, var(--surface-2) 45%, transparent); font-weight: 700; }
+.addphoto svg.i { width: 34px; height: 34px; color: var(--accent); }
+.addphoto small { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.cookphoto .polaroid { max-width: 280px; padding-bottom: 20px; }
+.cookphoto .polaroid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.polaroid .rm, .page-th .rm { position: absolute; top: 6px; right: 6px; z-index: 3; width: 30px; height: 30px; border-radius: 50%; border: 0; background: rgba(36,28,22,.72); color: #fff; display: grid; place-items: center; padding: 0; }
+.polaroid .rm svg.i { width: 16px; height: 16px; }
+.hand-in { font-family: var(--font-hand) !important; font-size: 1.35rem !important; line-height: 1.3; }
+.cooktag { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: inherit; background: color-mix(in srgb, var(--surface-2) 35%, transparent); }
+.cooktag .thumb { width: 52px; height: 56px; border-width: 3px; border-bottom-width: 7px; }
+.cooktag .thumb .ill { width: 70%; }
+.cooktag .min { display: grid; line-height: 1.25; } .cooktag b { font-family: var(--font-display); font-size: 1.08rem; font-weight: 600; }
+.cooktag svg.i { width: 20px; height: 20px; color: var(--accent); }
+button.post-photo { width: 100%; border: 0; cursor: zoom-in; }
+.cookpost header .stamp { margin-left: auto; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); border: 1.5px solid currentColor; border-radius: 4px; padding: 3px 6px; transform: rotate(4deg); white-space: nowrap; }
+.madegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 14px 12px; padding: 4px 2px 8px; }
+.madeth { position: relative; padding: 4px 4px 14px; border: 0; background: var(--polaroid); box-shadow: var(--shadow); transform: rotate(var(--r, -1deg)); transition: transform .2s var(--ease); }
+.madeth:active { transform: scale(.96); }
+.madeth img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.madeth .av { position: absolute; right: -6px; bottom: -6px; width: 28px; height: 28px; }
+.madenotes { display: grid; margin-top: 8px; }
+.madenote { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; text-align: left; border: 0; border-bottom: 1px solid var(--rule); background: none; padding: 10px 0; color: inherit; }
+.madenote .min { display: grid; } .madenote .meta { display: flex; gap: 8px; align-items: baseline; font-size: .85rem; } .madenote .meta span { color: var(--muted); }
+.madenote .hand { font-size: 1.3rem; }
+.sheet.cookview { gap: 12px; }
+.cv-h { display: flex; align-items: center; gap: 10px; } .cv-h .min { display: grid; line-height: 1.25; } .cv-h .muted { font-size: .82rem; }
+.polaroid.big { display: block; border: 0; width: 100%; max-width: 460px; padding: 8px 8px 26px; transform: rotate(-.8deg); animation: none; cursor: zoom-in; }
+.polaroid.big::before, .polaroid.big::after { display: none; }
+.polaroid.big img { width: 100%; max-height: 58vh; object-fit: cover; display: block; }
+.polaroid.tilt { transform: rotate(-1.4deg); animation: none; }
+.polaroid.tilt::before, .polaroid.tilt::after { width: 56px; height: 18px; }
+.picklist { display: grid; max-height: 52vh; overflow: auto; margin: 0 -4px; padding: 0 4px; }
+.pickrow { display: grid; grid-template-columns: 50px 1fr auto; gap: 12px; align-items: center; text-align: left; border: 0; border-bottom: 1px solid var(--rule); background: none; padding: 8px 2px; color: inherit; }
+.pickrow .thumb { width: 50px; height: 54px; border-width: 3px; border-bottom-width: 7px; } .pickrow .thumb .ill { width: 70%; }
+.pickrow .min { display: grid; line-height: 1.25; } .pickrow b { font-weight: 700; } .pickrow small { color: var(--muted); font-size: .82rem; }
+.pickrow > svg.i { width: 20px; height: 20px; color: var(--muted); }
+.pickrow .tick { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; color: transparent; }
+.pickrow .tick svg.i { width: 18px; height: 18px; }
+.pickrow.on .tick { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.served-line { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; margin-top: 10px; width: 100%; }
+.served-line a { color: var(--accent); }
+
+/* ---- Notebooks: events and guest books ---- */
+.hometabs.three { grid-template-columns: repeat(3, 1fr); }
+.list-h { margin: 22px 0 10px; }
+.evlist { display: grid; gap: 12px; }
+.evcard { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: center; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 14px 14px 12px; box-shadow: var(--shadow); animation: drop .4s var(--ease) both; }
+.evcard:active { transform: scale(.99); }
+.evcard .min { display: grid; gap: 3px; }
+.evcard h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.22rem; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.evcard .meta { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; }
+.evcard .hand.small { font-size: 1.15rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.evstrip { display: flex; gap: 6px; margin-top: 6px; }
+.evstrip img { width: 40px; height: 40px; object-fit: cover; border: 3px solid var(--polaroid); box-shadow: var(--shadow); }
+.evstrip img:nth-child(odd) { transform: rotate(-3deg); } .evstrip img:nth-child(even) { transform: rotate(2deg); }
+.datestamp { display: grid; justify-items: center; align-content: center; width: 64px; height: 74px; border: 1.5px solid var(--accent); color: var(--accent); border-radius: 8px; font-family: var(--font-mono); text-transform: uppercase; font-size: .58rem; letter-spacing: .1em; line-height: 1.15; transform: rotate(-3deg); background: color-mix(in srgb, var(--accent) 6%, transparent); flex: none; }
+.datestamp b { font-family: var(--font-display); font-size: 1.9rem; letter-spacing: 0; font-weight: 600; line-height: 1; }
+.monogram { display: inline-grid; place-items: center; width: 56px; height: 56px; flex: none; border-radius: 50%; background: color-mix(in srgb, var(--c) 18%, var(--surface)); color: var(--c); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--c) 60%, transparent); font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; }
+.evcard.guest { grid-template-columns: 56px 1fr; }
+.chip.person .monogram { width: 28px; height: 28px; font-size: .78rem; margin-right: 2px; }
+a.chip { text-decoration: none; color: inherit; }
+.evhead { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; padding-top: 6px; }
+.evtitle { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background: transparent; resize: none; overflow: hidden; font-family: var(--font-display); font-weight: 500; font-style: italic; font-size: 1.9rem; line-height: 1.15; letter-spacing: -.02em; padding: 4px 0 8px; color: var(--ink); }
+.evtitle:focus { outline: none; border-bottom-color: var(--accent); }
+.evtitle::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+.evpage select.input { appearance: auto; }
+.served { display: grid; gap: 2px; }
+.served h3 { margin: 6px 0 4px; }
+.srow { display: grid; grid-template-columns: 46px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.srow .thumb { width: 46px; height: 50px; border-width: 3px; border-bottom-width: 7px; } .srow .thumb .ill { width: 70%; }
+.srow .thumb.blank { display: block; background: repeating-linear-gradient(45deg, var(--surface-2) 0 6px, transparent 6px 12px); }
+.srow .min { display: grid; gap: 2px; line-height: 1.25; } .srow a { color: inherit; } .srow small { color: var(--muted); font-size: .82rem; }
+.srow .muted.small { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+.verdict { justify-self: start; display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; border: 1px solid currentColor; }
+.verdict svg.i { width: 12px; height: 12px; }
+.v-loved { color: var(--accent); } .v-ok { color: var(--parve); } .v-meh { color: var(--muted); }
+.mitems { display: grid; }
+.mitem { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.mitem .min { display: grid; gap: 6px; }
+.mitem .mt { font-weight: 700; font-size: 1.05rem; padding-top: 6px; } .mitem .mt a { color: inherit; text-decoration-color: var(--line); }
+.mitem.made .mt { text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
+.mcheck { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); display: grid; place-items: center; color: transparent; padding: 0; transition: background .2s, border-color .2s; }
+.mcheck svg.i { width: 20px; height: 20px; }
+.mcheck[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); animation: pop .35s var(--ease); }
+.verdicts { display: flex; gap: 6px; flex-wrap: wrap; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 10px; }
+.verdicts button { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: .8rem; color: var(--muted); }
+.verdicts button svg.i { width: 15px; height: 15px; }
+.verdicts button[aria-pressed="true"].v-loved { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.verdicts button[aria-pressed="true"].v-ok { background: var(--parve); border-color: var(--parve); color: #fff; }
+.verdicts button[aria-pressed="true"].v-meh { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.mnote { width: 100%; border: 0; border-bottom: 1px dashed var(--line); background: transparent; font-family: var(--font-hand); font-size: 1.2rem; padding: 2px 0; color: var(--ink); }
+.mnote:focus { outline: none; border-bottom-color: var(--accent); }
+.btn.ghost { background: transparent; border-style: dashed; }
+.ruled { width: 100%; border: 0; resize: vertical; padding: 4px 2px; color: var(--ink); background: repeating-linear-gradient(transparent 0 calc(1.9rem - 1px), var(--rule) calc(1.9rem - 1px) 1.9rem); line-height: 1.9rem; font-size: 1.35rem; min-height: calc(1.9rem * 4); }
+.ruled:focus { outline: none; }
+.evphotos { display: flex; flex-wrap: wrap; gap: 12px; }
+.evphotos .page-th { width: 92px; height: 112px; }
+.evphotos .page-th.add { display: grid; place-items: center; border: 1.5px dashed var(--line); transform: none; border-color: var(--line); background: transparent; box-shadow: none; color: var(--accent); }
+.evphotos .page-th.add svg.i { width: 28px; height: 28px; }
+.center { text-align: center; } .small { font-size: .85rem; }
 </style>
 </head>
 <body>
@@ -928,6 +1038,77 @@ const STR = {
     lockChange: 'Change the code', lockRemove: 'Remove the code', lockAdd: 'Add a code', lockRemoveQ: 'Remove the passcode?', lockRemoved: 'Code removed', lockNow: 'Lock now', erase: 'Delete', later: 'Later',
   }
 };
+// Notebooks and "I made it" vocabulary.
+Object.assign(STR.fr, {
+  none: '—', done: 'Terminé', optional: 'facultatif', theRecipe: 'La recette',
+  carnets: 'Carnets', carnet: 'Carnet', carnetsSub: 'Vos soirées, vos invités, et tout ce que vous avez servi.',
+  tabEvents: 'Soirées', tabGuests: 'Invités', upcoming: 'À venir', memories: 'Souvenirs',
+  nEvents: n => n ? `${n} soirée${n > 1 ? 's' : ''}` : 'Carnet neuf',
+  newEvent: 'Nouvelle soirée', newGuest: 'Nouveaux invités',
+  eventsEmptyT: 'Un carnet tout neuf', eventsEmpty: 'Préparez Thanksgiving, un dîner entre amis ou l’anniversaire de Maman : les idées de menu, ce qui a été fait, et le souvenir de la soirée. Tout reste là pour l’an prochain.',
+  guestsEmptyT: 'Le livre des invités', guestsEmpty: 'Pour chaque couple d’amis, ce que vous leur avez servi : pour ne pas refaire le même plat, ou refaire leur préféré.',
+  untitled: 'Soirée sans titre', unnamedGuests: 'Invités sans nom', evTitlePh: 'Thanksgiving, dîner avec les Dupont…',
+  evDate: 'Date', evOcc: 'Occasion', evGuests: 'Les invités', addGuests: 'Ajouter des invités',
+  servedBefore: 'Déjà servi à ces invités', servedNone: 'Rien de noté pour l’instant. Cochez les plats faits dans le menu, ils apparaîtront ici la prochaine fois.',
+  servedTimes: (n, d) => `${n} fois · dernière le ${d}`, inMenu: 'au menu', addToMenu: 'Ajouter au menu',
+  menu: 'Le menu', menuEmpty: 'Ajoutez les recettes auxquelles vous pensez, puis cochez ce que vous avez fait.',
+  addRecipes: 'Des recettes', otherDishPh: 'Autre plat (le fromage de Sarah…)', reuseMenu: (title, y) => `Reprendre le menu de « ${title} » (${y})`,
+  made: 'Fait', verdicts: { loved: 'Adoré', ok: 'Bien', meh: 'Bof' }, itemNotePh: 'Une note…',
+  evening: 'La soirée', eveningPh: 'Comment ça s’est passé, qui a aimé quoi, ce qu’on refera…',
+  privateNote: 'Ce carnet est à vous : personne d’autre ne le voit.',
+  delEvent: 'Supprimer cette soirée', delEventQ: title => `Supprimer « ${title} » ?`,
+  guestPickT: 'Qui vient ?', guestNewPh: 'Les Dupont, Sarah et Marc…', dinnerWith: name => `Dîner avec ${name}`,
+  guestNamePh: 'Les Dupont, Sarah et Marc…', guestNotes: 'À savoir', guestNotesPh: 'Allergies, ce qu’ils adorent, ce qu’ils n’aiment pas…',
+  planWith: 'Organiser une soirée avec eux', servedToThem: 'Ce qu’on leur a servi', theirEvenings: 'Leurs soirées', noEveningsYet: 'Pas encore de soirée.',
+  delGuest: 'Supprimer ces invités', delGuestQ: name => `Supprimer « ${name} » du livre des invités ? Leurs soirées restent.`,
+  nEvenings: n => `${n} soirée${n > 1 ? 's' : ''}`, lastOn: d => `dernière le ${d}`, nDishes: n => `${n} plat${n > 1 ? 's' : ''}`, nMade: n => `${n} fait${n > 1 ? 's' : ''}`,
+  addToEvent: 'Ajouter à une soirée', addedToEvent: title => `Ajouté à « ${title} »`, servedAt: 'Servi :',
+  madeIt: 'J’ai cuisiné', madeItQ: 'J’ai cuisiné…', madeItSub: 'Une photo, un mot, la recette. Et c’est dans le fil.', madeItToo: 'Moi aussi', madeItStamp: 'Fait maison',
+  fabQ: 'Qu’est-ce qu’on ajoute ?', newRecipeChoice: 'Une nouvelle recette', newRecipeSub: 'À taper, depuis un lien, une photo de livre…',
+  cookT: title => `J’ai cuisiné « ${title} »`, cookPhotoOnlyT: 'Une photo pour la famille', cookPhotoBtn: 'Prendre ou choisir une photo',
+  cookNote: 'Un mot ?', cookNotePh: 'Moins de sucre, tout le monde en a repris…', cookEvent: 'Pour une soirée ?', cookPost: 'Publier',
+  cookVisAll: 'Toute la famille le verra.', cookVisSome: names => `Visible seulement par : ${names}, comme la recette.`, cookVisMe: 'Visible par vous seul, comme la recette.',
+  cookLocal: 'Rangé avec la recette, sur ce téléphone.', cookPosted: 'Publié dans le fil', cookNoRecipe: 'Sans recette, juste une photo',
+  pickRecipeT: 'Quelle recette ?', pickSearchPh: 'Chercher une recette…', pickDone: n => n ? `Ajouter (${n})` : 'Ajouter',
+  madeByFam: 'Fait par la famille', madeByMe: 'Mes essais', nTimes: n => `${n} fois`, cookedVerb: 'a cuisiné', photoVerb: 'a partagé une photo',
+  delCookQ: 'Supprimer cette photo et ce mot ?', reusedN: n => n ? `${n} plat${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} au menu` : 'Tout est déjà au menu',
+});
+STR.fr.nav.carnets = 'Carnets';
+Object.assign(STR.en, {
+  none: '—', done: 'Done', optional: 'optional', theRecipe: 'The recipe',
+  carnets: 'Notebooks', carnet: 'Notebook', carnetsSub: 'Your evenings, your guests, and everything you served.',
+  tabEvents: 'Events', tabGuests: 'Guests', upcoming: 'Coming up', memories: 'Memories',
+  nEvents: n => n ? `${n} event${n > 1 ? 's' : ''}` : 'New notebook',
+  newEvent: 'New event', newGuest: 'New guests',
+  eventsEmptyT: 'A brand-new notebook', eventsEmpty: 'Plan Thanksgiving, dinner with friends or Mom’s birthday: menu ideas, what got made, and how the evening went. It all stays here for next year.',
+  guestsEmptyT: 'The guest book', guestsEmpty: 'For each couple of friends, what you served them: so you don’t repeat a dish, or so you can make their favourite again.',
+  untitled: 'Untitled event', unnamedGuests: 'Unnamed guests', evTitlePh: 'Thanksgiving, dinner with the Smiths…',
+  evDate: 'Date', evOcc: 'Occasion', evGuests: 'Guests', addGuests: 'Add guests',
+  servedBefore: 'Already served to these guests', servedNone: 'Nothing noted yet. Tick the dishes you made in the menu and they’ll show up here next time.',
+  servedTimes: (n, d) => `${n} time${n > 1 ? 's' : ''} · last on ${d}`, inMenu: 'on the menu', addToMenu: 'Add to the menu',
+  menu: 'The menu', menuEmpty: 'Add the recipes you’re thinking about, then tick what you made.',
+  addRecipes: 'Recipes', otherDishPh: 'Another dish (Sarah’s cheese board…)', reuseMenu: (title, y) => `Reuse the menu from “${title}” (${y})`,
+  made: 'Made', verdicts: { loved: 'Loved', ok: 'Good', meh: 'Meh' }, itemNotePh: 'A note…',
+  evening: 'The evening', eveningPh: 'How it went, who loved what, what to make again…',
+  privateNote: 'This notebook is yours: nobody else sees it.',
+  delEvent: 'Delete this event', delEventQ: title => `Delete “${title}”?`,
+  guestPickT: 'Who’s coming?', guestNewPh: 'The Smiths, Sarah and Mark…', dinnerWith: name => `Dinner with ${name}`,
+  guestNamePh: 'The Smiths, Sarah and Mark…', guestNotes: 'Good to know', guestNotesPh: 'Allergies, what they love, what they don’t…',
+  planWith: 'Plan an evening with them', servedToThem: 'What we served them', theirEvenings: 'Their evenings', noEveningsYet: 'No evenings yet.',
+  delGuest: 'Delete these guests', delGuestQ: name => `Remove “${name}” from the guest book? Their evenings stay.`,
+  nEvenings: n => `${n} evening${n > 1 ? 's' : ''}`, lastOn: d => `last on ${d}`, nDishes: n => `${n} dish${n > 1 ? 'es' : ''}`, nMade: n => `${n} made`,
+  addToEvent: 'Add to an event', addedToEvent: title => `Added to “${title}”`, servedAt: 'Served at:',
+  madeIt: 'I made it', madeItQ: 'I made something…', madeItSub: 'A photo, a word, the recipe. And it’s in the feed.', madeItToo: 'Me too', madeItStamp: 'Homemade',
+  fabQ: 'What are we adding?', newRecipeChoice: 'A new recipe', newRecipeSub: 'Type it, from a link, a photo of a cookbook…',
+  cookT: title => `I made “${title}”`, cookPhotoOnlyT: 'A photo for the family', cookPhotoBtn: 'Take or choose a photo',
+  cookNote: 'A word?', cookNotePh: 'Less sugar, everyone had seconds…', cookEvent: 'For an event?', cookPost: 'Post',
+  cookVisAll: 'The whole family will see it.', cookVisSome: names => `Only seen by: ${names}, like the recipe.`, cookVisMe: 'Only you will see it, like the recipe.',
+  cookLocal: 'Kept with the recipe, on this phone.', cookPosted: 'Posted to the feed', cookNoRecipe: 'No recipe, just a photo',
+  pickRecipeT: 'Which recipe?', pickSearchPh: 'Search a recipe…', pickDone: n => n ? `Add (${n})` : 'Add',
+  madeByFam: 'Made by the family', madeByMe: 'My attempts', nTimes: n => `${n} time${n > 1 ? 's' : ''}`, cookedVerb: 'made this', photoVerb: 'shared a photo',
+  delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
+});
+STR.en.nav.carnets = 'Notebooks';
 
 // ---------- Small helpers ----------
 const $ = (s, el = document) => el.querySelector(s);
@@ -994,6 +1175,8 @@ const DB = {
   async put(r) { return this.db ? this._run('recipes', 'readwrite', s => s.put(r)) : this.mem.set(r.id, r); },
   async del(id) { return this.db ? this._run('recipes', 'readwrite', s => s.delete(id)) : this.mem.delete(id); },
   async clear() { return this.db ? this._run('recipes', 'readwrite', s => s.clear()) : this.mem.clear(); },
+  async kvGet(k) { return this.db ? this._run('kv', 'readonly', s => s.get(k)) : this.mem.get('kv:' + k); },
+  async kvSet(k, v) { return this.db ? this._run('kv', 'readwrite', s => s.put(v, k)) : this.mem.set('kv:' + k, v); },
 };
 
 // ---------- App state ----------
@@ -1340,8 +1523,9 @@ function confirmBox(msg, yes, danger = true) {
 // ---------- Navigation ----------
 function navHTML(active) {
   const t = T().nav;
-  const items = [['', 'book', t.list, 'list'], ['fav', 'bookmark', t.fav, 'fav'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
-  const NAV_ART = { book: 'nav-book', bookmark: 'nav-saved', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
+  const items = [['', 'book', t.list, 'list'], ['carnets', 'notebook', t.carnets, 'carnets'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
+  if (active === 'fav') active = 'carnets';
+  const NAV_ART = { book: 'nav-book', notebook: 'nav-notebook', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
   $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
   updateNavCount();
 }
@@ -1355,6 +1539,7 @@ function route() {
   const h = location.hash.replace(/^#\/?/, '');
   const [a = '', b = ''] = h.split('/').map(decodeURIComponent);
   if (current === 'list' || current === 'fav') L.scroll = window.scrollY;
+  flushEvent(); flushGuest();
   closeCook();
   $$('.scrim, .viewer').forEach(s => s.remove());
   $('#view').dataset.id = '';
@@ -1380,6 +1565,9 @@ function route() {
     return;
   }
   if (a === 'more') return renderMore();
+  if (a === 'carnets') return renderCarnets();
+  if (a === 'carnet' && b) return renderEvent(b);
+  if (a === 'invites' && b) return renderGuest(b);
   return renderList(a === 'fav');
 }
 window.addEventListener('hashchange', route);
@@ -1582,7 +1770,7 @@ function renderFeed() {
       ${homeTabs('feed')}
       ${feedHTML()}
     </div>
-    <button class="fab" data-act="new">${ico('plus')}${esc(t.add)}</button>`;
+    <button class="fab" data-act="fab">${ico('plus')}${esc(t.add)}</button>`;
 }
 function renderList(favOnly) {
   const was = current;
@@ -1598,10 +1786,10 @@ function renderList(favOnly) {
     <div class="wrap">
       <header class="top">
         <div class="mast"><span>${esc(t.appName)}</span><span class="mast-r">${esc(t.collection(recipes.length))}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
-        <h1 class="greet">${favOnly ? esc(t.favorites) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
+        <h1 class="greet">${favOnly ? esc(t.carnets) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
         ${favOnly ? '' : calHTML()}
       </header>
-      ${favOnly ? '' : bannerHTML()}
+      ${favOnly ? carnetTabs('fav') : bannerHTML()}
       ${!favOnly && FAM.on && !S.feedOff ? homeTabs('book') : ''}
     </div>
     <div class="searchbar"><div class="wrap">
@@ -1621,7 +1809,7 @@ function renderList(favOnly) {
       <div id="railbox"></div>
       <div id="results"></div>
     </div>
-    <button class="fab" data-act="new">${ico('plus')}${esc(t.add)}</button>
+    <button class="fab" data-act="fab">${ico('plus')}${esc(t.add)}</button>
     <div class="az" id="az" hidden></div>`;
   renderResults();
   requestAnimationFrame(() => window.scrollTo(0, L.scroll || 0));
@@ -1782,7 +1970,9 @@ function renderRecipe(r) {
       ${steps ? `<section class="section"><div class="section-h"><h2>${esc(t.steps)}</h2></div><ol class="steps">${steps}</ol></section>` : ''}
       ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.notes)}</h2></div><div class="notes">${esc(r.notes)}</div></section>` : ''}
       ${ing || steps ? pagesHTML(r) : ''}
-      <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small" data-act="cooked">${ico('check')}${esc(t.cookedToday)}</button></div>
+      <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small primary" data-act="cooked">${ico('camera')}${esc(t.madeIt)}</button>
+        ${eventsWith(r.id).length ? `<div class="served-line"><span>${esc(t.servedAt)}</span>${eventsWith(r.id).slice(0, 6).map(e => `<a href="#/carnet/${encodeURIComponent(e.id)}">${esc(evLabel(e))}${evLabel(e).includes(String(new Date(evTime(e)).getFullYear())) ? '' : ' · ' + new Date(evTime(e)).getFullYear()}</a>`).join('')}</div>` : ''}</div>
+      ${madeSectionHTML(r)}
       ${FAM.on && FAM.raw.has(r.id) ? `<section class="section" id="commentsSec"><div class="section-h"><h2>${esc(t.comments)}</h2></div>
         <div id="comments">${commentsListHTML()}</div>
         <div class="comment-form"><textarea class="input" id="commentIn" rows="2" placeholder="${esc(t.commentPh)}"></textarea>
@@ -1817,6 +2007,7 @@ function recipeMenu(r) {
   const t = T();
   sheet(`<h2>${esc(r.title)}</h2><div class="menu">
     ${isMine(r) ? `<button data-m="edit">${ico('edit')}${esc(t.edit)}</button>` : `<button data-m="dup">${ico('copy')}${esc(t.copyToMine)}</button>`}
+    <button data-m="event">${ico('book')}${esc(t.addToEvent)}</button>
     <button data-m="send">${ico('mail')}${esc(t.send)}</button>
     <button data-m="share">${ico('share')}${esc(t.share)}</button>
     <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
@@ -1827,6 +2018,7 @@ function recipeMenu(r) {
       const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return; close();
       if (m === 'edit') go('#/edit/' + r.id);
       if (m === 'share') shareText(r.title, recipeText(r));
+      if (m === 'event') addToEventSheet(r);
       if (m === 'unbook') { setInBook(r.id, false); toast(t.removedFromBook); }
       if (m === 'send') sendRecipe(r);
       if (m === 'copy') { try { await navigator.clipboard.writeText(recipeText(r)); } catch {} toast(t.copied); }
@@ -2367,7 +2559,7 @@ async function askClaude() {
 // Data lives in /families/{fid}; firestore.rules decides who sees what, on the server.
 const FAM = {
   cfg: ls.get('fbConfig', null), fid: ls.get('famId', null), name: ls.get('famName', ''), code: ls.get('famCode', ''), on: false, ready: false,
-  uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], all: [], unsub: [], fb: null, db: null, auth: null,
+  uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], cooks: new Map(), all: [], unsub: [], fb: null, db: null, auth: null,
 };
 let FB = null;
 const AV_KEYS = ['whisk', 'teapot', 'mitt', 'apron', 'pan', 'pot', 'kettle', 'rollingpin', 'grater', 'spoon', 'desserts', 'cocktails', 'breads', 'salads', 'vegetarian'];
@@ -2422,8 +2614,10 @@ async function famStart() {
   }, e => { console.warn(e); gotRecipes(); }));
   FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, 'saved'), s => { FAM.saved = new Map(); s.forEach(d => FAM.saved.set(d.id, d.data())); rebuild(); }, e => console.warn(e)));
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('recos'), FB.where('to', '==', FAM.uid)), s => { FAM.recos = []; s.forEach(d => FAM.recos.push({ ...d.data(), id: d.id })); FAM.recos.sort((a, b) => b.at - a.at); famChanged(); }, e => console.warn(e)));
+  psListen();
   await ready;
   FAM.ready = true;
+  psMigrate().catch(e => console.warn(e));
   return true;
 }
 function famRecipe(d) {
@@ -2447,7 +2641,7 @@ function famChanged() {
     const a = document.activeElement;
     if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.closest('#view')) return;
     if ($('.scrim') || lockState || cookState) return;
-    if (!['list', 'fav', 'recipe', 'feed', 'famille'].includes(current)) { updateNavCount(); return; }
+    if (!['list', 'fav', 'recipe', 'feed', 'famille', 'carnets'].includes(current)) { updateNavCount(); return; }
     const y = window.scrollY; route(); window.scrollTo(0, y);
   }, 200);
 }
@@ -2468,6 +2662,7 @@ async function cloudSave(r) {
     if (!prev) Object.assign(c, { hearts: {}, ratings: {}, commentCount: 0 });
     FAM.raw.set(r.id, { ...(prev || {}), ...c, id: r.id });
     quiet(FB.setDoc(fref('recipes', r.id), c, { merge: !!prev }));
+    if (prev) syncCooksAudience(r.id, c.audience);
   }
   const myPrev = prev?.ratings?.[FAM.uid] || 0;
   if ((r.rating || 0) !== myPrev && FAM.raw.has(r.id)) {
@@ -2485,7 +2680,7 @@ async function cloudSave(r) {
 }
 async function cloudDelete(r) {
   const prev = FAM.raw.get(r.id);
-  if (prev && prev.owner === FAM.uid) { FAM.raw.delete(r.id); quiet(FB.deleteDoc(fref('recipes', r.id))); }
+  if (prev && prev.owner === FAM.uid) { deleteCooksOf(r.id); FAM.raw.delete(r.id); quiet(FB.deleteDoc(fref('recipes', r.id))); }
   else setInBook(r.id, false);
   FAM.saved.delete(r.id); quiet(FB.deleteDoc(fref('members', FAM.uid, 'saved', r.id)));
   rebuild();
@@ -2566,13 +2761,16 @@ function recommendSheet(r) {
 function feedHTML() {
   const t = T(), muted = new Set(S.muted || []);
   const recos = FAM.recos.filter(x => !x.done && FAM.raw.has(x.rid));
-  const posts = FAM.all.filter(r => !r.sample && (r.owner === FAM.uid || !muted.has(r.owner))).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 60);
+  const posts = FAM.all.filter(r => !r.sample && (r.owner === FAM.uid || !muted.has(r.owner)));
+  const cooks = [...FAM.cooks.values()].filter(c => c.uid === FAM.uid || !muted.has(c.uid));
+  const items = [...posts.map(r => ({ at: r.createdAt || 0, r })), ...cooks.map(c => ({ at: c.at || 0, c }))].sort((a, b) => b.at - a.at).slice(0, 80);
   const recoHTML = recos.map(x => { const r = famRecipe(FAM.raw.get(x.rid)); return `<article class="reco">
       <div class="reco-h">${avatarHTML(x.from)}<div class="min"><span class="eyebrow">${esc(t.recoFor(member(x.from).name))}</span>${x.note ? `<p class="hand">${esc(x.note)}</p>` : ''}</div></div>
       <a class="card" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<div class="min"><h3>${esc(r.title)}</h3><div class="meta">${[r.category && t.cat[r.category], totalTime(r) && fmtDur(totalTime(r))].filter(Boolean).map(m => `<span>${esc(m)}</span>`).join('')}</div></div><div class="side"></div></a>
       <div class="row2"><button class="btn small" data-act="recodone" data-id="${x.id}">${esc(t.recoLater)}</button>${r.inBook ? `<a class="btn small primary" href="#/r/${encodeURIComponent(r.id)}">${esc(t.open)}</a>` : `<button class="btn small primary" data-act="recokeep" data-id="${x.id}">${ico('bookmark')}${esc(t.addToBook)}</button>`}</div>
     </article>`; }).join('');
-  const postHTML = posts.map(r => {
+  const postHTML = items.map(({ r, c }) => {
+    if (c) return cookPostHTML(c);
     const hearts = Object.keys(r.hearts || {}), liked = !!(r.hearts || {})[FAM.uid];
     const lock = !(r.audience || []).includes('all');
     return `<article class="post">
@@ -2721,6 +2919,455 @@ async function famLeave() {
   for (const k of ['fbConfig', 'famId', 'famName', 'famCode']) ls.del(k);
   location.hash = '#/'; location.reload();
 }
+
+// ---------- Personal notebooks (events, guests) and "I made it" posts ----------
+// Events and guest books are private to each person: on the phone, or in members/{me}/… in the family space.
+// "I made it" posts are shared with exactly the people who can see the recipe (see firestore.rules → cooks).
+const PS = { events: new Map(), guests: new Map(), cooks: new Map() };
+const PS_KINDS = ['events', 'guests', 'cooks'];
+const plain = o => JSON.parse(JSON.stringify(o));
+async function psLoadLocal() {
+  for (const k of PS_KINDS) { let arr = []; try { arr = (await DB.kvGet('ps_' + k)) || []; } catch {} PS[k] = new Map(arr.map(x => [x.id, x])); }
+}
+const psTimers = {};
+function psPersistLocal(kind) { clearTimeout(psTimers[kind]); psTimers[kind] = setTimeout(() => DB.kvSet('ps_' + kind, [...PS[kind].values()]).catch(() => {}), 250); }
+function psPut(kind, o) {
+  o.updatedAt = Date.now(); PS[kind].set(o.id, o);
+  if (FAM.on && kind !== 'cooks') quiet(FB.setDoc(fref('members', FAM.uid, kind, o.id), plain(o)));
+  else psPersistLocal(kind);
+}
+function psDel(kind, id) {
+  PS[kind].delete(id);
+  if (FAM.on && kind !== 'cooks') quiet(FB.deleteDoc(fref('members', FAM.uid, kind, id))); else psPersistLocal(kind);
+}
+// Family mode: listen to my own notebooks, and to the "I made it" posts I'm allowed to see.
+function psListen() {
+  for (const kind of ['events', 'guests']) FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, kind), s => {
+    PS[kind] = new Map(); s.forEach(d => PS[kind].set(d.id, { ...d.data(), id: d.id })); psChanged();
+  }, e => console.warn(e)));
+  FAM.unsub.push(FB.onSnapshot(FB.query(fcol('cooks'), FB.where('audience', 'array-contains-any', ['all', FAM.uid])), s => {
+    FAM.cooks = new Map(); s.forEach(d => FAM.cooks.set(d.id, { ...d.data(), id: d.id })); famChanged();
+  }, e => console.warn(e)));
+}
+let psTimer = null;
+function psChanged() { clearTimeout(psTimer); psTimer = setTimeout(() => { if (current === 'carnets' && !$('.scrim')) { const y = window.scrollY; route(); window.scrollTo(0, y); } }, 200); }
+// The first time this phone joins a family, its notebooks and photos move to the family space.
+async function psMigrate() {
+  const flag = 'psMigrated_' + FAM.fid; if (ls.get(flag, false)) return;
+  const local = {}; for (const k of PS_KINDS) { try { local[k] = (await DB.kvGet('ps_' + k)) || []; } catch { local[k] = []; } }
+  for (const k of ['events', 'guests']) for (const o of local[k]) { PS[k].set(o.id, o); quiet(FB.setDoc(fref('members', FAM.uid, k, o.id), plain(o))); }
+  for (const c of local.cooks) {
+    const src = c.rid && FAM.raw.get(c.rid);
+    const nc = { ...c, uid: FAM.uid, rid: src ? c.rid : null, audience: src ? [...(src.audience || ['all'])] : [FAM.uid], hearts: {} };
+    FAM.cooks.set(nc.id, nc); quiet(FB.setDoc(fref('cooks', nc.id), plain(nc)));
+  }
+  ls.set(flag, true);
+}
+
+// ---------- "I made it" ----------
+const cooksAll = () => FAM.on ? [...FAM.cooks.values()] : [...PS.cooks.values()];
+const cooksFor = rid => cooksAll().filter(c => c.rid === rid).sort((a, b) => b.at - a.at);
+const cooksForEvent = eid => cooksAll().filter(c => c.eid === eid && (!FAM.on || c.uid === FAM.uid));
+const cookAuthor = c => !FAM.on ? '' : c.uid === FAM.uid ? T().you : member(c.uid).name;
+const canDelCook = c => !FAM.on || c.uid === FAM.uid || (c.rid && FAM.raw.get(c.rid)?.owner === FAM.uid);
+function pickFile(accept = 'image/*', multiple = false) {
+  return new Promise(res => {
+    const i = document.createElement('input'); i.type = 'file'; i.accept = accept; i.multiple = multiple; i.hidden = true;
+    i.onchange = () => { res([...i.files]); i.remove(); };
+    document.body.append(i); i.click();
+    setTimeout(() => window.addEventListener('focus', () => setTimeout(() => { if (i.isConnected && !i.files.length) { i.remove(); res([]); } }, 800), { once: true }), 300);
+  });
+}
+// Who will see a post about this recipe, in words.
+function visibilityText(r) {
+  const t = T();
+  if (!FAM.on) return t.cookLocal;
+  const aud = r ? (FAM.raw.get(r.id)?.audience || ['all']) : ['all'];
+  if (aud.includes('all')) return t.cookVisAll;
+  const others = aud.filter(x => x !== FAM.uid);
+  return others.length ? t.cookVisSome(others.map(x => member(x).name).join(', ')) : t.cookVisMe;
+}
+function cookSheet(r) {
+  const t = T();
+  const evs = eventsSorted().filter(e => evTime(e) > Date.now() - 45 * 864e5).slice(0, 12);
+  const today = isoDay(new Date());
+  const pre = evs.find(e => e.date === today && (!r || e.items.some(i => i.rid === r.id))) || evs.find(e => e.date === today);
+  const st = { photo: null, thumb: null };
+  sheet(`<h2 class="cook-h">${esc(r ? t.cookT(r.title) : t.cookPhotoOnlyT)}</h2>
+    <div class="cookphoto" id="ckPhoto"></div>
+    <div class="field"><label for="ckNote">${esc(t.cookNote)}</label><textarea class="input hand-in" id="ckNote" rows="3" maxlength="1000" placeholder="${esc(t.cookNotePh)}"></textarea></div>
+    ${evs.length ? `<div class="field"><label for="ckEv">${esc(t.cookEvent)}</label><select class="input" id="ckEv"><option value="">${esc(t.none)}</option>${evs.map(e => `<option value="${e.id}" ${pre && pre.id === e.id ? 'selected' : ''}>${esc(evLabel(e))} · ${esc(fmtDate(evTime(e), { day: 'numeric', month: 'short' }))}</option>`).join('')}</select></div>` : ''}
+    <p class="hint" style="margin:0">${ico(FAM.on ? (visibilityText(r) === t.cookVisAll ? 'users' : 'lock') : 'book')} ${esc(visibilityText(r))}</p>
+    <div class="row2"><button class="btn" data-x="no">${esc(t.cancel)}</button><button class="btn primary" data-x="ok">${ico('check')}${esc(FAM.on ? t.cookPost : t.save)}</button></div>`, (el, close) => {
+    const draw = () => {
+      el.querySelector('#ckPhoto').innerHTML = st.photo
+        ? `<figure class="polaroid tilt"><img src="${st.photo}" alt=""><button class="rm" data-x="rm" aria-label="${esc(t.del)}">${ico('x')}</button></figure>`
+        : `<button class="addphoto" data-x="pick">${ico('camera')}<span>${esc(t.cookPhotoBtn)}</span><small>${esc(t.optional)}</small></button>`;
+    };
+    draw();
+    el.addEventListener('click', async e => {
+      const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return;
+      if (x === 'no') close();
+      if (x === 'rm') { st.photo = st.thumb = null; draw(); }
+      if (x === 'pick') {
+        const [f] = await pickFile(); if (!f) return;
+        try { st.photo = await compress(f, 1200, 0.78); st.thumb = await compress(f, 320, 0.72); draw(); } catch { toast('Photo ?'); }
+      }
+      if (x === 'ok') {
+        const note = el.querySelector('#ckNote').value.trim();
+        if (!r && !st.photo && !note) { el.querySelector('#ckNote').focus(); return; }
+        const eid = el.querySelector('#ckEv')?.value || '';
+        close();
+        await saveCook(r, { ...st, note, eid });
+      }
+    });
+  });
+}
+async function saveCook(r, { photo, thumb, note, eid }) {
+  const t = T(), id = uid();
+  const c = { id, uid: FAM.on ? FAM.uid : 'me', rid: r ? r.id : null, rtitle: r ? r.title : '', note: (note || '').slice(0, 1000), at: Date.now(), hearts: {} };
+  if (photo) { c.photo = photo; c.thumb = thumb; }
+  if (eid) c.eid = eid;
+  if (FAM.on) {
+    c.audience = r && FAM.raw.get(r.id) ? [...(FAM.raw.get(r.id).audience || ['all'])] : ['all'];
+    FAM.cooks.set(id, c); quiet(FB.setDoc(fref('cooks', id), plain(c)));
+  } else { c.audience = ['me']; PS.cooks.set(id, c); psPersistLocal('cooks'); }
+  if (r) { r.cookCount = (r.cookCount || 0) + 1; r.lastCooked = Date.now(); await saveRecipe(r); }
+  const ev = eid && PS.events.get(eid);
+  if (ev && r) {
+    const it = ev.items.find(i => i.rid === r.id);
+    if (it) it.made = true; else ev.items.push(newItem(r, true));
+    psPut('events', ev);
+  }
+  toast(FAM.on ? t.cookPosted : t.bravo);
+  try { navigator.vibrate?.(15); } catch {}
+  route();
+}
+function heartCook(id) {
+  const c = FAM.cooks.get(id); if (!c) return;
+  const on = !(c.hearts || {})[FAM.uid];
+  c.hearts = { ...(c.hearts || {}) }; if (on) c.hearts[FAM.uid] = true; else delete c.hearts[FAM.uid];
+  quiet(FB.updateDoc(fref('cooks', id), { ['hearts.' + FAM.uid]: on ? true : FB.deleteField() }));
+  try { if (on) navigator.vibrate?.(15); } catch {}
+}
+async function deleteCook(id) {
+  const t = T();
+  if (!(await confirmBox(t.delCookQ, t.del))) return false;
+  if (FAM.on) { FAM.cooks.delete(id); quiet(FB.deleteDoc(fref('cooks', id))); } else { PS.cooks.delete(id); psPersistLocal('cooks'); }
+  return true;
+}
+// Keep posts in step with their recipe: same audience, and gone when the recipe goes.
+function syncCooksAudience(rid, audience) {
+  for (const c of FAM.cooks.values()) if (c.rid === rid && JSON.stringify(c.audience) !== JSON.stringify(audience)) {
+    c.audience = [...audience]; quiet(FB.updateDoc(fref('cooks', c.id), { audience: [...audience] }));
+  }
+}
+function deleteCooksOf(rid) {
+  for (const c of [...FAM.cooks.values()]) if (c.rid === rid) { FAM.cooks.delete(c.id); quiet(FB.deleteDoc(fref('cooks', c.id))); }
+}
+function cookViewer(id) {
+  const t = T();
+  const draw = (el, close) => {
+    const c = cooksAll().find(x => x.id === id); if (!c) { close(); return; }
+    const r = c.rid && byId(c.rid), hearts = Object.keys(c.hearts || {}), liked = FAM.on && !!(c.hearts || {})[FAM.uid];
+    el.innerHTML = `<div class="grab"></div>
+      ${FAM.on ? `<header class="cv-h">${avatarHTML(c.uid, 'sm')}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc(ago(c.at))}</span></div></header>` : `<p class="eyebrow" style="margin:0">${esc(fmtDate(c.at))}</p>`}
+      ${c.photo ? `<button class="polaroid big" data-x="zoom"><img src="${esc(c.photo)}" alt=""></button>` : ''}
+      ${c.note ? `<p class="hand">${esc(c.note)}</p>` : ''}
+      ${r && current !== 'recipe' ? `<a class="cooktag" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<span class="min"><span class="eyebrow">${esc(t.theRecipe)}</span><b>${esc(r.title)}</b></span>${ico('arrow')}</a>` : ''}
+      <div class="post-acts">
+        ${FAM.on ? `<button class="pa ${liked ? 'on' : ''}" data-x="heart" aria-pressed="${liked}" aria-label="${esc(t.like)}">${ico(liked ? 'heart' : 'heartO')}<span>${hearts.length || ''}</span></button><span class="likers">${hearts.slice(0, 6).map(h => avatarHTML(h, 'xs')).join('')}</span>` : ''}
+        <span style="flex:1"></span>
+        ${canDelCook(c) ? `<button class="pa" data-x="del" aria-label="${esc(t.del)}">${ico('trash')}</button>` : ''}
+      </div>`;
+  };
+  sheet('', (el, close) => {
+    el.classList.add('cookview'); draw(el, close);
+    el.addEventListener('click', async e => {
+      const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return;
+      const c = cooksAll().find(y => y.id === id); if (!c) return;
+      if (x === 'zoom') viewImage(c.photo);
+      if (x === 'heart') { heartCook(id); draw(el, close); }
+      if (x === 'del') { close(); if (await deleteCook(id)) route(); }
+    });
+    el.addEventListener('click', e => { if (e.target.closest('a[href]')) close(); });
+  });
+}
+function madeSectionHTML(r) {
+  const t = T(), list = cooksFor(r.id); if (!list.length) return '';
+  const pics = list.filter(c => c.thumb || c.photo), notes = list.filter(c => c.note);
+  return `<section class="section" id="madeSec"><div class="section-h"><h2>${esc(FAM.on ? t.madeByFam : t.madeByMe)}</h2><span class="eyebrow">${esc(t.nTimes(list.length))}</span></div>
+    ${pics.length ? `<div class="madegrid">${pics.map((c, i) => `<button class="madeth" data-act="viewcook" data-id="${c.id}" style="--r:${(i % 2 ? 1 : -1) * (1 + (i % 3) * .6)}deg"><img src="${esc(c.thumb || c.photo)}" alt="" loading="lazy">${FAM.on ? avatarHTML(c.uid, 'xs') : ''}</button>`).join('')}</div>` : ''}
+    ${notes.length ? `<div class="madenotes">${notes.map(c => `<button class="madenote" data-act="viewcook" data-id="${c.id}">${FAM.on ? avatarHTML(c.uid, 'sm') : ''}<span class="min"><span class="meta"><b>${esc(FAM.on ? cookAuthor(c) : fmtDate(c.at))}</b>${FAM.on ? `<span>${esc(ago(c.at))}</span>` : ''}</span><span class="hand">${esc(c.note)}</span></span></button>`).join('')}</div>` : ''}
+  </section>`;
+}
+function cookPostHTML(c) {
+  const t = T(), r = c.rid && byId(c.rid), hearts = Object.keys(c.hearts || {}), liked = !!(c.hearts || {})[FAM.uid];
+  return `<article class="post cookpost">
+    <header>${avatarHTML(c.uid)}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc((c.rid ? t.cookedVerb : t.photoVerb) + ' · ' + ago(c.at))}</span></div><span class="stamp">${esc(t.madeItStamp)}</span></header>
+    ${c.photo || c.thumb ? `<button class="post-photo" data-act="viewcook" data-id="${c.id}"><img src="${esc(c.photo || c.thumb)}" alt="" loading="lazy"></button>` : ''}
+    ${c.note ? `<p class="hand">${esc(c.note)}</p>` : ''}
+    ${r ? `<a class="cooktag" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<span class="min"><span class="eyebrow">${esc(t.theRecipe)}</span><b>${esc(r.title)}</b></span>${ico('arrow')}</a>` : ''}
+    <div class="post-acts">
+      <button class="pa ${liked ? 'on' : ''}" data-act="likecook" data-id="${c.id}" aria-pressed="${liked}" aria-label="${esc(t.like)}">${ico(liked ? 'heart' : 'heartO')}<span>${hearts.length || ''}</span></button>
+      <span class="likers">${hearts.slice(0, 5).map(h => avatarHTML(h, 'xs')).join('')}</span>
+      <span style="flex:1"></span>
+      ${r && r.id ? `<button class="pa" data-act="cookthis" data-id="${r.id}">${ico('camera')}<span>${esc(t.madeItToo)}</span></button>` : ''}
+    </div>
+  </article>`;
+}
+// The + button: a new recipe, or "I made something".
+function fabSheet() {
+  const t = T();
+  sheet(`<h2>${esc(t.fabQ)}</h2><div class="choice">
+    <button data-x="cook">${artImg('pan')}<span class="min"><b>${esc(t.madeItQ)}</b><small>${esc(t.madeItSub)}</small></span></button>
+    <button data-x="new">${artImg('mains')}<span class="min"><b>${esc(t.newRecipeChoice)}</b><small>${esc(t.newRecipeSub)}</small></span></button>
+  </div>`, (el, close) => el.addEventListener('click', async e => {
+    const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return; close();
+    if (x === 'new') go('#/edit/new');
+    if (x === 'cook') { const pick = await pickRecipes({ title: t.pickRecipeT, allowNone: FAM.on }); if (pick) cookSheet(pick[0] || null); }
+  }));
+}
+// Choose one or several recipes (my book first; in a family, everything I can see).
+function pickRecipes({ title, multi = false, allowNone = false, exclude = [] }) {
+  const t = T(), pool = (FAM.on ? FAM.all : recipes).filter(r => !exclude.includes(r.id));
+  const c = collator(); pool.sort((a, b) => (b.inBook !== false) - (a.inBook !== false) || c.compare(sortKey(a.title), sortKey(b.title)));
+  const sel = new Set();
+  return new Promise(res => {
+    let done = false;
+    const close = sheet(`<h2>${esc(title)}</h2>
+      <div class="search" style="margin:0">${ico('search', 'lead')}<input id="pkQ" type="search" autocomplete="off" placeholder="${esc(t.pickSearchPh)}"></div>
+      <div class="picklist" id="pkList"></div>
+      ${allowNone ? `<button class="btn" data-x="none">${ico('camera')}${esc(t.cookNoRecipe)}</button>` : ''}
+      ${multi ? `<button class="btn primary" data-x="ok" id="pkOk" disabled>${esc(t.pickDone(0))}</button>` : ''}`, (el, cl) => {
+      const draw = () => {
+        const q = norm(el.querySelector('#pkQ').value).trim();
+        const list = q ? pool.filter(r => norm(r.title).includes(q) || norm(r.tags?.join(' ')).includes(q)) : pool;
+        el.querySelector('#pkList').innerHTML = list.slice(0, 200).map(r => `<button class="pickrow ${sel.has(r.id) ? 'on' : ''}" data-id="${r.id}" aria-pressed="${sel.has(r.id)}">${thumbHTML(r)}<span class="min"><b>${esc(r.title)}</b><small>${esc([r.category && t.cat[r.category], FAM.on && r.owner && r.owner !== FAM.uid ? member(r.owner).name : ''].filter(Boolean).join(' · '))}</small></span>${multi ? `<span class="tick">${ico('check')}</span>` : ico('arrow')}</button>`).join('') || `<p class="muted">${esc(t.noResults)}</p>`;
+        const ok = el.querySelector('#pkOk'); if (ok) { ok.disabled = !sel.size; ok.textContent = t.pickDone(sel.size); }
+      };
+      draw();
+      el.querySelector('#pkQ').addEventListener('input', draw);
+      el.addEventListener('click', e => {
+        const row = e.target.closest('.pickrow');
+        if (row) { const r = pool.find(x => x.id === row.dataset.id); if (!multi) { done = true; cl(); res([r]); return; } sel.has(r.id) ? sel.delete(r.id) : sel.add(r.id); draw(); return; }
+        const x = e.target.closest('[data-x]')?.dataset.x;
+        if (x === 'none') { done = true; cl(); res([]); }
+        if (x === 'ok') { done = true; cl(); res(pool.filter(r => sel.has(r.id))); }
+      });
+    });
+    const obs = new MutationObserver(() => { if (!done && !$('#pkList')) { obs.disconnect(); res(null); } else if (done) obs.disconnect(); });
+    obs.observe(document.body, { childList: true });
+    void close;
+  });
+}
+
+// ---------- Carnets: events ----------
+const isoDay = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const evTime = e => e.date ? new Date(e.date + 'T12:00').getTime() : (e.createdAt || 0);
+const evLabel = e => e.title || (e.occ && occLabel(e.occ)) || T().untitled;
+const eventsSorted = () => [...PS.events.values()].sort((a, b) => evTime(b) - evTime(a));
+const guestName = id => PS.guests.get(id)?.name || '';
+const itemKey = i => i.rid || 'x:' + norm(i.title);
+const newItem = (r, made = false) => ({ id: uid(), rid: r ? r.id : null, title: r ? r.title : '', made, verdict: '', note: '' });
+const itemTitle = i => (i.rid && byId(i.rid)?.title) || i.title || '…';
+function newEvent(preset = {}) {
+  const e = { id: uid(), title: '', date: isoDay(new Date()), occ: '', guests: [], items: [], notes: '', photos: [], createdAt: Date.now(), ...preset };
+  psPut('events', e); return e;
+}
+// Everything already served to any of these guests (optionally leaving one evening out).
+function servedTo(gids, exceptId) {
+  const out = new Map();
+  for (const e of eventsSorted()) {
+    if (e.id === exceptId || !e.guests.some(g => gids.includes(g))) continue;
+    for (const i of e.items) {
+      if (!i.made) continue;
+      const k = itemKey(i), o = out.get(k) || { rid: i.rid, title: itemTitle(i), count: 0, last: 0, lastEvent: null, verdicts: [] };
+      o.count++; if (evTime(e) > o.last) { o.last = evTime(e); o.lastEvent = e; }
+      if (i.verdict) o.verdicts.push(i.verdict);
+      out.set(k, o);
+    }
+  }
+  return [...out.values()].sort((a, b) => b.last - a.last);
+}
+const VERD = { loved: 'heart', ok: 'check', meh: 'x' };
+const bestVerdict = vs => vs.includes('loved') ? 'loved' : vs.includes('ok') ? 'ok' : vs.includes('meh') ? 'meh' : '';
+function verdictBadge(v) { return v ? `<span class="verdict v-${v}">${ico(VERD[v])}${esc(T().verdicts[v])}</span>` : ''; }
+function stampHTML(e) {
+  const d = new Date(evTime(e));
+  return `<span class="datestamp"><span>${esc(d.toLocaleDateString(locale(), { weekday: 'short' }))}</span><b>${d.getDate()}</b><span>${esc(d.toLocaleDateString(locale(), { month: 'short' }))} ${String(d.getFullYear()).slice(2)}</span></span>`;
+}
+function evCardHTML(e) {
+  const t = T(), made = e.items.filter(i => i.made).length;
+  const pics = [...(e.photos || []), ...cooksForEvent(e.id).map(c => c.thumb).filter(Boolean)].slice(0, 5);
+  return `<a class="evcard" href="#/carnet/${encodeURIComponent(e.id)}">${stampHTML(e)}<span class="min">
+    <span class="meta">${[e.occ && occLabel(e.occ), e.guests.map(guestName).filter(Boolean).join(', ')].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join('')}</span>
+    <h3>${esc(evLabel(e))}</h3>
+    <span class="meta"><span>${esc(t.nDishes(e.items.length))}</span>${made ? `<span>${esc(t.nMade(made))}</span>` : ''}</span>
+    ${pics.length ? `<span class="evstrip">${pics.map(p => `<img src="${esc(p)}" alt="" loading="lazy">`).join('')}</span>` : ''}</span></a>`;
+}
+const monoColor = id => AV_COLORS[[...String(id)].reduce((a, c) => a + c.charCodeAt(0), 0) % AV_COLORS.length];
+const monogram = g => `<span class="monogram" style="--c:${monoColor(g.id)}" aria-hidden="true">${esc((g.name || '?').replace(/^(les|the)\s+/i, '').split(/[\s&,]+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?')}</span>`;
+function guestEvents(gid) { return eventsSorted().filter(e => e.guests.includes(gid)); }
+function guestCardHTML(g) {
+  const t = T(), evs = guestEvents(g.id);
+  return `<a class="evcard guest" href="#/invites/${encodeURIComponent(g.id)}">${monogram(g)}<span class="min">
+    <h3>${esc(g.name || t.unnamedGuests)}</h3>
+    <span class="meta"><span>${esc(t.nEvenings(evs.length))}</span>${evs[0] ? `<span>${esc(t.lastOn(fmtDate(evTime(evs[0]), { day: 'numeric', month: 'short', year: 'numeric' })))}</span>` : ''}</span>
+    ${g.notes ? `<span class="hand small">${esc(g.notes.split('\n')[0])}</span>` : ''}</span></a>`;
+}
+const carnetTabs = v => { const t = T(); return `<div class="hometabs three" role="tablist">${[['events', t.tabEvents], ['guests', t.tabGuests], ['fav', t.favorites]].map(([k, l]) => `<button role="tab" data-act="ctab" data-v="${k}" aria-selected="${v === k}">${esc(l)}</button>`).join('')}</div>`; };
+function renderCarnets() {
+  current = 'carnets'; navHTML('carnets');
+  const t = T(), tab = S.carnetTab === 'guests' ? 'guests' : 'events';
+  const evs = eventsSorted(), today = isoDay(new Date());
+  const up = evs.filter(e => (e.date || '') >= today).reverse(), past = evs.filter(e => (e.date || '') < today);
+  const gs = [...PS.guests.values()].sort((a, b) => (evTime(guestEvents(b.id)[0] || {}) - evTime(guestEvents(a.id)[0] || {})) || collator().compare(a.name, b.name));
+  const body = tab === 'events'
+    ? (evs.length ? `${up.length ? `<h2 class="eyebrow list-h">${esc(t.upcoming)}</h2><div class="evlist">${up.map(evCardHTML).join('')}</div>` : ''}
+        ${past.length ? `<h2 class="eyebrow list-h">${esc(t.memories)}</h2><div class="evlist">${past.map(evCardHTML).join('')}</div>` : ''}`
+      : `<div class="empty">${artImg('teapot', 'ill-big')}<h2>${esc(t.eventsEmptyT)}</h2><p>${esc(t.eventsEmpty)}</p><button class="btn primary" data-act="newevent">${ico('plus')}${esc(t.newEvent)}</button></div>`)
+    : (gs.length ? `<div class="evlist" style="margin-top:16px">${gs.map(guestCardHTML).join('')}</div>`
+      : `<div class="empty">${artImg('kettle', 'ill-big')}<h2>${esc(t.guestsEmptyT)}</h2><p>${esc(t.guestsEmpty)}</p><button class="btn primary" data-act="newguest">${ico('plus')}${esc(t.newGuest)}</button></div>`);
+  $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div><div class="wrap">
+    <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.nEvents(evs.length))}</span></div>
+      <h1 class="greet">${esc(t.carnets)}</h1><p class="muted" style="margin:0">${esc(t.carnetsSub)}</p></header>
+    ${carnetTabs(tab)}
+    ${body}
+  </div>
+  ${(tab === 'events' ? evs.length : gs.length) ? `<button class="fab" data-act="${tab === 'events' ? 'newevent' : 'newguest'}">${ico('plus')}${esc(tab === 'events' ? t.newEvent : t.newGuest)}</button>` : ''}`;
+}
+
+let curEv = null, evSaveT = null;
+function renderEvent(id) {
+  const e = PS.events.get(id); if (!e) return go('#/carnets');
+  curEv = e; current = 'carnet'; navHTML('carnets');
+  const t = T();
+  const occs = [...generalOcc(), ...HOLIDAYS];
+  const served = e.guests.length ? servedTo(e.guests, e.id) : [];
+  const inMenu = new Set(e.items.map(itemKey));
+  const prev = e.occ ? eventsSorted().find(x => x.id !== e.id && x.occ === e.occ && x.items.length && evTime(x) <= evTime(e)) : null;
+  const myCooks = cooksForEvent(e.id).filter(c => c.thumb || c.photo);
+  $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.carnet)}</h1>
+      <button class="icon-btn" data-act="evdel" aria-label="${esc(t.delEvent)}">${ico('trash')}</button></div>
+    <div class="wrap stack evpage" id="evPage">
+      <div class="evhead">${stampHTML(e)}<textarea class="evtitle" id="evTitle" rows="1" placeholder="${esc(t.evTitlePh)}" aria-label="${esc(t.evTitlePh)}">${esc(e.title)}</textarea></div>
+      <div class="row2">
+        <div class="field"><label for="evDate">${esc(t.evDate)}</label><input class="input" type="date" id="evDate" value="${esc(e.date || '')}"></div>
+        <div class="field"><label for="evOcc">${esc(t.evOcc)}</label><select class="input" id="evOcc"><option value="">${esc(t.none)}</option>${occs.map(k => `<option value="${k}" ${e.occ === k ? 'selected' : ''}>${esc(occLabel(k))}</option>`).join('')}</select></div>
+      </div>
+
+      <section class="panel"><h2>${ico('users')} ${esc(t.evGuests)}</h2>
+        <div class="wrapchips">${e.guests.map(g => PS.guests.get(g)).filter(Boolean).map(g => `<a class="chip person" href="#/invites/${encodeURIComponent(g.id)}">${monogram(g)}${esc(g.name)}</a>`).join('')}
+          <button class="chip" data-act="evguests">${ico('plus')}${esc(e.guests.length ? t.edit : t.addGuests)}</button></div>
+        ${e.guests.length ? `<div class="served"><h3 class="eyebrow">${esc(t.servedBefore)}</h3>
+          ${served.length ? served.map(s => `<div class="srow">${s.rid && byId(s.rid) ? thumbHTML(byId(s.rid)) : `<span class="thumb blank"></span>`}<span class="min"><b>${s.rid && byId(s.rid) ? `<a href="#/r/${encodeURIComponent(s.rid)}">${esc(s.title)}</a>` : esc(s.title)}</b>
+              <small>${esc(t.servedTimes(s.count, fmtDate(s.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small>${verdictBadge(bestVerdict(s.verdicts))}</span>
+              ${inMenu.has(s.rid || 'x:' + norm(s.title)) ? `<span class="muted small">${esc(t.inMenu)}</span>` : `<button class="icon-btn" data-act="evaddserved" data-rid="${esc(s.rid || '')}" data-title="${esc(s.title)}" aria-label="${esc(t.addToMenu)}">${ico('plus')}</button>`}</div>`).join('')
+            : `<p class="muted" style="margin:0">${esc(t.servedNone)}</p>`}</div>` : ''}
+      </section>
+
+      <section class="panel"><h2>${ico('book')} ${esc(t.menu)}</h2>
+        ${e.items.length ? `<div class="mitems">${e.items.map((i, n) => `<div class="mitem ${i.made ? 'made' : ''}">
+          <button class="mcheck" data-act="evmade" data-i="${n}" aria-pressed="${i.made}" aria-label="${esc(t.made)}">${ico('check')}</button>
+          <div class="min">
+            <div class="mt">${i.rid && byId(i.rid) ? `<a href="#/r/${encodeURIComponent(i.rid)}">${esc(itemTitle(i))}</a>` : `<span>${esc(itemTitle(i))}</span>`}</div>
+            ${i.made ? `<div class="verdicts">${Object.keys(VERD).map(v => `<button data-act="evverdict" data-i="${n}" data-v="${v}" class="v-${v}" aria-pressed="${i.verdict === v}">${ico(VERD[v])}${esc(t.verdicts[v])}</button>`).join('')}</div>` : ''}
+            <input class="mnote" data-i="${n}" value="${esc(i.note || '')}" placeholder="${esc(t.itemNotePh)}" aria-label="${esc(t.itemNotePh)}">
+          </div>
+          <button class="icon-btn" data-act="evrm" data-i="${n}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}</div>`
+          : `<p class="muted" style="margin:0">${esc(t.menuEmpty)}</p>`}
+        <div class="btnrow"><button class="btn small" data-act="evaddrecipes">${ico('plus')}${esc(t.addRecipes)}</button><button class="btn small" data-act="evcook">${ico('camera')}${esc(t.madeIt)}</button></div>
+        <form class="shop-add" id="evOther"><input class="input" id="evOtherIn" placeholder="${esc(t.otherDishPh)}" enterkeyhint="done"><button class="btn" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+        ${prev ? `<button class="btn small ghost" data-act="evreuse" data-from="${prev.id}">${ico('copy')}${esc(t.reuseMenu(evLabel(prev), new Date(evTime(prev)).getFullYear()))}</button>` : ''}
+      </section>
+
+      <section class="panel evening"><h2>${ico('chat')} ${esc(t.evening)}</h2>
+        <textarea class="ruled hand-in" id="evNotes" rows="5" placeholder="${esc(t.eveningPh)}">${esc(e.notes || '')}</textarea>
+        <div class="evphotos">${(e.photos || []).map((p, n) => `<span class="page-th"><img src="${esc(p)}" alt="" data-act="evview" data-i="${n}"><button class="rm" data-act="evphotorm" data-i="${n}" aria-label="${esc(t.del)}">${ico('x')}</button></span>`).join('')}
+          ${myCooks.map(c => `<button class="page-th" data-act="viewcook" data-id="${c.id}"><img src="${esc(c.thumb || c.photo)}" alt=""></button>`).join('')}
+          ${(e.photos || []).length < 6 ? `<button class="page-th add" data-act="evphoto" aria-label="${esc(t.addPhoto)}">${ico('camera')}</button>` : ''}</div>
+      </section>
+      <p class="muted center small">${esc(t.privateNote)}</p>
+    </div>`;
+  const ta = $('#evTitle'); const fit = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }; fit();
+  ta.addEventListener('input', fit);
+  $('#evOther').onsubmit = ev => { ev.preventDefault(); const v = $('#evOtherIn').value.trim(); if (!v) return; e.items.push({ ...newItem(null), title: v }); psPut('events', e); rerenderEvent(); };
+  if (!e.title && !e.items.length) setTimeout(() => ta.focus(), 250);
+}
+function rerenderEvent() { const y = window.scrollY; renderEvent(curEv.id); window.scrollTo(0, y); }
+function readEvent() {
+  const e = curEv; if (!e || !$('#evPage')) return;
+  e.title = $('#evTitle').value.trim().slice(0, 120); e.date = $('#evDate').value; e.occ = $('#evOcc').value; e.notes = $('#evNotes').value;
+  $$('.mnote').forEach(i => { const it = e.items[+i.dataset.i]; if (it) it.note = i.value.slice(0, 300); });
+}
+function saveEventSoon() { clearTimeout(evSaveT); evSaveT = setTimeout(() => { readEvent(); if (curEv) psPut('events', curEv); }, 500); }
+function flushEvent() { if (evSaveT && current === 'carnet') { clearTimeout(evSaveT); evSaveT = null; readEvent(); if (curEv) psPut('events', curEv); } }
+document.addEventListener('input', e => { if (e.target.closest('#evPage')) saveEventSoon(); });
+document.addEventListener('change', e => {
+  if (!e.target.closest('#evPage')) return;
+  if (['evDate', 'evOcc'].includes(e.target.id)) { readEvent(); psPut('events', curEv); rerenderEvent(); }
+});
+function guestPicker(e) {
+  const t = T(), sel = new Set(e.guests);
+  sheet(`<h2>${esc(t.guestPickT)}</h2><div class="wrapchips" id="gpList"></div>
+    <form class="shop-add" id="gpNew"><input class="input" id="gpIn" placeholder="${esc(t.guestNewPh)}" enterkeyhint="done"><button class="btn" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    <button class="btn primary" data-x="ok">${esc(t.done)}</button>`, (el, close) => {
+    const draw = () => { el.querySelector('#gpList').innerHTML = [...PS.guests.values()].sort((a, b) => collator().compare(a.name, b.name)).map(g => `<button type="button" class="chip person ${sel.has(g.id) ? 'on' : ''}" data-g="${g.id}" aria-pressed="${sel.has(g.id)}">${monogram(g)}${esc(g.name)}</button>`).join('') || `<p class="muted" style="margin:0">${esc(t.guestsEmpty)}</p>`; };
+    draw();
+    el.querySelector('#gpNew').onsubmit = ev => { ev.preventDefault(); const v = el.querySelector('#gpIn').value.trim(); if (!v) return; const g = { id: uid(), name: v.slice(0, 80), notes: '', createdAt: Date.now() }; psPut('guests', g); sel.add(g.id); el.querySelector('#gpIn').value = ''; draw(); };
+    el.addEventListener('click', ev => {
+      const c = ev.target.closest('[data-g]'); if (c) { sel.has(c.dataset.g) ? sel.delete(c.dataset.g) : sel.add(c.dataset.g); draw(); return; }
+      if (ev.target.closest('[data-x="ok"]')) {
+        const v = el.querySelector('#gpIn').value.trim(); if (v) { const g = { id: uid(), name: v.slice(0, 80), notes: '', createdAt: Date.now() }; psPut('guests', g); sel.add(g.id); }
+        close(); readEvent(); e.guests = [...sel]; if (!e.title && e.guests.length === 1 && !e.occ) e.title = t.dinnerWith(guestName(e.guests[0])); psPut('events', e); rerenderEvent();
+      }
+    });
+  });
+}
+function addToEventSheet(r) {
+  const t = T(), evs = eventsSorted().slice(0, 15);
+  sheet(`<h2>${esc(t.addToEvent)}</h2><div class="menu">
+    <button data-e="new">${ico('plus')}${esc(t.newEvent)}</button>
+    ${evs.map(e => `<button data-e="${e.id}">${ico('book')}<span class="min" style="display:grid"><span>${esc(evLabel(e))}</span><small class="muted">${esc(fmtDate(evTime(e)))}${e.items.some(i => i.rid === r.id) ? ' · ' + esc(t.inMenu) : ''}</small></span></button>`).join('')}</div>`, (el, close) => el.addEventListener('click', ev => {
+    const id = ev.target.closest('[data-e]')?.dataset.e; if (!id) return; close();
+    const e = id === 'new' ? newEvent() : PS.events.get(id); if (!e) return;
+    if (!e.items.some(i => i.rid === r.id)) e.items.push(newItem(r));
+    psPut('events', e);
+    if (id === 'new') go('#/carnet/' + e.id); else toast(t.addedToEvent(evLabel(e)), { label: t.open, fn: () => go('#/carnet/' + e.id) });
+  }));
+}
+const eventsWith = rid => eventsSorted().filter(e => e.items.some(i => i.rid === rid));
+
+// ---------- Carnets: guest books ----------
+function renderGuest(id) {
+  const g = PS.guests.get(id); if (!g) return go('#/carnets');
+  current = 'invites'; navHTML('carnets');
+  const t = T(), evs = guestEvents(id), served = servedTo([id]);
+  $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.tabGuests)}</h1>
+      <button class="icon-btn" data-act="guestdel" data-id="${g.id}" aria-label="${esc(t.delGuest)}">${ico('trash')}</button></div>
+    <div class="wrap stack" id="guestPage" data-id="${g.id}">
+      <div class="evhead">${monogram(g)}<textarea class="evtitle" id="gName" rows="1" placeholder="${esc(t.guestNamePh)}">${esc(g.name)}</textarea></div>
+      <div class="field"><label for="gNotes">${esc(t.guestNotes)}</label><textarea class="ruled hand-in" id="gNotes" rows="3" placeholder="${esc(t.guestNotesPh)}">${esc(g.notes || '')}</textarea></div>
+      <button class="btn primary" data-act="planwith" data-id="${g.id}">${ico('plus')}${esc(t.planWith)}</button>
+      <section class="panel"><h2>${ico('book')} ${esc(t.servedToThem)}</h2>
+        ${served.length ? `<div class="served">${served.map(s => `<div class="srow">${s.rid && byId(s.rid) ? thumbHTML(byId(s.rid)) : `<span class="thumb blank"></span>`}<span class="min"><b>${s.rid && byId(s.rid) ? `<a href="#/r/${encodeURIComponent(s.rid)}">${esc(s.title)}</a>` : esc(s.title)}</b>
+          <small>${esc(t.servedTimes(s.count, fmtDate(s.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small>${verdictBadge(bestVerdict(s.verdicts))}</span></div>`).join('')}</div>`
+          : `<p class="muted" style="margin:0">${esc(t.servedNone)}</p>`}
+      </section>
+      <section><h2 class="eyebrow list-h">${esc(t.theirEvenings)}</h2>
+        ${evs.length ? `<div class="evlist">${evs.map(evCardHTML).join('')}</div>` : `<p class="muted">${esc(t.noEveningsYet)}</p>`}</section>
+    </div>`;
+  const ta = $('#gName'); const fit = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }; fit(); ta.addEventListener('input', fit);
+  if (!g.name) setTimeout(() => ta.focus(), 250);
+}
+let gSaveT = null, gSaveFn = null;
+function flushGuest() { if (gSaveT) { clearTimeout(gSaveT); gSaveT = null; gSaveFn?.(); } }
+document.addEventListener('input', e => {
+  const p = e.target.closest('#guestPage'); if (!p) return;
+  gSaveFn = () => { const g = PS.guests.get(p.dataset.id); if (!g || !$('#gName')) return; g.name = $('#gName').value.trim().slice(0, 80); g.notes = $('#gNotes').value.slice(0, 3000); psPut('guests', g); };
+  clearTimeout(gSaveT); gSaveT = setTimeout(() => { gSaveT = null; gSaveFn(); }, 500);
+});
 
 // ---------- Sending recipes between phones ----------
 // A recipe travels inside a link (compressed into the address), sent by WhatsApp, SMS or e-mail.
@@ -2937,7 +3584,7 @@ function renderMore() {
 }
 async function exportBackup(share) {
   const t = T();
-  const data = JSON.stringify({ app: 'la-cuisine-d-abe', version: 1, exported: new Date().toISOString(), recipes, shop }, null, 1);
+  const data = JSON.stringify({ app: 'la-cuisine-d-abe', version: 1, exported: new Date().toISOString(), recipes, shop, events: [...PS.events.values()], guests: [...PS.guests.values()], cooks: FAM.on ? [] : [...PS.cooks.values()] }, null, 1);
   const name = `recettes-abe-${new Date().toISOString().slice(0, 10)}.json`;
   const file = new File([data], name, { type: 'application/json' });
   if (share && navigator.canShare?.({ files: [file] })) {
@@ -2961,6 +3608,7 @@ async function importBackup(file) {
       await saveRecipe(r); n++;
     }
     if (Array.isArray(d.shop) && !shop.length) { shop = d.shop; saveShop(); }
+    for (const k of PS_KINDS) if (Array.isArray(d[k]) && !(k === 'cooks' && FAM.on)) for (const o of d[k]) if (o && o.id && !PS[k].has(o.id)) psPut(k, o);
     toast(t.importedN(n)); renderMore();
   } catch { toast(t.badFile); }
 }
@@ -2999,6 +3647,32 @@ document.addEventListener('click', async e => {
   const rid = $('#view').dataset.id, r = rid ? byId(rid) : null;
   switch (act) {
     case 'new': go('#/edit/new'); break;
+    case 'fab': fabSheet(); break;
+    case 'cookthis': { const x = byId(b.dataset.id); if (x) cookSheet(x); break; }
+    case 'viewcook': cookViewer(b.dataset.id); break;
+    case 'likecook': heartCook(b.dataset.id); famChanged(); break;
+    case 'ctab': if (b.dataset.v === 'fav') go('#/fav'); else { S.carnetTab = b.dataset.v; saveSettings(); if (current === 'carnets') route(); else go('#/carnets'); } break;
+    case 'newevent': { const e = newEvent(); go('#/carnet/' + e.id); break; }
+    case 'newguest': { const g = { id: uid(), name: '', notes: '', createdAt: Date.now() }; psPut('guests', g); go('#/invites/' + g.id); break; }
+    case 'planwith': { const g = PS.guests.get(b.dataset.id); if (!g) break; flushGuest(); const e = newEvent({ guests: [g.id], title: g.name ? t.dinnerWith(g.name) : '' }); go('#/carnet/' + e.id); break; }
+    case 'guestdel': { const g = PS.guests.get(b.dataset.id); if (!g || !(await confirmBox(t.delGuestQ(g.name || t.unnamedGuests), t.del))) break;
+      gSaveT && clearTimeout(gSaveT); gSaveT = null; psDel('guests', g.id); for (const e of PS.events.values()) if (e.guests.includes(g.id)) { e.guests = e.guests.filter(x => x !== g.id); psPut('events', e); } go('#/carnets'); break; }
+    case 'evguests': if (curEv) guestPicker(curEv); break;
+    case 'evaddserved': if (curEv) { readEvent(); const x = b.dataset.rid && byId(b.dataset.rid); curEv.items.push(x ? newItem(x) : { ...newItem(null), title: b.dataset.title }); psPut('events', curEv); rerenderEvent(); } break;
+    case 'evmade': if (curEv) { readEvent(); const it = curEv.items[+b.dataset.i]; if (it) { it.made = !it.made; if (!it.made) it.verdict = ''; } psPut('events', curEv); rerenderEvent(); } break;
+    case 'evverdict': if (curEv) { readEvent(); const it = curEv.items[+b.dataset.i]; if (it) it.verdict = it.verdict === b.dataset.v ? '' : b.dataset.v; psPut('events', curEv); rerenderEvent(); } break;
+    case 'evrm': if (curEv) { readEvent(); curEv.items.splice(+b.dataset.i, 1); psPut('events', curEv); rerenderEvent(); } break;
+    case 'evaddrecipes': if (curEv) { const ev = curEv; const got = await pickRecipes({ title: t.addRecipes, multi: true, exclude: ev.items.map(i => i.rid).filter(Boolean) }); if (got && got.length) { readEvent(); ev.items.push(...got.map(x => newItem(x))); psPut('events', ev); if (curEv === ev && current === 'carnet') rerenderEvent(); } } break;
+    case 'evcook': if (curEv) { readEvent(); psPut('events', curEv); const ev = curEv; const got = await pickRecipes({ title: t.pickRecipeT }); if (got && got[0]) { cookSheet(got[0]); setTimeout(() => { const s = $('#ckEv'); if (s) s.value = ev.id; }, 0); } } break;
+    case 'evreuse': if (curEv) { const from = PS.events.get(b.dataset.from); if (!from) break; readEvent(); const have = new Set(curEv.items.map(itemKey)); let n = 0;
+      for (const i of from.items) if (!have.has(itemKey(i))) { curEv.items.push({ ...newItem(null), rid: i.rid, title: i.title || itemTitle(i) }); n++; }
+      psPut('events', curEv); rerenderEvent(); toast(t.reusedN(n)); } break;
+    case 'evphoto': if (curEv) { const ev = curEv; const fs = await pickFile('image/*', true); if (!fs.length) break; readEvent();
+      for (const f of fs) { if ((ev.photos || []).length >= 6) break; try { ev.photos = [...(ev.photos || []), await compress(f, 800, 0.7)]; } catch {} }
+      psPut('events', ev); if (curEv === ev && current === 'carnet') rerenderEvent(); } break;
+    case 'evphotorm': if (curEv) { readEvent(); curEv.photos.splice(+b.dataset.i, 1); psPut('events', curEv); rerenderEvent(); } break;
+    case 'evview': if (curEv) viewImage(curEv.photos[+b.dataset.i]); break;
+    case 'evdel': if (curEv && await confirmBox(t.delEventQ(evLabel(curEv)), t.del)) { clearTimeout(evSaveT); evSaveT = null; psDel('events', curEv.id); curEv = null; go('#/carnets'); } break;
     case 'back': if (history.length > 1) history.back(); else go('#/'); break;
     case 'clearq': L.q = ''; $('#q').value = ''; renderResults(); $('#q').focus(); break;
     case 'voice': voiceSearch(); break;
@@ -3057,7 +3731,7 @@ document.addEventListener('click', async e => {
       if (code) { const ok = await receiveCode(code); if (ok === true) { toast(t.gotOne); renderInbox(false); } break; }
       $('#pasteBox').hidden = false; $('#pasteIn').focus(); break; }
     case 'pastego': { const code = codeFromText($('#pasteIn').value); if (!code) { toast(t.pasteBad); break; } const ok = await receiveCode(code); if (ok === true) { toast(t.gotOne); renderInbox(false); } break; }
-    case 'cooked': if (r) { r.cookCount = (r.cookCount || 0) + 1; r.lastCooked = Date.now(); await saveRecipe(r); toast(t.bravo); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
+    case 'cooked': if (r) cookSheet(r); break;
     case 'cook': if (r) go('#/cook/' + r.id); break;
     case 'cookclose': history.back(); break;
     case 'cookprev': cookMove(-1); break;
@@ -3248,6 +3922,7 @@ document.addEventListener('visibilitychange', () => {
   const ok = await DB.open();
   try { recipes = await DB.all(); } catch { recipes = []; }
   for (const r of recipes) if (migrate(r)) DB.put(r).catch(() => {});
+  await psLoadLocal();
   recipes.forEach(indexRecipe);
   if (!ok) setTimeout(() => toast(T().offlineSave), 800);
   // In a family, the shared space is the source of truth (it is cached on the phone, so it works offline).
