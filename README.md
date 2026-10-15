@@ -87,7 +87,9 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 Everyone keeps their own book, and sees what the others are cooking.
 
-The **La famille** tab is always on the home screen. Until the family is set up (below), it shows what the feed will look like and a button to create or join it.
+The feed has its own tab in the bottom bar, **Famille**. A small red number on it says how many new posts there are since you last looked (and on Android, and on iPhone when installed, the app icon shows it too). Until the family is set up (below), the tab shows what the feed will look like and a button to create or join it.
+
+- **Just a photo**: the bar at the top of the feed (or the + button) shares a photo with no recipe attached: a plate at a restaurant, a dish at friends', anything too pretty or too funny. Add where it was if you like.
 
 - **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".

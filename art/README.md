@@ -27,6 +27,7 @@ Every illustration in the app is one file in this folder. The current set is a m
 | `other.svg` | whisk | Autre |
 | `whisk.svg`, `teapot.svg`, `kettle.svg`, `mitt.svg`, `apron.svg`, `pan.svg`, `pot.svg`, `rollingpin.svg`, `grater.svg`, `spoon.svg` | kitchen tools | family avatars (plus a few category drawings); `pot.svg` is also the empty-page drawing, `whisk.svg` the "Claude is thinking" animation |
 | `nav-book.svg` | open recipe book | bottom bar: Recettes |
+| `nav-feed.svg` | stacked photos with a heart | bottom bar: Famille (the feed) |
 | `nav-notebook.svg` | spiral notebook with a bookmark | bottom bar: Carnets |
 | `nav-saved.svg` | ribbon bookmark | (spare, was the Favoris tab) |
 | `nav-fridge.svg` | fridge | bottom bar: Frigo |

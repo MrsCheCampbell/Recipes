@@ -50,7 +50,7 @@
   --font-hand: "Caveat", "Bradley Hand", cursive;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
   --radius: 14px;
-  --nav-h: 70px;
+  --nav-h: 49px;
   --ease: cubic-bezier(.2, .8, .2, 1);
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
@@ -234,14 +234,15 @@ img.ill { display: block; }
   padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); border-top: 1px solid var(--line); }
 .nav::before { content: ""; position: absolute; left: 0; right: 0; top: -5px; height: 4px;
   background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 4px 4px; }
-.nav .in { display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
-.nav a { display: grid; justify-items: center; align-content: center; gap: 3px; text-decoration: none; color: var(--muted); font-size: .76rem; font-weight: 700; position: relative; transition: color .2s; }
-.nav a svg.i, .nav a .navart { width: 30px; height: 30px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
+.nav .in { display: grid; grid-template-columns: repeat(6, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
+.nav a { display: grid; justify-items: center; align-content: center; gap: 1px; text-decoration: none; color: var(--muted); font-size: .66rem; letter-spacing: -.01em; white-space: nowrap; font-weight: 700; position: relative; transition: color .2s; }
+.nav a svg.i, .nav a .navart { width: 27px; height: 27px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
 .nav a:not(.on) .navart { filter: saturate(.35); opacity: .7; }
 .nav a.on { color: var(--accent); }
-.nav a.on svg.i, .nav a.on .navart { transform: translateY(-2px) scale(1.1); }
-.nav a.on::after { content: ""; position: absolute; bottom: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.nav .count { position: absolute; top: 8px; left: calc(50% + 7px); background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-style: normal; font-size: .64rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
+.nav a.on svg.i, .nav a.on .navart { transform: translateY(-1px) scale(1.08); }
+.nav a.on::after { content: ""; position: absolute; bottom: 1px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.nav .count.dot { min-width: 16px; height: 16px; font-size: .58rem; box-shadow: 0 0 0 2px var(--surface); animation: pop .4s var(--ease); }
+.nav .count { position: absolute; top: 1px; left: calc(50% + 5px); background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-style: normal; font-size: .64rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px; }
 
 /* ---------- Recipe page ---------- */
 .hero { position: relative; overflow: hidden; padding: calc(68px + env(safe-area-inset-top, 0px)) 22px 46px;
@@ -709,6 +710,25 @@ a.chip { text-decoration: none; color: inherit; }
 .chip.pchip button { border: 0; background: none; width: 30px; height: 30px; display: grid; place-items: center; padding: 0; color: var(--muted); }
 .chip.pchip button svg.i { width: 15px; height: 15px; }
 /* ---- Feed intro (before the family is set up) ---- */
+.fsel-native { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0; pointer-events: none; }
+.fsel { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 0 12px 0 14px; min-height: 50px; font-size: 1rem; font-weight: 700; text-align: left; transition: border-color .2s, transform .15s var(--ease); }
+.fsel span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fsel svg.i { width: 20px; height: 20px; flex: none; color: var(--accent); }
+.fsel:active { transform: scale(.98); } .fsel:focus-visible { border-color: var(--ink); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+.fsel.pill { width: auto; max-width: 13em; min-height: 42px; border-radius: 999px; padding: 0 10px 0 14px; font-size: .88rem; }
+.fopts { display: grid; max-height: 60vh; overflow: auto; margin: 0 -4px; padding: 0 4px; }
+.fopts h3 { margin: 14px 0 4px; }
+.fopt { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; border: 0; border-bottom: 1px solid var(--rule); background: none; text-align: left; font-size: 1.05rem; padding: 0 4px; color: var(--ink); }
+.fopt[aria-pressed="true"] { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.2rem; color: var(--accent); }
+.fopt svg.i { width: 22px; height: 22px; color: var(--accent); }
+.sheet.filters { gap: 14px; padding-bottom: 0; }
+.fgroup { display: grid; gap: 8px; } .fgroup .wrapchips { gap: 7px; } .fgroup .chip { min-height: 36px; font-size: .86rem; }
+.fbar { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0 calc(16px + env(safe-area-inset-bottom, 0px)); margin-top: 4px; grid-template-columns: 1fr 1.4fr; box-shadow: 0 -10px 14px -10px rgba(36,28,22,.18); }
+.fbar .btn { white-space: nowrap; font-size: .95rem; padding-inline: .7em; }
+.composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
+.composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.composer .icon-btn { width: 40px; height: 40px; } .composer .mill { width: 26px; height: 26px; }
+.post.fresh { box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent); }
 .feedintro { display: grid; gap: 14px; padding-block: 18px 30px; }
 .feedintro .panel p { margin: 0; }
 .post.sample { opacity: .9; pointer-events: none; position: relative; }
@@ -738,6 +758,7 @@ const I = {
   mic: `<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>`,
   x: `<path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/>`,
   plus: `<path d="M12 5v14M5 12h14"/>`,
+  chev: `<path d="m7 9.5 5 5 5-5"/>`,
   // open cookbook with a ribbon bookmark
   book: `<path d="M3 5.6c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8V19c-3-1.2-6-1.2-9 .8-3-2-6-2-9-.8Z"/><path d="M12 6.4v13.4"/><path d="M15.6 4.9v6.2l1.5-1.1 1.5 1.1V4.7" ${F} opacity=".9"/>`,
   heart: `<path d="M12 20s-7.5-4.4-7.5-10.1A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.5 2.4C19.5 15.6 12 20 12 20Z" ${F}/><path d="M7.9 9.4a1.9 1.9 0 0 1 1.5-1.2" stroke="var(--surface)" opacity=".75"/>`,
@@ -1138,6 +1159,9 @@ Object.assign(STR.en, {
   delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
 });
 STR.en.nav.carnets = 'Notebooks';
+STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family'; STR.fr.sortBy = 'Trier par'; STR.en.sortBy = 'Sort by';
+Object.assign(STR.fr, { newPosts: n => `${n} nouveauté${n > 1 ? 's' : ''} dans la famille`, composerPh: 'Une photo à partager ?', photoPost: 'Une photo, juste comme ça', photoPostSub: 'Au restaurant, chez des amis, une assiette trop belle ou trop drôle.', cookPlace: 'Où ?', choose: 'Choisir', anyF: 'Tout', filtersShow: n => n ? `Voir ${n} recette${n > 1 ? 's' : ''}` : 'Aucune recette' });
+Object.assign(STR.en, { newPosts: n => `${n} new in the family`, composerPh: 'A photo to share?', photoPost: 'Just a photo', photoPostSub: 'At a restaurant, at friends’, a plate too pretty or too funny not to share.', cookPlace: 'Where?', choose: 'Choose', anyF: 'Any', filtersShow: n => n ? `Show ${n} recipe${n > 1 ? 's' : ''}` : 'No recipes' });
 Object.assign(STR.fr, {
   occOne: { birthday: 'Anniversaire' },
   tabWines: 'Cave', allWines: 'Tous', newWine: 'Nouveau vin', unnamedWine: 'Vin sans nom',
@@ -1581,15 +1605,26 @@ function confirmBox(msg, yes, danger = true) {
 // ---------- Navigation ----------
 function navHTML(active) {
   const t = T().nav;
-  const items = [['', 'book', t.list, 'list'], ['carnets', 'notebook', t.carnets, 'carnets'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
+  const items = [['', 'book', t.list, 'list'], ['fil', 'feed', t.feed, 'fil'], ['carnets', 'notebook', t.carnets, 'carnets'], ['frigo', 'fridge', t.fridge, 'frigo'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
   if (active === 'fav') active = 'carnets';
-  const NAV_ART = { book: 'nav-book', notebook: 'nav-notebook', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
-  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
+  const NAV_ART = { book: 'nav-book', feed: 'nav-feed', notebook: 'nav-notebook', fridge: 'nav-fridge', cart: 'nav-basket', more: 'nav-whisk' };
+  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}><img class="navart" src="${artSrc(NAV_ART[i])}" alt="" aria-hidden="true"><span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : k === 'fil' ? '<i class="count dot" id="feedCount" hidden></i>' : ''}</a>`).join('');
   updateNavCount();
 }
 function updateNavCount() {
-  const el = $('#shopCount'); if (!el) return;
-  const n = shop.filter(x => !x.done).length; el.hidden = !n; el.textContent = n;
+  const el = $('#shopCount'); if (el) { const n = shop.filter(x => !x.done).length; el.hidden = !n; el.textContent = n; }
+  const f = $('#feedCount'), u = feedUnread();
+  if (f) { f.hidden = !u; f.textContent = u > 9 ? '9+' : u; f.setAttribute('aria-label', T().newPosts(u)); }
+  try { if (u) navigator.setAppBadge?.(u); else navigator.clearAppBadge?.(); } catch {}
+}
+// New in the family feed since I last opened it (others' recipes and photos, and recommendations for me).
+function feedUnread() {
+  if (!FAM.on || S.feedOff) return 0;
+  const seen = ls.get('feedSeen', 0), muted = new Set(S.muted || []);
+  const other = id => id && id !== FAM.uid && !muted.has(id);
+  return FAM.all.filter(r => !r.sample && other(r.owner) && (r.createdAt || 0) > seen).length
+    + [...FAM.cooks.values()].filter(c => other(c.uid) && (c.at || 0) > seen).length
+    + FAM.recos.filter(x => !x.done && (x.at || 0) > seen).length;
 }
 
 let current = '';
@@ -1623,6 +1658,7 @@ function route() {
     return;
   }
   if (a === 'more') return renderMore();
+  if (a === 'fil') return renderFeed();
   if (a === 'carnets') return renderCarnets();
   if (a === 'carnet' && b) return renderEvent(b);
   if (a === 'invites' && b) return renderGuest(b);
@@ -1813,7 +1849,11 @@ function chipsHTML() {
     (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
     chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));
 }
-const homeTabs = v => { const t = T(); return `<div class="hometabs" role="tablist"><button role="tab" data-act="homeview" data-v="feed" aria-selected="${v === 'feed'}">${ico('users')}${esc(t.tabFeed)}${FAM.recos.filter(x => !x.done).length ? `<i>${FAM.recos.filter(x => !x.done).length}</i>` : ''}</button><button role="tab" data-act="homeview" data-v="book" aria-selected="${v === 'book'}">${ico('book')}${esc(t.tabBook)}</button></div>`; };
+function composerHTML() {
+  const t = T();
+  return `<div class="composer">${avatarHTML(FAM.uid)}<button class="composer-in" data-act="photopost">${esc(t.composerPh)}</button>
+    <button class="icon-btn" data-act="photopost" aria-label="${esc(t.photoPost)}">${ico('camera')}</button><button class="icon-btn" data-act="cookpick" aria-label="${esc(t.madeItQ)}">${artImg('pan', 'mill')}</button></div>`;
+}
 function feedIntroHTML() {
   const t = T();
   return `<div class="feedintro">
@@ -1823,25 +1863,24 @@ function feedIntroHTML() {
     <section class="panel"><h2>${ico('users')} ${esc(t.feedIntroT)}</h2><p>${esc(t.feedIntro)}</p><p class="muted">${esc(t.feedIntroHow)}</p>
       <a class="btn primary" href="#/famille">${ico('users')}${esc(t.feedIntroBtn)}</a></section></div>`;
 }
+let feedPrevSeen = 0;
 function renderFeed() {
-  current = 'feed'; navHTML('list');
+  if (current !== 'feed') feedPrevSeen = ls.get('feedSeen', 0);
+  current = 'feed'; navHTML('fil');
+  if (FAM.on && document.visibilityState !== 'hidden') { ls.set('feedSeen', Date.now()); updateNavCount(); }
   const t = T();
   $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
         <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
-        <h1 class="greet">${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span></h1>
-        ${calHTML()}
+        <h1 class="greet">${esc(t.tabFeed)}</h1>
       </header>
-      ${bannerHTML()}
-      ${homeTabs('feed')}
-      ${FAM.on ? feedHTML() : feedIntroHTML()}
+      ${FAM.on ? composerHTML() + feedHTML() : feedIntroHTML()}
     </div>
     <button class="fab" data-act="fab">${ico('plus')}${esc(t.add)}</button>`;
 }
 function renderList(favOnly) {
   const was = current;
-  if (!favOnly && !S.feedOff && (S.homeView || (FAM.on ? 'feed' : 'book')) === 'feed') return renderFeed();
   current = favOnly ? 'fav' : 'list';
   if (favOnly) L.fav = true; else if (was === 'fav') L.fav = false;
   if (was !== 'recipe') L.scroll = 0;
@@ -1857,7 +1896,6 @@ function renderList(favOnly) {
         ${favOnly ? '' : calHTML()}
       </header>
       ${favOnly ? carnetTabs('fav') : bannerHTML()}
-      ${!favOnly && !S.feedOff ? homeTabs('book') : ''}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}
@@ -1871,7 +1909,7 @@ function renderList(favOnly) {
       <div class="listmeta"><span class="muted" id="count"></span>
         <span style="display:flex;gap:8px;align-items:center;min-width:0">
           <button class="icon-btn" data-act="surprise" aria-label="${esc(t.surprise)}" title="${esc(t.surprise)}" style="width:42px;height:42px;border:1px solid var(--line);background:var(--surface)">${ico('dice')}</button>
-          <select id="sort" aria-label="Tri">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
+          <select id="sort" aria-label="${esc(t.sortBy)}">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
         </span></div>
       <div id="railbox"></div>
       <div id="results"></div>
@@ -1946,23 +1984,58 @@ window.addEventListener('scroll', azVisibility, { passive: true });
 document.addEventListener('click', e => { if (e.target.closest('#az')) { azJump(e); setTimeout(() => $('.az-pop')?.remove(), 500); } });
 
 function openFilters() {
-  const t = T();
-  const opt = (v, label, sel) => `<option value="${v}" ${sel === v ? 'selected' : ''}>${esc(label)}</option>`;
-  sheet(`<h2>${esc(t.filters)}</h2>
-    <div class="form" style="padding:0">
-      <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat">${opt('', t.all, L.cat)}${CATS.map(c => opt(c, t.cat[c], L.cat)).join('')}</select></div>
-      <div class="field"><label for="fKash">${esc(t.kashrutF)}</label><select id="fKash">${opt('', t.all, L.kash)}${KASHRUT.map(k => opt(k, t.kashLong[k], L.kash)).join('')}</select></div>
-      <div class="field"><label for="fHol">${esc(t.occasions)}</label><select id="fHol">${opt('', t.all, L.hol)}
-        <optgroup label="${esc(t.occMoments)}">${generalOcc().map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
-        <optgroup label="${esc(t.occSeasons)}">${SEASONS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
-        <optgroup label="${esc(t.occJewish)}">${HOLIDAYS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup></select></div>
-      <label class="toggle">${esc(t.quick)}<input type="checkbox" id="fQuick" ${L.quick ? 'checked' : ''}></label>
-      <div class="row2"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">OK</button></div>
-    </div>`, (el, close) => {
-    el.querySelector('[data-x="ok"]').onclick = () => { L.cat = $('#fCat').value; L.kash = $('#fKash').value; L.hol = $('#fHol').value; L.quick = $('#fQuick').checked; close(); refreshList(); };
-    el.querySelector('[data-x="reset"]').onclick = () => { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); };
+  const t = T(), st = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick };
+  const group = (title, key, items) => `<div class="fgroup"><h3 class="eyebrow">${esc(title)}</h3><div class="wrapchips">${items.map(([v, label]) => `<button type="button" class="chip ${st[key] === v ? 'on' : ''}" data-f="${key}" data-v="${esc(v)}" aria-pressed="${st[key] === v}">${esc(label)}</button>`).join('')}</div></div>`;
+  const count = () => { const saved = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick }; Object.assign(L, st); const n = filtered().length; Object.assign(L, saved); return n; };
+  const body = () => `<h2>${esc(t.filters)}</h2>
+    ${group(t.category, 'cat', [['', t.anyF], ...CATS.filter(c => c === st.cat || recipes.some(r => r.category === c)).map(c => [c, t.cat[c]])])}
+    ${group(t.kashrutF, 'kash', [['', t.anyF], ...KASHRUT.map(k => [k, t.kashLong[k]])])}
+    ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
+    ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
+    ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
+    <div class="fgroup"><button type="button" class="chip ${st.quick ? 'on' : ''}" data-f="quick" aria-pressed="${st.quick}">${ico('clock')}${esc(t.quick)}</button></div>
+    <div class="row2 fbar"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">${esc(t.filtersShow(count()))}</button></div>`;
+  sheet(body(), (el, close) => {
+    el.classList.add('filters');
+    el.addEventListener('click', e => {
+      const c = e.target.closest('[data-f]');
+      if (c) { const k = c.dataset.f; if (k === 'quick') st.quick = !st.quick; else st[k] = st[k] === c.dataset.v && c.dataset.v ? '' : c.dataset.v; const y = el.scrollTop; el.innerHTML = '<div class="grab"></div>' + body(); el.scrollTop = y; return; }
+      const x = e.target.closest('[data-x]')?.dataset.x;
+      if (x === 'ok') { Object.assign(L, st); close(); refreshList(); }
+      if (x === 'reset') { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); }
+    });
   });
 }
+// Native drop-downs look like a web form: each <select> gets a button in the app's style that opens a list.
+// The <select> stays (hidden) as the value everything else reads.
+function fancySelects(root = document) {
+  for (const sel of root.querySelectorAll('select:not([data-fancy])')) {
+    sel.dataset.fancy = '1'; sel.classList.add('fsel-native'); sel.tabIndex = -1;
+    const lbl = sel.id ? document.querySelector(`label[for="${sel.id}"]`) : null;
+    const btn = document.createElement('button'); btn.type = 'button';
+    btn.className = 'fsel' + (sel.id === 'sort' ? ' pill' : '');
+    const name = (lbl?.textContent || sel.getAttribute('aria-label') || '').trim();
+    const draw = () => { btn.innerHTML = `<span>${esc(sel.selectedOptions[0]?.textContent || '—')}</span>${ico('chev')}`; btn.setAttribute('aria-label', [name, sel.selectedOptions[0]?.textContent].filter(Boolean).join(' : ')); };
+    draw(); sel.after(btn);
+    if (lbl) { lbl.removeAttribute('for'); lbl.addEventListener('click', () => btn.click()); }
+    sel.addEventListener('change', draw);
+    btn.addEventListener('click', () => pickOption(sel, name, draw));
+  }
+}
+function pickOption(sel, name, draw) {
+  const opt = o => `<button type="button" class="fopt" data-v="${esc(o.value)}" aria-pressed="${o.selected}">${esc(o.textContent)}${o.selected ? ico('check') : ''}</button>`;
+  const html = [...sel.children].map(n => n.tagName === 'OPTGROUP' ? `<h3 class="eyebrow">${esc(n.label)}</h3>${[...n.children].map(opt).join('')}` : opt(n)).join('');
+  sheet(`${name ? `<h2>${esc(name)}</h2>` : ''}<div class="fopts">${html}</div>`, (el, close) => {
+    el.querySelector('.fopt[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
+    el.addEventListener('click', e => {
+      const b = e.target.closest('.fopt'); if (!b) return;
+      close(); if (sel.value === b.dataset.v) return;
+      sel.value = b.dataset.v; draw();
+      sel.dispatchEvent(new Event('input', { bubbles: true })); sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  });
+}
+new MutationObserver(() => { if (document.querySelector('select:not([data-fancy])')) fancySelects(); }).observe(document.body, { childList: true, subtree: true });
 function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
 
 // Voice search (Chrome on Android)
@@ -2676,6 +2749,7 @@ async function famStart() {
   const u = FAM.auth.currentUser || await waitUser();
   if (!u) { FAM.on = false; return false; }
   FAM.uid = u.uid; FAM.on = true;
+  if (!ls.get('feedSeen', 0)) ls.set('feedSeen', Date.now());
   FAM.unsub.forEach(f => f()); FAM.unsub = [];
   let first = true, gotRecipes;
   const ready = new Promise(r => { gotRecipes = r; setTimeout(r, 2500); });
@@ -2846,7 +2920,8 @@ function feedHTML() {
     if (c) return cookPostHTML(c);
     const hearts = Object.keys(r.hearts || {}), liked = !!(r.hearts || {})[FAM.uid];
     const lock = !(r.audience || []).includes('all');
-    return `<article class="post">
+    const fresh = r.owner !== FAM.uid && (r.createdAt || 0) > feedPrevSeen;
+    return `<article class="post ${fresh ? 'fresh' : ''}">
       <header>${avatarHTML(r.owner)}<div class="min"><b>${esc(r.owner === FAM.uid ? t.you : member(r.owner).name)}</b><span class="muted">${esc(t.postedAgo(ago(r.createdAt || Date.now())))}</span></div>${lock ? `<span class="lockbadge" title="${esc(t.audPrivateShort)}">${ico('lock')}</span>` : ''}</header>
       <a class="post-photo" href="#/r/${encodeURIComponent(r.id)}">${r.photo || r.thumb ? `<img src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">` : artHTML(r, 'ph')}</a>
       <a class="post-title" href="#/r/${encodeURIComponent(r.id)}"><h3>${esc(r.title)}</h3></a>
@@ -2961,7 +3036,7 @@ async function famJoin() {
     await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, code: inv.k, joinedAt: Date.now() });
     famSaveLocal(inv.c, inv.f, inv.n || t.family, inv.k); S.name = name; saveSettings();
     await famStart(); await offerMigration();
-    history.replaceState(null, '', location.pathname + '#/');
+    history.replaceState(null, '', location.pathname + '#/fil');
     route(); toast(t.welcomeFam(inv.n || t.family));
   } catch (e) { console.warn(e); toast(t.famJoinErr); }
 }
@@ -3068,6 +3143,7 @@ function cookSheet(r) {
   const st = { photo: null, thumb: null };
   sheet(`<h2 class="cook-h">${esc(r ? t.cookT(r.title) : t.cookPhotoOnlyT)}</h2>
     <div class="cookphoto" id="ckPhoto"></div>
+    ${!r ? `<div class="field"><label for="ckPlace">${esc(t.cookPlace)}</label><input class="input" id="ckPlace" maxlength="80"></div>` : ''}
     <div class="field"><label for="ckNote">${esc(t.cookNote)}</label><textarea class="input hand-in" id="ckNote" rows="3" maxlength="1000" placeholder="${esc(t.cookNotePh)}"></textarea></div>
     ${evs.length ? `<div class="field"><label for="ckEv">${esc(t.cookEvent)}</label><select class="input" id="ckEv"><option value="">${esc(t.none)}</option>${evs.map(e => `<option value="${e.id}" ${pre && pre.id === e.id ? 'selected' : ''}>${esc(evLabel(e))} · ${esc(fmtDate(evTime(e), { day: 'numeric', month: 'short' }))}</option>`).join('')}</select></div>` : ''}
     <p class="hint" style="margin:0">${ico(FAM.on ? (visibilityText(r) === t.cookVisAll ? 'users' : 'lock') : 'book')} ${esc(visibilityText(r))}</p>
@@ -3089,18 +3165,19 @@ function cookSheet(r) {
       if (x === 'ok') {
         const note = el.querySelector('#ckNote').value.trim();
         if (!r && !st.photo && !note) { el.querySelector('#ckNote').focus(); return; }
-        const eid = el.querySelector('#ckEv')?.value || '';
+        const eid = el.querySelector('#ckEv')?.value || '', place = el.querySelector('#ckPlace')?.value.trim() || '';
         close();
-        await saveCook(r, { ...st, note, eid });
+        await saveCook(r, { ...st, note, eid, place });
       }
     });
   });
 }
-async function saveCook(r, { photo, thumb, note, eid }) {
+async function saveCook(r, { photo, thumb, note, eid, place }) {
   const t = T(), id = uid();
   const c = { id, uid: FAM.on ? FAM.uid : 'me', rid: r ? r.id : null, rtitle: r ? r.title : '', note: (note || '').slice(0, 1000), at: Date.now(), hearts: {} };
   if (photo) { c.photo = photo; c.thumb = thumb; }
   if (eid) c.eid = eid;
+  if (place) c.place = place.slice(0, 80);
   if (FAM.on) {
     c.audience = r && FAM.raw.get(r.id) ? [...(FAM.raw.get(r.id).audience || ['all'])] : ['all'];
     FAM.cooks.set(id, c); quiet(FB.setDoc(fref('cooks', id), plain(c)));
@@ -3176,8 +3253,9 @@ function madeSectionHTML(r) {
 }
 function cookPostHTML(c) {
   const t = T(), r = c.rid && byId(c.rid), hearts = Object.keys(c.hearts || {}), liked = !!(c.hearts || {})[FAM.uid];
-  return `<article class="post cookpost">
-    <header>${avatarHTML(c.uid)}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc((c.rid ? t.cookedVerb : t.photoVerb) + ' · ' + ago(c.at))}</span></div><span class="stamp">${esc(t.madeItStamp)}</span></header>
+  const fresh = c.uid !== FAM.uid && (c.at || 0) > feedPrevSeen;
+  return `<article class="post cookpost ${fresh ? 'fresh' : ''}">
+    <header>${avatarHTML(c.uid)}<div class="min"><b>${esc(cookAuthor(c))}</b><span class="muted">${esc((c.rid ? t.cookedVerb : t.photoVerb) + (c.place ? ' · ' + c.place : '') + ' · ' + ago(c.at))}</span></div>${c.rid ? `<span class="stamp">${esc(t.madeItStamp)}</span>` : ''}</header>
     ${c.photo || c.thumb ? `<button class="post-photo" data-act="viewcook" data-id="${c.id}"><img src="${esc(c.photo || c.thumb)}" alt="" loading="lazy"></button>` : ''}
     ${c.note ? `<p class="hand">${esc(c.note)}</p>` : ''}
     ${r ? `<a class="cooktag" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<span class="min"><span class="eyebrow">${esc(t.theRecipe)}</span><b>${esc(r.title)}</b></span>${ico('arrow')}</a>` : ''}
@@ -3189,16 +3267,19 @@ function cookPostHTML(c) {
     </div>
   </article>`;
 }
-// The + button: a new recipe, or "I made something".
+async function cookPick() { const t = T(), pick = await pickRecipes({ title: t.pickRecipeT, allowNone: FAM.on }); if (pick) cookSheet(pick[0] || null); }
+// The + button: a new recipe, "I made something", or just a photo.
 function fabSheet() {
   const t = T();
   sheet(`<h2>${esc(t.fabQ)}</h2><div class="choice">
     <button data-x="cook">${artImg('pan')}<span class="min"><b>${esc(t.madeItQ)}</b><small>${esc(t.madeItSub)}</small></span></button>
+    ${FAM.on ? `<button data-x="photo">${artImg('nav-feed')}<span class="min"><b>${esc(t.photoPost)}</b><small>${esc(t.photoPostSub)}</small></span></button>` : ''}
     <button data-x="new">${artImg('mains')}<span class="min"><b>${esc(t.newRecipeChoice)}</b><small>${esc(t.newRecipeSub)}</small></span></button>
   </div>`, (el, close) => el.addEventListener('click', async e => {
     const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return; close();
     if (x === 'new') go('#/edit/new');
-    if (x === 'cook') { const pick = await pickRecipes({ title: t.pickRecipeT, allowNone: FAM.on }); if (pick) cookSheet(pick[0] || null); }
+    if (x === 'photo') cookSheet(null);
+    if (x === 'cook') cookPick();
   }));
 }
 // Choose one or several recipes (my book first; in a family, everything I can see).
@@ -3820,6 +3901,8 @@ document.addEventListener('click', async e => {
   switch (act) {
     case 'new': go('#/edit/new'); break;
     case 'fab': fabSheet(); break;
+    case 'photopost': cookSheet(null); break;
+    case 'cookpick': cookPick(); break;
     case 'cookthis': { const x = byId(b.dataset.id); if (x) cookSheet(x); break; }
     case 'viewcook': cookViewer(b.dataset.id); break;
     case 'likecook': heartCook(b.dataset.id); famChanged(); break;
@@ -3883,7 +3966,6 @@ document.addEventListener('click', async e => {
     case 'share': if (r) shareText(r.title, recipeText(r)); break;
     case 'units': if (r) { S.units = b.dataset.u; saveSettings(); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'send': if (r) sendRecipe(r); break;
-    case 'homeview': S.homeView = b.dataset.v; saveSettings(); L.scroll = 0; route(); window.scrollTo(0, 0); break;
     case 'scope': L.scope = L.scope === 'family' ? '' : 'family'; refreshList(); break;
     case 'like': toggleHeart(b.dataset.id); break;
     case 'bookmark': { const x = FAM.all.find(y => y.id === b.dataset.id); if (x) { setInBook(x.id, !x.inBook); toast(!x.inBook ? t.addedToBook : t.removedFromBook); } break; }
