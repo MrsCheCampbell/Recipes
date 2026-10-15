@@ -1,5 +1,5 @@
 // Offline support: app shell is cached; fonts and images are cached as they load.
-const VERSION = 'abe-v10';
+const VERSION = 'abe-v11';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon.svg', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

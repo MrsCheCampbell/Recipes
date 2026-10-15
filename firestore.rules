@@ -1,0 +1,89 @@
+rules_version = '2';
+// La Cuisine d'Abe — family sharing rules.
+// Everything lives under /families/{familyId}. Only members can read anything there.
+// A recipe is visible to the people in its `audience` list: 'all' means the whole family,
+// otherwise it lists exactly who may see it (always including its owner).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function isMember(fid) { return signedIn() && exists(/databases/$(database)/documents/families/$(fid)/members/$(uid())); }
+    function family(fid) { return get(/databases/$(database)/documents/families/$(fid)).data; }
+    function canSee(r) { return r.owner == uid() || r.audience.hasAny(['all', uid()]); }
+    function recipe(fid, rid) { return get(/databases/$(database)/documents/families/$(fid)/recipes/$(rid)).data; }
+
+    match /families/{fid} {
+      allow read: if isMember(fid);
+      allow create: if signedIn() && request.resource.data.createdBy == uid()
+        && request.resource.data.code is string && request.resource.data.code.size() >= 12;
+      allow update: if isMember(fid) && resource.data.createdBy == uid()
+        && request.resource.data.createdBy == resource.data.createdBy;
+
+      // Joining: the founder, or anyone holding the family's invite code.
+      match /members/{memberId} {
+        allow read: if isMember(fid);
+        allow create: if signedIn() && memberId == uid()
+          && (family(fid).createdBy == uid() || request.resource.data.code == family(fid).code)
+          && request.resource.data.name is string && request.resource.data.name.size() <= 40;
+        allow update: if signedIn() && memberId == uid()
+          && request.resource.data.code == resource.data.code;
+        allow delete: if signedIn() && memberId == uid();
+
+        // Personal saved list: only its owner sees it.
+        match /saved/{rid} {
+          allow read, write: if signedIn() && memberId == uid();
+        }
+      }
+
+      match /recipes/{rid} {
+        allow read: if isMember(fid) && canSee(resource.data);
+        allow create: if isMember(fid)
+          && request.resource.data.owner == uid()
+          && request.resource.data.audience is list
+          && request.resource.data.audience.hasAny(['all', uid()])
+          && request.resource.data.hearts == {} && request.resource.data.ratings == {}
+          && request.resource.data.commentCount == 0;
+        // The owner edits anything but ownership. Others (who can see it) may only
+        // add or remove their own heart and rating, and bump the comment count by one.
+        allow update: if isMember(fid) && (
+          (resource.data.owner == uid() && request.resource.data.owner == uid()
+            && request.resource.data.audience.hasAny(['all', uid()]))
+          || (canSee(resource.data)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['hearts', 'ratings', 'commentCount'])
+            && request.resource.data.hearts.diff(resource.data.hearts).affectedKeys().hasOnly([uid()])
+            && request.resource.data.ratings.diff(resource.data.ratings).affectedKeys().hasOnly([uid()])
+            && (!(uid() in request.resource.data.ratings)
+                || (request.resource.data.ratings[uid()] is int && request.resource.data.ratings[uid()] >= 1 && request.resource.data.ratings[uid()] <= 5))
+            && request.resource.data.commentCount >= resource.data.commentCount - 1
+            && request.resource.data.commentCount <= resource.data.commentCount + 1)
+        );
+        allow delete: if isMember(fid) && resource.data.owner == uid();
+
+        // Photos of cookbook pages (kept apart so a recipe stays under the 1 MB limit).
+        match /pages/{n} {
+          allow read: if isMember(fid) && canSee(recipe(fid, rid));
+          allow write: if isMember(fid) && recipe(fid, rid).owner == uid();
+        }
+
+        match /comments/{cid} {
+          allow read: if isMember(fid) && canSee(recipe(fid, rid));
+          allow create: if isMember(fid) && canSee(recipe(fid, rid))
+            && request.resource.data.uid == uid()
+            && request.resource.data.text is string && request.resource.data.text.size() <= 2000;
+          allow delete: if isMember(fid) && (resource.data.uid == uid() || recipe(fid, rid).owner == uid());
+        }
+      }
+
+      // "Recommended for you": only the sender and the recipient see it.
+      match /recos/{id} {
+        allow read: if isMember(fid) && (resource.data.to == uid() || resource.data.from == uid());
+        allow create: if isMember(fid) && request.resource.data.from == uid()
+          && exists(/databases/$(database)/documents/families/$(fid)/members/$(request.resource.data.to));
+        allow update: if isMember(fid) && resource.data.to == uid()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['done']);
+        allow delete: if isMember(fid) && (resource.data.to == uid() || resource.data.from == uid());
+      }
+    }
+  }
+}

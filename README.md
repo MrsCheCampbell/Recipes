@@ -83,6 +83,37 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **Backup**: send a backup file to email or Google Drive, and restore it on a new phone. The app reminds him once a month.
 - Six example recipes (challah, roast chicken, shakshuka, ratatouille, honey cake, tarte Tatin), removable in one tap.
 
+## La famille: a recipe feed just for us
+
+Everyone keeps their own book, and sees what the others are cooking.
+
+- **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
+- **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
+- **Ratings**: everyone rates with their own stars; the recipe shows the family average.
+- **Privacy, per recipe** (in the recipe form, "Qui peut la voir ?"): *Toute la famille*, *Moi seul(e)*, or *Choisir* exactly who (Mom's secret birthday cake can be hidden from you). This is enforced by the server rules, so a hidden recipe never even reaches the other phones.
+- **Search the whole family**: the "Toute la famille" chip above the search results.
+- **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
+- **Avatars**: each person picks a drawn avatar and a colour.
+- **Cocktails** have their own section (and illustration).
+- **Adding someone later** (your brother): *Plus → La famille → Inviter quelqu'un* sends a link. They pick a name and avatar; everything already there stays.
+- Works offline: everything is cached on the phone, and changes sync when the connection comes back.
+
+### Setting up the family (once, about 10 minutes)
+
+The family's recipes live in your own free Firebase project (Google). Nobody else can read them.
+
+1. Go to https://console.firebase.google.com → **Create a project** (free Spark plan; Google Analytics not needed).
+2. **Build → Authentication → Get started → Sign-in method → Anonymous → Enable.**
+3. **Build → Firestore Database → Create database** (production mode, a region near you, e.g. `europe-west`).
+4. In Firestore, open the **Rules** tab, replace everything with the contents of [`firestore.rules`](firestore.rules), and click **Publish**.
+5. **Project settings (gear) → Your apps → Web (`</>`)** → register an app (no hosting needed) → copy the `firebaseConfig = { ... }` block.
+6. In the app: **Plus → La famille → Créer la famille**, paste that block, name the family, pick your name and avatar.
+7. **Inviter quelqu'un** → send the link to Mom and Dad. When they tap it, the app opens on "Rejoindre", they choose their name and avatar, done.
+
+When joining, the app offers to bring the recipes already on that phone into the family (visible to everyone, or private for now).
+
+Notes: the Firebase web config isn't a secret (security comes from the rules). Accounts are tied to each phone; if someone leaves or resets their phone, they rejoin with a new invite link (their earlier recipes stay in the family). The free plan's limits (50,000 reads and 20,000 writes a day, 1 GB) are far beyond what a family uses.
+
 ## Frigo: what can I make?
 
 The **Frigo** tab (the little fridge in the bottom bar):
@@ -105,5 +136,5 @@ Set your own name in *Plus → Réglages → Prénom affiché* so the inbox says
 
 ## Tech
 
-No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed), and `vendor/anthropic/` (the official Anthropic TypeScript SDK 0.130.0, bundled for the browser, MIT, loaded only when Claude is asked). Data lives in the phone's IndexedDB.
+No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed), `vendor/anthropic/` (the official Anthropic TypeScript SDK 0.130.0, bundled for the browser, MIT, loaded only when Claude is asked), and `vendor/firebase/` (Firebase JS SDK 12.19.0, app + auth + firestore, Apache-2.0, loaded only when the phone is in a family). `firestore.rules` holds the family security rules. Data lives in the phone's IndexedDB.
 Link import goes through public CORS proxies (allorigins, corsproxy.io, codetabs) because browsers can't read other sites directly. If a site blocks them, the link is still saved and he can paste the text instead.
