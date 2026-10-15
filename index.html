@@ -410,6 +410,12 @@ h1, h2, h3, .greet, .rtitle h1, .letter, .thumb, .hero .ph.art, .az-pop, .stats 
 .more-box .in { display: grid; gap: 16px; padding: 0 14px 14px; }
 .nav { background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px); }
 
+.units { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--surface-2); border-radius: 12px; padding: 4px; margin: 4px 0 6px; }
+.units button { border: 0; background: transparent; border-radius: 9px; min-height: 40px; font-weight: 700; font-size: .9rem; color: var(--muted); }
+.units button[aria-pressed="true"] { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); }
+.units-note { font-size: .82rem; margin: 0 0 4px; }
+b.conv { color: var(--accent); text-decoration: underline dotted; text-underline-offset: 3px; }
+
 /* ---------- Lock screen ---------- */
 .lock { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: grid; place-items: center; overflow: auto;
   padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
@@ -567,6 +573,7 @@ const STR = {
     step: (i, n) => `Étape ${i} sur ${n}`, prev: 'Précédente', next: 'Suivante', finish: 'Terminé !', showIng: 'Ingrédients', close: 'Fermer',
     timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
     offlineSave: 'Le stockage n’est pas disponible : les recettes ne seront pas gardées.',
+    units: { orig: 'Comme écrit', metric: 'Métrique', us: 'Tasses & oz' }, unitsLabel: 'Unités', unitsNote: 'Conversions approximatives. Touchez une quantité pour voir l’originale.',
     jewishBox: 'Cacheroute & fêtes', kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
@@ -636,6 +643,7 @@ const STR = {
     step: (i, n) => `Step ${i} of ${n}`, prev: 'Back', next: 'Next', finish: 'Done!', showIng: 'Ingredients', close: 'Close',
     timerDone: 'Timer done', stop: 'Stop', startTimer: 'Start', timerFor: 'Timer',
     offlineSave: 'Storage is unavailable: recipes won’t be kept.',
+    units: { orig: 'As written', metric: 'Metric', us: 'Cups & oz' }, unitsLabel: 'Units', unitsNote: 'Approximate conversions. Tap a quantity to see the original.',
     jewishBox: 'Kashrut & holidays', kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
@@ -883,9 +891,93 @@ function splitQty(line, factor) {
   if (!m) return { q: '', rest: line };
   const a = parseNum(m[2]); if (isNaN(a)) return { q: '', rest: line };
   let q = factor === 1 ? m[2].trim() : fmtNum(a * factor);
-  if (m[3]) { const b = parseNum(m[4]); q += '–' + (factor === 1 ? m[4] : fmtNum(b * factor)); }
-  return { q, rest: line.slice(m[0].length) };
+  let n2 = null;
+  if (m[3]) { const b = parseNum(m[4]); n2 = b * factor; q += '–' + (factor === 1 ? m[4] : fmtNum(n2)); }
+  return { q, rest: line.slice(m[0].length), n: a * factor, n2 };
 }
+
+// ---------- Unit conversion (as written / metric / US cups & oz) ----------
+const DENS = [ // grams per US cup, matched on the ingredient name
+  [/matz|matsa/, 120], [/amande|almond/, 95], [/sucre glace|icing|powdered|confectioner/, 120], [/farine|flour/, 125],
+  [/sucre roux|cassonade|vergeoise|brown sugar/, 220], [/sucre|sugar/, 200], [/beurre|butter/, 227], [/riz|rice/, 185],
+  [/avoine|oat/, 90], [/cacao|cocoa/, 85], [/miel|honey/, 340], [/semoule|semolina|couscous/, 170], [/chapelure|breadcrumb/, 110],
+  [/fromage|cheese|parmesan/, 100], [/pepite|chocolate chip|chocolat/, 170], [/noisette|hazelnut|noix|nut/, 120], [/raisin/, 150],
+];
+const LIQ = /\b(eau|water|lait|milk|creme|cream|huile|oil|bouillon|broth|stock|jus|juice|vin|wine|vinaigre|vinegar|sirop|syrup|biere|beer)\b/;
+const UNIT_RE = /^(\s*)(cups?|tasses?|fl\.?\s?oz|ounces?|oz|pounds?|lbs?|sticks?|pints?|quarts?|qt|kg|kilos?|grammes?|grams?|gr|g|ml|cl|dl|litres?|liters?|l)\b\.?/i;
+const TEMP_F = /(\d{3})\s*(?:°\s*|degrees?\s*|degr[eé]s\s*)?F\b/g;
+const TEMP_C = /(\d{2,3})\s*(?:°\s*|degr[eé]s\s*|degrees?\s*)C\b/g;
+function unitKind(u) {
+  u = u.toLowerCase().replace(/[.\s]/g, '');
+  if (/^(cups?|tasses?)$/.test(u)) return 'cup';
+  if (u === 'floz') return 'floz';
+  if (/^(ounces?|oz)$/.test(u)) return 'oz';
+  if (/^(pounds?|lbs?)$/.test(u)) return 'lb';
+  if (/^sticks?$/.test(u)) return 'stick';
+  if (/^pints?$/.test(u)) return 'pint';
+  if (/^(quarts?|qt)$/.test(u)) return 'quart';
+  if (/^(kg|kilos?)$/.test(u)) return 'kg';
+  if (/^(g|gr|grammes?|grams?)$/.test(u)) return 'g';
+  if (['ml', 'cl', 'dl'].includes(u)) return u;
+  return 'l';
+}
+const density = name => (DENS.find(([re]) => re.test(name)) || [])[1];
+const fmt1 = v => (Math.round(v * 10) / 10).toLocaleString(locale());
+const round5 = x => x < 20 ? Math.round(x) : x < 100 ? Math.round(x / 5) * 5 : Math.round(x / 10) * 10;
+const asG = x => x >= 1000 ? { v: fmt1(x / 1000), u: 'kg' } : { v: String(round5(x)), u: 'g' };
+const asMl = x => x >= 1000 ? { v: fmt1(x / 1000), u: 'l' } : { v: String(round5(x)), u: 'ml' };
+const niceFrac = v => { const q = Math.round(v * 4) / 4, t = Math.round(v * 3) / 3; return Math.abs(q - v) <= Math.abs(t - v) ? q : t; };
+const UL = { fr: { cup: ['tasse', 'tasses'], tbsp: 'c. à soupe', tsp: 'c. à café' }, en: { cup: ['cup', 'cups'], tbsp: 'tbsp', tsp: 'tsp' } };
+function usVolume(cups) {
+  const ul = UL[S.lang];
+  if (cups >= 0.25) { const v = niceFrac(cups); return { v: fmtNum(v), u: ul.cup[v > 1 ? 1 : 0] }; }
+  const tbsp = cups * 16;
+  if (tbsp >= 1) return { v: fmtNum(niceFrac(tbsp)), u: ul.tbsp };
+  return { v: fmtNum(Math.max(0.25, niceFrac(tbsp * 3))), u: ul.tsp };
+}
+function toMetric(n, kind, name) {
+  const liquid = LIQ.test(name), d = density(name);
+  switch (kind) {
+    case 'cup': return liquid || !d ? asMl(n * 240) : asG(n * d);
+    case 'floz': return asMl(n * 29.57);
+    case 'oz': return asG(n * 28.35);
+    case 'lb': return asG(n * 453.6);
+    case 'stick': return asG(n * 113);
+    case 'pint': return asMl(n * 473);
+    case 'quart': return asMl(n * 946);
+  }
+  return null;
+}
+function toUS(n, kind, name) {
+  const d = density(name);
+  if (kind === 'g' || kind === 'kg') {
+    const g = kind === 'kg' ? n * 1000 : n;
+    if (d && !LIQ.test(name)) return usVolume(g / d);
+    const oz = g / 28.35;
+    return oz >= 16 ? { v: fmtNum(niceFrac(oz / 16)), u: 'lb' } : { v: fmtNum(Math.max(0.25, niceFrac(oz))), u: 'oz' };
+  }
+  const ml = { ml: 1, cl: 10, dl: 100, l: 1000 }[kind];
+  if (ml) return usVolume(n * ml / 240);
+  return null;
+}
+function ingLine(line, factor) {
+  const r = splitQty(line, factor);
+  const mode = S.units || 'orig';
+  if (!r.q || mode === 'orig') return r;
+  const m = r.rest.match(UNIT_RE); if (!m) return r;
+  const kind = unitKind(m[2]), name = norm(r.rest.slice(m[0].length));
+  const f = mode === 'metric' ? toMetric : toUS;
+  const a = f(r.n, kind, name); if (!a) return r;
+  const b = r.n2 != null ? f(r.n2, kind, name) : null;
+  return { q: b && b.u === a.u ? `${a.v}–${b.v} ${a.u}` : `${a.v} ${a.u}`, rest: r.rest.slice(m[0].length), conv: true, orig: (r.q + m[0]).trim() };
+}
+function convertTemps(text) {
+  const mode = S.units || 'orig';
+  if (mode === 'metric') return text.replace(TEMP_F, (x, f) => `${Math.round((f - 32) * 5 / 9 / 10) * 10} °C`);
+  if (mode === 'us') return text.replace(TEMP_C, (x, c) => `${Math.round((c * 9 / 5 + 32) / 25) * 25} °F`);
+  return text;
+}
+const hasUnits = r => lines(r.ingredients).some(l => { const x = splitQty(l, 1); return x.q && UNIT_RE.test(x.rest); }) || new RegExp(TEMP_F.source).test(r.steps || '') || new RegExp(TEMP_C.source).test(r.steps || '');
 const lines = s => String(s || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
 const isHeading = l => /:$/.test(l) || /^#+\s/.test(l);
 const cleanHeading = l => l.replace(/^#+\s*/, '').replace(/\s*:$/, '');
@@ -1180,13 +1272,13 @@ function renderRecipe(r) {
   let ing = '';
   for (const l of lines(r.ingredients)) {
     if (isHeading(l)) { ing += `<li class="sub">${esc(cleanHeading(l))}</li>`; continue; }
-    const { q, rest } = splitQty(l, factor);
-    ing += `<li><label><input type="checkbox"><span>${q ? `<b>${esc(q)}</b>` : ''}${esc(rest)}</span></label></li>`;
+    const { q, rest, conv, orig } = ingLine(l, factor);
+    ing += `<li><label><input type="checkbox"><span>${q ? `<b${conv ? ` class="conv" data-orig="${esc(orig)}"` : ''}>${esc(q)}</b>` : ''}${esc(rest)}</span></label></li>`;
   }
   let steps = '';
   for (const l of lines(r.steps)) {
     if (isHeading(l) && l.length < 60) { steps += `<li class="sub">${esc(cleanHeading(l))}</li>`; continue; }
-    steps += `<li class="step"><div>${withTimers(cleanStep(l))}</div></li>`;
+    steps += `<li class="step"><div>${withTimers(convertTemps(cleanStep(l)))}</div></li>`;
   }
   const photo = r.photo
     ? `<img class="ph" src="${esc(r.photo)}" alt="${esc(r.title)}">`
@@ -1219,6 +1311,8 @@ function renderRecipe(r) {
       </div>
       ${ing ? `<section class="section"><div class="section-h"><h2>${esc(t.ingredients)}</h2>
         <div class="scaler" aria-label="Portions"><button data-act="scale" data-d="-1" aria-label="moins">−</button><span>${esc(base ? t.servings(cur) : t.times(cur))}</span><button data-act="scale" data-d="1" aria-label="plus">+</button></div></div>
+        ${hasUnits(r) ? `<div class="units" role="group" aria-label="${esc(t.unitsLabel)}">${['orig', 'metric', 'us'].map(u => `<button data-act="units" data-u="${u}" aria-pressed="${(S.units || 'orig') === u}">${esc(t.units[u])}</button>`).join('')}</div>
+          ${(S.units || 'orig') !== 'orig' ? `<p class="muted units-note">${esc(t.unitsNote)}</p>` : ''}` : ''}
         <ul class="ing">${ing}</ul>
         <button class="btn block" style="margin-top:10px" data-act="toshop">${ico('cart')}${esc(t.addToShop)}</button></section>` : ''}
       ${steps ? `<section class="section"><div class="section-h"><h2>${esc(t.steps)}</h2></div><ol class="steps">${steps}</ol></section>` : ''}
@@ -1283,7 +1377,7 @@ function drawCook() {
   el.innerHTML = `<div class="ch"><button class="icon-btn" data-act="cookclose" aria-label="${esc(t.close)}">${ico('x')}</button><h2>${esc(r.title)}</h2>
       <button class="btn small" data-act="cooking">${esc(t.showIng)}</button></div>
     <div class="body"><div class="progress"><i style="width:${((i + 1) / st.length) * 100}%"></i></div>
-      <div class="num">${esc(t.step(i + 1, st.length))}</div><div class="text">${withTimers(st[i])}</div></div>
+      <div class="num">${esc(t.step(i + 1, st.length))}</div><div class="text">${withTimers(convertTemps(st[i]))}</div></div>
     <div class="foot"><button class="btn" data-act="cookprev" ${i === 0 ? 'disabled' : ''}>${esc(t.prev)}</button>
       <button class="btn primary" data-act="cooknext">${esc(i === st.length - 1 ? t.finish : t.next)}</button></div>`;
 }
@@ -1721,9 +1815,10 @@ document.addEventListener('click', async e => {
     case 'scale': if (r) { const base = +r.servings || 0; const cur = scale[r.id] ?? (base || 1); const step = base ? 1 : 0.5; scale[r.id] = Math.max(step, cur + (+b.dataset.d) * step); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'toshop': if (r) {
       const base = +r.servings || 0, cur = scale[r.id] ?? (base || 1), f = base ? cur / base : cur; let n = 0;
-      for (const l of lines(r.ingredients)) { if (isHeading(l)) continue; const { q, rest } = splitQty(l, f); shop.push({ id: uid(), text: (q ? q + ' ' : '') + rest.trim(), done: false, recipe: r.title }); n++; }
+      for (const l of lines(r.ingredients)) { if (isHeading(l)) continue; const { q, rest } = ingLine(l, f); shop.push({ id: uid(), text: (q ? q + ' ' : '') + rest.trim(), done: false, recipe: r.title }); n++; }
       saveShop(); toast(t.addedToShop(n)); } break;
     case 'share': if (r) shareText(r.title, recipeText(r)); break;
+    case 'units': if (r) { S.units = b.dataset.u; saveSettings(); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'cooked': if (r) { r.cookCount = (r.cookCount || 0) + 1; r.lastCooked = Date.now(); await saveRecipe(r); toast(t.bravo); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'cook': if (r) go('#/cook/' + r.id); break;
     case 'cookclose': history.back(); break;
@@ -1758,6 +1853,9 @@ document.addEventListener('click', async e => {
   }
 });
 document.addEventListener('click', e => {
+  // Tap a converted quantity to peek at the original wording.
+  const cv = e.target.closest('b.conv');
+  if (cv) { e.preventDefault(); const o = cv.dataset.orig; cv.dataset.orig = cv.textContent; cv.textContent = o; return; }
   const c = e.target.closest('#fHol .chip'); if (!c) return;
   c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on'));
   $('#form').dispatchEvent(new Event('input'));

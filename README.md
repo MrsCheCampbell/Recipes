@@ -53,6 +53,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 **Cooking**
 - Servings scaler that recalculates the quantities (½, ¼, ⅓ fractions).
+- Units switch on every recipe: **As written / Metric / Cups & oz**. Cups become grams using the real weight of each ingredient (flour, sugar, butter…), liquids become ml, and oven temperatures in the steps switch between °F and °C. Converted amounts are underlined; tap one to see the original.
 - Tick ingredients off as you go.
 - **Cooking mode**: one big step at a time, swipe to move between steps, and the screen stays on.
 - Times in steps ("20 min", "1 h 30") become tap-to-start timers that ring and vibrate.
