@@ -416,6 +416,23 @@ h1, h2, h3, .greet, .rtitle h1, .letter, .thumb, .hero .ph.art, .az-pop, .stats 
 .units-note { font-size: .82rem; margin: 0 0 4px; }
 b.conv { color: var(--accent); text-decoration: underline dotted; text-underline-offset: 3px; }
 
+.ocr { display: grid; gap: 6px; font-size: .9rem; font-weight: 700; color: var(--accent); }
+.ocr .bar { height: 6px; border-radius: 3px; background: var(--surface); overflow: hidden; }
+.ocr .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+.pages { display: flex; flex-wrap: wrap; gap: 10px; }
+.pages:empty { display: none; }
+.page-th { position: relative; width: 84px; height: 112px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); padding: 0; background: var(--surface); }
+.page-th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.page-th .rm { position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; display: grid; place-items: center; padding: 0; }
+.page-th .rm svg { width: 18px; height: 18px; }
+.section .pages .page-th { width: 120px; height: 160px; }
+.viewer { position: fixed; inset: 0; z-index: 150; background: #000; }
+.viewer .vs { width: 100%; height: 100%; overflow: auto; display: grid; place-items: center; touch-action: pan-x pan-y pinch-zoom; }
+.viewer img { max-width: 100%; max-height: 100%; display: block; }
+.viewer.zoom .vs { place-items: start; }
+.viewer.zoom img { max-width: none; max-height: none; width: 230%; }
+.viewer .close { position: absolute; z-index: 2; top: calc(10px + env(safe-area-inset-top, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
+
 /* ---------- Lock screen ---------- */
 .lock { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: grid; place-items: center; overflow: auto;
   padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
@@ -456,6 +473,7 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 <div class="timers" id="timers" aria-live="polite"></div>
 <div class="lock" id="lock" hidden></div>
 <input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="bookInput" accept="image/*" multiple hidden>
 <input type="file" id="backupInput" accept="application/json,.json" hidden>
 
 <script>
@@ -497,6 +515,7 @@ const I = {
   scale: '<path d="M12 3a2 2 0 0 1 2 2h5l2 7a3.5 3.5 0 0 1-7 0l2-5h-2.3A2 2 0 0 1 13 8.7V19h4v2H7v-2h4V8.7A2 2 0 0 1 9.3 7H7l2 5a3.5 3.5 0 0 1-7 0l2-7h5a2 2 0 0 1 2-2Z"/>',
   pin: '<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 4.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z"/>',
   iosShare: '<path d="M12 2 7.5 6.5l1.4 1.4L11 5.8V15h2V5.8l2.1 2.1 1.4-1.4ZM5 9h4v2H7v9h10v-9h-2V9h4v13H5Z"/>',
+  bookCam: '<path d="M4 4h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4Zm16 0h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6ZM6 7v2h4V7Zm0 3v2h4v-2Zm8-3v2h4V7Z"/>',
   install: '<path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v13h10V5Zm4 2h2v5h2l-3 3-3-3h2Z"/>',
 };
 const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="${cls}">${I[n]}</svg>`;
@@ -574,6 +593,10 @@ const STR = {
     timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
     offlineSave: 'Le stockage n’est pas disponible : les recettes ne seront pas gardées.',
     units: { orig: 'Comme écrit', metric: 'Métrique', us: 'Tasses & oz' }, unitsLabel: 'Unités', unitsNote: 'Conversions approximatives. Touchez une quantité pour voir l’originale.',
+    bookBtn: 'Photographier une page de livre', bookHint: 'Posez le livre bien à plat, avec une bonne lumière. Vous pouvez prendre plusieurs pages.',
+    ocrLoading: 'Préparation de la lecture… (la première fois prend un peu plus de temps)', ocrReading: (i, n, p) => n > 1 ? `Lecture de la page ${i} sur ${n}… ${p} %` : `Lecture de la page… ${p} %`,
+    ocrOk: 'Page lue ! Vérifiez le texte, puis enregistrez.', ocrFail: 'Le texte n’a pas pu être lu. La photo de la page est quand même gardée avec la recette.', ocrEmpty: 'Aucun texte trouvé. La photo de la page est quand même gardée avec la recette.',
+    pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
     jewishBox: 'Cacheroute & fêtes', kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
@@ -644,6 +667,10 @@ const STR = {
     timerDone: 'Timer done', stop: 'Stop', startTimer: 'Start', timerFor: 'Timer',
     offlineSave: 'Storage is unavailable: recipes won’t be kept.',
     units: { orig: 'As written', metric: 'Metric', us: 'Cups & oz' }, unitsLabel: 'Units', unitsNote: 'Approximate conversions. Tap a quantity to see the original.',
+    bookBtn: 'Photograph a cookbook page', bookHint: 'Lay the book flat, in good light. You can take several pages.',
+    ocrLoading: 'Getting ready to read… (the first time takes a little longer)', ocrReading: (i, n, p) => n > 1 ? `Reading page ${i} of ${n}… ${p}%` : `Reading the page… ${p}%`,
+    ocrOk: 'Page read! Check the text, then save.', ocrFail: 'The text couldn’t be read. The page photo is still kept with the recipe.', ocrEmpty: 'No text found. The page photo is still kept with the recipe.',
+    pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
     jewishBox: 'Kashrut & holidays', kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
@@ -1069,7 +1096,7 @@ function route() {
   const [a = '', b = ''] = h.split('/').map(decodeURIComponent);
   if (current === 'list' || current === 'fav') L.scroll = window.scrollY;
   closeCook();
-  $$('.scrim').forEach(s => s.remove());
+  $$('.scrim, .viewer').forEach(s => s.remove());
   $('#view').dataset.id = '';
   $('#nav').hidden = a === 'edit';
   if (a === 'r' && byId(b)) return renderRecipe(byId(b));
@@ -1309,6 +1336,7 @@ function renderRecipe(r) {
         ${r.link ? `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">${ico('link')}${esc(t.openLink)}</a>` : ''}
         <button class="btn" data-act="share">${ico('share')}${esc(t.share)}</button>
       </div>
+      ${!ing && !steps ? pagesHTML(r) : ''}
       ${ing ? `<section class="section"><div class="section-h"><h2>${esc(t.ingredients)}</h2>
         <div class="scaler" aria-label="Portions"><button data-act="scale" data-d="-1" aria-label="moins">−</button><span>${esc(base ? t.servings(cur) : t.times(cur))}</span><button data-act="scale" data-d="1" aria-label="plus">+</button></div></div>
         ${hasUnits(r) ? `<div class="units" role="group" aria-label="${esc(t.unitsLabel)}">${['orig', 'metric', 'us'].map(u => `<button data-act="units" data-u="${u}" aria-pressed="${(S.units || 'orig') === u}">${esc(t.units[u])}</button>`).join('')}</div>
@@ -1317,6 +1345,7 @@ function renderRecipe(r) {
         <button class="btn block" style="margin-top:10px" data-act="toshop">${ico('cart')}${esc(t.addToShop)}</button></section>` : ''}
       ${steps ? `<section class="section"><div class="section-h"><h2>${esc(t.steps)}</h2></div><ol class="steps">${steps}</ol></section>` : ''}
       ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.notes)}</h2></div><div class="notes">${esc(r.notes)}</div></section>` : ''}
+      ${ing || steps ? pagesHTML(r) : ''}
       <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small" data-act="cooked">${ico('check')}${esc(t.cookedToday)}</button></div>
       <p class="muted" style="font-size:.85rem;text-align:center">${esc(t.addedOn(fmtDate(r.createdAt)))}</p>
     </article>`;
@@ -1447,6 +1476,7 @@ function renderEdit(r) {
   const t = T(), isNew = !r;
   r = r || { title: '', holidays: [], tags: [] };
   formPhoto = r.photo || null;
+  formPages = [...(r.pages || [])];
   const draft = ls.get('draft');
   const draftKey = isNew ? 'new' : r.id;
   const showDraft = draft && draft.key === draftKey && draft.ts > (r.updatedAt || 0);
@@ -1459,6 +1489,10 @@ function renderEdit(r) {
         <input class="input" id="fPhotoUrl" type="url" inputmode="url" placeholder="${esc(t.photoUrl)}" value="${formPhoto && /^https?:/.test(formPhoto) ? esc(formPhoto) : ''}"></div>
       <div class="importbox">
         <h3>${esc(t.importTitle)}</h3>
+        <button type="button" class="btn primary" data-act="book">${ico('bookCam')}${esc(t.bookBtn)}</button>
+        <span class="hint">${esc(t.bookHint)}</span>
+        <div id="ocrStatus" class="ocr" hidden><span id="ocrText"></span><div class="bar"><i id="ocrBar"></i></div></div>
+        <div class="pages" id="formPages"></div>
         <div class="field"><label for="fLink">${esc(t.link)}</label><input class="input" id="fLink" type="url" inputmode="url" placeholder="https://…" value="${esc(r.link || '')}">
           <span class="hint">${esc(t.importLinkHint)}</span></div>
         <button type="button" class="btn" data-act="import">${ico('download')}${esc(t.importBtn)}</button>
@@ -1485,7 +1519,7 @@ function renderEdit(r) {
     </form>
     <div class="savebar"><div class="in"><button class="btn" data-act="back">${esc(t.cancel)}</button><button class="btn primary" data-act="save">${ico('check')}${esc(t.save)}</button></div></div>`;
   $('#view').dataset.id = isNew ? '' : r.id;
-  drawPhotoBox();
+  drawPhotoBox(); drawFormPages();
   const form = $('#form');
   form.addEventListener('input', () => ls.set('draft', { key: draftKey, ts: Date.now(), data: readForm() }));
   form.addEventListener('submit', e => e.preventDefault());
@@ -1506,7 +1540,7 @@ function readForm() {
     pesach: !!$('#fPesach')?.checked, holidays: $$('#fHol .chip.on').map(b => b.dataset.h),
     servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
     ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', source: v('fSource'),
-    tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto,
+    tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto, pages: formPages,
   };
 }
 function fillForm(d, onlyEmpty = false) {
@@ -1559,7 +1593,7 @@ function parseRecipeText(text) {
     // No headings: short lines that look like quantities are ingredients, long lines are steps.
     const rest = head.slice(1); title = head[0] || '';
     for (const l of rest) (l.length < 70 && !/[.!]$/.test(l) ? ing : steps).push(l);
-  } else { title = head[0] || ''; notes = notes.concat(head.slice(1).filter(l => l.length > 40)); }
+  } else { title = head[0] || ''; notes = notes.concat(head.slice(1).filter(l => l.length > 40 && !/personnes|servings|serves|pr[eé]paration|cuisson|prep|cook/i.test(l))); }
   const d = { title: title.replace(/^recette\s*:?\s*/i, ''), ingredients: ing.map(l => l.replace(/^[-•*▢☐]\s*/, '')).join('\n'), steps: steps.map(cleanStep).join('\n'), notes: notes.join('\n') };
   const all = norm(text);
   const pers = all.match(/(?:pour|for|serves?|portions?\s*:?)\s*(\d+)\s*(?:personnes?|pers|people|servings|portions)?/);
@@ -1620,6 +1654,83 @@ async function localizePhoto(url) {
   // Save a copy of a web image inside the app so it still shows offline.
   try { const b = await fetchVia(url, true); if (b && b.type.startsWith('image/')) return await compress(b, 1400); } catch {}
   return url;
+}
+
+// ---------- Cookbook pages: photo + text reading (Tesseract, bundled with the app) ----------
+let formPages = [];
+function drawFormPages() {
+  const box = $('#formPages'); if (!box) return;
+  const t = T();
+  box.innerHTML = formPages.map((p, i) => `<div class="page-th"><button type="button" data-act="viewpage" data-i="${i}" style="all:unset;display:block;width:100%;height:100%"><img src="${esc(p)}" alt="${esc(t.pageAlt(i + 1))}"></button>
+    <button type="button" class="rm" data-act="rmpage" data-i="${i}" aria-label="${esc(t.removePage)}">${ico('x')}</button></div>`).join('');
+}
+function pagesHTML(r) {
+  const n = (r.pages || []).length; if (!n) return '';
+  const t = T();
+  return `<section class="section"><div class="section-h"><h2>${esc(t.pagesN(n))}</h2></div><div class="pages">${r.pages.map((p, i) =>
+    `<button class="page-th" data-act="viewpage" data-i="${i}" aria-label="${esc(t.pageAlt(i + 1))}"><img src="${esc(p)}" alt="" loading="lazy"></button>`).join('')}</div></section>`;
+}
+function viewImage(src) {
+  const el = document.createElement('div'); el.className = 'viewer'; el.setAttribute('role', 'dialog');
+  el.innerHTML = `<button class="icon-btn on-photo close" aria-label="${esc(T().close)}">${ico('x')}</button><div class="vs"><img src="${esc(src)}" alt=""></div>`;
+  el.addEventListener('click', e => { if (e.target.closest('.close')) el.remove(); else if (e.target.tagName === 'IMG') el.classList.toggle('zoom'); });
+  document.body.append(el);
+}
+const vendorURL = p => new URL('vendor/tesseract/' + p, location.href).href;
+let tessLoading = null;
+function loadTesseract() {
+  if (window.Tesseract) return Promise.resolve();
+  return tessLoading ||= new Promise((res, rej) => {
+    const sc = document.createElement('script'); sc.src = vendorURL('tesseract.min.js');
+    sc.onload = res; sc.onerror = () => { tessLoading = null; rej(new Error('load')); };
+    document.head.append(sc);
+  });
+}
+// Book text wraps mid-sentence; join those lines back so each step reads as one paragraph.
+function unwrapOcr(text) {
+  const out = [];
+  const PRON = /^(les|le|la|lui|leur|leurs|en|y|vous|nous|moi|toi|ci|là)\b/;
+  const ls_ = text.replace(/\r/g, '')
+    .replace(/(\p{L})-\n(\p{Ll}+)/gu, (m, a, b) => PRON.test(b) ? `${a}-${b}` : a + b)
+    .split('\n').map(l => l.replace(/\s+/g, ' ').trim())
+    .map(l => (l.match(/[\p{L}\d]/gu) || []).length < 2 ? '' : l);  // drop specks read as text
+  for (const l of ls_) {
+    const prev = out[out.length - 1];
+    // Only rejoin long lines: wrapped paragraph text runs the full column width, ingredient lines are short.
+    if (l && prev && prev.length >= 40 && !/[.!?:;]$/.test(prev) && /^\p{Ll}/u.test(l)) out[out.length - 1] = prev + ' ' + l;
+    else out.push(l);
+  }
+  return out.filter((l, i, a) => l || (a[i - 1] && a[i + 1])).join('\n').replace(/\n{3,}/g, '\n\n');
+}
+async function readBookPages(files) {
+  const t = T();
+  const st = $('#ocrStatus'), txt = $('#ocrText'), bar = $('#ocrBar');
+  const set = (msg, p) => { if (!st) return; st.hidden = false; txt.textContent = msg; bar.style.width = Math.round((p || 0) * 100) + '%'; };
+  const pages = [];
+  for (const f of files) { try { pages.push(await compress(f, 2000, 0.85)); } catch {} }
+  if (!pages.length) return;
+  formPages.push(...pages); drawFormPages();
+  const btn = $('[data-act="book"]'); if (btn) btn.disabled = true;
+  set(t.ocrLoading, 0.02);
+  let text = '', cur = 1, worker;
+  try {
+    await loadTesseract();
+    worker = await Tesseract.createWorker(S.lang === 'fr' ? ['fra', 'eng'] : ['eng', 'fra'], 1, {
+      workerPath: vendorURL('worker.min.js'), corePath: vendorURL(''), langPath: vendorURL('lang'),
+      logger: m => { if (m.status === 'recognizing text') set(t.ocrReading(cur, pages.length, Math.round(m.progress * 100)), m.progress); },
+    });
+    for (; cur <= pages.length; cur++) { const { data } = await worker.recognize(pages[cur - 1]); text += data.text + '\n\n'; }
+  } catch (e) {
+    set(t.ocrFail, 0); if (btn) btn.disabled = false; $('#form')?.dispatchEvent(new Event('input')); return;
+  } finally { try { await worker?.terminate(); } catch {} }
+  if (btn) btn.disabled = false;
+  text = unwrapOcr(text).trim();
+  if (text.replace(/\W/g, '').length < 10) { set(t.ocrEmpty, 0); $('#form')?.dispatchEvent(new Event('input')); return; }
+  st.hidden = true;
+  const paste = $('#fPaste'); if (paste) paste.value = text;
+  fillForm(parseRecipeText(text), true);
+  $('#form')?.dispatchEvent(new Event('input'));
+  toast(t.ocrOk);
 }
 
 // ---------- Share target (Android "Share" → this app) ----------
@@ -1829,6 +1940,9 @@ document.addEventListener('click', async e => {
     case 'tstop': timers = timers.filter(x => x.id !== b.dataset.id); ls.set('timers', timers); drawTimers(); break;
     case 'save': submitForm(); break;
     case 'pickphoto': $('#photoInput').click(); break;
+    case 'book': $('#bookInput').click(); break;
+    case 'rmpage': formPages.splice(+b.dataset.i, 1); drawFormPages(); $('#form').dispatchEvent(new Event('input')); break;
+    case 'viewpage': { const src = current === 'edit' ? formPages[+b.dataset.i] : r?.pages?.[+b.dataset.i]; if (src) viewImage(src); break; }
     case 'rmphoto': formPhoto = null; $('#fPhotoUrl').value = ''; drawPhotoBox(); break;
     case 'import': doImport(); break;
     case 'paste': { const v = $('#fPaste').value.trim(); if (!v) { $('#fPaste').focus(); break; } fillForm(parseRecipeText(v)); toast(t.pasteOk); break; }
@@ -1870,6 +1984,7 @@ document.addEventListener('keydown', e => {
   if (!cookState) return;
   if (e.key === 'ArrowRight') cookMove(1); if (e.key === 'ArrowLeft') cookMove(-1);
 });
+$('#bookInput').addEventListener('change', e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) readBookPages(fs); });
 $('#photoInput').addEventListener('change', async e => {
   const f = e.target.files[0]; e.target.value = ''; if (!f) return;
   try { formPhoto = await compress(f, 1400); $('#fPhotoUrl').value = ''; drawPhotoBox(); $('#form').dispatchEvent(new Event('input')); } catch { toast('Photo ?'); }

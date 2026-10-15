@@ -37,6 +37,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 **Recipes**
 - Add a photo with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
 - **Import from a link**: paste a recipe URL (Marmiton, 750g, most blogs) and it fills in the title, photo, ingredients, steps, times and servings.
+- **Photograph a cookbook page**: take one or more photos of a book page and the app reads the text (French or English) and fills in the title, servings, times, ingredients and steps. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom). Reading happens on the phone itself, so the photos are never sent anywhere.
 - **Paste text**: paste a recipe from an email or a WhatsApp message and it splits it into ingredients and steps.
 - **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
 - Category, kashrut (Bassari / Halavi / Parvé), kosher for Pesach, holidays, keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
@@ -74,5 +75,5 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 ## Tech
 
-No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache) and `icons/`. Data lives in the phone's IndexedDB.
+No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed). Data lives in the phone's IndexedDB.
 Link import goes through public CORS proxies (allorigins, corsproxy.io, codetabs) because browsers can't read other sites directly. If a site blocks them, the link is still saved and he can paste the text instead.
