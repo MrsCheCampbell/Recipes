@@ -40,7 +40,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **Photograph a cookbook page**: take one or more photos of a book page and the app reads the text (French or English) and fills in the title, servings, times, ingredients and steps. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom). Reading happens on the phone itself, so the photos are never sent anywhere.
 - **Paste text**: paste a recipe from an email or a WhatsApp message and it splits it into ingredients and steps.
 - **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
-- Category, **occasions** (having friends over, family dinner, Mom's birthday, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
@@ -67,8 +67,8 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Jewish holidays are one group of occasions; kashrut sits in a fold-away section of the recipe form and in Filters.
 
 **Occasions with dates**
-- Thanksgiving and New Year's Eve are dated automatically. Mom's birthday and any occasion he adds can be given a date in *Plus → Occasions*.
-- Two weeks before, a quiet line under the greeting says e.g. "Anniversaire de Maman dans 9 jours". Tapping it shows the recipes tagged for it.
+- Thanksgiving and New Year's Eve are dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
+- Two weeks before, a quiet line under the greeting says e.g. "Thanksgiving dans 9 jours". Tapping it shows the recipes tagged for it.
 - "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
@@ -121,7 +121,7 @@ Notes: the Firebase web config isn't a secret (security comes from the rules). A
 
 The **Carnets** tab (bottom bar) is private to each person, even in the family.
 
-- **Soirées (events)**: one page per evening: Thanksgiving, friends over, Mom's birthday. Give it a date and an occasion, add the guests, then build **the menu**: recipes you're considering (from your book or the family's), or any other dish typed in ("Sarah's cheese board"). On the night, tick what you actually made, mark it *Adoré / Bien / Bof*, and add a note per dish. **La soirée** is for notes about the evening and up to six photos. "J'ai cuisiné" photos tagged to that evening show up there too.
+- **Soirées (events)**: one page per evening: Thanksgiving, friends over, a birthday. Give it a date and an occasion, add the guests, then build **the menu**: recipes you're considering (from your book or the family's), or any other dish typed in ("Sarah's cheese board"). On the night, tick what you actually made, mark it *Adoré / Bien / Bof*, and add a note per dish. **La soirée** is for notes about the evening and up to six photos. "J'ai cuisiné" photos tagged to that evening show up there too.
 - **Next year**: an evening with the same occasion offers **Reprendre le menu de « Thanksgiving 2025 »**, which copies last year's menu in one tap.
 - **Invités (guest book)**: one page per couple or group of friends: what to know about them (allergies, what they love), every evening with them, and **everything you've served them**, with how many times, when last, and whether it was loved. When you plan a new evening with them, **Déjà servi à ces invités** lists it right on the page, so you don't repeat a dish, or so you can make their favourite again. **Organiser une soirée avec eux** starts a new evening with them already invited.
 - On a recipe: *menu → Ajouter à une soirée*, and the recipe shows which evenings it was served at.

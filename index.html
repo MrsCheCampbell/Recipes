@@ -816,7 +816,7 @@ const artHTML = (r, cls) => { const c = catOf(r); return `<div class="${cls} art
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
 const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
-const OCCASIONS = ['friends','family','momsbday','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
+const OCCASIONS = ['friends','family','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
 const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
 const KASHRUT = ['meat','dairy','parve'];
 
@@ -836,7 +836,7 @@ const STR = {
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
     cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', cocktails: 'Cocktails', other: 'Autre' },
     hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot',
-      friends: 'Recevoir des amis', family: 'Repas de famille', momsbday: 'Anniversaire de Maman', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
+      friends: 'Recevoir des amis', family: 'Repas de famille', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
       hotday: 'Jour de canicule', coldday: 'Jour de grand froid', rainyday: 'Jour de pluie', spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver', garden: 'Du potager' },
     kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
     kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
@@ -961,7 +961,7 @@ const STR = {
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', cocktails: 'Cocktails', other: 'Other' },
     hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot',
-      friends: 'Having friends over', family: 'Family dinner', momsbday: 'Mom’s birthday', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+      friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
       hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
     kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
     kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
@@ -1139,6 +1139,7 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 Object.assign(STR.fr, {
+  occOne: { birthday: 'Anniversaire' },
   tabWines: 'Cave', allWines: 'Tous', newWine: 'Nouveau vin', unnamedWine: 'Vin sans nom',
   winesEmptyT: 'La cave', winesEmpty: 'Photographiez l’étiquette des vins que vous aimez, avec une note. Vous saurez lequel c’était, à quelle soirée et avec quel plat.',
   snapLabel: 'Photographier l’étiquette', wineNamePh: 'Nom du vin', wineColor: 'Couleur', wcol: { red: 'Rouge', white: 'Blanc', rose: 'Rosé', sparkling: 'Bulles', sweet: 'Doux' },
@@ -1150,6 +1151,7 @@ Object.assign(STR.fr, {
   feedIntroBtn: 'Créer ou rejoindre la famille', example: 'Exemple', exampleWho: 'Maman', exampleNote: 'Le gâteau de dimanche, tout le monde en a repris.',
 });
 Object.assign(STR.en, {
+  occOne: { birthday: 'Birthday' },
   tabWines: 'Cellar', allWines: 'All', newWine: 'New wine', unnamedWine: 'Unnamed wine',
   winesEmptyT: 'The cellar', winesEmpty: 'Snap the label of wines you like and add a note. You’ll know which one it was, at which evening, and with which dish.',
   snapLabel: 'Snap the label', wineNamePh: 'Wine name', wineColor: 'Colour', wcol: { red: 'Red', white: 'White', rose: 'Rosé', sparkling: 'Sparkling', sweet: 'Sweet' },
@@ -1237,10 +1239,15 @@ const customOcc = () => S.customOcc || [];
 const occLabel = (k, lang = S.lang) => STR[lang].hol[k] || customOcc().find(c => c.key === k)?.label || '';
 const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
 // Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
+// "Mom's birthday" was folded into Birthdays.
 function migrate(r) {
-  if (!('pesach' in r)) return false;
-  if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
-  delete r.pesach; return true;
+  let changed = false;
+  if ('pesach' in r) {
+    if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
+    delete r.pesach; changed = true;
+  }
+  if ((r.holidays || []).includes('momsbday')) { r.holidays = [...new Set(r.holidays.map(h => h === 'momsbday' ? 'birthday' : h))]; changed = true; }
+  return changed;
 }
 const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, sort: 'az', scroll: 0 };
 let shop = ls.get('shop', []);
@@ -1657,7 +1664,6 @@ function datedOccasions(now = new Date()) {
   const thanks = y => { const d = new Date(y, 10, 1); d.setDate(1 + ((4 - d.getDay() + 7) % 7) + 21); return d; };
   let tg = thanks(today.getFullYear()); if (tg < today) tg = thanks(today.getFullYear() + 1);
   const list = [{ key: 'thanksgiving', date: tg }, { key: 'newyear', date: next('12-31') }];
-  if (S.occDates?.momsbday) list.push({ key: 'momsbday', date: next(S.occDates.momsbday) });
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
@@ -2688,6 +2694,7 @@ async function famStart() {
 }
 function famRecipe(d) {
   const o = FAM.saved.get(d.id) || {}, ratings = d.ratings || {}, vals = Object.values(ratings);
+  if ((d.holidays || []).includes('momsbday')) d = { ...d, holidays: [...new Set(d.holidays.map(h => h === 'momsbday' ? 'birthday' : h))] };
   return { ...d, favorite: !!o.favorite, cookCount: o.cookCount || 0, lastCooked: o.lastCooked || 0, rating: ratings[FAM.uid] || 0,
     famRating: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0, famCount: vals.length,
     hearts: d.hearts || {}, mine: d.owner === FAM.uid, inBook: d.owner === FAM.uid || !!o.inBook };
@@ -3231,7 +3238,11 @@ function pickRecipes({ title, multi = false, allowNone = false, exclude = [] }) 
 // ---------- Carnets: events ----------
 const isoDay = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const evTime = e => e.date ? new Date(e.date + 'T12:00').getTime() : (e.createdAt || 0);
-const evLabel = e => e.title || (e.occ && occLabel(e.occ)) || (e.guests?.length && guestName(e.guests[0]) && T().dinnerWith(e.guests.map(guestName).filter(Boolean).join(', '))) || T().untitled;
+const evLabel = e => {
+  if (e.title) return e.title;
+  const k = e.occ === 'momsbday' ? 'birthday' : e.occ, occ = k && (T().occOne[k] || occLabel(k)), who = (e.guests || []).map(guestName).filter(Boolean).join(', ');
+  return occ && who ? `${occ} · ${who}` : occ || (who && T().dinnerWith(who)) || T().untitled;
+};
 const eventsSorted = () => [...PS.events.values()].sort((a, b) => evTime(b) - evTime(a));
 const guestName = id => PS.guests.get(id)?.name || '';
 const itemKey = i => i.rid || 'x:' + norm(i.title);
@@ -3709,7 +3720,6 @@ function renderMore() {
     <a class="btn block" href="#/inbox">${ico('mail')}${esc(t.inbox)}${inbox.length ? ` (${inbox.length})` : ''}</a>
     <section class="panel"><h2>${esc(t.occasions)}</h2><p class="muted" style="margin:0">${esc(t.occText)}</p>
       <div class="occ-list">
-        <label class="occ-row"><span>${esc(occLabel('momsbday'))}</span><input class="input" type="date" data-occdate="momsbday" value="${S.occDates?.momsbday ? new Date().getFullYear() + '-' + S.occDates.momsbday : ''}"></label>
         ${customOcc().map(c => `<div class="occ-row"><span>${esc(c.label)}</span><input class="input" type="date" data-occdate="${c.key}" aria-label="${esc(c.label)}" value="${c.date ? new Date().getFullYear() + '-' + c.date : ''}">
           <button class="icon-btn" data-act="delocc" data-k="${c.key}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}
       </div>
@@ -3796,7 +3806,7 @@ function samples() {
     R({ title: fr ? 'Gâteau au miel et à la cannelle' : 'Honey & Cinnamon Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur', 'autumn', 'rainyday'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
       ingredients: fr ? '300 g de farine\n1 sachet de levure chimique\n1 c. à café de bicarbonate\n2 c. à café de cannelle\n½ c. à café de gingembre\n3 œufs\n200 g de miel\n150 g de sucre roux\n150 ml d’huile\n200 ml de thé fort refroidi\n1 zeste d’orange' : '300 g flour\n1 packet baking powder\n1 tsp baking soda\n2 tsp cinnamon\n½ tsp ginger\n3 eggs\n200 g honey\n150 g brown sugar\n150 ml oil\n200 ml strong cooled tea\n1 orange zest',
       steps: fr ? 'Préchauffer le four à 170 °C. Huiler un moule à cake.\nMélanger farine, levure, bicarbonate et épices.\nFouetter œufs, miel, sucre, huile, thé et zeste.\nIncorporer les ingrédients secs sans trop travailler.\nCuire 50 min, jusqu’à ce qu’une lame ressorte sèche.\nAttendre un jour avant de servir : il est encore meilleur. Chana tova !' : 'Preheat the oven to 170 °C. Oil a loaf pan.\nMix flour, baking powder, soda and spices.\nWhisk eggs, honey, sugar, oil, tea and zest.\nFold in the dry ingredients without overmixing.\nBake 50 min, until a knife comes out clean.\nWait a day before serving: it gets even better. Shana tova!' }, 5),
-    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'momsbday', 'birthday', 'autumn'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
+    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'birthday', 'autumn'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
       ingredients: fr ? '1 pâte feuilletée\n8 pommes (Golden ou Reinette)\n150 g de sucre\n80 g de beurre\n1 pincée de fleur de sel' : '1 sheet puff pastry\n8 apples (Golden or Reinette)\n150 g sugar\n80 g butter\n1 pinch flaky salt',
       steps: fr ? 'Préchauffer le four à 190 °C. Éplucher les pommes et les couper en quartiers.\nDans un moule allant sur le feu, faire un caramel blond avec le sucre, puis ajouter le beurre et la fleur de sel.\nRanger les pommes serrées sur le caramel, cuire 15 min à feu doux.\nCouvrir avec la pâte en rentrant les bords, piquer à la fourchette.\nEnfourner 30 min, jusqu’à ce que la pâte soit bien dorée.\nAttendre 5 min puis retourner d’un coup sur un plat. Servir tiède avec de la crème fraîche.' : 'Preheat the oven to 190 °C. Peel the apples and cut into quarters.\nIn an ovenproof pan, make a golden caramel with the sugar, then add the butter and salt.\nPack the apples tightly on the caramel and cook 15 min over low heat.\nCover with the pastry, tucking in the edges, and prick with a fork.\nBake 30 min, until the pastry is deep golden.\nWait 5 min, then turn it out in one go onto a plate. Serve warm with crème fraîche.' }, 6),
   ];
@@ -3970,8 +3980,7 @@ document.addEventListener('change', e => {
   const od = e.target.dataset?.occdate;
   if (od) {
     const mmdd = (e.target.value || '').slice(5);
-    if (od === 'momsbday') S.occDates = { ...(S.occDates || {}), momsbday: mmdd };
-    else S.customOcc = customOcc().map(c => c.key === od ? { ...c, date: mmdd } : c);
+    S.customOcc = customOcc().map(c => c.key === od ? { ...c, date: mmdd } : c);
     saveSettings(); toast(T().saved);
   }
   if (e.target.id === 'sort') { L.sort = e.target.value; renderResults(); }
