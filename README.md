@@ -40,14 +40,14 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **Photograph a cookbook page**: take one or more photos of a book page and the app reads the text (French or English) and fills in the title, servings, times, ingredients and steps. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom). Reading happens on the phone itself, so the photos are never sent anywhere.
 - **Paste text**: paste a recipe from an email or a WhatsApp message and it splits it into ingredients and steps.
 - **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
-- Category, kashrut (Bassari / Halavi / Parvé), kosher for Pesach, holidays, keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, Mom's birthday, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own, plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
 - Alphabetical list grouped by letter, with an A–Z rail to slide through.
 - Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
 - Voice search (microphone button).
-- Quick filters for Favorites and each category he uses, plus kashrut, holiday, "quick (≤ 30 min)" and kosher for Pesach under Filters.
+- Quick filters for Favorites and each category he uses, plus kashrut, occasion and "quick (≤ 30 min)" under Filters.
 - A carousel of his favorites at the top.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
 - "Surprends-moi" opens a random recipe.
@@ -64,7 +64,11 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 **Jewish touches (kept discreet)**
 - Hebrew date under the greeting.
 - One quiet line under the greeting: the Hebrew date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
-- Kashrut (Bassari / Halavi / Parvé), kosher for Pesach and holiday tags sit in a fold-away section of the recipe form and in Filters.
+- Jewish holidays are one group of occasions; kashrut sits in a fold-away section of the recipe form and in Filters.
+
+**Occasions with dates**
+- Thanksgiving and New Year's Eve are dated automatically. Mom's birthday and any occasion he adds can be given a date in *Plus → Occasions*.
+- Two weeks before, a quiet line under the greeting says e.g. "Anniversaire de Maman dans 9 jours". Tapping it shows the recipes tagged for it.
 - "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 

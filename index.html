@@ -433,6 +433,12 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .viewer.zoom img { max-width: none; max-height: none; width: 230%; }
 .viewer .close { position: absolute; z-index: 2; top: calc(10px + env(safe-area-inset-top, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
 
+.occ-chips .chip.add { border-style: dashed; color: var(--muted); }
+.occ-chips .chip.add svg { width: 18px; height: 18px; }
+.occ-list { display: grid; gap: 8px; }
+.occ-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 9.5em) 48px; gap: 8px; align-items: center; font-weight: 700; }
+.occ-row .input { width: 100%; min-width: 0; padding: 8px 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: .9rem; }
+
 /* ---------- Lock screen ---------- */
 .lock { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: grid; place-items: center; overflow: auto;
   padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
@@ -523,6 +529,7 @@ const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="currentColor" aria-
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','other'];
 const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
+const OCCASIONS = ['friends','family','momsbday','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
 const KASHRUT = ['meat','dairy','parve'];
 
 const STR = {
@@ -540,7 +547,8 @@ const STR = {
     firstRecipe: 'Ajouter ma première recette', loadSamples: 'Voir des recettes d’exemple',
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
     cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', other: 'Autre' },
-    hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot' },
+    hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot',
+      friends: 'Recevoir des amis', family: 'Repas de famille', momsbday: 'Anniversaire de Maman', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine' },
     kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
     kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
     prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
@@ -597,6 +605,9 @@ const STR = {
     ocrLoading: 'Préparation de la lecture… (la première fois prend un peu plus de temps)', ocrReading: (i, n, p) => n > 1 ? `Lecture de la page ${i} sur ${n}… ${p} %` : `Lecture de la page… ${p} %`,
     ocrOk: 'Page lue ! Vérifiez le texte, puis enregistrez.', ocrFail: 'Le texte n’a pas pu être lu. La photo de la page est quand même gardée avec la recette.', ocrEmpty: 'Aucun texte trouvé. La photo de la page est quand même gardée avec la recette.',
     pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
+    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', occJewish: 'Fêtes juives', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: 'ex : Anniversaire de Léa, Dîner du dimanche',
+    occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
+    occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
     jewishBox: 'Cacheroute & fêtes', kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
@@ -619,7 +630,8 @@ const STR = {
     firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', other: 'Other' },
-    hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot' },
+    hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot',
+      friends: 'Having friends over', family: 'Family dinner', momsbday: 'Mom’s birthday', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner' },
     kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
     kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
@@ -671,6 +683,9 @@ const STR = {
     ocrLoading: 'Getting ready to read… (the first time takes a little longer)', ocrReading: (i, n, p) => n > 1 ? `Reading page ${i} of ${n}… ${p}%` : `Reading the page… ${p}%`,
     ocrOk: 'Page read! Check the text, then save.', ocrFail: 'The text couldn’t be read. The page photo is still kept with the recipe.', ocrEmpty: 'No text found. The page photo is still kept with the recipe.',
     pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
+    occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', occJewish: 'Jewish holidays', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: 'e.g. Léa’s birthday, Sunday dinner',
+    occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
+    occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     jewishBox: 'Kashrut & holidays', kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
@@ -753,7 +768,16 @@ const DB = {
 // ---------- App state ----------
 let recipes = [];
 const byId = id => recipes.find(r => r.id === id);
-const L = { q: '', kash: '', cat: '', hol: '', fav: false, quick: false, pesach: false, sort: 'az', scroll: 0 };
+const customOcc = () => S.customOcc || [];
+const occLabel = (k, lang = S.lang) => STR[lang].hol[k] || customOcc().find(c => c.key === k)?.label || '';
+const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
+// Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
+function migrate(r) {
+  if (!('pesach' in r)) return false;
+  if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
+  delete r.pesach; return true;
+}
+const L = { q: '', kash: '', cat: '', hol: '', fav: false, quick: false, sort: 'az', scroll: 0 };
 let shop = ls.get('shop', []);
 const saveShop = () => { ls.set('shop', shop); updateNavCount(); };
 
@@ -765,7 +789,7 @@ const SYN = [
   ['hallah', 'challah', 'halla', 'hala', 'hallot', 'challot'],
   ['matsa', 'matzo', 'matza', 'matzah', 'matsot'],
   ['roch hachana', 'rosh hashanah', 'rosh hashana'], ['kippour', 'kippur'], ['souccot', 'sukkot', 'succot'],
-  ['pourim', 'purim'], ['chavouot', 'shavuot'], ['bassari', 'meat', 'viande', 'fleishig'], ['halavi', 'dairy', 'lait', 'milchig'], ['parve', 'pareve', 'parev'],
+  ['pourim', 'purim'], ['chavouot', 'shavuot'], ['amis', 'friends', 'invites', 'guests'], ['anniversaire', 'birthday'], ['thanksgiving', 'dinde', 'turkey'], ['bassari', 'meat', 'viande', 'fleishig'], ['halavi', 'dairy', 'lait', 'milchig'], ['parve', 'pareve', 'parev'],
   ['poulet', 'chicken'], ['boeuf', 'beef'], ['agneau', 'lamb'], ['poisson', 'fish'], ['oeuf', 'oeufs', 'egg', 'eggs'], ['pomme de terre', 'pommes de terre', 'potato', 'potatoes', 'patate'],
   ['gateau', 'cake'], ['soupe', 'soup', 'potage'], ['miel', 'honey'], ['carotte', 'carrot'], ['oignon', 'onion'], ['ail', 'garlic'], ['cannelle', 'cinnamon'],
 ].map(g => g.map(norm));
@@ -789,7 +813,7 @@ function indexRecipe(r) {
   const both = (dict, k) => k ? [STR.fr[dict][k], STR.en[dict][k]].join(' ') : '';
   const f = {
     title: norm(r.title),
-    meta: norm([r.tags?.join(' '), both('cat', r.category), both('kash', r.kashrut), (r.holidays || []).map(h => both('hol', h)).join(' '), r.source, r.pesach ? 'pessah pesach passover' : ''].join(' ')),
+    meta: norm([r.tags?.join(' '), both('cat', r.category), both('kash', r.kashrut), (r.holidays || []).map(h => occLabel(h, 'fr') + ' ' + occLabel(h, 'en')).join(' '), r.source].join(' ')),
     ing: norm(r.ingredients),
     rest: norm([r.steps, r.notes, r.link].join(' ')),
   };
@@ -820,7 +844,7 @@ function filtered() {
   const toks = norm(L.q).split(/\s+/).filter(Boolean);
   let list = recipes.filter(r =>
     (!L.fav || r.favorite) && (!L.kash || r.kashrut === L.kash) && (!L.cat || r.category === L.cat) &&
-    (!L.hol || (r.holidays || []).includes(L.hol)) && (!L.pesach || r.pesach) && (!L.quick || (totalTime(r) > 0 && totalTime(r) <= 30)));
+    (!L.hol || (r.holidays || []).includes(L.hol)) && (!L.quick || (totalTime(r) > 0 && totalTime(r) <= 30)));
   if (toks.length) {
     list = list.map(r => [r, score(r, toks)]).filter(x => x[1] > 0);
     if (L.sort === 'az') list.sort((a, b) => b[1] - a[1] || collator().compare(sortKey(a[0].title), sortKey(b[0].title)));
@@ -1116,6 +1140,35 @@ function greeting() {
   if ((dow === 5 && h >= 12) || (dow === 6 && (!st || now < st.endAt))) return T().shabbatShalom;
   return T().hello[h < 5 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3].replace('-', '\u2011');
 }
+const occChip = (h, sel = []) => { const on = (sel || []).includes(h); return `<button type="button" class="chip ${on ? 'on' : ''}" data-h="${h}" aria-pressed="${on}">${esc(occLabel(h))}</button>`; };
+function addOccasion(onAdded) {
+  const t = T();
+  sheet(`<h2>${esc(t.occAdd)}</h2>
+    <div class="form" style="padding:0">
+      <div class="field"><label for="occName">${esc(t.occName)}</label><input class="input" id="occName" placeholder="${esc(t.occNamePh)}"></div>
+      <div class="field"><label for="occDateIn">${esc(t.occDate)}</label><input class="input" id="occDateIn" type="date"></div>
+      <div class="row2"><button class="btn" data-x="no">${esc(t.cancel)}</button><button class="btn primary" data-x="ok">${esc(t.save)}</button></div></div>`, (el, close) => {
+    setTimeout(() => $('#occName')?.focus(), 50);
+    el.querySelector('[data-x="no"]').onclick = close;
+    el.querySelector('[data-x="ok"]').onclick = () => {
+      const label = $('#occName').value.trim(); if (!label) { $('#occName').focus(); return; }
+      const key = 'c_' + uid();
+      S.customOcc = [...customOcc(), { key, label, date: ($('#occDateIn').value || '').slice(5) }]; saveSettings();
+      close(); onAdded?.(key);
+    };
+  });
+}
+// Next date for occasions that have one (Thanksgiving, New Year's Eve, birthdays the user dated).
+function datedOccasions(now = new Date()) {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const next = (mmdd) => { const [m, d] = mmdd.split('-').map(Number); let x = new Date(today.getFullYear(), m - 1, d); if (x < today) x = new Date(today.getFullYear() + 1, m - 1, d); return x; };
+  const thanks = y => { const d = new Date(y, 10, 1); d.setDate(1 + ((4 - d.getDay() + 7) % 7) + 21); return d; };
+  let tg = thanks(today.getFullYear()); if (tg < today) tg = thanks(today.getFullYear() + 1);
+  const list = [{ key: 'thanksgiving', date: tg }, { key: 'newyear', date: next('12-31') }];
+  if (S.occDates?.momsbday) list.push({ key: 'momsbday', date: next(S.occDates.momsbday) });
+  for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
+  return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
+}
 function calHTML() {
   // A quiet line under the greeting: date, Hebrew date, and Shabbat/holiday only when near.
   const t = T(), now = new Date(), dow = now.getDay();
@@ -1129,6 +1182,10 @@ function calHTML() {
     const name = t.hol[hol.key], n = recipes.filter(r => (r.holidays || []).includes(hol.key)).length;
     const label = t.holSoon(name, hol.offset - 1);
     bits.push(n ? `<button data-act="holfilter" data-h="${hol.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);
+  }
+  for (const o of datedOccasions(now).filter(o => o.days <= 14).slice(0, 2)) {
+    const n = recipes.filter(r => (r.holidays || []).includes(o.key)).length, label = t.occSoon(occLabel(o.key), o.days);
+    bits.push(n ? `<button data-act="holfilter" data-h="${o.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);
   }
   return `<div class="cal">${bits.join('<i>·</i>')}</div>`;
 }
@@ -1147,7 +1204,7 @@ function bannerHTML() {
 }
 function railHTML() {
   const t = T();
-  if (current !== 'list' || L.q || L.cat || L.hol || L.kash || L.quick || L.pesach || L.fav || recipes.length < 4) return '';
+  if (current !== 'list' || L.q || L.cat || L.hol || L.kash || L.quick || L.fav || recipes.length < 4) return '';
   let items = recipes.filter(r => r.favorite), title = t.favRail;
   if (items.length < 2) { items = [...recipes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); title = t.recentRail; }
   items = items.slice(0, 10);
@@ -1159,14 +1216,13 @@ function railHTML() {
 function chipsHTML() {
   const t = T();
   const chip = (act, on, label, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-act="${act}" ${extra} aria-pressed="${on}">${label}</button>`;
-  const active = L.cat || L.hol || L.quick || L.pesach;
   const counts = {}; recipes.forEach(r => { if (r.category) counts[r.category] = (counts[r.category] || 0) + 1; });
   const cats = CATS.filter(c => counts[c]).sort((a, b) => counts[b] - counts[a]);
-  const extra = L.hol || L.quick || L.pesach || L.kash;
+  const extra = L.hol || L.quick || L.kash;
   return chip('all', !L.cat && !L.fav && !extra, esc(t.all)) +
     (current === 'fav' ? '' : chip('fav', L.fav, ico('heart', 'star-fav') + esc(t.favorites))) +
     cats.map(c => chip('cat', L.cat === c, esc(t.cat[c]), `data-c="${c}"`)).join('') +
-    chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && t.hol[L.hol], L.quick && '≤30′', L.pesach && t.hol.pesach].filter(Boolean).map(esc).join(', ')}` : ''));
+    chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));
 }
 function renderList(favOnly) {
   const was = current;
@@ -1211,7 +1267,7 @@ function cardHTML(r) {
   const meta = [r.category && t.cat[r.category], totalTime(r) && fmtDur(totalTime(r)), r.servings && t.servings(+r.servings)].filter(Boolean);
   return `<a class="card" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}
     <div class="min"><h3>${esc(r.title)}</h3><div class="meta">${meta.map(m => `<span>${esc(m)}</span>`).join('')}</div>
-    <div class="meta">${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${r.pesach ? `<span>${esc(t.hol.pesach)}</span>` : ''}${r.rating ? `<span style="color:var(--honey)">${'★'.repeat(r.rating)}</span>` : ''}</div></div>
+    <div class="meta">${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${r.rating ? `<span style="color:var(--honey)">${'★'.repeat(r.rating)}</span>` : ''}</div></div>
     <div class="side">${r.favorite ? ico('heart', 'star-fav') : ''}</div></a>`;
 }
 function renderResults() {
@@ -1267,13 +1323,14 @@ function openFilters() {
     <div class="form" style="padding:0">
       <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat">${opt('', t.all, L.cat)}${CATS.map(c => opt(c, t.cat[c], L.cat)).join('')}</select></div>
       <div class="field"><label for="fKash">${esc(t.kashrutF)}</label><select id="fKash">${opt('', t.all, L.kash)}${KASHRUT.map(k => opt(k, t.kashLong[k], L.kash)).join('')}</select></div>
-      <div class="field"><label for="fHol">${esc(t.holidays)}</label><select id="fHol">${opt('', t.all, L.hol)}${HOLIDAYS.map(h => opt(h, t.hol[h], L.hol)).join('')}</select></div>
+      <div class="field"><label for="fHol">${esc(t.occasions)}</label><select id="fHol">${opt('', t.all, L.hol)}
+        <optgroup label="${esc(t.occMoments)}">${generalOcc().map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
+        <optgroup label="${esc(t.occJewish)}">${HOLIDAYS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup></select></div>
       <label class="toggle">${esc(t.quick)}<input type="checkbox" id="fQuick" ${L.quick ? 'checked' : ''}></label>
-      <label class="toggle">${esc(t.pesachOk)}<input type="checkbox" id="fPes" ${L.pesach ? 'checked' : ''}></label>
       <div class="row2"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">OK</button></div>
     </div>`, (el, close) => {
-    el.querySelector('[data-x="ok"]').onclick = () => { L.cat = $('#fCat').value; L.kash = $('#fKash').value; L.hol = $('#fHol').value; L.quick = $('#fQuick').checked; L.pesach = $('#fPes').checked; close(); refreshList(); };
-    el.querySelector('[data-x="reset"]').onclick = () => { Object.assign(L, { cat: '', hol: '', quick: false, pesach: false, kash: '' }); close(); refreshList(); };
+    el.querySelector('[data-x="ok"]').onclick = () => { L.cat = $('#fCat').value; L.kash = $('#fKash').value; L.hol = $('#fHol').value; L.quick = $('#fQuick').checked; close(); refreshList(); };
+    el.querySelector('[data-x="reset"]').onclick = () => { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); };
   });
 }
 function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
@@ -1312,9 +1369,8 @@ function renderRecipe(r) {
     : `<div class="ph art" style="--c:${artColor(r.title)}">${esc(initial(r.title))}</div>`;
   const badges = [
     r.kashrut && `<span class="badge kbadge k-${r.kashrut}">${esc(t.kashLong[r.kashrut])}</span>`,
-    r.pesach && `<span class="badge kosher-p">${esc(t.pesachOk)}</span>`,
     r.category && `<span class="badge">${esc(t.cat[r.category])}</span>`,
-    ...(r.holidays || []).map(h => `<span class="badge">${esc(t.hol[h])}</span>`),
+    ...(r.holidays || []).filter(h => occLabel(h)).map(h => `<span class="badge">${esc(occLabel(h))}</span>`),
     ...(r.tags || []).map(g => `<span class="badge">#${esc(g)}</span>`),
   ].filter(Boolean).join('');
   $('#view').innerHTML = `
@@ -1501,10 +1557,13 @@ function renderEdit(r) {
       </div>
       <div class="field"><label for="fTitle">${esc(t.title)} *</label><input class="input" id="fTitle" required placeholder="${esc(t.titlePh)}" value="${esc(r.title)}" style="font-size:1.15rem;font-weight:700"></div>
       <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat"><option value="">—</option>${CATS.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${esc(t.cat[c])}</option>`).join('')}</select></div>
-      <details class="more-box" ${r.kashrut || r.pesach || (r.holidays || []).length ? 'open' : ''}><summary>${esc(t.jewishBox)}</summary><div class="in">
-      <div class="field"><span class="lbl">${esc(t.kashrut)}</span><div class="seg">${kOpt}</div></div>
-      <label class="toggle">${esc(t.pesachOk)}<input type="checkbox" id="fPesach" ${r.pesach ? 'checked' : ''}></label>
-      <div class="field"><span class="lbl">${esc(t.holidays)}</span><div class="wrapchips" id="fHol">${HOLIDAYS.map(h => `<button type="button" class="chip ${(r.holidays || []).includes(h) ? 'on' : ''}" data-h="${h}" aria-pressed="${(r.holidays || []).includes(h)}">${esc(t.hol[h])}</button>`).join('')}</div></div>
+      <div class="field"><span class="lbl">${esc(t.occasions)}</span>
+        <span class="eyebrow">${esc(t.occMoments)}</span>
+        <div class="wrapchips occ-chips" id="fOcc">${generalOcc().map(h => occChip(h, r.holidays)).join('')}<button type="button" class="chip add" data-act="addocc">${ico('plus')}${esc(t.addOcc)}</button></div>
+        <span class="eyebrow" style="margin-top:6px">${esc(t.occJewish)}</span>
+        <div class="wrapchips occ-chips" id="fHol">${HOLIDAYS.map(h => occChip(h, r.holidays)).join('')}</div></div>
+      <details class="more-box" ${r.kashrut ? 'open' : ''}><summary>${esc(t.kashrut)}</summary><div class="in">
+      <div class="seg">${kOpt}</div>
       </div></details>
       <div class="row3">
         <div class="field"><label for="fServ">${esc(t.servingsF)}</label><input class="input" id="fServ" type="number" inputmode="numeric" min="0" value="${esc(r.servings || '')}"></div>
@@ -1537,7 +1596,7 @@ function readForm() {
   const v = id => $('#' + id)?.value?.trim() ?? '';
   return {
     title: v('fTitle'), link: v('fLink'), category: v('fCat'), kashrut: $('input[name="kashrut"]:checked')?.value || '',
-    pesach: !!$('#fPesach')?.checked, holidays: $$('#fHol .chip.on').map(b => b.dataset.h),
+    holidays: $$('.occ-chips .chip.on[data-h]').map(b => b.dataset.h),
     servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
     ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', source: v('fSource'),
     tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto, pages: formPages,
@@ -1549,12 +1608,12 @@ function fillForm(d, onlyEmpty = false) {
   set('fIng', d.ingredients); set('fSteps', d.steps); set('fNotes', d.notes); set('fSource', d.source);
   if (d.tags?.length) set('fTags', d.tags.join(', '));
   if (d.kashrut !== undefined && !onlyEmpty) { const k = $(`input[name="kashrut"][value="${d.kashrut}"]`); if (k) k.checked = true; }
-  if (d.pesach !== undefined && !onlyEmpty) $('#fPesach').checked = d.pesach;
-  if (!onlyEmpty && (d.kashrut || d.pesach || d.holidays?.length)) $('.more-box').open = true;
-  if (d.holidays && !onlyEmpty) $$('#fHol .chip').forEach(b => { const on = d.holidays.includes(b.dataset.h); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  if (!onlyEmpty && d.kashrut) $('.more-box').open = true;
+  if (d.holidays && !onlyEmpty) $$('.occ-chips .chip[data-h]').forEach(b => { const on = d.holidays.includes(b.dataset.h); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
   if (d.photo && (!onlyEmpty || !formPhoto)) { formPhoto = d.photo; drawPhotoBox(); if (/^https?:/.test(d.photo)) $('#fPhotoUrl').value = d.photo; }
 }
 async function saveRecipe(r) {
+  migrate(r);
   indexRecipe(r);
   await DB.put(r);
   const i = recipes.findIndex(x => x.id === r.id);
@@ -1818,6 +1877,13 @@ function renderMore() {
         <div class="field"><label for="sCity">${esc(t.city)}</label><select id="sCity">${Object.entries(CITIES).map(([k, c]) => opt(k, c[0], S.city)).join('')}${S.gps ? opt('gps', t.myPos, S.city) : ''}</select>
           <button type="button" class="btn small" data-act="gps">${ico('pin')}${esc(t.useGps)}</button></div>
       </div></section>
+    <section class="panel"><h2>${esc(t.occasions)}</h2><p class="muted" style="margin:0">${esc(t.occText)}</p>
+      <div class="occ-list">
+        <label class="occ-row"><span>${esc(occLabel('momsbday'))}</span><input class="input" type="date" data-occdate="momsbday" value="${S.occDates?.momsbday ? new Date().getFullYear() + '-' + S.occDates.momsbday : ''}"></label>
+        ${customOcc().map(c => `<div class="occ-row"><span>${esc(c.label)}</span><input class="input" type="date" data-occdate="${c.key}" aria-label="${esc(c.label)}" value="${c.date ? new Date().getFullYear() + '-' + c.date : ''}">
+          <button class="icon-btn" data-act="delocc" data-k="${c.key}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}
+      </div>
+      <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></section>
     <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
       ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
         <button class="btn" data-act="locknow">${esc(t.lockNow)}</button>` : `<button class="btn primary" data-act="lockchange">${esc(t.lockAdd)}</button>`}</section>
@@ -1884,19 +1950,19 @@ function samples() {
       ingredients: fr ? '1 kg de farine\n2 sachets de levure boulangère (16 g)\n120 g de sucre\n2 c. à café de sel\n3 œufs (+ 1 jaune pour dorer)\n150 ml d’huile\n400 ml d’eau tiède\nGraines de sésame ou de pavot' : '1 kg flour\n2 packets dried yeast (16 g)\n120 g sugar\n2 tsp salt\n3 eggs (+ 1 yolk to glaze)\n150 ml oil\n400 ml warm water\nSesame or poppy seeds',
       steps: fr ? 'Délayer la levure dans l’eau tiède avec une cuillère de sucre, laisser mousser 10 min.\nMélanger farine, sucre et sel. Ajouter les œufs, l’huile puis la levure.\nPétrir 10 minutes jusqu’à obtenir une pâte souple.\nCouvrir et laisser lever 1 h 30 dans un endroit tiède.\nPrélever un peu de pâte pour la bénédiction (hafracha). Diviser en deux, tresser chaque ’halla à 3 ou 6 brins.\nLaisser lever encore 45 min, dorer au jaune d’œuf et parsemer de graines.\nCuire 30 min à 180 °C jusqu’à ce que le dessous sonne creux.' : 'Dissolve the yeast in the warm water with a spoon of sugar; let it foam 10 min.\nMix flour, sugar and salt. Add eggs, oil, then the yeast.\nKnead for 10 minutes until smooth.\nCover and let rise 1 hour 30 in a warm place.\nSeparate a small piece of dough for the blessing (hafrashat challah). Divide in two and braid each loaf with 3 or 6 strands.\nLet rise another 45 min, brush with yolk and sprinkle with seeds.\nBake 30 min at 180 °C until the bottom sounds hollow.',
       notes: fr ? 'Pour Roch Hachana : ajouter des raisins secs et former une couronne ronde.' : 'For Rosh Hashanah: add raisins and shape into a round crown.' }, 1),
-    R({ title: fr ? 'Poulet rôti au citron et au thym' : 'Roast Chicken with Lemon & Thyme', category: 'poultry', kashrut: 'meat', holidays: ['shabbat'], servings: 4, prep: 15, cook: 75, source: fr ? 'Exemple' : 'Example', rating: 5,
+    R({ title: fr ? 'Poulet rôti au citron et au thym' : 'Roast Chicken with Lemon & Thyme', category: 'poultry', kashrut: 'meat', holidays: ['shabbat', 'family', 'friends'], servings: 4, prep: 15, cook: 75, source: fr ? 'Exemple' : 'Example', rating: 5,
       ingredients: fr ? '1 poulet fermier (1,6 kg)\n2 citrons\n1 tête d’ail\n6 branches de thym\n800 g de petites pommes de terre\n4 c. à soupe d’huile d’olive\nSel, poivre' : '1 free-range chicken (1.6 kg)\n2 lemons\n1 head of garlic\n6 sprigs thyme\n800 g small potatoes\n4 tbsp olive oil\nSalt, pepper',
       steps: fr ? 'Préchauffer le four à 200 °C. Sortir le poulet du réfrigérateur 30 min avant.\nCouper un citron en quatre et le glisser dans le poulet avec la moitié du thym et 4 gousses d’ail.\nDisposer les pommes de terre coupées en deux autour, arroser d’huile, saler, poivrer.\nEnfourner 1 h 15 en arrosant le poulet de son jus toutes les 20 minutes.\nLaisser reposer 10 min sous une feuille d’aluminium, presser le second citron sur le jus et servir.' : 'Preheat the oven to 200 °C. Take the chicken out of the fridge 30 min before.\nQuarter one lemon and put it inside the chicken with half the thyme and 4 garlic cloves.\nArrange the halved potatoes around it, drizzle with oil, season.\nRoast 1 hour 15, basting with the juices every 20 minutes.\nRest 10 min under foil, squeeze the second lemon over the juices and serve.' }, 2),
     R({ title: fr ? 'Chakchouka' : 'Shakshuka', category: 'vegetarian', kashrut: 'parve', servings: 4, prep: 10, cook: 25, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'facile' : 'easy', fr ? 'tunisien' : 'Tunisian'], rating: 4,
       ingredients: fr ? '3 c. à soupe d’huile d’olive\n1 oignon émincé\n2 poivrons rouges en lanières\n3 gousses d’ail\n1 c. à café de cumin\n1 c. à café de paprika\n½ c. à café de harissa\n800 g de tomates concassées\n6 œufs\nCoriandre fraîche' : '3 tbsp olive oil\n1 onion, sliced\n2 red peppers, in strips\n3 garlic cloves\n1 tsp cumin\n1 tsp paprika\n½ tsp harissa\n800 g crushed tomatoes\n6 eggs\nFresh coriander',
       steps: fr ? 'Faire revenir l’oignon et les poivrons dans l’huile 10 min.\nAjouter l’ail, le cumin, le paprika et la harissa, cuire 1 min.\nVerser les tomates, saler, laisser mijoter 10 min.\nCreuser 6 puits et y casser les œufs. Couvrir et cuire 6 à 8 min.\nParsemer de coriandre et servir avec du pain.' : 'Sauté the onion and peppers in the oil for 10 min.\nAdd garlic, cumin, paprika and harissa; cook 1 min.\nPour in the tomatoes, salt, and simmer 10 min.\nMake 6 wells and crack in the eggs. Cover and cook 6 to 8 min.\nSprinkle with coriander and serve with bread.' }, 3),
-    R({ title: 'Ratatouille', category: 'vegetarian', kashrut: 'parve', pesach: true, servings: 6, prep: 30, cook: 60, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'provençal' : 'Provençal'],
+    R({ title: 'Ratatouille', category: 'vegetarian', kashrut: 'parve', holidays: ['pesach', 'friends', 'bbq'], servings: 6, prep: 30, cook: 60, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'provençal' : 'Provençal'],
       ingredients: fr ? '2 aubergines\n3 courgettes\n2 poivrons (rouge et jaune)\n2 oignons\n4 gousses d’ail\n6 tomates bien mûres\n6 c. à soupe d’huile d’olive\n1 bouquet garni (thym, laurier)\nBasilic frais\nSel, poivre' : '2 aubergines\n3 courgettes\n2 peppers (red and yellow)\n2 onions\n4 garlic cloves\n6 ripe tomatoes\n6 tbsp olive oil\n1 bouquet garni (thyme, bay)\nFresh basil\nSalt, pepper',
       steps: fr ? 'Couper tous les légumes en dés d’environ 2 cm.\nFaire revenir séparément aubergines, courgettes et poivrons dans l’huile, 8 min chacun.\nDans une cocotte, faire fondre les oignons et l’ail 5 min, ajouter les tomates.\nAjouter tous les légumes et le bouquet garni, couvrir et laisser mijoter 40 min à feu doux.\nRectifier l’assaisonnement et ajouter le basilic au moment de servir. Encore meilleure le lendemain.' : 'Cut all the vegetables into 2 cm dice.\nSauté the aubergines, courgettes and peppers separately in the oil, 8 min each.\nIn a casserole, soften the onions and garlic 5 min, then add the tomatoes.\nAdd all the vegetables and the bouquet garni, cover and simmer gently 40 min.\nAdjust the seasoning and add the basil just before serving. Even better the next day.' }, 4),
     R({ title: fr ? 'Gâteau au miel et à la cannelle' : 'Honey & Cinnamon Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
       ingredients: fr ? '300 g de farine\n1 sachet de levure chimique\n1 c. à café de bicarbonate\n2 c. à café de cannelle\n½ c. à café de gingembre\n3 œufs\n200 g de miel\n150 g de sucre roux\n150 ml d’huile\n200 ml de thé fort refroidi\n1 zeste d’orange' : '300 g flour\n1 packet baking powder\n1 tsp baking soda\n2 tsp cinnamon\n½ tsp ginger\n3 eggs\n200 g honey\n150 g brown sugar\n150 ml oil\n200 ml strong cooled tea\n1 orange zest',
       steps: fr ? 'Préchauffer le four à 170 °C. Huiler un moule à cake.\nMélanger farine, levure, bicarbonate et épices.\nFouetter œufs, miel, sucre, huile, thé et zeste.\nIncorporer les ingrédients secs sans trop travailler.\nCuire 50 min, jusqu’à ce qu’une lame ressorte sèche.\nAttendre un jour avant de servir : il est encore meilleur. Chana tova !' : 'Preheat the oven to 170 °C. Oil a loaf pan.\nMix flour, baking powder, soda and spices.\nWhisk eggs, honey, sugar, oil, tea and zest.\nFold in the dry ingredients without overmixing.\nBake 50 min, until a knife comes out clean.\nWait a day before serving: it gets even better. Shana tova!' }, 5),
-    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
+    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'momsbday', 'birthday'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
       ingredients: fr ? '1 pâte feuilletée\n8 pommes (Golden ou Reinette)\n150 g de sucre\n80 g de beurre\n1 pincée de fleur de sel' : '1 sheet puff pastry\n8 apples (Golden or Reinette)\n150 g sugar\n80 g butter\n1 pinch flaky salt',
       steps: fr ? 'Préchauffer le four à 190 °C. Éplucher les pommes et les couper en quartiers.\nDans un moule allant sur le feu, faire un caramel blond avec le sucre, puis ajouter le beurre et la fleur de sel.\nRanger les pommes serrées sur le caramel, cuire 15 min à feu doux.\nCouvrir avec la pâte en rentrant les bords, piquer à la fourchette.\nEnfourner 30 min, jusqu’à ce que la pâte soit bien dorée.\nAttendre 5 min puis retourner d’un coup sur un plat. Servir tiède avec de la crème fraîche.' : 'Preheat the oven to 190 °C. Peel the apples and cut into quarters.\nIn an ovenproof pan, make a golden caramel with the sugar, then add the butter and salt.\nPack the apples tightly on the caramel and cook 15 min over low heat.\nCover with the pastry, tucking in the edges, and prick with a fork.\nBake 30 min, until the pastry is deep golden.\nWait 5 min, then turn it out in one go onto a plate. Serve warm with crème fraîche.' }, 6),
   ];
@@ -1912,11 +1978,11 @@ document.addEventListener('click', async e => {
     case 'back': if (history.length > 1) history.back(); else go('#/'); break;
     case 'clearq': L.q = ''; $('#q').value = ''; renderResults(); $('#q').focus(); break;
     case 'voice': voiceSearch(); break;
-    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', quick: false, pesach: false }); refreshList(); break;
+    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', quick: false }); refreshList(); break;
     case 'fav': if (current === 'recipe' && r) { r.favorite = !r.favorite; await saveRecipe(r); renderRecipe(r); } else { L.fav = !L.fav; refreshList(); } break;
     case 'cat': L.cat = L.cat === b.dataset.c ? '' : b.dataset.c; refreshList(); break;
     case 'filters': openFilters(); break;
-    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', quick: false, pesach: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
+    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', quick: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
     case 'holfilter': Object.assign(L, { hol: b.dataset.h, q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
     case 'surprise': { const l = filtered(); if (l.length) go('#/r/' + l[Math.floor(Math.random() * l.length)].id); break; }
     case 'samples': for (const s of samples()) if (!byId(s.id)) await saveRecipe(s); toast(t.samplesAdded); route(); break;
@@ -1960,6 +2026,14 @@ document.addEventListener('click', async e => {
     case 'iosok': ls.set('iosNudgeDone', true); b.closest('.banner').remove(); break;
     case 'snooze': ls.set('nudgeSnooze', Date.now() + 14 * 864e5); b.closest('.banner').remove(); break;
     case 'restore': $('#backupInput').click(); break;
+    case 'addocc': addOccasion(key => {
+      if (current === 'edit') { $('[data-act="addocc"]').insertAdjacentHTML('beforebegin', occChip(key, [key])); $('#form').dispatchEvent(new Event('input')); }
+      else renderMore();
+    }); break;
+    case 'delocc': { const c = customOcc().find(x => x.key === b.dataset.k); if (!c || !(await confirmBox(t.occDelQ(c.label), t.del))) break;
+      S.customOcc = customOcc().filter(x => x.key !== c.key); saveSettings();
+      for (const r2 of recipes.filter(x => (x.holidays || []).includes(c.key))) { r2.holidays = r2.holidays.filter(h => h !== c.key); await saveRecipe(r2); }
+      if (L.hol === c.key) L.hol = ''; renderMore(); break; }
     case 'lockchange': showLock('setup', ok => { if (ok) renderMore(); }); lockState.cancellable = true; drawLock(); break;
     case 'lockremove': if (await confirmBox(t.lockRemoveQ, t.lockRemove)) { ls.del('lock'); S.lockOff = true; saveSettings(); toast(t.lockRemoved); renderMore(); } break;
     case 'locknow': try { sessionStorage.removeItem('abe:ok'); } catch {} showLock('unlock'); break;
@@ -1970,7 +2044,7 @@ document.addEventListener('click', e => {
   // Tap a converted quantity to peek at the original wording.
   const cv = e.target.closest('b.conv');
   if (cv) { e.preventDefault(); const o = cv.dataset.orig; cv.dataset.orig = cv.textContent; cv.textContent = o; return; }
-  const c = e.target.closest('#fHol .chip'); if (!c) return;
+  const c = e.target.closest('.occ-chips .chip[data-h]'); if (!c) return;
   c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on'));
   $('#form').dispatchEvent(new Event('input'));
 });
@@ -1978,6 +2052,13 @@ document.addEventListener('input', e => {
   if (e.target.id === 'q') { L.q = e.target.value; renderResults(); }
 });
 document.addEventListener('change', e => {
+  const od = e.target.dataset?.occdate;
+  if (od) {
+    const mmdd = (e.target.value || '').slice(5);
+    if (od === 'momsbday') S.occDates = { ...(S.occDates || {}), momsbday: mmdd };
+    else S.customOcc = customOcc().map(c => c.key === od ? { ...c, date: mmdd } : c);
+    saveSettings(); toast(T().saved);
+  }
   if (e.target.id === 'sort') { L.sort = e.target.value; renderResults(); }
 });
 document.addEventListener('keydown', e => {
@@ -2091,6 +2172,7 @@ document.addEventListener('visibilitychange', () => {
   readShareParams();
   const ok = await DB.open();
   try { recipes = await DB.all(); } catch { recipes = []; }
+  for (const r of recipes) if (migrate(r)) DB.put(r).catch(() => {});
   recipes.forEach(indexRecipe);
   if (!ok) setTimeout(() => toast(T().offlineSave), 800);
   await gate();
