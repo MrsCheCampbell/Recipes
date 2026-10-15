@@ -87,6 +87,8 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 Everyone keeps their own book, and sees what the others are cooking.
 
+The **La famille** tab is always on the home screen. Until the family is set up (below), it shows what the feed will look like and a button to create or join it.
+
 - **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
@@ -123,7 +125,8 @@ The **Carnets** tab (bottom bar) is private to each person, even in the family.
 - **Next year**: an evening with the same occasion offers **Reprendre le menu de « Thanksgiving 2025 »**, which copies last year's menu in one tap.
 - **Invités (guest book)**: one page per couple or group of friends: what to know about them (allergies, what they love), every evening with them, and **everything you've served them**, with how many times, when last, and whether it was loved. When you plan a new evening with them, **Déjà servi à ces invités** lists it right on the page, so you don't repeat a dish, or so you can make their favourite again. **Organiser une soirée avec eux** starts a new evening with them already invited.
 - On a recipe: *menu → Ajouter à une soirée*, and the recipe shows which evenings it was served at.
-- **Favoris** is now the third tab inside Carnets.
+- **Cave (wine notes)**: snap the label, note the name, colour, vintage, appellation, château, stars and a few words. Link a wine to the dishes it went with (the recipe then shows *Accords*), add wines to an evening, and each guest book lists the wines poured for those friends.
+- **Favoris** is now the last tab inside Carnets.
 
 Everything is in the backup file (*Plus → Sauvegarder*). In a family it is also stored in your own private space on the server, which only you can read.
 
