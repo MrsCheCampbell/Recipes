@@ -473,7 +473,9 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
 .lock { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; overflow: auto;
   padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
   background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 22px 22px; }
-.lock-in { position: relative; width: 100%; max-width: 350px; display: grid; justify-items: center; gap: 12px; text-align: center; background: var(--surface); padding: 30px 18px 24px; box-shadow: var(--shadow-lift); animation: settle .6s var(--ease) both; }
+.lock-in { position: relative; width: 100%; max-width: 350px; display: grid; justify-items: center; gap: 12px; text-align: center; background: var(--surface); padding: 30px 18px 24px; box-shadow: var(--shadow-lift); }
+.lock-in.intro { animation: fadein .35s var(--ease) both; }
+@keyframes fadein { from { opacity: 0; } }
 .lock-in::before, .lock-in::after { content: ""; position: absolute; top: 9px; width: 12px; height: 12px; border-top: 1px solid var(--muted); opacity: .6; }
 .lock-in::before { left: 9px; border-left: 1px solid var(--muted); } .lock-in::after { right: 9px; border-right: 1px solid var(--muted); }
 .lock .mono { width: 74px; height: 74px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-family: var(--font-display); font-style: italic; font-size: 2.5rem; box-shadow: 0 0 0 4px var(--surface), 0 0 0 5px var(--accent); }
@@ -487,7 +489,8 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
 @keyframes shake { 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
 .keys { display: grid; grid-template-columns: repeat(3, 74px); gap: 14px 24px; justify-content: center; }
 .keys button { width: 74px; height: 74px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); font-family: var(--font-display); font-weight: 600; font-variation-settings: "opsz" 12; font-size: 1.9rem; color: var(--ink); transition: transform .12s var(--ease), background .15s; }
-.keys button:active { transform: scale(.92); background: var(--surface-2); }
+.keys button { touch-action: manipulation; }
+.keys button:active { background: var(--surface-2); }
 .keys button.ghost { border: 0; background: transparent; font-family: var(--font-body); font-size: .82rem; font-weight: 700; color: var(--muted); }
 .keys button.ghost svg.i { width: 26px; height: 26px; }
 
@@ -699,7 +702,7 @@ const STR = {
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
     lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
     lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: 'ex : l’année de notre mariage',
-    lockSaved: 'Code enregistré', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
+    lockSaved: 'Code enregistré', lockRedo: 'Petite mise à jour : choisissez à nouveau votre code. Vos recettes ne changent pas.', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
     lockChange: 'Changer le code', lockRemove: 'Retirer le code', lockAdd: 'Ajouter un code', lockRemoveQ: 'Retirer le code d’accès ?', lockRemoved: 'Code retiré', lockNow: 'Verrouiller maintenant', erase: 'Effacer', later: 'Plus tard',
   },
   en: {
@@ -789,7 +792,7 @@ const STR = {
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: 'e.g. the year we married',
-    lockSaved: 'Code saved', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
+    lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
     lockChange: 'Change the code', lockRemove: 'Remove the code', lockAdd: 'Add a code', lockRemoveQ: 'Remove the passcode?', lockRemoved: 'Code removed', lockNow: 'Lock now', erase: 'Delete', later: 'Later',
   }
 };
@@ -2409,23 +2412,31 @@ const lockData = () => ls.get('lock', null);
 const sessionOk = () => { try { return sessionStorage.getItem('abe:ok') === '1'; } catch { return false; } };
 const markOk = () => { try { sessionStorage.setItem('abe:ok', '1'); } catch {} };
 let lockState = null;
-function showLock(mode, done) {
+function showLock(mode, done, msg = '') {
   const el = $('#lock');
-  lockState = { mode, buf: '', first: '', fails: 0, done, msg: '', err: false };
+  lockState = { mode, buf: '', first: '', fails: 0, done, msg, err: false };
   el.hidden = false; document.body.style.overflow = 'hidden';
+  // Build the card once; key presses only update the text and dots, so nothing moves under the finger.
+  el.innerHTML = `<div class="lock-in intro" role="dialog" aria-modal="true">
+    <div class="mono">${esc(initial(S.name || 'Abe'))}</div>
+    <h1 id="lockTitle"></h1><p id="lockSub" aria-live="polite"></p>
+    <div class="dots" id="dots"><span></span><span></span><span></span><span></span></div>
+    <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-k="${n}">${n}</button>`).join('')}<span id="lockLeft"></span><button type="button" data-k="0">0</button>
+      <button type="button" class="ghost" data-k="del" aria-label="${esc(T().clear)}">${ico('back')}</button></div></div>`;
   drawLock();
 }
 function drawLock() {
-  const t = T(), st = lockState, el = $('#lock');
+  const t = T(), st = lockState, el = $('#lock'); if (!st || !el.firstChild) return;
   const title = st.mode === 'unlock' ? t.lockHello(S.name || 'Abe') : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
   const sub = st.msg || (st.mode === 'unlock' ? t.lockEnter : st.mode === 'setup' ? t.lockSetupSub : '');
-  const key = (v, label = v, cls = '') => `<button type="button" class="${cls}" data-k="${v}" aria-label="${esc(label)}">${label}</button>`;
-  const left = st.mode === 'unlock' ? key('forgot', esc(t.lockForgot), 'ghost') : st.mode === 'setup' && lockState.cancellable ? key('cancel', esc(t.cancel), 'ghost') : '<span></span>';
-  el.innerHTML = `<div class="lock-in" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-    <div class="mono">${esc(initial(S.name || 'Abe'))}</div>
-    <h1>${esc(title)}</h1><p class="${st.err ? 'err' : ''}" aria-live="polite">${esc(sub)}</p>
-    <div class="dots" id="dots">${[0, 1, 2, 3].map(i => `<span class="${i < st.buf.length ? 'on' : ''}"></span>`).join('')}</div>
-    <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => key(n)).join('')}${left}${key(0)}${key('del', ico('back'), 'ghost')}</div></div>`;
+  $('#lockTitle').textContent = title;
+  el.firstChild.setAttribute('aria-label', title);
+  const p = $('#lockSub'); p.textContent = sub; p.className = st.err ? 'err' : '';
+  $$('#dots span').forEach((d, i) => d.classList.toggle('on', i < st.buf.length));
+  const left = st.mode === 'unlock' ? ['forgot', t.lockForgot] : st.mode === 'setup' && st.cancellable ? ['cancel', t.cancel] : null;
+  const slot = $('#lockLeft');
+  const want = left ? left[0] : '';
+  if (slot.dataset.k !== want) { slot.dataset.k = want; slot.innerHTML = left ? `<button type="button" class="ghost" data-k="${left[0]}">${esc(left[1])}</button>` : ''; }
 }
 async function lockKey(k) {
   const st = lockState, t = T(); if (!st) return;
@@ -2445,13 +2456,13 @@ async function lockKey(k) {
   } else if (st.mode === 'confirm') {
     if (st.buf !== st.first) { st.mode = 'setup'; st.buf = ''; st.first = ''; st.msg = t.lockMismatch; st.err = true; drawLock(); shake(); return; }
     const salt = uid();
-    ls.set('lock', { salt, hash: await hashCode(st.buf, salt), hint: '' });
+    ls.set('lock', { v: 2, salt, hash: await hashCode(st.buf, salt), hint: '' });
     S.lockOff = false; saveSettings(); markOk();
     closeLock(true);
     setTimeout(askHint, 400);
   }
 }
-function shake() { const d = $('#dots'); d?.classList.add('shake'); try { navigator.vibrate?.(120); } catch {} }
+function shake() { const d = $('#dots'); if (!d) return; d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); setTimeout(() => d.classList.remove('shake'), 450); try { navigator.vibrate?.(120); } catch {} }
 function closeLock(ok) {
   const st = lockState; lockState = null;
   $('#lock').hidden = true; $('#lock').innerHTML = ''; document.body.style.overflow = '';
@@ -2469,6 +2480,8 @@ function gate() {
   return new Promise(res => {
     const d = lockData();
     if (!d && S.lockOff) return res();
+    // Codes saved before the keypad fix may not be the digits that were typed: ask once for a new one.
+    if (d && d.v !== 2) { ls.del('lock'); return showLock('setup', () => res(), T().lockRedo); }
     if (d && sessionOk()) return res();
     showLock(d ? 'unlock' : 'setup', () => res());
   });
