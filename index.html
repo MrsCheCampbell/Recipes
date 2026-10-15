@@ -9,7 +9,12 @@
 <meta name="description" content="Les recettes d'Abe : chercher, cuisiner, partager.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cuisine d'Abe">
+<meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap">
@@ -485,6 +490,7 @@ const I = {
   pot: '<path d="M4 9h16v2h-1v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-6H4Zm-2 1h2v2H2Zm18 0h2v2h-2ZM8 3l1 1-1 2 1 1-1 1H7l1-1-1-1 1-2-1-1Zm4 0 1 1-1 2 1 1-1 1h-1l1-1-1-1 1-2-1-1Zm4 0 1 1-1 2 1 1-1 1h-1l1-1-1-1 1-2-1-1Z"/>',
   scale: '<path d="M12 3a2 2 0 0 1 2 2h5l2 7a3.5 3.5 0 0 1-7 0l2-5h-2.3A2 2 0 0 1 13 8.7V19h4v2H7v-2h4V8.7A2 2 0 0 1 9.3 7H7l2 5a3.5 3.5 0 0 1-7 0l2-7h5a2 2 0 0 1 2-2Z"/>',
   pin: '<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 4.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z"/>',
+  iosShare: '<path d="M12 2 7.5 6.5l1.4 1.4L11 5.8V15h2V5.8l2.1 2.1 1.4-1.4ZM5 9h4v2H7v9h10v-9h-2V9h4v13H5Z"/>',
   install: '<path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v13h10V5Zm4 2h2v5h2l-3 3-3-3h2Z"/>',
 };
 const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="${cls}">${I[n]}</svg>`;
@@ -548,6 +554,8 @@ const STR = {
     tools: 'Conversions', convFrom: 'Quantité', convIngr: 'Ingrédient (pour les tasses)', ovenTitle: 'Températures du four',
     install: 'Installer l’appli sur le téléphone', installText: 'Pour l’avoir sur l’écran d’accueil, comme une vraie appli.',
     installHow: 'Dans Chrome : menu ⋮ puis « Installer l’application » (ou « Ajouter à l’écran d’accueil »).',
+    installIos: 'Dans Safari : touchez le bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».',
+    iosNudge: 'Pour l’avoir comme une vraie appli : Partager, puis « Sur l’écran d’accueil ».', ok: 'OK',
     eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
     madeFor: 'Fait avec amour pour', withLove: 'Papa',
     // jewish calendar
@@ -617,6 +625,8 @@ const STR = {
     tools: 'Conversions', convFrom: 'Amount', convIngr: 'Ingredient (for cups)', ovenTitle: 'Oven temperatures',
     install: 'Install the app on the phone', installText: 'Put it on the home screen, like a real app.',
     installHow: 'In Chrome: menu ⋮ then “Install app” (or “Add to Home screen”).',
+    installIos: 'In Safari: tap the Share button (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.',
+    iosNudge: 'To use it like a real app: tap Share, then “Add to Home Screen”.', ok: 'OK',
     eraseAll: 'Erase everything', eraseQ: 'Erase every recipe from this phone? This can’t be undone.', erased: 'Everything erased',
     madeFor: 'Made with love for', withLove: 'Dad',
     candles: 'Candle lighting', havdala: 'Shabbat ends', thisFriday: 'Friday', approx: 'Approximate times',
@@ -1005,6 +1015,10 @@ function calHTML() {
 }
 function bannerHTML() {
   const t = T();
+  if (isIOS && !installed() && !ls.get('iosNudgeDone', false)) {
+    return `<section class="banner"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span>${ico('iosShare').replace('<svg', '<svg style="width:20px;height:20px;vertical-align:-4px;color:var(--accent)"')} ${esc(t.iosNudge)}</span>
+      <button class="btn small" data-act="iosok">${esc(t.ok)}</button></div></section>`;
+  }
   const lb = ls.get('lastBackup', 0);
   if (recipes.filter(r => !r.sample).length >= 10 && Date.now() - lb > 30 * 864e5 && ls.get('nudgeSnooze', 0) < Date.now()) {
     return `<section class="banner"><div class="row" style="justify-content:space-between"><span>${esc(t.backupNudge)}</span>
@@ -1559,6 +1573,8 @@ function renderShop() {
 
 // ---------- More / settings ----------
 let installEvt = null;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const installed = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; });
 const CUP_G = { flour: [125, 'Farine', 'Flour'], sugar: [200, 'Sucre', 'Sugar'], brown: [220, 'Sucre roux', 'Brown sugar'], icing: [120, 'Sucre glace', 'Powdered sugar'], butter: [227, 'Beurre', 'Butter'], oil: [218, 'Huile', 'Oil'], rice: [185, 'Riz', 'Rice'], oats: [90, 'Flocons d’avoine', 'Oats'], cocoa: [85, 'Cacao', 'Cocoa'], honey: [340, 'Miel', 'Honey'], almonds: [95, 'Amandes en poudre', 'Ground almonds'], matza: [120, 'Farine de matsa', 'Matzo meal'], water: [240, 'Eau / lait (ml)', 'Water / milk (ml)'] };
 const UNITS = { cup: 'cup / tasse', tbsp: 'tbsp / c. à soupe', tsp: 'tsp / c. à café', floz: 'fl oz', oz: 'oz', lb: 'lb', stick: 'stick (butter)', f: '°F' };
@@ -1581,13 +1597,13 @@ function renderMore() {
   const t = T();
   const nFav = recipes.filter(r => r.favorite).length, nCooked = recipes.reduce((a, r) => a + (r.cookCount || 0), 0);
   const hasSamples = recipes.some(r => r.sample);
-  const isInstalled = matchMedia('(display-mode: standalone)').matches;
+  const isInstalled = installed();
   const opt = (v, l, s) => `<option value="${v}" ${s === v ? 'selected' : ''}>${esc(l)}</option>`;
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.moreTitle)}</h1></header>
     <section class="panel"><h2>${esc(t.stats)}</h2><div class="stats"><div><b>${recipes.length}</b><span>${esc(t.statRecipes)}</span></div><div><b>${nFav}</b><span>${esc(t.statFav)}</span></div><div><b>${nCooked}</b><span>${esc(t.statCooked)}</span></div></div></section>
     ${isInstalled ? '' : `<section class="panel"><h2>${esc(t.install)}</h2><p class="muted" style="margin:0">${esc(t.installText)}</p>
-      ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(t.installHow)}</p>`}</section>`}
+      ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(isIOS ? t.installIos : t.installHow)}</p>`}</section>`}
     <section class="panel"><h2>${esc(t.settings)}</h2>
       <div class="form" style="padding:0;gap:14px">
         <div class="field"><label for="sName">${esc(t.yourName)}</label><select id="sName">${['Abe', 'Abraham', 'Papa', 'Dad', 'Avraham'].map(n => opt(n, n, S.name)).join('')}</select></div>
@@ -1732,6 +1748,7 @@ document.addEventListener('click', async e => {
     case 'gps': navigator.geolocation?.getCurrentPosition(p => { S.gps = [p.coords.latitude, p.coords.longitude]; S.city = 'gps'; saveSettings(); renderMore(); }, () => toast(t.gpsFail), { timeout: 15000 }); break;
     case 'backup': exportBackup(false); break;
     case 'backupshare': exportBackup(true); break;
+    case 'iosok': ls.set('iosNudgeDone', true); b.closest('.banner').remove(); break;
     case 'snooze': ls.set('nudgeSnooze', Date.now() + 14 * 864e5); b.closest('.banner').remove(); break;
     case 'restore': $('#backupInput').click(); break;
     case 'lockchange': showLock('setup', ok => { if (ok) renderMore(); }); lockState.cancellable = true; drawLock(); break;
@@ -1802,7 +1819,6 @@ async function lockKey(k) {
   if (st.buf.length >= 4) return;
   st.buf += k; drawLock();
   if (st.buf.length < 4) return;
-  await new Promise(r => setTimeout(r, 120));
   if (st.mode === 'unlock') {
     const d = lockData();
     if (d && (await hashCode(st.buf, d.salt)) === d.hash) { markOk(); return closeLock(true); }

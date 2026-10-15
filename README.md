@@ -17,6 +17,16 @@ A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight 
 3. The green pot icon appears on his home screen. It opens full screen like any other app.
 4. The first time it opens, it asks to **choose a 4-digit code** (and an optional hint). Set it up with him, or pick it for him and tell him.
 
+## Installing on an iPhone
+
+1. Open the same link in **Safari**.
+2. Tap the **Share** button (the square with an arrow pointing up) → **Add to Home Screen** / **Sur l'écran d'accueil** → **Add**.
+3. Open it from the home screen icon. It runs full screen and asks for its own 4-digit code.
+
+Install it to the home screen rather than using it in a Safari tab: Safari can clear data from websites you haven't visited for a while, but it keeps data for home-screen apps.
+
+Each phone keeps its own recipes. To copy recipes from one phone to another, use *Plus → Envoyer la sauvegarde* on one phone and *Restaurer une sauvegarde* on the other.
+
 ## What it does
 
 **Passcode**
