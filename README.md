@@ -1,4 +1,4 @@
-# La Cuisine d'Abe 🍲✡
+# La Cuisine d'Abe
 
 A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight from Chrome, works offline, and keeps every recipe on the phone.
 
@@ -14,9 +14,15 @@ A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight 
 
 1. Open the link above in **Chrome**.
 2. Tap **⋮** → **Installer l'application** / **Install app** (or "Ajouter à l'écran d'accueil").
-3. The blue pot icon appears on his home screen. It opens full screen like any other app.
+3. The green pot icon appears on his home screen. It opens full screen like any other app.
+4. The first time it opens, it asks to **choose a 4-digit code** (and an optional hint). Set it up with him, or pick it for him and tell him.
 
 ## What it does
+
+**Passcode**
+- A 4-digit code is asked each time the app opens, and again after 15 minutes in the background.
+- "Code oublié ?" shows the hint he saved. The code can be changed, removed, or the app locked straight away from *Plus → Code d'accès*.
+- This is a privacy lock for the phone. The recipes never leave his phone, so nobody visiting the website sees them.
 
 **Recipes**
 - Add a photo with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
@@ -30,7 +36,8 @@ A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight 
 - Alphabetical list grouped by letter, with an A–Z rail to slide through.
 - Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
 - Voice search (microphone button).
-- Quick filters for Favorites, Bassari, Halavi, Parvé, plus category, holiday, "quick (≤ 30 min)" and kosher for Pesach.
+- Quick filters for Favorites and each category he uses, plus kashrut, holiday, "quick (≤ 30 min)" and kosher for Pesach under Filters.
+- A carousel of his favorites at the top.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
 - "Surprends-moi" opens a random recipe.
 
@@ -42,17 +49,17 @@ A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight 
 - "I cooked this today" keeps a count and the last date cooked.
 - Shopping list: add a recipe's ingredients in one tap, check items off, share the list.
 
-**Jewish calendar & France**
+**Jewish touches (kept discreet)**
 - Hebrew date under the greeting.
-- Banner for the next holiday (Roch Hachana, Yom Kippour, Souccot, Hanoucca, Tou Bichvat, Pourim, Pessah, Chavouot) with a button for his recipes for it.
-- From Wednesday on, Shabbat **candle-lighting and end times** for his city (Paris, Lyon, Marseille, Nice, Strasbourg… or GPS).
+- One quiet line under the greeting: the Hebrew date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
+- Kashrut (Bassari / Halavi / Parvé), kosher for Pesach and holiday tags sit in a fold-away section of the recipe form and in Filters.
 - "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Comfort & safety**
 - Large text by default (three sizes), light and dark modes, big tap targets.
 - **Backup**: send a backup file to email or Google Drive, and restore it on a new phone. The app reminds him once a month.
-- Six example recipes (challah, matzo ball soup, shakshuka, latkes, honey cake, hamantaschen), removable in one tap.
+- Six example recipes (challah, roast chicken, shakshuka, ratatouille, honey cake, tarte Tatin), removable in one tap.
 
 ## Tech
 
