@@ -181,6 +181,7 @@ main.enter { animation: enter .32s var(--ease); }
 .tile:nth-child(even) .img { transform: rotate(1.8deg); }
 .tile:active .img { transform: rotate(0) scale(.98); }
 .tile::before { content: ""; position: absolute; z-index: 2; top: -8px; left: 50%; width: 56px; height: 18px; margin-left: -28px; background: var(--tape); transform: rotate(-5deg); }
+.tile .why { position: absolute; z-index: 3; left: 10px; top: 150px; transform: rotate(-2.2deg); font-family: var(--font-mono); font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); background: var(--polaroid); padding: 1px 5px; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 3px; }
 .tile b { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 1.02rem; line-height: 1.2; padding-inline: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* ---------- Illustrated placeholders ---------- */
@@ -368,6 +369,34 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .savebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px); border-top: 1px solid var(--line); padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
 .savebar .in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
 
+/* ---------- Inbox (airmail) ---------- */
+.mast-r { display: inline-flex; align-items: center; gap: 10px; }
+.mailbtn { position: relative; display: inline-grid; place-items: center; color: var(--ink); margin: -8px -6px -8px 0; width: 34px; height: 34px; }
+.mailbtn svg.i { width: 22px; height: 22px; }
+.mailbtn i { position: absolute; top: 0; right: -2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-style: normal; font-size: .6rem; letter-spacing: 0; display: grid; place-items: center; animation: pop .5s var(--ease); }
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.25); } }
+.airmail { position: relative; border: 0 !important; background: var(--surface); padding: 18px; }
+.airmail::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 6px; pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 18px, var(--dairy) 18px 30px, transparent 30px 36px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.banner.airmail { background: var(--surface); }
+.banner.airmail svg.i { color: var(--accent); vertical-align: -5px; }
+.letter-card { position: relative; background: var(--surface); border-radius: 6px; padding: 20px 18px 16px; display: grid; gap: 12px; box-shadow: var(--shadow); animation: drop .5s var(--ease) both; }
+.letter-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 6px; pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 18px, var(--dairy) 18px 30px, transparent 30px 36px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.stamp-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.postmark { color: var(--dairy); border: 1.5px solid currentColor; border-radius: 4px; padding: 2px 7px; transform: rotate(-3deg); font-weight: 500; }
+.letter-main { display: grid; grid-template-columns: 76px 1fr; gap: 16px; align-items: center; }
+.letter-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; }
+.letter-card .meta { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; }
+.letter-acts { display: grid; grid-template-columns: 56px 1fr; gap: 10px; }
+.letter-acts .btn { padding: 0 .8em; }
+.peek summary { cursor: pointer; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); list-style: none; }
+.peek summary::-webkit-details-marker { display: none; }
+.peek ul, .peek ol { margin: 10px 0 0; padding-left: 1.3em; display: grid; gap: 4px; }
+.peek .hand { font-family: var(--font-hand); font-size: 1.3rem; margin: 10px 0 0; }
+
 /* ---------- Panels, shopping, settings ---------- */
 .stack { display: grid; gap: 16px; padding-block: 16px; }
 .panel { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 16px 16px; display: grid; gap: 12px; box-shadow: var(--shadow); }
@@ -535,6 +564,8 @@ const I = {
   iosShare: `<path d="M12 14.5v-11M8.5 7 12 3.5 15.5 7"/><path d="M8.5 10H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1.5"/>`,
   // cookbook page with a camera lens
   bookCam: `<path d="M3 6c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8v12.5c-3-1.2-6-1.2-9 .8-3-2-6-2-9-.8Z"/><path d="M12 6.8v13.3"/><circle cx="16.6" cy="12.6" r="2.5"/><path d="M5.5 10h3.5M5.5 13h3.5" opacity=".6"/>`,
+  // envelope sealed with a heart
+  mail: `<rect x="3" y="5.5" width="18" height="13" rx="2.4"/><path d="m3.6 7.2 8.4 6 8.4-6"/><path d="M12 17.3s-2-1.1-2-2.5a1 1 0 0 1 2-.5 1 1 0 0 1 2 .5c0 1.4-2 2.5-2 2.5Z" ${F}/>`,
   // cute pot with a face, for the empty state
   pot: `<path d="M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4Z"/><path d="M2.5 11.6h2M19.5 11.6h2M6 10.5c0-2 2.7-3 6-3s6 1 6 3M11 6.3h2"/><circle cx="9.3" cy="14.6" r=".8" ${F}/><circle cx="14.7" cy="14.6" r=".8" ${F}/><path d="M10.9 16.6a1.6 1.6 0 0 0 2.2 0"/>`,
 };
@@ -560,7 +591,13 @@ const ILL = {
 };
 const CAT_C = { soups: '#C9773A', breads: '#C49A4A', desserts: '#C26B7A', pastries: '#C9963A', salads: '#6E9A55', fish: '#4F86A8', poultry: '#C7823F', meat: '#A85543', vegetarian: '#D9822B', sides: '#B39256', starters: '#7C8F4E', mains: '#8C7A6B', sauces: '#B5412C', drinks: '#5E8C8A', other: '#8C7A6B' };
 const illus = cat => `<svg viewBox="0 0 64 64" class="ill" aria-hidden="true">${ILL[cat] || ILL.mains}</svg>`;
-const artHTML = (r, cls) => `<div class="${cls} art" style="--c:${CAT_C[r.category] || '#8C7A6B'}">${illus(r.category)}</div>`;
+// No category? Guess one from the name so the drawing still fits.
+const GUESS = [[/soupe|veloute|potage|bouillon|soup|gaspacho/, 'soups'], [/salade|salad|taboule/, 'salads'], [/tarte|croissant|madeleine|brioche|cookie|biscuit/, 'pastries'],
+  [/gateau|cake|mousse|creme|flan|glace|sorbet|dessert|chocolat/, 'desserts'], [/pain|halla|challah|baguette|bread|focaccia/, 'breads'], [/poulet|dinde|canard|chicken|turkey|duck/, 'poultry'],
+  [/boeuf|agneau|veau|steak|beef|lamb|roti|boulette/, 'meat'], [/poisson|saumon|dorade|thon|cabillaud|fish|salmon|tuna/, 'fish'], [/sauce|confiture|pesto|vinaigrette|jam/, 'sauces'],
+  [/the\b|cafe|jus|limonade|cocktail|smoothie|tea\b|juice/, 'drinks'], [/puree|gratin|frites|riz|pates|potato|rice|pasta/, 'sides'], [/legume|carotte|courgette|aubergine|ratatouille|vegetable/, 'vegetarian']];
+const catOf = r => r.category || (GUESS.find(([re]) => re.test(norm(r.title))) || [])[1] || 'mains';
+const artHTML = (r, cls) => { const c = catOf(r); return `<div class="${cls} art" style="--c:${CAT_C[c] || '#8C7A6B'}">${illus(c)}</div>`; };
 
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','other'];
@@ -649,6 +686,14 @@ const STR = {
     occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
     occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
     collection: n => `Recueil · ${String(n).padStart(3, '0')}`, added: 'Ajoutée',
+    inbox: 'Boîte de réception', parAvion: 'Par avion', inboxEmpty: 'Rien pour l’instant. Quand quelqu’un vous envoie une recette depuis son appli, elle arrive ici.',
+    fromWho: n => `De la part de ${n}`, receivedOn: d => `reçue le ${d}`, keep: 'Garder', toss: 'Supprimer', kept: 'Ajoutée à vos recettes', tossed: 'Recette supprimée',
+    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli La Cuisine d’Abe :`,
+    inboxBanner: (n, from) => n === 1 ? `${from} vous a envoyé une recette` : `${n} recettes vous attendent`, open: 'Ouvrir', preview: 'Voir la recette',
+    pasteLink: 'Coller une recette reçue', pasteHelp: 'Sur iPhone, ou si le lien s’est ouvert ailleurs : copiez le message reçu, puis touchez ce bouton.', pastePh: 'Collez ici le message ou le lien reçu',
+    pasteGo: 'Ajouter à la boîte', pasteBad: 'Aucune recette trouvée dans ce texte.', alreadyIn: 'Cette recette est déjà dans votre boîte.', gotOne: 'Nouvelle recette reçue !',
+    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez La Cuisine d’Abe, puis Boîte de réception → « Coller une recette reçue ».',
+    copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
     jewishBox: 'Cacheroute & fêtes', kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
     lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
@@ -731,6 +776,14 @@ const STR = {
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
+    inbox: 'Inbox', parAvion: 'Par avion', inboxEmpty: 'Nothing yet. When someone sends you a recipe from their app, it lands here.',
+    fromWho: n => `From ${n}`, receivedOn: d => `received ${d}`, keep: 'Keep it', toss: 'Delete', kept: 'Added to your recipes', tossed: 'Recipe deleted',
+    send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your La Cuisine d’Abe app:`,
+    inboxBanner: (n, from) => n === 1 ? `${from} sent you a recipe` : `${n} recipes are waiting for you`, open: 'Open', preview: 'See the recipe',
+    pasteLink: 'Paste a received recipe', pasteHelp: 'On iPhone, or if the link opened somewhere else: copy the message you received, then tap this button.', pastePh: 'Paste the message or link here',
+    pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
+    iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open La Cuisine d’Abe, then Inbox → “Paste a received recipe”.',
+    copyForApp: 'Copy for my app', someone: 'Someone',
     jewishBox: 'Kashrut & holidays', kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
     lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
@@ -820,7 +873,7 @@ function migrate(r) {
   if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
   delete r.pesach; return true;
 }
-const L = { q: '', kash: '', cat: '', hol: '', fav: false, quick: false, sort: 'az', scroll: 0 };
+const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, sort: 'az', scroll: 0 };
 let shop = ls.get('shop', []);
 const saveShop = () => { ls.set('shop', shop); updateNavCount(); };
 
@@ -888,6 +941,10 @@ function filtered() {
   let list = recipes.filter(r =>
     (!L.fav || r.favorite) && (!L.kash || r.kashrut === L.kash) && (!L.cat || r.category === L.cat) &&
     (!L.hol || (r.holidays || []).includes(L.hol)) && (!L.quick || (totalTime(r) > 0 && totalTime(r) <= 30)));
+  if (L.mood && !toks.length) {
+    const scores = new Map(moodList(L.mood).map(x => [x.r, x.score]));
+    return list.filter(r => scores.has(r)).sort((a, b) => scores.get(b) - scores.get(a));
+  }
   if (toks.length) {
     list = list.map(r => [r, score(r, toks)]).filter(x => x[1] > 0);
     if (L.sort === 'az') list.sort((a, b) => b[1] - a[1] || collator().compare(sortKey(a[0].title), sortKey(b[0].title)));
@@ -1171,6 +1228,17 @@ function route() {
   if (a === 'cook' && byId(b)) { renderRecipe(byId(b)); return openCook(byId(b)); }
   if (a === 'edit') return renderEdit(b === 'new' ? null : byId(b));
   if (a === 'shop') return renderShop();
+  if (a === 'inbox') return renderInbox(false);
+  if (a === 'recu' && b) {
+    receiveCode(b, true).then(ok => {
+      const ios = isIOS && !installed();
+      if (ios) iosLandingCode = b;
+      history.replaceState(null, '', location.pathname + '#/inbox');
+      renderInbox(ios);
+      if (ok === true && !ios) toast(T().gotOne); else if (!ok) toast(T().pasteBad);
+    });
+    return;
+  }
   if (a === 'more') return renderMore();
   return renderList(a === 'fav');
 }
@@ -1235,6 +1303,8 @@ function calHTML() {
 }
 function bannerHTML() {
   const t = T();
+  if (inbox.length) return `<section class="banner airmail"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span>${ico('mail')} ${esc(t.inboxBanner(inbox.length, inbox[0].from))}</span>
+    <a class="btn small primary" href="#/inbox">${esc(t.open)}</a></div></section>`;
   if (isIOS && !installed() && !ls.get('iosNudgeDone', false)) {
     return `<section class="banner"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span>${ico('iosShare').replace('<svg', '<svg style="width:20px;height:20px;vertical-align:-4px;color:var(--accent)"')} ${esc(t.iosNudge)}</span>
       <button class="btn small" data-act="iosok">${esc(t.ok)}</button></div></section>`;
@@ -1264,29 +1334,85 @@ async function refreshWeather() {
     if (current === 'list' && $('#railbox')) $('#railbox').innerHTML = railHTML();
   } catch {}
 }
+// What fits today, read from each recipe itself (title, ingredients, type, cooking time), not only from tags.
+// Each rule: [pattern on the normalised text, points, label shown on the polaroid].
+const MOODS = {
+  hotday: { tags: ['hotday', 'summer'], cats: { salads: 3, drinks: 2, starters: 1 }, words: [
+    ['gaspacho|gazpacho', 4, 'gaspacho'], ['salade|salad', 3, 'salade'], ['sorbet|glace\\b|ice cream|granite', 4, 'glacé'], ['servir (bien )?frais|servir froid|served cold|chilled', 2, 'frais'],
+    ['taboule|tabbouleh', 3, 'taboulé'], ['concombre|cucumber', 2, 'concombre'], ['pasteque|watermelon|melon', 3, 'melon'], ['tomate|tomato', 1, 'tomate'],
+    ['carpaccio|tartare|ceviche', 3, 'cru'], ['menthe|mint', 1, 'menthe'], ['citron|lemon|lime', 1, 'citron'], ['limonade|lemonade|smoothie|citronnade', 3, 'boisson fraîche'],
+    ['barbecue|bbq|plancha|grill', 2, 'grillé'], ['yaourt|yogurt|tzatziki', 1, 'yaourt']], long: -2 },
+  coldday: { tags: ['coldday', 'winter'], cats: { soups: 3, meat: 1, poultry: 1 }, words: [
+    ['(?<!a )soupe|soup\\b|potage|veloute|bouillon|broth', 3, 'soupe'], ['ragout|stew|mijot|braise|daube|bourguignon|pot au feu|blanquette', 4, 'mijoté'],
+    ['gratin', 3, 'gratin'], ['tajine|tagine|couscous', 2, 'tajine'], ['cassoulet|choucroute|raclette|fondue|tartiflette', 4, 'réconfort'],
+    ['dafina|skhina|cholent|tcholent|hamin', 4, 'dafina'], ['lentille|lentil|pois chiche|chickpea|haricot|bean', 2, 'légumineuses'],
+    ['chocolat chaud|hot chocolate|vin chaud|mulled', 4, 'boisson chaude'], ['roti\\b|rotie|roast', 2, 'rôti'], ['curry|chili', 2, 'épicé'], ['puree|mash', 2, 'purée']], long: 2 },
+  rainyday: { tags: ['rainyday'], cats: { soups: 2, pastries: 1, desserts: 1 }, words: [
+    ['(?<!a )soupe|soup\\b|veloute', 2, 'soupe'], ['gratin', 2, 'gratin'], ['crepe|pancake|gaufre|waffle', 3, 'crêpes'], ['cookie|biscuit|madeleine|brownie', 3, 'goûter'],
+    ['gateau|cake|tarte|pie', 2, 'gâteau'], ['pates|pasta|risotto|lasagne', 2, 'pâtes'], ['chocolat|chocolate', 2, 'chocolat'], ['tea\\b|infusion', 1, 'thé']], long: 1 },
+  spring: { tags: ['spring'], words: [['asperge|asparagus', 4, 'asperges'], ['petits? pois|\\bpeas\\b', 3, 'petits pois'], ['feve|broad bean|fava', 3, 'fèves'], ['radis|radish', 3, 'radis'],
+    ['artichaut|artichoke', 3, 'artichaut'], ['epinard|spinach', 2, 'épinards'], ['fraise|strawberr', 3, 'fraises'], ['rhubarbe|rhubarb', 4, 'rhubarbe'], ['agneau|lamb', 2, 'agneau'], ['oseille|sorrel|ail des ours', 3, 'herbes'], ['petits? oignons|spring onion', 2, 'oignons nouveaux']] },
+  summer: { tags: ['summer', 'garden'], cats: { salads: 1 }, words: [['tomate|tomato', 3, 'tomates'], ['courgette|zucchini', 3, 'courgettes'], ['aubergine|eggplant', 3, 'aubergines'], ['poivron|bell pepper', 3, 'poivrons'],
+    ['basilic|basil', 2, 'basilic'], ['peche|peach|nectarine', 3, 'pêches'], ['abricot|apricot', 3, 'abricots'], ['cerise|cherr', 3, 'cerises'], ['melon|pasteque|watermelon', 3, 'melon'],
+    ['framboise|raspberr|myrtille|blueberr', 3, 'fruits rouges'], ['haricots? verts?|green bean', 2, 'haricots verts'], ['epis? de mais|corn\\b', 2, 'maïs'], ['concombre|cucumber', 2, 'concombre']] },
+  autumn: { tags: ['autumn'], words: [['potiron|citrouille|courge(?!tte)|butternut|potimarron|pumpkin|squash', 4, 'courge'], ['champignon|cepe|girolle|mushroom', 3, 'champignons'],
+    ['pomme(?!s? de terre)|apple', 3, 'pommes'], ['poire|pear', 3, 'poires'], ['coing|quince', 4, 'coings'], ['raisin(?! sec)|grape', 2, 'raisin'], ['chataigne|marron|chestnut', 4, 'châtaignes'],
+    ['noix(?! de muscade| de coco)|walnut|noisette|hazelnut', 2, 'noix'], ['figue|fig\\b', 3, 'figues'], ['betterave|beet', 2, 'betterave'], ['miel|honey', 1, 'miel'], ['cannelle|cinnamon', 1, 'cannelle']] },
+  winter: { tags: ['winter'], cats: { soups: 1 }, words: [['chou\\b|choux|cabbage|kale|brussels', 3, 'chou'], ['poireau|leek', 3, 'poireaux'], ['endive', 3, 'endives'], ['navet|turnip|panais|parsnip|topinambour', 3, 'racines'],
+    ['celeri|celeriac', 2, 'céleri'], ['orange|clementine|mandarine|pamplemousse|grapefruit', 3, 'agrumes'], ['kiwi', 2, 'kiwi'], ['carotte|carrot', 1, 'carottes'],
+    ['pot au feu|choucroute|raclette|fondue', 4, 'plat d’hiver'], ['(?<!a )soupe|soup\\b|potage|veloute', 2, 'soupe']] },
+};
+const WHY_EN = { gaspacho: 'gazpacho', salade: 'salad', 'glacé': 'iced', frais: 'chilled', 'taboulé': 'tabbouleh', concombre: 'cucumber', melon: 'melon', tomate: 'tomato', cru: 'raw', menthe: 'mint',
+  citron: 'lemon', 'boisson fraîche': 'cold drink', 'grillé': 'grilled', yaourt: 'yogurt', soupe: 'soup', 'mijoté': 'slow-cooked', gratin: 'gratin', tajine: 'tagine', 'réconfort': 'comfort',
+  dafina: 'dafina', 'légumineuses': 'beans', 'boisson chaude': 'hot drink', 'rôti': 'roast', 'épicé': 'spicy', 'purée': 'mash', 'crêpes': 'pancakes', 'goûter': 'teatime', 'gâteau': 'cake',
+  'pâtes': 'pasta', chocolat: 'chocolate', 'thé': 'tea', asperges: 'asparagus', 'petits pois': 'peas', 'fèves': 'broad beans', radis: 'radish', artichaut: 'artichoke', 'épinards': 'spinach',
+  fraises: 'strawberries', rhubarbe: 'rhubarb', agneau: 'lamb', herbes: 'herbs', 'oignons nouveaux': 'spring onions', tomates: 'tomatoes', courgettes: 'courgettes', aubergines: 'aubergines',
+  poivrons: 'peppers', basilic: 'basil', 'pêches': 'peaches', abricots: 'apricots', cerises: 'cherries', 'fruits rouges': 'berries', 'haricots verts': 'green beans', 'maïs': 'corn',
+  courge: 'squash', champignons: 'mushrooms', pommes: 'apples', poires: 'pears', coings: 'quince', raisin: 'grapes', 'châtaignes': 'chestnuts', noix: 'walnuts', figues: 'figs',
+  betterave: 'beetroot', miel: 'honey', cannelle: 'cinnamon', chou: 'cabbage', poireaux: 'leeks', endives: 'endives', racines: 'root veg', 'céleri': 'celeriac', agrumes: 'citrus',
+  kiwi: 'kiwi', carottes: 'carrots', 'plat d’hiver': 'winter dish' };
+const moodRe = new Map();
+function moodScore(r, key) {
+  const m = MOODS[key]; if (!m || !r._ix) return { score: 0 };
+  let score = 0, why = '';
+  if ((r.holidays || []).some(h => m.tags.includes(h))) score += 5;
+  if (m.cats?.[r.category]) score += m.cats[r.category];
+  const title = r._ix.title, body = title + ' ' + r._ix.ing;
+  for (const [pat, pts, label] of m.words) {
+    let re = moodRe.get(pat); if (!re) { re = new RegExp('\\b(' + pat + ')'); moodRe.set(pat, re); }
+    const lbl = S.lang === 'en' ? (WHY_EN[label] || label) : label;
+    if (re.test(title)) { score += pts * 2; why ||= lbl; } else if (re.test(body)) { score += pts; why ||= lbl; }
+  }
+  if (m.long && totalTime(r) >= 60) score += m.long;
+  return { score: Math.max(0, score), why };
+}
+function moodList(key) {
+  return recipes.map(r => ({ r, ...moodScore(r, key) })).filter(x => x.score >= 3)
+    .sort((a, b) => b.score - a.score || (b.r.rating || 0) - (a.r.rating || 0));
+}
 function moodRail() {
   // Weather first (hot / cold / rain), otherwise the season.
   const t = T(), fresh = wx && Date.now() - wx.at < 3 * 3600e3;
-  const tagged = k => recipes.filter(r => (r.holidays || []).includes(k));
   const season = seasonNow();
   const opts = [];
-  if (fresh && wx.temp >= 28) opts.push(['hotday', t.wxHot(wx.temp, wx.city), [...tagged('hotday'), ...tagged('summer')]]);
-  if (fresh && wx.temp <= 5) opts.push(['coldday', t.wxCold(wx.temp, wx.city), [...tagged('coldday'), ...tagged('winter')]]);
-  if (fresh && ((wx.code >= 51 && wx.code <= 67) || (wx.code >= 80 && wx.code <= 82))) opts.push(['rainyday', t.wxRain(wx.city), tagged('rainyday')]);
-  opts.push([season, t.seasonRail[season], [...tagged(season), ...(season === 'summer' ? tagged('garden') : [])]]);
-  for (const [key, title, list] of opts) { const items = [...new Set(list)]; if (items.length) return { key, title, items }; }
+  if (fresh && wx.temp >= 28) opts.push(['hotday', t.wxHot(wx.temp, wx.city)]);
+  if (fresh && wx.temp <= 5) opts.push(['coldday', t.wxCold(wx.temp, wx.city)]);
+  if (fresh && ((wx.code >= 51 && wx.code <= 67) || (wx.code >= 80 && wx.code <= 82))) opts.push(['rainyday', t.wxRain(wx.city)]);
+  opts.push([season, t.seasonRail[season]]);
+  for (const [key, title] of opts) { const items = moodList(key); if (items.length) return { key, title, items }; }
   return null;
 }
-const tilesHTML = items => `<div class="rail">${items.slice(0, 10).map(r => `<a class="tile" href="#/r/${encodeURIComponent(r.id)}">${r.thumb || r.photo
+const moodTitle = key => { const t = T(); return t.seasonRail[key] || occLabel(key); };
+const tilesHTML = items => `<div class="rail">${items.slice(0, 10).map(x => { const r = x.r || x; return `<a class="tile" href="#/r/${encodeURIComponent(r.id)}">${r.thumb || r.photo
   ? `<img class="img" src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">`
-  : artHTML(r, 'img')}<b>${esc(r.title)}</b></a>`).join('')}</div>`;
+  : artHTML(r, 'img')}${x.why ? `<span class="why">${esc(x.why)}</span>` : ''}<b>${esc(r.title)}</b></a>`; }).join('')}</div>`;
 function railHTML() {
   const t = T();
-  if (current !== 'list' || L.q || L.cat || L.hol || L.kash || L.quick || L.fav || recipes.length < 4) return '';
+  if (current !== 'list' || L.q || L.cat || L.hol || L.mood || L.kash || L.quick || L.fav || recipes.length < 4) return '';
   let items = recipes.filter(r => r.favorite), title = t.favRail;
   if (items.length < 2) { items = [...recipes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); title = t.recentRail; }
   const mood = moodRail();
-  return (mood ? `<div class="rail-h"><h2>${esc(mood.title)}</h2><button class="linkish" data-act="holfilter" data-h="${mood.key}">${esc(t.seeAll)}${ico('arrow')}</button></div>${tilesHTML(mood.items)}` : '') +
+  return (mood ? `<div class="rail-h"><h2>${esc(mood.title)}</h2><button class="linkish" data-act="moodfilter" data-m="${mood.key}">${esc(t.seeAll)}${ico('arrow')}</button></div>${tilesHTML(mood.items)}` : '') +
     `<div class="rail-h"><h2>${esc(title)}</h2>${title === t.favRail ? `<a href="#/fav" class="linkish">${esc(t.seeAll)}${ico('arrow')}</a>` : ''}</div>${tilesHTML(items)}`;
 }
 function chipsHTML() {
@@ -1298,6 +1424,7 @@ function chipsHTML() {
   return chip('all', !L.cat && !L.fav && !extra, esc(t.all)) +
     (current === 'fav' ? '' : chip('fav', L.fav, ico('heart', 'heart') + esc(t.favorites))) +
     cats.map(c => chip('cat', L.cat === c, esc(t.cat[c]), `data-c="${c}"`)).join('') +
+    (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
     chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));
 }
 function renderList(favOnly) {
@@ -1312,7 +1439,7 @@ function renderList(favOnly) {
     <div class="valance" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
-        <div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.collection(recipes.length))}</span></div>
+        <div class="mast"><span>${esc(t.appName)}</span><span class="mast-r">${esc(t.collection(recipes.length))}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
         <h1 class="greet">${favOnly ? esc(t.favorites) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
         ${favOnly ? '' : calHTML()}
       </header>
@@ -1480,7 +1607,7 @@ function renderRecipe(r) {
       <div class="actions">
         ${lines(r.steps).length ? `<button class="btn primary" data-act="cook">${ico('fire')}${esc(t.cookMode)}</button>` : ''}
         ${r.link ? `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">${ico('link')}${esc(t.openLink)}</a>` : ''}
-        <button class="btn" data-act="share">${ico('share')}${esc(t.share)}</button>
+        <button class="btn" data-act="send">${ico('mail')}${esc(t.send)}</button>
       </div>
       ${!ing && !steps ? pagesHTML(r) : ''}
       ${ing ? `<section class="section"><div class="section-h"><h2>${esc(t.ingredients)}</h2>
@@ -1511,6 +1638,7 @@ function recipeMenu(r) {
   const t = T();
   sheet(`<h2>${esc(r.title)}</h2><div class="menu">
     <button data-m="edit">${ico('edit')}${esc(t.edit)}</button>
+    <button data-m="send">${ico('mail')}${esc(t.send)}</button>
     <button data-m="share">${ico('share')}${esc(t.share)}</button>
     <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
     <button data-m="print">${ico('print')}${esc(t.print)}</button>
@@ -1520,6 +1648,7 @@ function recipeMenu(r) {
       const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return; close();
       if (m === 'edit') go('#/edit/' + r.id);
       if (m === 'share') shareText(r.title, recipeText(r));
+      if (m === 'send') sendRecipe(r);
       if (m === 'copy') { try { await navigator.clipboard.writeText(recipeText(r)); } catch {} toast(t.copied); }
       if (m === 'print') setTimeout(() => window.print(), 300);
       if (m === 'dup') { const c = { ...r, id: uid(), title: r.title + ' (2)', createdAt: Date.now(), updatedAt: Date.now(), cookCount: 0, lastCooked: 0, sample: false }; await saveRecipe(c); go('#/r/' + c.id); }
@@ -1884,6 +2013,93 @@ async function readBookPages(files) {
   toast(t.ocrOk);
 }
 
+// ---------- Sending recipes between phones ----------
+// A recipe travels inside a link (compressed into the address), sent by WhatsApp, SMS or e-mail.
+// Opening the link puts it in the receiver's inbox, where they keep it or delete it.
+let inbox = ls.get('inbox', []);
+const saveInbox = () => { ls.set('inbox', inbox); updateNavCount(); };
+const b64url = bytes => { let s = ''; bytes.forEach(b => s += String.fromCharCode(b)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64url = str => Uint8Array.from(atob(str.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+async function squeeze(bytes, how) {
+  const stream = new Blob([bytes]).stream().pipeThrough(how === 'in' ? new CompressionStream('deflate-raw') : new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+async function packRecipe(r) {
+  const keep = ['title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags'];
+  const rec = {}; for (const k of keep) if (r[k]) rec[k] = r[k];
+  rec.holidays = (r.holidays || []).filter(h => !h.startsWith('c_'));
+  const pic = r.thumb || r.photo;
+  if (pic && pic.startsWith('data:')) { try { const mini = await compress(await (await fetch(pic)).blob(), 160, 0.6); if (mini.length < 9000) rec.mini = mini; } catch {} }
+  const bytes = new TextEncoder().encode(JSON.stringify({ v: 1, from: S.name || '', at: Date.now(), r: rec }));
+  if ('CompressionStream' in window) { try { return '1' + b64url(await squeeze(bytes, 'in')); } catch {} }
+  return '0' + b64url(bytes);
+}
+async function unpackRecipe(code) {
+  const bytes = unb64url(code.slice(1));
+  const json = new TextDecoder().decode(code[0] === '1' ? await squeeze(bytes, 'out') : bytes);
+  const d = JSON.parse(json);
+  if (!d || !d.r || !d.r.title) throw new Error('bad');
+  return d;
+}
+const codeHash = c => { let h = 5381; for (let i = 0; i < c.length; i++) h = ((h * 33) ^ c.charCodeAt(i)) >>> 0; return h.toString(36); };
+async function receiveCode(code, quiet) {
+  const t = T();
+  let d; try { d = await unpackRecipe(code); } catch { if (!quiet) toast(t.pasteBad); return false; }
+  const id = 'in_' + codeHash(code);
+  if (inbox.some(x => x.id === id)) { if (!quiet) toast(t.alreadyIn); return 'dup'; }
+  inbox.unshift({ id, from: d.from || t.someone, sentAt: d.at, receivedAt: Date.now(), r: d.r, code });
+  saveInbox();
+  return true;
+}
+const codeFromText = txt => (String(txt).match(/#\/recu\/([A-Za-z0-9_-]{8,})/) || [])[1];
+async function sendRecipe(r) {
+  const t = T();
+  const url = location.origin + location.pathname + '#/recu/' + await packRecipe(r);
+  const text = t.sendText(S.name || 'Abe', r.title);
+  if (navigator.share) { try { await navigator.share({ title: r.title, text, url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(text + '\n' + url); toast(t.copied); } catch { toast(t.copied); }
+}
+function letterHTML(x) {
+  const t = T(), r = x.r;
+  const fake = { ...r, id: x.id };
+  const pic = r.mini ? `<img class="thumb" src="${esc(r.mini)}" alt="">` : artHTML(fake, 'thumb');
+  return `<article class="letter-card" data-id="${x.id}">
+    <div class="stamp-row"><span class="postmark">${esc(t.parAvion)}</span><span>${esc(t.receivedOn(fmtDate(x.receivedAt, { day: '2-digit', month: '2-digit', year: 'numeric' })))}</span></div>
+    <div class="letter-main">${pic}<div class="min"><span class="eyebrow">${esc(t.fromWho(x.from))}</span><h3>${esc(r.title)}</h3>
+      <div class="meta">${[r.category && t.cat[r.category], (+r.prep || 0) + (+r.cook || 0) ? fmtDur((+r.prep || 0) + (+r.cook || 0)) : '', r.servings ? t.servings(+r.servings) : ''].filter(Boolean).map(m => `<span>${esc(m)}</span>`).join('')}</div></div></div>
+    <details class="peek"><summary>${esc(t.preview)}</summary>
+      ${lines(r.ingredients).length ? `<ul>${lines(r.ingredients).map(l => `<li>${esc(isHeading(l) ? cleanHeading(l) : l)}</li>`).join('')}</ul>` : ''}
+      ${lines(r.steps).length ? `<ol>${lines(r.steps).filter(l => !isHeading(l)).map(l => `<li>${esc(cleanStep(l))}</li>`).join('')}</ol>` : ''}
+      ${r.notes ? `<p class="hand">${esc(r.notes)}</p>` : ''}</details>
+    <div class="letter-acts"><button class="btn" data-act="toss" data-id="${x.id}" aria-label="${esc(t.toss)}" title="${esc(t.toss)}">${ico('trash')}</button><button class="btn primary" data-act="keep" data-id="${x.id}">${ico('check')}${esc(t.keep)}</button></div>
+  </article>`;
+}
+function renderInbox(iosLanding) {
+  current = 'inbox'; navHTML('');
+  const t = T();
+  $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="home" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.inbox)}</h1></div>
+    <div class="wrap stack">
+      ${iosLanding ? `<section class="panel airmail"><h2>${esc(t.iosCopyTitle)}</h2><p style="margin:0">${esc(t.iosCopyText)}</p>
+        <button class="btn primary" data-act="copyforapp">${ico('copy')}${esc(t.copyForApp)}</button></section>` : ''}
+      ${inbox.length ? inbox.map(letterHTML).join('') : `<div class="empty">${ico('mail', 'ill-big')}<p>${esc(t.inboxEmpty)}</p></div>`}
+      <section class="panel"><h2>${esc(t.pasteLink)}</h2><p class="hint" style="margin:0">${esc(t.pasteHelp)}</p>
+        <button class="btn" data-act="pastecode">${ico('copy')}${esc(t.pasteLink)}</button>
+        <div class="field" id="pasteBox" hidden><textarea class="input" id="pasteIn" rows="3" placeholder="${esc(t.pastePh)}"></textarea>
+          <button class="btn primary" data-act="pastego">${esc(t.pasteGo)}</button></div></section>
+    </div>`;
+  window.scrollTo(0, 0);
+}
+let iosLandingCode = '';
+async function keepLetter(id) {
+  const t = T(), x = inbox.find(y => y.id === id); if (!x) return;
+  const r = { ...x.r, id: uid(), createdAt: Date.now(), updatedAt: Date.now(), cookCount: 0, rating: 0, favorite: false, holidays: x.r.holidays || [], tags: x.r.tags || [] };
+  r.source = r.source || x.from;
+  if (r.mini) { r.photo = r.mini; r.thumb = r.mini; } delete r.mini;
+  await saveRecipe(r);
+  inbox = inbox.filter(y => y.id !== id); saveInbox();
+  toast(t.kept); go('#/r/' + r.id);
+}
+
 // ---------- Share target (Android "Share" → this app) ----------
 let pendingShare = null;
 function readShareParams() {
@@ -1962,13 +2178,14 @@ function renderMore() {
       ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(isIOS ? t.installIos : t.installHow)}</p>`}</section>`}
     <section class="panel"><h2>${esc(t.settings)}</h2>
       <div class="form" style="padding:0;gap:14px">
-        <div class="field"><label for="sName">${esc(t.yourName)}</label><select id="sName">${['Abe', 'Abraham', 'Papa', 'Dad', 'Avraham'].map(n => opt(n, n, S.name)).join('')}</select></div>
+        <div class="field"><label for="sName">${esc(t.yourName)}</label><input class="input" id="sName" list="nameList" autocomplete="given-name" value="${esc(S.name || '')}"><datalist id="nameList">${['Abe', 'Abraham', 'Papa', 'Dad', 'Avraham'].map(n => `<option value="${n}">`).join('')}</datalist></div>
         <div class="field"><label for="sLang">${esc(t.language)}</label><select id="sLang">${opt('fr', 'Français', S.lang)}${opt('en', 'English', S.lang)}</select></div>
         <div class="field"><label for="sSize">${esc(t.textSize)}</label><select id="sSize">${Object.entries(t.sizes).map(([k, v]) => opt(k, v, S.size)).join('')}</select></div>
         <div class="field"><label for="sTheme">${esc(t.theme)}</label><select id="sTheme">${Object.entries(t.themes).map(([k, v]) => opt(k, v, S.theme)).join('')}</select></div>
         <div class="field"><label for="sCity">${esc(t.city)}</label><select id="sCity">${Object.entries(CITIES).map(([k, c]) => opt(k, c[0], S.city)).join('')}${S.gps ? opt('gps', t.myPos, S.city) : ''}</select>
           <button type="button" class="btn small" data-act="gps">${ico('pin')}${esc(t.useGps)}</button></div>
       </div></section>
+    <a class="btn block" href="#/inbox">${ico('mail')}${esc(t.inbox)}${inbox.length ? ` (${inbox.length})` : ''}</a>
     <section class="panel"><h2>${esc(t.occasions)}</h2><p class="muted" style="margin:0">${esc(t.occText)}</p>
       <div class="occ-list">
         <label class="occ-row"><span>${esc(occLabel('momsbday'))}</span><input class="input" type="date" data-occdate="momsbday" value="${S.occDates?.momsbday ? new Date().getFullYear() + '-' + S.occDates.momsbday : ''}"></label>
@@ -2001,7 +2218,7 @@ function renderMore() {
   const upd = () => { const a = parseNum($('#cAmt').value.replace(',', '.')) || parseFloat($('#cAmt').value.replace(',', '.')); $('#cOut').textContent = isFinite(a) ? convert(a, $('#cUnit').value, $('#cIng').value) : '—'; $('#cIng').closest('.field').hidden = !['cup', 'tbsp', 'tsp'].includes($('#cUnit').value); };
   ['cAmt', 'cUnit', 'cIng'].forEach(id => $('#' + id).addEventListener('input', upd)); upd();
   const bind = (id, key, after) => $('#' + id).addEventListener('change', e => { S[key] = e.target.value; saveSettings(); applyLook(); after?.(); });
-  bind('sName', 'name'); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city', () => { wx = null; refreshWeather(); });
+  $('#sName').addEventListener('change', e => { S.name = e.target.value.trim() || 'Abe'; saveSettings(); toast(T().saved); }); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city', () => { wx = null; refreshWeather(); });
 }
 async function exportBackup(share) {
   const t = T();
@@ -2070,12 +2287,14 @@ document.addEventListener('click', async e => {
     case 'back': if (history.length > 1) history.back(); else go('#/'); break;
     case 'clearq': L.q = ''; $('#q').value = ''; renderResults(); $('#q').focus(); break;
     case 'voice': voiceSearch(); break;
-    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', quick: false }); refreshList(); break;
+    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', mood: '', quick: false }); refreshList(); break;
     case 'fav': if (current === 'recipe' && r) { r.favorite = !r.favorite; await saveRecipe(r); renderRecipe(r); } else { L.fav = !L.fav; refreshList(); } break;
     case 'cat': L.cat = L.cat === b.dataset.c ? '' : b.dataset.c; refreshList(); break;
     case 'filters': openFilters(); break;
-    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', quick: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
-    case 'holfilter': Object.assign(L, { hol: b.dataset.h, q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
+    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', mood: '', quick: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
+    case 'moodfilter': Object.assign(L, { mood: b.dataset.m, hol: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
+    case 'moodoff': L.mood = ''; refreshList(); break;
+    case 'holfilter': Object.assign(L, { hol: b.dataset.h, mood: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
     case 'surprise': { const l = filtered(); if (l.length) go('#/r/' + l[Math.floor(Math.random() * l.length)].id); break; }
     case 'samples': for (const s of samples()) if (!byId(s.id)) await saveRecipe(s); toast(t.samplesAdded); route(); break;
     case 'rmsamples': for (const s of recipes.filter(x => x.sample)) await DB.del(s.id); recipes = recipes.filter(x => !x.sample); toast(t.samplesRemoved); route(); break;
@@ -2088,6 +2307,17 @@ document.addEventListener('click', async e => {
       saveShop(); toast(t.addedToShop(n)); } break;
     case 'share': if (r) shareText(r.title, recipeText(r)); break;
     case 'units': if (r) { S.units = b.dataset.u; saveSettings(); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
+    case 'send': if (r) sendRecipe(r); break;
+    case 'home': go('#/'); break;
+    case 'keep': keepLetter(b.dataset.id); break;
+    case 'toss': inbox = inbox.filter(y => y.id !== b.dataset.id); saveInbox(); toast(t.tossed); renderInbox(false); break;
+    case 'copyforapp': { const url = location.origin + location.pathname + '#/recu/' + iosLandingCode; try { await navigator.clipboard.writeText(url); } catch {} toast(t.copied); break; }
+    case 'pastecode': {
+      let txt = ''; try { txt = await navigator.clipboard.readText(); } catch {}
+      const code = codeFromText(txt);
+      if (code) { const ok = await receiveCode(code); if (ok === true) { toast(t.gotOne); renderInbox(false); } break; }
+      $('#pasteBox').hidden = false; $('#pasteIn').focus(); break; }
+    case 'pastego': { const code = codeFromText($('#pasteIn').value); if (!code) { toast(t.pasteBad); break; } const ok = await receiveCode(code); if (ok === true) { toast(t.gotOne); renderInbox(false); } break; }
     case 'cooked': if (r) { r.cookCount = (r.cookCount || 0) + 1; r.lastCooked = Date.now(); await saveRecipe(r); toast(t.bravo); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
     case 'cook': if (r) go('#/cook/' + r.id); break;
     case 'cookclose': history.back(); break;

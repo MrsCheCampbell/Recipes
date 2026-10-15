@@ -48,7 +48,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
 - Voice search (microphone button).
 - Quick filters for Favorites and each category he uses, plus kashrut, occasion and "quick (≤ 30 min)" under Filters.
-- At the top, a carousel that fits the moment: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
+- At the top, a carousel that fits the moment, worked out from each recipe itself (name, ingredients, type, cooking time), not only from tags. A small stamp on each polaroid says why it was picked ("SOUPE", "POMMES", "MIJOTÉ"). Seasons use what's in season in France (asparagus in spring, tomatoes in summer, squash, apples and mushrooms in autumn, leeks and citrus in winter). The moments: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
 - "Surprends-moi" opens a random recipe.
 
@@ -82,6 +82,16 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Large text by default (three sizes), light and dark modes, big tap targets.
 - **Backup**: send a backup file to email or Google Drive, and restore it on a new phone. The app reminds him once a month.
 - Six example recipes (challah, roast chicken, shakshuka, ratatouille, honey cake, tarte Tatin), removable in one tap.
+
+## Sending recipes to each other
+
+Each phone keeps its own recipe book. To share one:
+
+1. On a recipe, tap **Envoyer**. The phone's share menu opens: pick WhatsApp, SMS, e-mail… The recipe travels inside the link (with a small photo).
+2. The other person taps the link. On Android it lands in their **Boîte de réception** (the envelope at the top right of the home screen). On iPhone it opens in Safari: tap **Copier pour mon appli**, open the app, go to the inbox and tap **Coller une recette reçue**.
+3. In the inbox, **Garder** adds it to their recipes (with "Recette de" set to the sender), the bin deletes it.
+
+Set your own name in *Plus → Réglages → Prénom affiché* so the inbox says who it's from.
 
 ## Tech
 
