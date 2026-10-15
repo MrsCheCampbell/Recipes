@@ -5,7 +5,7 @@
 <title>La Cuisine d'Abe</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="theme-color" content="#2F5D50">
+<meta name="theme-color" content="#B5412C">
 <meta name="description" content="Les recettes d'Abe : chercher, cuisiner, partager.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -17,29 +17,36 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Yesteryear&family=Special+Elite&family=Caveat:wght@500;600&display=swap">
 <style>
-/* Layout: one-column phone app — serif greeting, quiet calendar line, big search, favorites carousel, A–Z list, fixed bottom nav.
-   Palette: bottle green on porcelain, with a thread of saffron gold. */
+/* Layout: one-column phone app styled like grandma's recipe book — gingham valance, cream paper, polaroid photos, ruled recipe cards.
+   Palette: tomato red and mustard on cream paper, brown ink; a dusty blue for the ruled lines. */
 :root {
-  --bg: #F4F3EE;
-  --surface: #FFFFFF;
-  --surface-2: #EBE9E1;
-  --ink: #1E2621;
-  --muted: #646C66;
-  --line: #DEDBD1;
-  --accent: #2F5D50;
-  --accent-ink: #FFFFFF;
-  --honey: #A87A22;
-  --honey-soft: #F3EBD8;
-  --meat: #A64B42;
-  --dairy: #3F6F95;
-  --parve: #4F7E5C;
-  --danger: #B42318;
-  --shadow: 0 1px 2px rgba(30,38,33,.05), 0 6px 20px rgba(30,38,33,.07);
-  --font-display: "DM Serif Display", "Iowan Old Style", Georgia, serif;
+  --bg: #F4EAD3;
+  --surface: #FFFAEF;
+  --surface-2: #EEE0C2;
+  --ink: #3A2A1F;
+  --muted: #7A6650;
+  --line: #DDCBA6;
+  --accent: #B5412C;
+  --accent-ink: #FFF8EC;
+  --honey: #B9821A;
+  --honey-soft: #F8E7B8;
+  --rule: #C9D6E4;
+  --gingham: rgba(181, 65, 44, .42);
+  --polaroid: #FFFDF7;
+  --tape: rgba(246, 232, 190, .78);
+  --meat: #A8402F;
+  --dairy: #3C6E99;
+  --parve: #3F7F5A;
+  --danger: #A8321F;
+  --shadow: 0 1px 2px rgba(58,42,31,.08), 0 6px 18px rgba(58,42,31,.10);
+  --font-display: "Playfair Display", "Bodoni 72", Georgia, serif;
+  --font-script: "Yesteryear", "Brush Script MT", cursive;
+  --font-type: "Special Elite", "American Typewriter", "Courier New", monospace;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
-  --radius: 18px;
+  --radius: 12px;
   --nav-h: 68px;
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
@@ -47,18 +54,20 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121715; --surface: #1A211E; --surface-2: #232C28; --ink: #ECEEE8; --muted: #A2ABA4; --line: #2F3934;
-    --accent: #8CC2AE; --accent-ink: #0F1513; --honey: #E0B75A; --honey-soft: #2E2817;
-    --meat: #E59A90; --dairy: #8FB8DA; --parve: #9CCBA6; --danger: #FF8A80;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    --bg: #211914; --surface: #2B211A; --surface-2: #372A20; --ink: #F3E7D3; --muted: #BBA78B; --line: #4A3A2D;
+    --accent: #E9785E; --accent-ink: #211914; --honey: #E7B652; --honey-soft: #3D3018; --rule: #3B4756;
+    --gingham: rgba(233, 120, 94, .26); --polaroid: #EFE5D2; --tape: rgba(240, 225, 185, .35);
+    --meat: #EE9A88; --dairy: #8DB5DE; --parve: #8FC7A0; --danger: #FF8A73;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.3);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121715; --surface: #1A211E; --surface-2: #232C28; --ink: #ECEEE8; --muted: #A2ABA4; --line: #2F3934;
-  --accent: #8CC2AE; --accent-ink: #0F1513; --honey: #E0B75A; --honey-soft: #2E2817;
-  --meat: #E59A90; --dairy: #8FB8DA; --parve: #9CCBA6; --danger: #FF8A80;
-  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  --bg: #211914; --surface: #2B211A; --surface-2: #372A20; --ink: #F3E7D3; --muted: #BBA78B; --line: #4A3A2D;
+  --accent: #E9785E; --accent-ink: #211914; --honey: #E7B652; --honey-soft: #3D3018; --rule: #3B4756;
+  --gingham: rgba(233, 120, 94, .26); --polaroid: #EFE5D2; --tape: rgba(240, 225, 185, .35);
+  --meat: #EE9A88; --dairy: #8DB5DE; --parve: #8FC7A0; --danger: #FF8A73;
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.3);
   color-scheme: dark;
 }
 html { font-size: 17px; -webkit-text-size-adjust: 100%; }
@@ -458,10 +467,110 @@ b.conv { color: var(--accent); text-decoration: underline dotted; text-underline
 .keys button.ghost { border: 0; background: transparent; font-family: var(--font-body); font-size: .85rem; font-weight: 700; color: var(--muted); }
 .keys button.ghost svg { width: 28px; height: 28px; }
 
+/* ---------- v3: grandma's recipe book ---------- */
+body {
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.gingham, .valance, .hero {
+  background-color: var(--surface);
+  background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%);
+  background-size: 18px 18px;
+}
+.valance { height: 34px; position: relative; margin-bottom: 14px; }
+.valance::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 9px;
+  background: radial-gradient(circle at 9px 0, var(--accent) 8.5px, transparent 9px) repeat-x; background-size: 18px 9px;
+}
+.brand { font-family: var(--font-type); font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.top { padding-block: 6px 4px; }
+.greet { font-family: var(--font-display); font-weight: 700; font-size: 2.05rem; letter-spacing: -.01em; }
+.greet .name { font-family: var(--font-script); font-style: normal; font-weight: 400; font-size: 1.45em; color: var(--accent); letter-spacing: 0; }
+.cal { font-family: var(--font-type); font-size: .82rem; }
+.searchbar { background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); }
+.search { border: 1.5px solid var(--line); background: var(--surface); }
+.chip { background: var(--surface); border: 1.5px solid var(--line); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn { border-radius: 12px; border-width: 1.5px; background: var(--surface); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -2px 0 rgba(0,0,0,.15); }
+.fab { background: var(--accent); color: var(--accent-ink); box-shadow: 0 8px 22px rgba(181,65,44,.35), inset 0 -3px 0 rgba(0,0,0,.15); border-radius: 18px; }
+.linkish { border: 0; background: none; padding: 0; font: inherit; font-family: var(--font-type); font-size: .85rem; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+h1, h2, h3 { font-family: var(--font-display); }
+.rail-h h2, .section-h h2, .panel h2, .sheet h2, .empty h2 { font-family: var(--font-script); font-weight: 400; font-size: 2.1rem; color: var(--accent); letter-spacing: 0; line-height: 1.05; }
+.section-h h2::after { content: " ❦"; font-family: var(--font-display); font-size: .55em; color: var(--honey); vertical-align: middle; }
+.page-h h1 { font-family: var(--font-script); font-weight: 400; font-size: 2rem; color: var(--accent); }
+.eyebrow, .fact span, .stats span, .units-note { font-family: var(--font-type); font-weight: 400; letter-spacing: .06em; }
+.letter { font-family: var(--font-script); font-size: 2.3rem; color: var(--accent); border-bottom: 1.5px dashed var(--line); padding: 16px 0 0; }
+
+/* polaroids */
+.thumb { border: 4px solid var(--polaroid); border-bottom-width: 9px; border-radius: 2px; box-shadow: var(--shadow); transform: rotate(-2deg); background-clip: padding-box; }
+.cards .card:nth-child(even) .thumb { transform: rotate(1.8deg); }
+.thumb.art, .tile .img.art, .hero .ph.art { font-family: var(--font-script); font-weight: 400; }
+.card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.12rem; }
+.card { border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); border-radius: 0; padding: 12px 6px; }
+.tile { position: relative; padding-top: 6px; }
+.tile .img { border: 7px solid var(--polaroid); border-bottom-width: 22px; border-radius: 2px; transform: rotate(-2.5deg); width: 150px; height: 182px; }
+.tile:nth-child(even) .img { transform: rotate(2deg); }
+.tile::before { content: ""; position: absolute; z-index: 2; top: 0; left: 50%; width: 58px; height: 18px; margin-left: -29px; background: var(--tape); transform: rotate(-5deg); box-shadow: 0 1px 1px rgba(0,0,0,.06); }
+.tile b { font-family: var(--font-hand); font-weight: 600; font-size: 1.25rem; line-height: 1.1; padding-inline: 4px; }
+
+/* recipe page: polaroid on a gingham tablecloth, recipe card below */
+.hero { padding: calc(64px + env(safe-area-inset-top, 0px)) 20px 44px; max-width: none; }
+.hero .bar { background: none; }
+.polaroid { position: relative; margin: 0 auto; max-width: 440px; background: var(--polaroid); padding: 10px 10px 40px; box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 14px 30px rgba(58,42,31,.25); transform: rotate(-1.6deg); }
+.polaroid::before, .polaroid::after { content: ""; position: absolute; z-index: 2; width: 84px; height: 24px; background: var(--tape); box-shadow: 0 1px 1px rgba(0,0,0,.06); }
+.polaroid::before { top: -10px; left: -18px; transform: rotate(-38deg); }
+.polaroid::after { top: -10px; right: -18px; transform: rotate(38deg); }
+.hero .ph { width: 100%; aspect-ratio: 4 / 3; max-height: none; border-radius: 0; }
+.hero .ph.art { aspect-ratio: 4 / 3; font-size: 7.5rem; }
+.polaroid figcaption { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: var(--font-hand); font-size: 1.35rem; font-weight: 600; color: #5A4636; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-inline: 12px; }
+article.paper { position: relative; background: var(--surface); margin-top: -22px; border-top: 5px double var(--accent); box-shadow: 0 -2px 14px rgba(58,42,31,.08); padding-block: 4px 30px; max-width: 760px; }
+.rtitle h1 { font-family: var(--font-display); font-weight: 700; font-size: 2.2rem; }
+.rtitle .muted { font-family: var(--font-type); }
+.badge { font-family: var(--font-type); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; border: 1.5px solid currentColor; border-radius: 3px; color: var(--muted); background: transparent; transform: rotate(-1deg); }
+.badge.kbadge { border-color: transparent; transform: none; }
+.fact { background: transparent; border: 1.5px dashed var(--line); border-radius: 8px; }
+.fact b { font-family: var(--font-display); font-weight: 700; }
+.ing { border-left: 2px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+.ing li label { border-bottom: 1px solid var(--rule); border-radius: 0; padding: 10px 8px; }
+.ing .sub, .steps .sub { font-family: var(--font-hand); font-weight: 600; font-size: 1.4rem; color: var(--honey); }
+.steps li.step::before { background: var(--accent); color: var(--accent-ink); font-family: var(--font-display); font-weight: 700; }
+.steps li.step > div { border-bottom: 1px solid var(--rule); padding-bottom: 12px; }
+.notes { font-family: var(--font-hand); font-size: 1.45rem; line-height: 1.3; background: var(--honey-soft); border: 0; border-radius: 2px; box-shadow: var(--shadow); transform: rotate(-.8deg); padding: 16px 18px; color: var(--ink); }
+.cooked { background: transparent; border: 1.5px dashed var(--line); }
+.timer-chip { border-radius: 6px; }
+
+/* forms, panels, nav */
+.importbox { background: var(--honey-soft); border: 2px dashed color-mix(in srgb, var(--honey) 60%, transparent); }
+.importbox h3 { font-family: var(--font-script); font-weight: 400; font-size: 1.8rem; color: var(--accent); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-top: 4px double var(--accent); border-radius: 6px; }
+.more-box { background: var(--surface); }
+.nav { background: var(--surface); border-top: 0; }
+.nav::before { content: ""; position: absolute; left: 0; right: 0; top: -6px; height: 6px;
+  background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 6px 6px; }
+.nav a.on::before { background: var(--accent); }
+.banner { background: var(--honey-soft); border: 1.5px dashed color-mix(in srgb, var(--honey) 60%, transparent); }
+.stats b { font-family: var(--font-display); font-weight: 700; }
+.love b { font-family: var(--font-script); font-weight: 400; font-size: 1.6rem; color: var(--accent); }
+
+/* lock screen: a recipe card on the tablecloth */
+.lock { background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 22px 22px; }
+.lock-in { background: var(--surface); padding: 26px 18px 22px; border-radius: 6px; border-top: 5px double var(--accent); box-shadow: 0 16px 40px rgba(58,42,31,.3); }
+.lock .mono { border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-family: var(--font-script); font-style: normal; font-size: 2.8rem; box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent); }
+.lock h1 { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; }
+.keys button { background: var(--bg); border: 1.5px solid var(--line); font-family: var(--font-display); }
+.dots span { border-color: var(--accent); } .dots span.on { background: var(--accent); }
+
+.greet, .rtitle h1, .card h3, .keys button, .fact b, .stats b, .steps li.step::before, .lock h1 { font-variant-numeric: lining-nums; }
+.thumb.art, .tile .img.art, .hero .ph.art { font-family: var(--font-display); font-style: italic; font-weight: 700; }
+.hero { overflow: hidden; }
+.rail-h { gap: 12px; align-items: center; }
+.rail-h h2 { flex: 1; min-width: 0; }
+.rail-h .linkish { white-space: nowrap; flex: none; }
+
 @media (min-width: 640px) {
-  .greet { font-size: 2.4rem; }
+  .greet { font-size: 2.5rem; }
   .rtitle h1 { font-size: 2.6rem; }
-  .hero .ph { border-radius: 0 0 22px 22px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
@@ -530,6 +639,7 @@ const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="currentColor" aria-
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','other'];
 const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
 const OCCASIONS = ['friends','family','momsbday','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
+const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
 const KASHRUT = ['meat','dairy','parve'];
 
 const STR = {
@@ -548,7 +658,8 @@ const STR = {
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
     cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', other: 'Autre' },
     hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot',
-      friends: 'Recevoir des amis', family: 'Repas de famille', momsbday: 'Anniversaire de Maman', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine' },
+      friends: 'Recevoir des amis', family: 'Repas de famille', momsbday: 'Anniversaire de Maman', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
+      hotday: 'Jour de canicule', coldday: 'Jour de grand froid', rainyday: 'Jour de pluie', spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver', garden: 'Du potager' },
     kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
     kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
     prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
@@ -605,6 +716,8 @@ const STR = {
     ocrLoading: 'Préparation de la lecture… (la première fois prend un peu plus de temps)', ocrReading: (i, n, p) => n > 1 ? `Lecture de la page ${i} sur ${n}… ${p} %` : `Lecture de la page… ${p} %`,
     ocrOk: 'Page lue ! Vérifiez le texte, puis enregistrez.', ocrFail: 'Le texte n’a pas pu être lu. La photo de la page est quand même gardée avec la recette.', ocrEmpty: 'Aucun texte trouvé. La photo de la page est quand même gardée avec la recette.',
     pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
+    occSeasons: 'Saisons, météo & potager', seasonRail: { spring: 'Recettes de printemps', summer: 'Recettes d’été', autumn: 'Recettes d’automne', winter: 'Recettes d’hiver' },
+    wxHot: (d, c) => `Il fait ${d}° à ${c} : de quoi se rafraîchir`, wxCold: (d, c) => `Il fait ${d}° à ${c} : de quoi se réchauffer`, wxRain: c => `Il pleut à ${c} : un bon petit plat`,
     occasions: 'Occasions', occMoments: 'Recevoir & célébrer', occJewish: 'Fêtes juives', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: 'ex : Anniversaire de Léa, Dîner du dimanche',
     occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
     occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
@@ -631,7 +744,8 @@ const STR = {
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', other: 'Other' },
     hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot',
-      friends: 'Having friends over', family: 'Family dinner', momsbday: 'Mom’s birthday', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner' },
+      friends: 'Having friends over', family: 'Family dinner', momsbday: 'Mom’s birthday', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+      hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
     kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
     kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
@@ -683,6 +797,8 @@ const STR = {
     ocrLoading: 'Getting ready to read… (the first time takes a little longer)', ocrReading: (i, n, p) => n > 1 ? `Reading page ${i} of ${n}… ${p}%` : `Reading the page… ${p}%`,
     ocrOk: 'Page read! Check the text, then save.', ocrFail: 'The text couldn’t be read. The page photo is still kept with the recipe.', ocrEmpty: 'No text found. The page photo is still kept with the recipe.',
     pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
+    occSeasons: 'Seasons, weather & garden', seasonRail: { spring: 'Spring recipes', summer: 'Summer recipes', autumn: 'Autumn recipes', winter: 'Winter recipes' },
+    wxHot: (d, c) => `It’s ${d}° in ${c}: something to cool down`, wxCold: (d, c) => `It’s ${d}° in ${c}: something to warm up`, wxRain: c => `It’s raining in ${c}: some comfort food`,
     occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', occJewish: 'Jewish holidays', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: 'e.g. Léa’s birthday, Sunday dinner',
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
@@ -789,7 +905,7 @@ const SYN = [
   ['hallah', 'challah', 'halla', 'hala', 'hallot', 'challot'],
   ['matsa', 'matzo', 'matza', 'matzah', 'matsot'],
   ['roch hachana', 'rosh hashanah', 'rosh hashana'], ['kippour', 'kippur'], ['souccot', 'sukkot', 'succot'],
-  ['pourim', 'purim'], ['chavouot', 'shavuot'], ['amis', 'friends', 'invites', 'guests'], ['anniversaire', 'birthday'], ['thanksgiving', 'dinde', 'turkey'], ['bassari', 'meat', 'viande', 'fleishig'], ['halavi', 'dairy', 'lait', 'milchig'], ['parve', 'pareve', 'parev'],
+  ['pourim', 'purim'], ['chavouot', 'shavuot'], ['amis', 'friends', 'invites', 'guests'], ['anniversaire', 'birthday'], ['thanksgiving', 'dinde', 'turkey'], ['ete', 'summer'], ['hiver', 'winter'], ['automne', 'autumn', 'fall'], ['printemps', 'spring'], ['potager', 'jardin', 'garden'], ['canicule', 'chaud', 'chaleur', 'hot'], ['froid', 'cold'], ['pluie', 'rain', 'rainy'], ['bassari', 'meat', 'viande', 'fleishig'], ['halavi', 'dairy', 'lait', 'milchig'], ['parve', 'pareve', 'parev'],
   ['poulet', 'chicken'], ['boeuf', 'beef'], ['agneau', 'lamb'], ['poisson', 'fish'], ['oeuf', 'oeufs', 'egg', 'eggs'], ['pomme de terre', 'pommes de terre', 'potato', 'potatoes', 'patate'],
   ['gateau', 'cake'], ['soupe', 'soup', 'potage'], ['miel', 'honey'], ['carotte', 'carrot'], ['oignon', 'onion'], ['ail', 'garlic'], ['cannelle', 'cinnamon'],
 ].map(g => g.map(norm));
@@ -1202,16 +1318,48 @@ function bannerHTML() {
   }
   return '';
 }
+const seasonNow = (d = new Date()) => ['winter', 'winter', 'spring', 'spring', 'spring', 'summer', 'summer', 'summer', 'autumn', 'autumn', 'autumn', 'winter'][d.getMonth()];
+// Current weather for the chosen city (Open-Meteo, free, no account). Cached for an hour; silent when offline.
+let wx = ls.get('wx', null);
+function cityCoords() {
+  if (S.city === 'gps' && S.gps) return [T().myPos, S.gps[0], S.gps[1]];
+  const c = CITIES[S.city] || CITIES.paris; return [c[0], c[1], c[2]];
+}
+async function refreshWeather() {
+  const [name, lat, lng] = cityCoords();
+  if (wx && wx.city === name && Date.now() - wx.at < 3600e3) return;
+  try {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code`, { signal: AbortSignal.timeout(8000) });
+    const d = await r.json();
+    wx = { city: name, at: Date.now(), temp: Math.round(d.current.temperature_2m), code: d.current.weather_code };
+    ls.set('wx', wx);
+    if (current === 'list' && $('#railbox')) $('#railbox').innerHTML = railHTML();
+  } catch {}
+}
+function moodRail() {
+  // Weather first (hot / cold / rain), otherwise the season.
+  const t = T(), fresh = wx && Date.now() - wx.at < 3 * 3600e3;
+  const tagged = k => recipes.filter(r => (r.holidays || []).includes(k));
+  const season = seasonNow();
+  const opts = [];
+  if (fresh && wx.temp >= 28) opts.push(['hotday', t.wxHot(wx.temp, wx.city), [...tagged('hotday'), ...tagged('summer')]]);
+  if (fresh && wx.temp <= 5) opts.push(['coldday', t.wxCold(wx.temp, wx.city), [...tagged('coldday'), ...tagged('winter')]]);
+  if (fresh && ((wx.code >= 51 && wx.code <= 67) || (wx.code >= 80 && wx.code <= 82))) opts.push(['rainyday', t.wxRain(wx.city), tagged('rainyday')]);
+  opts.push([season, t.seasonRail[season], [...tagged(season), ...(season === 'summer' ? tagged('garden') : [])]]);
+  for (const [key, title, list] of opts) { const items = [...new Set(list)]; if (items.length) return { key, title, items }; }
+  return null;
+}
+const tilesHTML = items => `<div class="rail">${items.slice(0, 10).map(r => `<a class="tile" href="#/r/${encodeURIComponent(r.id)}">${r.thumb || r.photo
+  ? `<img class="img" src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">`
+  : `<div class="img art" style="--c:${artColor(r.title)}">${esc(initial(r.title))}</div>`}<b>${esc(r.title)}</b></a>`).join('')}</div>`;
 function railHTML() {
   const t = T();
   if (current !== 'list' || L.q || L.cat || L.hol || L.kash || L.quick || L.fav || recipes.length < 4) return '';
   let items = recipes.filter(r => r.favorite), title = t.favRail;
   if (items.length < 2) { items = [...recipes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); title = t.recentRail; }
-  items = items.slice(0, 10);
-  return `<div class="rail-h"><h2>${esc(title)}</h2>${title === t.favRail ? `<a href="#/fav" class="muted" style="font-weight:700">${esc(t.seeAll)}</a>` : ''}</div>
-    <div class="rail">${items.map(r => `<a class="tile" href="#/r/${encodeURIComponent(r.id)}">${r.thumb || r.photo
-      ? `<img class="img" src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">`
-      : `<div class="img art" style="--c:${artColor(r.title)}">${esc(initial(r.title))}</div>`}<b>${esc(r.title)}</b></a>`).join('')}</div>`;
+  const mood = moodRail();
+  return (mood ? `<div class="rail-h"><h2>${esc(mood.title)}</h2><button class="linkish" data-act="holfilter" data-h="${mood.key}">${esc(t.seeAll)}</button></div>${tilesHTML(mood.items)}` : '') +
+    `<div class="rail-h"><h2>${esc(title)}</h2>${title === t.favRail ? `<a href="#/fav" class="linkish">${esc(t.seeAll)}</a>` : ''}</div>${tilesHTML(items)}`;
 }
 function chipsHTML() {
   const t = T();
@@ -1233,8 +1381,10 @@ function renderList(favOnly) {
   const t = T();
   const hasSpeech = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   $('#view').innerHTML = `
+    <div class="valance" aria-hidden="true"></div>
     <div class="wrap">
       <header class="top">
+        <div class="brand">${esc(t.appName)}</div>
         <h1 class="greet">${favOnly ? esc(t.favorites) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
         ${favOnly ? '' : calHTML()}
       </header>
@@ -1325,6 +1475,7 @@ function openFilters() {
       <div class="field"><label for="fKash">${esc(t.kashrutF)}</label><select id="fKash">${opt('', t.all, L.kash)}${KASHRUT.map(k => opt(k, t.kashLong[k], L.kash)).join('')}</select></div>
       <div class="field"><label for="fHol">${esc(t.occasions)}</label><select id="fHol">${opt('', t.all, L.hol)}
         <optgroup label="${esc(t.occMoments)}">${generalOcc().map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
+        <optgroup label="${esc(t.occSeasons)}">${SEASONS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup>
         <optgroup label="${esc(t.occJewish)}">${HOLIDAYS.map(h => opt(h, occLabel(h), L.hol)).join('')}</optgroup></select></div>
       <label class="toggle">${esc(t.quick)}<input type="checkbox" id="fQuick" ${L.quick ? 'checked' : ''}></label>
       <div class="row2"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">OK</button></div>
@@ -1374,12 +1525,12 @@ function renderRecipe(r) {
     ...(r.tags || []).map(g => `<span class="badge">#${esc(g)}</span>`),
   ].filter(Boolean).join('');
   $('#view').innerHTML = `
-    <div class="hero">${photo}
+    <div class="hero"><figure class="polaroid" style="margin:0 auto">${photo}<figcaption>${esc(r.title)}</figcaption></figure>
       <div class="bar"><button class="icon-btn on-photo" data-act="back" aria-label="Retour">${ico('back')}</button>
       <span class="r"><button class="icon-btn on-photo" data-act="fav" aria-label="${esc(t.favorites)}" aria-pressed="${!!r.favorite}">${ico(r.favorite ? 'heart' : 'heartO')}</button>
       <button class="icon-btn on-photo" data-act="menu" aria-label="Menu">${ico('dots')}</button></span></div>
     </div>
-    <article class="wrap">
+    <article class="wrap paper">
       <div class="rtitle">
         <h1>${esc(r.title)}</h1>
         ${r.source ? `<div class="muted">${esc(t.source)} <b>${esc(r.source)}</b></div>` : ''}
@@ -1560,6 +1711,8 @@ function renderEdit(r) {
       <div class="field"><span class="lbl">${esc(t.occasions)}</span>
         <span class="eyebrow">${esc(t.occMoments)}</span>
         <div class="wrapchips occ-chips" id="fOcc">${generalOcc().map(h => occChip(h, r.holidays)).join('')}<button type="button" class="chip add" data-act="addocc">${ico('plus')}${esc(t.addOcc)}</button></div>
+        <span class="eyebrow" style="margin-top:6px">${esc(t.occSeasons)}</span>
+        <div class="wrapchips occ-chips" id="fSeason">${SEASONS.map(h => occChip(h, r.holidays)).join('')}</div>
         <span class="eyebrow" style="margin-top:6px">${esc(t.occJewish)}</span>
         <div class="wrapchips occ-chips" id="fHol">${HOLIDAYS.map(h => occChip(h, r.holidays)).join('')}</div></div>
       <details class="more-box" ${r.kashrut ? 'open' : ''}><summary>${esc(t.kashrut)}</summary><div class="in">
@@ -1909,7 +2062,7 @@ function renderMore() {
   const upd = () => { const a = parseNum($('#cAmt').value.replace(',', '.')) || parseFloat($('#cAmt').value.replace(',', '.')); $('#cOut').textContent = isFinite(a) ? convert(a, $('#cUnit').value, $('#cIng').value) : '—'; $('#cIng').closest('.field').hidden = !['cup', 'tbsp', 'tsp'].includes($('#cUnit').value); };
   ['cAmt', 'cUnit', 'cIng'].forEach(id => $('#' + id).addEventListener('input', upd)); upd();
   const bind = (id, key, after) => $('#' + id).addEventListener('change', e => { S[key] = e.target.value; saveSettings(); applyLook(); after?.(); });
-  bind('sName', 'name'); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city');
+  bind('sName', 'name'); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city', () => { wx = null; refreshWeather(); });
 }
 async function exportBackup(share) {
   const t = T();
@@ -1950,19 +2103,19 @@ function samples() {
       ingredients: fr ? '1 kg de farine\n2 sachets de levure boulangère (16 g)\n120 g de sucre\n2 c. à café de sel\n3 œufs (+ 1 jaune pour dorer)\n150 ml d’huile\n400 ml d’eau tiède\nGraines de sésame ou de pavot' : '1 kg flour\n2 packets dried yeast (16 g)\n120 g sugar\n2 tsp salt\n3 eggs (+ 1 yolk to glaze)\n150 ml oil\n400 ml warm water\nSesame or poppy seeds',
       steps: fr ? 'Délayer la levure dans l’eau tiède avec une cuillère de sucre, laisser mousser 10 min.\nMélanger farine, sucre et sel. Ajouter les œufs, l’huile puis la levure.\nPétrir 10 minutes jusqu’à obtenir une pâte souple.\nCouvrir et laisser lever 1 h 30 dans un endroit tiède.\nPrélever un peu de pâte pour la bénédiction (hafracha). Diviser en deux, tresser chaque ’halla à 3 ou 6 brins.\nLaisser lever encore 45 min, dorer au jaune d’œuf et parsemer de graines.\nCuire 30 min à 180 °C jusqu’à ce que le dessous sonne creux.' : 'Dissolve the yeast in the warm water with a spoon of sugar; let it foam 10 min.\nMix flour, sugar and salt. Add eggs, oil, then the yeast.\nKnead for 10 minutes until smooth.\nCover and let rise 1 hour 30 in a warm place.\nSeparate a small piece of dough for the blessing (hafrashat challah). Divide in two and braid each loaf with 3 or 6 strands.\nLet rise another 45 min, brush with yolk and sprinkle with seeds.\nBake 30 min at 180 °C until the bottom sounds hollow.',
       notes: fr ? 'Pour Roch Hachana : ajouter des raisins secs et former une couronne ronde.' : 'For Rosh Hashanah: add raisins and shape into a round crown.' }, 1),
-    R({ title: fr ? 'Poulet rôti au citron et au thym' : 'Roast Chicken with Lemon & Thyme', category: 'poultry', kashrut: 'meat', holidays: ['shabbat', 'family', 'friends'], servings: 4, prep: 15, cook: 75, source: fr ? 'Exemple' : 'Example', rating: 5,
+    R({ title: fr ? 'Poulet rôti au citron et au thym' : 'Roast Chicken with Lemon & Thyme', category: 'poultry', kashrut: 'meat', holidays: ['shabbat', 'family', 'friends', 'coldday', 'winter'], servings: 4, prep: 15, cook: 75, source: fr ? 'Exemple' : 'Example', rating: 5,
       ingredients: fr ? '1 poulet fermier (1,6 kg)\n2 citrons\n1 tête d’ail\n6 branches de thym\n800 g de petites pommes de terre\n4 c. à soupe d’huile d’olive\nSel, poivre' : '1 free-range chicken (1.6 kg)\n2 lemons\n1 head of garlic\n6 sprigs thyme\n800 g small potatoes\n4 tbsp olive oil\nSalt, pepper',
       steps: fr ? 'Préchauffer le four à 200 °C. Sortir le poulet du réfrigérateur 30 min avant.\nCouper un citron en quatre et le glisser dans le poulet avec la moitié du thym et 4 gousses d’ail.\nDisposer les pommes de terre coupées en deux autour, arroser d’huile, saler, poivrer.\nEnfourner 1 h 15 en arrosant le poulet de son jus toutes les 20 minutes.\nLaisser reposer 10 min sous une feuille d’aluminium, presser le second citron sur le jus et servir.' : 'Preheat the oven to 200 °C. Take the chicken out of the fridge 30 min before.\nQuarter one lemon and put it inside the chicken with half the thyme and 4 garlic cloves.\nArrange the halved potatoes around it, drizzle with oil, season.\nRoast 1 hour 15, basting with the juices every 20 minutes.\nRest 10 min under foil, squeeze the second lemon over the juices and serve.' }, 2),
-    R({ title: fr ? 'Chakchouka' : 'Shakshuka', category: 'vegetarian', kashrut: 'parve', servings: 4, prep: 10, cook: 25, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'facile' : 'easy', fr ? 'tunisien' : 'Tunisian'], rating: 4,
+    R({ title: fr ? 'Chakchouka' : 'Shakshuka', category: 'vegetarian', kashrut: 'parve', holidays: ['brunch', 'garden', 'summer'], servings: 4, prep: 10, cook: 25, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'facile' : 'easy', fr ? 'tunisien' : 'Tunisian'], rating: 4,
       ingredients: fr ? '3 c. à soupe d’huile d’olive\n1 oignon émincé\n2 poivrons rouges en lanières\n3 gousses d’ail\n1 c. à café de cumin\n1 c. à café de paprika\n½ c. à café de harissa\n800 g de tomates concassées\n6 œufs\nCoriandre fraîche' : '3 tbsp olive oil\n1 onion, sliced\n2 red peppers, in strips\n3 garlic cloves\n1 tsp cumin\n1 tsp paprika\n½ tsp harissa\n800 g crushed tomatoes\n6 eggs\nFresh coriander',
       steps: fr ? 'Faire revenir l’oignon et les poivrons dans l’huile 10 min.\nAjouter l’ail, le cumin, le paprika et la harissa, cuire 1 min.\nVerser les tomates, saler, laisser mijoter 10 min.\nCreuser 6 puits et y casser les œufs. Couvrir et cuire 6 à 8 min.\nParsemer de coriandre et servir avec du pain.' : 'Sauté the onion and peppers in the oil for 10 min.\nAdd garlic, cumin, paprika and harissa; cook 1 min.\nPour in the tomatoes, salt, and simmer 10 min.\nMake 6 wells and crack in the eggs. Cover and cook 6 to 8 min.\nSprinkle with coriander and serve with bread.' }, 3),
-    R({ title: 'Ratatouille', category: 'vegetarian', kashrut: 'parve', holidays: ['pesach', 'friends', 'bbq'], servings: 6, prep: 30, cook: 60, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'provençal' : 'Provençal'],
+    R({ title: 'Ratatouille', category: 'vegetarian', kashrut: 'parve', holidays: ['pesach', 'friends', 'bbq', 'summer', 'garden'], servings: 6, prep: 30, cook: 60, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'provençal' : 'Provençal'],
       ingredients: fr ? '2 aubergines\n3 courgettes\n2 poivrons (rouge et jaune)\n2 oignons\n4 gousses d’ail\n6 tomates bien mûres\n6 c. à soupe d’huile d’olive\n1 bouquet garni (thym, laurier)\nBasilic frais\nSel, poivre' : '2 aubergines\n3 courgettes\n2 peppers (red and yellow)\n2 onions\n4 garlic cloves\n6 ripe tomatoes\n6 tbsp olive oil\n1 bouquet garni (thyme, bay)\nFresh basil\nSalt, pepper',
       steps: fr ? 'Couper tous les légumes en dés d’environ 2 cm.\nFaire revenir séparément aubergines, courgettes et poivrons dans l’huile, 8 min chacun.\nDans une cocotte, faire fondre les oignons et l’ail 5 min, ajouter les tomates.\nAjouter tous les légumes et le bouquet garni, couvrir et laisser mijoter 40 min à feu doux.\nRectifier l’assaisonnement et ajouter le basilic au moment de servir. Encore meilleure le lendemain.' : 'Cut all the vegetables into 2 cm dice.\nSauté the aubergines, courgettes and peppers separately in the oil, 8 min each.\nIn a casserole, soften the onions and garlic 5 min, then add the tomatoes.\nAdd all the vegetables and the bouquet garni, cover and simmer gently 40 min.\nAdjust the seasoning and add the basil just before serving. Even better the next day.' }, 4),
-    R({ title: fr ? 'Gâteau au miel et à la cannelle' : 'Honey & Cinnamon Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
+    R({ title: fr ? 'Gâteau au miel et à la cannelle' : 'Honey & Cinnamon Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur', 'autumn', 'rainyday'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
       ingredients: fr ? '300 g de farine\n1 sachet de levure chimique\n1 c. à café de bicarbonate\n2 c. à café de cannelle\n½ c. à café de gingembre\n3 œufs\n200 g de miel\n150 g de sucre roux\n150 ml d’huile\n200 ml de thé fort refroidi\n1 zeste d’orange' : '300 g flour\n1 packet baking powder\n1 tsp baking soda\n2 tsp cinnamon\n½ tsp ginger\n3 eggs\n200 g honey\n150 g brown sugar\n150 ml oil\n200 ml strong cooled tea\n1 orange zest',
       steps: fr ? 'Préchauffer le four à 170 °C. Huiler un moule à cake.\nMélanger farine, levure, bicarbonate et épices.\nFouetter œufs, miel, sucre, huile, thé et zeste.\nIncorporer les ingrédients secs sans trop travailler.\nCuire 50 min, jusqu’à ce qu’une lame ressorte sèche.\nAttendre un jour avant de servir : il est encore meilleur. Chana tova !' : 'Preheat the oven to 170 °C. Oil a loaf pan.\nMix flour, baking powder, soda and spices.\nWhisk eggs, honey, sugar, oil, tea and zest.\nFold in the dry ingredients without overmixing.\nBake 50 min, until a knife comes out clean.\nWait a day before serving: it gets even better. Shana tova!' }, 5),
-    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'momsbday', 'birthday'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
+    R({ title: 'Tarte Tatin', category: 'pastries', kashrut: 'dairy', holidays: ['friends', 'momsbday', 'birthday', 'autumn'], servings: 8, prep: 30, cook: 45, source: fr ? 'Exemple' : 'Example', favorite: true,
       ingredients: fr ? '1 pâte feuilletée\n8 pommes (Golden ou Reinette)\n150 g de sucre\n80 g de beurre\n1 pincée de fleur de sel' : '1 sheet puff pastry\n8 apples (Golden or Reinette)\n150 g sugar\n80 g butter\n1 pinch flaky salt',
       steps: fr ? 'Préchauffer le four à 190 °C. Éplucher les pommes et les couper en quartiers.\nDans un moule allant sur le feu, faire un caramel blond avec le sucre, puis ajouter le beurre et la fleur de sel.\nRanger les pommes serrées sur le caramel, cuire 15 min à feu doux.\nCouvrir avec la pâte en rentrant les bords, piquer à la fourchette.\nEnfourner 30 min, jusqu’à ce que la pâte soit bien dorée.\nAttendre 5 min puis retourner d’un coup sur un plat. Servir tiède avec de la crème fraîche.' : 'Preheat the oven to 190 °C. Peel the apples and cut into quarters.\nIn an ovenproof pan, make a golden caramel with the sugar, then add the butter and salt.\nPack the apples tightly on the caramel and cook 15 min over low heat.\nCover with the pastry, tucking in the edges, and prick with a fork.\nBake 30 min, until the pastry is deep golden.\nWait 5 min, then turn it out in one go onto a plate. Serve warm with crème fraîche.' }, 6),
   ];
@@ -2178,6 +2331,7 @@ document.addEventListener('visibilitychange', () => {
   await gate();
   route();
   drawTimers();
+  refreshWeather();
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>

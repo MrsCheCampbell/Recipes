@@ -40,7 +40,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **Photograph a cookbook page**: take one or more photos of a book page and the app reads the text (French or English) and fills in the title, servings, times, ingredients and steps. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom). Reading happens on the phone itself, so the photos are never sent anywhere.
 - **Paste text**: paste a recipe from an email or a WhatsApp message and it splits it into ingredients and steps.
 - **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
-- Category, **occasions** (having friends over, family dinner, Mom's birthday, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own, plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, Mom's birthday, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
@@ -48,7 +48,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
 - Voice search (microphone button).
 - Quick filters for Favorites and each category he uses, plus kashrut, occasion and "quick (≤ 30 min)" under Filters.
-- A carousel of his favorites at the top.
+- At the top, a carousel that fits the moment: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
 - "Surprends-moi" opens a random recipe.
 
@@ -71,6 +71,9 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Two weeks before, a quiet line under the greeting says e.g. "Anniversaire de Maman dans 9 jours". Tapping it shows the recipes tagged for it.
 - "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
+
+**Look**
+- Styled like grandma's recipe book: a red gingham valance, cream paper, recipe photos as taped polaroids on a gingham tablecloth, ruled recipe cards, handwritten-style headings, typewriter labels, and his notes on a sticky note. Ingredients and steps stay in a very legible font.
 
 **Comfort & safety**
 - Large text by default (three sizes), light and dark modes, big tap targets.
