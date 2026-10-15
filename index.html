@@ -1,0 +1,1681 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>La Cuisine d'Abe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#1E4FA8">
+<meta name="description" content="Les recettes d'Abe : chercher, cuisiner, partager.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap">
+<style>
+/* Layout: one-column phone app — sticky greeting header, big search, A–Z grouped list, fixed bottom nav.
+   Palette: tekhelet blue (the blue of the tallit) on a blue-biased paper, honey gold as the single warm accent. */
+:root {
+  --bg: #F3F6FB;
+  --surface: #FFFFFF;
+  --surface-2: #E8EEF8;
+  --ink: #14213D;
+  --muted: #56627C;
+  --line: #D6DEEC;
+  --accent: #1E4FA8;
+  --accent-ink: #FFFFFF;
+  --honey: #C98A0B;
+  --honey-soft: #FBF0D6;
+  --meat: #B23A3A;
+  --dairy: #2C76B8;
+  --parve: #2F8452;
+  --danger: #B42318;
+  --shadow: 0 1px 2px rgba(20,33,61,.06), 0 4px 16px rgba(20,33,61,.06);
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
+  --radius: 14px;
+  --nav-h: 68px;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1322; --surface: #161F34; --surface-2: #1E2A45; --ink: #E7ECF6; --muted: #9AA6C0; --line: #2A3653;
+    --accent: #7FA7F2; --accent-ink: #0D1322; --honey: #F2C14E; --honey-soft: #33290F;
+    --meat: #F08A8A; --dairy: #79B8F0; --parve: #7FD19F; --danger: #FF8A80;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1322; --surface: #161F34; --surface-2: #1E2A45; --ink: #E7ECF6; --muted: #9AA6C0; --line: #2A3653;
+  --accent: #7FA7F2; --accent-ink: #0D1322; --honey: #F2C14E; --honey-soft: #33290F;
+  --meat: #F08A8A; --dairy: #79B8F0; --parve: #7FD19F; --danger: #FF8A80;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+html { font-size: 17px; -webkit-text-size-adjust: 100%; }
+html[data-size="large"] { font-size: 19px; }
+html[data-size="xl"] { font-size: 22px; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--honey); outline-offset: 2px; }
+img { max-width: 100%; }
+a { color: var(--accent); }
+.wrap { padding-left: var(--gutter-l); padding-right: var(--gutter-r); max-width: 760px; margin: 0 auto; }
+main { padding-bottom: calc(var(--nav-h) + 96px + env(safe-area-inset-bottom, 0px)); min-height: 100vh; }
+.muted { color: var(--muted); }
+.eyebrow { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: 48px; padding: 0 1.1em; border-radius: 999px; border: 1.5px solid var(--line);
+  background: var(--surface); color: var(--ink); font-weight: 700; text-decoration: none;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.honey { background: var(--honey); border-color: var(--honey); color: #1B1405; }
+.btn.danger { color: var(--danger); border-color: currentColor; background: transparent; }
+.btn.block { width: 100%; }
+.btn.small { min-height: 40px; font-size: .9rem; padding: 0 .9em; }
+.btn svg { width: 1.2em; height: 1.2em; flex: none; }
+.icon-btn {
+  width: 48px; height: 48px; border-radius: 50%; border: 0; background: transparent;
+  display: inline-grid; place-items: center; color: inherit; flex: none;
+}
+.icon-btn svg { width: 26px; height: 26px; }
+.icon-btn.on-photo { background: rgba(13,19,34,.55); color: #fff; backdrop-filter: blur(6px); }
+
+/* ---------- Header ---------- */
+.top { padding-block: 20px 8px; display: grid; gap: 4px; }
+.top .dates { display: flex; flex-wrap: wrap; gap: .25em .9em; font-size: .9rem; color: var(--muted); }
+.top .dates .heb { color: var(--honey); font-weight: 700; }
+.greet { font-size: 2rem; font-weight: 800; }
+.greet .name { color: var(--accent); }
+
+.banner {
+  margin-top: 14px; padding: 14px 16px; border-radius: var(--radius);
+  background: var(--honey-soft); border: 1.5px solid color-mix(in srgb, var(--honey) 40%, transparent);
+  display: grid; gap: 8px;
+}
+.banner h3 { font-size: 1.15rem; }
+.banner .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.banner .times { display: flex; flex-wrap: wrap; gap: 4px 18px; font-variant-numeric: tabular-nums; }
+.banner .times b { font-size: 1.15rem; }
+
+/* ---------- Search ---------- */
+.searchbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg);
+  padding-block: 12px 10px;
+}
+.search {
+  display: flex; align-items: center; gap: 4px; background: var(--surface); border: 2px solid var(--line);
+  border-radius: 999px; padding-left: 14px; box-shadow: var(--shadow);
+}
+.search:focus-within { border-color: var(--accent); }
+.search svg.lead { width: 22px; height: 22px; color: var(--muted); flex: none; }
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 14px 6px; font-size: 1.05rem; outline: none; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px;
+  border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); font-weight: 700; font-size: .9rem; white-space: nowrap;
+}
+.chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip .dot { width: 10px; height: 10px; border-radius: 50%; }
+.chip.on .dot { box-shadow: 0 0 0 2px var(--accent-ink); }
+.listmeta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 10px 4px; flex-wrap: wrap; }
+.listmeta > * { min-width: 0; }
+.listmeta select { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 12px; font-weight: 700; max-width: 11em; min-height: 40px; }
+.listmeta .btn { white-space: nowrap; }
+
+/* ---------- Recipe list ---------- */
+.letter {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--accent);
+  padding: 18px 0 6px; border-bottom: 2px solid var(--line); margin-bottom: 4px; scroll-margin-top: 150px;
+}
+.cards { display: grid; gap: 2px; }
+.card {
+  display: grid; grid-template-columns: 76px 1fr auto; gap: 14px; align-items: center;
+  padding: 10px 4px; border-radius: 12px; text-decoration: none; color: inherit;
+}
+.card:active { background: var(--surface-2); }
+.thumb {
+  width: 76px; height: 76px; border-radius: 12px; object-fit: cover; background: var(--surface-2);
+  display: grid; place-items: center; overflow: hidden; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 2rem;
+}
+.card h3 { font-size: 1.1rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0; }
+.card .meta { font-size: .88rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 2px; }
+.card .side { display: grid; justify-items: end; gap: 6px; }
+.card .min { min-width: 0; }
+.star-fav { color: var(--honey); width: 22px; height: 22px; }
+.kbadge { display: inline-flex; align-items: center; gap: 5px; font-weight: 700; font-size: .8rem; }
+.kbadge::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.k-meat { color: var(--meat); } .k-dairy { color: var(--dairy); } .k-parve { color: var(--parve); }
+.dot.k-meat, .dot.k-dairy, .dot.k-parve { background: currentColor; }
+
+.az {
+  position: fixed; right: max(2px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; z-index: 25; padding: 6px 2px; border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent); touch-action: none; user-select: none;
+}
+.az span { font-size: .68rem; font-weight: 700; line-height: 1.22; width: 22px; text-align: center; color: var(--line); }
+.az span.has { color: var(--accent); }
+.az-pop {
+  position: fixed; left: 50%; top: 45%; transform: translate(-50%,-50%); z-index: 60;
+  width: 96px; height: 96px; border-radius: 24px; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 3rem;
+}
+
+.empty { text-align: center; padding: 40px 8px; display: grid; gap: 14px; justify-items: center; }
+.empty h2 { font-size: 1.5rem; }
+.empty p { max-width: 34ch; margin: 0; color: var(--muted); }
+
+.fab {
+  position: fixed; z-index: 30; right: calc(18px + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
+  height: 60px; padding: 0 22px 0 18px; border-radius: 999px; border: 0;
+  background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 1.05rem;
+  display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(30,79,168,.35);
+}
+.fab svg { width: 28px; height: 28px; }
+
+/* ---------- Bottom nav ---------- */
+.nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.nav .in { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
+.nav a {
+  display: grid; justify-items: center; align-content: center; gap: 2px; text-decoration: none;
+  color: var(--muted); font-size: .78rem; font-weight: 700; position: relative;
+}
+.nav a svg { width: 26px; height: 26px; }
+.nav a.on { color: var(--accent); }
+.nav a.on::before { content: ""; position: absolute; top: 0; width: 36px; height: 3px; border-radius: 0 0 3px 3px; background: var(--accent); }
+.nav .count {
+  position: absolute; top: 8px; left: calc(50% + 6px); background: var(--honey); color: #1B1405;
+  font-size: .7rem; min-width: 18px; height: 18px; border-radius: 9px; display: grid; place-items: center; padding: 0 4px;
+}
+
+/* ---------- Recipe page ---------- */
+.hero { position: relative; max-width: 760px; margin: 0 auto; }
+.hero .ph { width: 100%; aspect-ratio: 4 / 3; max-height: 52vh; object-fit: cover; display: block; background: var(--surface-2); }
+.hero .ph.art { display: grid; place-items: center; color: rgba(255,255,255,.92); font-family: var(--font-display); font-weight: 800; font-size: 6rem; }
+.hero .bar {
+  position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) calc(10px + env(safe-area-inset-right, 0px)) 0 calc(10px + env(safe-area-inset-left, 0px));
+}
+.hero .bar .r { display: flex; gap: 8px; }
+.rtitle { padding-block: 18px 6px; display: grid; gap: 10px; }
+.rtitle h1 { font-size: 2.1rem; font-weight: 800; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.badge { border-radius: 999px; padding: 3px 10px; font-size: .82rem; font-weight: 700; background: var(--surface-2); }
+.badge.kosher-p { background: var(--honey-soft); color: var(--ink); border: 1px solid var(--honey); }
+.stars { display: inline-flex; gap: 2px; }
+.stars button { border: 0; background: none; padding: 4px; color: var(--line); width: 40px; height: 40px; }
+.stars button.on { color: var(--honey); }
+.stars svg { width: 30px; height: 30px; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-block: 14px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; }
+.fact b { display: block; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.fact span { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 8px 4px; }
+.section { margin-top: 26px; }
+.section-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.section-h h2 { font-size: 1.45rem; }
+.scaler { display: inline-flex; align-items: center; gap: 4px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 2px; }
+.scaler button { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--surface-2); font-size: 1.3rem; font-weight: 700; }
+.scaler span { min-width: 7.5em; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ing { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+.ing li label { display: flex; gap: 12px; align-items: flex-start; padding: 10px 6px; border-radius: 10px; cursor: pointer; }
+.ing li label:active { background: var(--surface-2); }
+.ing input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--parve); flex: none; }
+.ing input:checked + span { text-decoration: line-through; color: var(--muted); }
+.ing .sub, .steps .sub { font-family: var(--font-display); font-weight: 700; color: var(--honey); padding: 14px 6px 2px; list-style: none; font-size: 1.05rem; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; counter-reset: st; }
+.steps li.step { display: grid; grid-template-columns: 38px 1fr; gap: 12px; counter-increment: st; }
+.steps li.step::before {
+  content: counter(st); width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; font-weight: 700; font-family: var(--font-display);
+}
+.steps li.step.done { opacity: .5; }
+.timer-chip {
+  display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid var(--honey); background: var(--honey-soft);
+  border-radius: 999px; padding: 0 10px; font-weight: 700; color: var(--ink); min-height: 32px; vertical-align: baseline;
+}
+.timer-chip svg { width: 16px; height: 16px; color: var(--honey); }
+.notes { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--honey); border-radius: 10px; padding: 12px 14px; white-space: pre-wrap; }
+.cooked { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-top: 26px; }
+
+/* ---------- Forms ---------- */
+.page-h {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg);
+  display: flex; align-items: center; gap: 8px; padding-block: 8px; border-bottom: 1px solid var(--line);
+}
+.page-h h1 { font-size: 1.35rem; flex: 1; min-width: 0; }
+.form { display: grid; gap: 18px; padding-block: 18px; }
+.field { display: grid; gap: 6px; }
+.field > label, .field > .lbl { font-weight: 700; }
+.field .hint { font-size: .85rem; color: var(--muted); }
+.input, .form textarea, .form select {
+  width: 100%; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; font-size: 1rem;
+}
+.form textarea { min-height: 9em; resize: vertical; line-height: 1.55; }
+.input:focus, .form textarea:focus, .form select:focus { border-color: var(--accent); outline: none; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.photo-drop {
+  border: 2px dashed var(--line); border-radius: var(--radius); background: var(--surface);
+  min-height: 170px; display: grid; place-items: center; text-align: center; padding: 16px; position: relative; overflow: hidden;
+}
+.photo-drop img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; display: block; }
+.photo-drop .acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface-2); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg label { text-align: center; padding: 10px 4px; border-radius: 9px; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:has(input:checked) { background: var(--surface); box-shadow: var(--shadow); }
+.seg label.k-meat:has(input:checked) { color: var(--meat); }
+.seg label.k-dairy:has(input:checked) { color: var(--dairy); }
+.seg label.k-parve:has(input:checked) { color: var(--parve); }
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; font-weight: 700; }
+.toggle input { width: 26px; height: 26px; accent-color: var(--accent); }
+.wrapchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.importbox { background: var(--surface-2); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; }
+.importbox h3 { font-size: 1.05rem; }
+.draft-note { background: var(--honey-soft); border-radius: 12px; padding: 12px 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+.savebar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+}
+.savebar .in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+
+/* ---------- Lists & settings ---------- */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; }
+.panel h2 { font-size: 1.2rem; }
+.stack { display: grid; gap: 14px; padding-block: 16px; }
+.shop-add { display: flex; gap: 8px; }
+.shop-add input { flex: 1; min-width: 0; }
+.shop-group h3 { font-size: 1rem; font-family: var(--font-body); color: var(--muted); padding: 10px 4px 2px; }
+.shop-item { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+.shop-item label { flex: 1; display: flex; gap: 12px; align-items: center; cursor: pointer; min-width: 0; }
+.shop-item input { width: 26px; height: 26px; accent-color: var(--parve); flex: none; }
+.shop-item.done span { text-decoration: line-through; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stats div { background: var(--surface-2); border-radius: 12px; padding: 12px 8px; text-align: center; }
+.stats b { display: block; font-family: var(--font-display); font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+.stats span { font-size: .8rem; color: var(--muted); }
+.conv-out { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+table.ref { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.ref td, table.ref th { padding: 6px 4px; border-bottom: 1px solid var(--line); text-align: left; }
+table.ref th { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.love { text-align: center; color: var(--muted); padding: 10px 0 0; font-size: .95rem; }
+.love b { color: var(--accent); font-family: var(--font-display); }
+
+/* ---------- Sheets, toasts, timers ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(8,12,24,.5); z-index: 100; display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 640px; max-height: 88vh; overflow: auto; background: var(--bg); border-radius: 22px 22px 0 0;
+  padding: 10px var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); display: grid; gap: 14px;
+  animation: up .22s ease-out;
+}
+.sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line); justify-self: center; }
+.sheet h2 { font-size: 1.3rem; }
+.sheet .menu { display: grid; gap: 4px; }
+.sheet .menu button { display: flex; align-items: center; gap: 14px; text-align: left; border: 0; background: var(--surface); border-radius: 12px; min-height: 56px; padding: 0 16px; font-weight: 700; }
+.sheet .menu button svg { width: 24px; height: 24px; color: var(--accent); }
+.sheet .menu button.danger { color: var(--danger); } .sheet .menu button.danger svg { color: var(--danger); }
+@keyframes up { from { transform: translateY(40px); opacity: .4; } }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + 90px + env(safe-area-inset-bottom, 0px)); z-index: 120;
+  background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 999px; font-weight: 700; max-width: calc(100% - 32px); text-align: center;
+  box-shadow: var(--shadow);
+}
+.timers { position: fixed; top: calc(8px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 110; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; width: min(420px, calc(100% - 32px)); }
+.tmr { display: flex; align-items: center; gap: 10px; background: var(--ink); color: var(--bg); border-radius: 999px; padding: 6px 6px 6px 16px; box-shadow: var(--shadow); }
+.tmr b { font-variant-numeric: tabular-nums; font-size: 1.2rem; }
+.tmr span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .85rem; opacity: .8; }
+.tmr button { border: 0; border-radius: 999px; height: 36px; padding: 0 12px; font-weight: 700; background: var(--bg); color: var(--ink); }
+.tmr.ring { background: var(--honey); color: #1B1405; animation: pulse 1s infinite; }
+.tmr.ring button { background: #1B1405; color: #fff; }
+@keyframes pulse { 50% { transform: scale(1.03); } }
+
+/* ---------- Cook mode ---------- */
+.cook { position: fixed; inset: 0; z-index: 90; background: var(--bg); display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); padding: calc(env(safe-area-inset-top, 0px) + var(--tmr-h, 0px)) 0 env(safe-area-inset-bottom, 0px); }
+.cook .ch { display: flex; align-items: center; gap: 8px; padding: 8px var(--gutter-r) 8px var(--gutter-l); border-bottom: 1px solid var(--line); }
+.cook .ch h2 { flex: 1; font-size: 1.05rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cook .body { overflow: auto; padding: 24px var(--gutter-r) 24px var(--gutter-l); display: grid; align-content: start; gap: 18px; max-width: 760px; margin: 0 auto; width: 100%; }
+.cook .num { font-family: var(--font-display); color: var(--honey); font-weight: 800; font-size: 1.1rem; }
+.cook .text { font-size: 1.75rem; line-height: 1.4; }
+.cook .text .timer-chip { font-size: 1.1rem; }
+.cook .progress { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.cook .progress i { display: block; height: 100%; background: var(--accent); transition: width .2s; }
+.cook .foot { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; padding: 10px var(--gutter-r) 12px var(--gutter-l); border-top: 1px solid var(--line); }
+.cook .foot .btn { min-height: 64px; font-size: 1.1rem; }
+
+@media (min-width: 640px) {
+  .greet { font-size: 2.4rem; }
+  .rtitle h1 { font-size: 2.6rem; }
+  .hero .ph { border-radius: 0 0 22px 22px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+@media print {
+  .nav, .fab, .hero .bar, .actions, .az, .cooked, .timers, .scaler button, .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+  main { padding: 0; }
+  .hero .ph { max-height: 260px; }
+}
+</style>
+</head>
+<body>
+<main id="view"></main>
+<nav class="nav" id="nav" aria-label="Navigation"><div class="in" id="navin"></div></nav>
+<div class="timers" id="timers" aria-live="polite"></div>
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="backupInput" accept="application/json,.json" hidden>
+
+<script>
+'use strict';
+/* =====================================================================
+   La Cuisine d'Abe — recipes app for Dad (Abraham / Abe).
+   Everything is stored on the phone (IndexedDB). Works offline.
+   ===================================================================== */
+
+// ---------- Icons ----------
+const I = {
+  search: '<path d="M10.5 3a7.5 7.5 0 1 0 4.7 13.3l4.2 4.2 1.4-1.4-4.2-4.2A7.5 7.5 0 0 0 10.5 3Zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Z"/>',
+  mic: '<path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11h-2Z"/>',
+  x: '<path d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6Z"/>',
+  plus: '<path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6Z"/>',
+  book: '<path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 2v14h11V5h-1v6l-2.5-1.5L11 11V5Z"/>',
+  heart: '<path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21Z"/>',
+  heartO: '<path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21Zm0-2.4c2.3-1.6 6.3-4.6 7.6-7.6.8-1.9-.4-4-2.4-4-1.3 0-2.3.8-4.1 2.8L12 11l-1.1-1.2C9.1 7.8 8.1 7 6.8 7c-2 0-3.2 2.1-2.4 4 1.3 3 5.3 6 7.6 7.6Z"/>',
+  cart: '<path d="M3 4h2.2l2.3 10.2A2 2 0 0 0 9.4 16H18v-2H9.4l-.4-2H18a1 1 0 0 0 1-.8L20.6 6H7.1L6.6 3.8A1 1 0 0 0 5.6 3H3Zm6.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/>',
+  more: '<path d="M4 6h16v2H4Zm0 5h16v2H4Zm0 5h16v2H4Z"/>',
+  back: '<path d="M15.4 5 8.4 12l7 7 1.4-1.4L11.2 12l5.6-5.6Z"/>',
+  dots: '<path d="M12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>',
+  star: '<path d="m12 2.8 2.8 5.8 6.4.9-4.6 4.5 1.1 6.3L12 17.3l-5.7 3 1.1-6.3-4.6-4.5 6.4-.9Z"/>',
+  edit: '<path d="M4 17.2V20h2.8l8.3-8.3-2.8-2.8ZM19.7 7.1a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0l-1.2 1.2 2.8 2.8Z"/>',
+  share: '<path d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1Z"/>',
+  trash: '<path d="M9 3h6l1 2h4v2H4V5h4Zm-3 6h12l-1 12H7Z"/>',
+  copy: '<path d="M8 3h11a2 2 0 0 1 2 2v11h-2V5H8Zm-3 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/>',
+  print: '<path d="M7 3h10v4H7Zm-3 6h16a1 1 0 0 1 1 1v7h-4v4H7v-4H3v-7a1 1 0 0 1 1-1Zm5 7v3h6v-3Z"/>',
+  link: '<path d="M10.6 13.4a1 1 0 0 0 1.4 0l4-4a3 3 0 0 0-4.2-4.2l-1.4 1.4 1.4 1.4 1.4-1.4a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 0 0 1.4ZM13.4 10.6a1 1 0 0 0-1.4 0l-4 4a3 3 0 0 0 4.2 4.2l1.4-1.4-1.4-1.4-1.4 1.4a1 1 0 0 1-1.4-1.4l4-4a1 1 0 0 0 0-1.4Z"/>',
+  camera: '<path d="M9 4h6l1.5 2H20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3.5Zm3 4a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/>',
+  fire: '<path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5S9 11 11 11c0-4 1-9 1-9Z"/>',
+  clock: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm1 4v5l4 2.4-1 1.7L11 13V7Z"/>',
+  dice: '<path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 3a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-4 4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM8 15a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/>',
+  filter: '<path d="M3 5h18l-7 8v6l-4 2v-8Z"/>',
+  check: '<path d="m9.5 16.2-4.2-4.2-1.4 1.4 5.6 5.6 11-11-1.4-1.4Z"/>',
+  download: '<path d="M11 3h2v9.2l3.3-3.3 1.4 1.4-5.7 5.7-5.7-5.7 1.4-1.4 3.3 3.3ZM4 19h16v2H4Z"/>',
+  upload: '<path d="M11 21h2v-9.2l3.3 3.3 1.4-1.4L12 8l-5.7 5.7 1.4 1.4 3.3-3.3ZM4 3h16v2H4Z"/>',
+  pot: '<path d="M4 9h16v2h-1v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-6H4Zm-2 1h2v2H2Zm18 0h2v2h-2ZM8 3l1 1-1 2 1 1-1 1H7l1-1-1-1 1-2-1-1Zm4 0 1 1-1 2 1 1-1 1h-1l1-1-1-1 1-2-1-1Zm4 0 1 1-1 2 1 1-1 1h-1l1-1-1-1 1-2-1-1Z"/>',
+  scale: '<path d="M12 3a2 2 0 0 1 2 2h5l2 7a3.5 3.5 0 0 1-7 0l2-5h-2.3A2 2 0 0 1 13 8.7V19h4v2H7v-2h4V8.7A2 2 0 0 1 9.3 7H7l2 5a3.5 3.5 0 0 1-7 0l2-7h5a2 2 0 0 1 2-2Z"/>',
+  pin: '<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 4.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z"/>',
+  install: '<path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v13h10V5Zm4 2h2v5h2l-3 3-3-3h2Z"/>',
+};
+const ico = (n, cls = '') => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="${cls}">${I[n]}</svg>`;
+
+// ---------- Vocabulary ----------
+const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','other'];
+const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
+const KASHRUT = ['meat','dairy','parve'];
+
+const STR = {
+  fr: {
+    appName: "La Cuisine d'Abe",
+    hello: ['Bonne nuit', 'Bonjour', 'Bon après-midi', 'Bonsoir'], shabbatShalom: 'Chabbat Chalom',
+    nav: { list: 'Recettes', fav: 'Favoris', shop: 'Courses', more: 'Plus' },
+    searchPh: 'Chercher : poulet, cannelle, Pessah…', voice: 'Chercher à la voix', clear: 'Effacer',
+    all: 'Toutes', favorites: 'Favoris', filters: 'Filtres', quick: 'Rapide (≤ 30 min)', pesachOk: 'Cacher pour Pessah',
+    sort: { az: 'De A à Z', recent: 'Ajoutées récemment', cooked: 'Les plus cuisinées', rating: 'Les mieux notées', time: 'Les plus rapides' },
+    nRecipes: n => n === 0 ? 'Aucune recette' : n === 1 ? '1 recette' : `${n} recettes`,
+    nOf: (n, total) => `${n} sur ${total}`,
+    surprise: 'Surprends-moi', add: 'Ajouter', newRecipe: 'Nouvelle recette', editRecipe: 'Modifier la recette',
+    emptyTitle: 'Votre livre de recettes est prêt', emptyText: 'Ajoutez une recette avec une photo, un lien, ou en copiant un texte. Tout reste sur votre téléphone.',
+    firstRecipe: 'Ajouter ma première recette', loadSamples: 'Voir des recettes d’exemple',
+    noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
+    cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & ’hallot', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', other: 'Autre' },
+    hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot' },
+    kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
+    kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
+    prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
+    servings: n => n === 1 ? '1 personne' : `${fmtNum(n)} personnes`, times: x => `Quantités ×${fmtNum(x)}`,
+    ingredients: 'Ingrédients', steps: 'Préparation', notes: 'Notes d’Abe', source: 'Recette de',
+    cookMode: 'Mode cuisine', addToShop: 'Ajouter aux courses', addedToShop: n => `${n} ingrédient${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} aux courses`,
+    openLink: 'Ouvrir le lien d’origine', edit: 'Modifier', share: 'Partager', print: 'Imprimer / PDF', duplicate: 'Dupliquer', del: 'Supprimer',
+    copyText: 'Copier le texte', copied: 'Copié', deleteQ: t => `Supprimer « ${t} » ?`, deleteYes: 'Oui, supprimer', cancel: 'Annuler', deleted: 'Recette supprimée', undo: 'Annuler',
+    cookedN: (n, d) => n ? `Cuisinée ${n} fois${d ? ' · dernière fois le ' + d : ''}` : 'Pas encore cuisinée', cookedToday: 'Je l’ai cuisinée aujourd’hui', bravo: 'Bravo ! Bon appétit',
+    addedOn: d => `Ajoutée le ${d}`,
+    // form
+    photo: 'Photo', addPhoto: 'Prendre ou choisir une photo', changePhoto: 'Changer', removePhoto: 'Retirer', photoUrl: 'ou coller le lien d’une image',
+    importTitle: 'Remplir automatiquement', importLinkHint: 'Collez le lien d’une recette (Marmiton, 750g, un blog…) et l’appli essaie de tout remplir.',
+    importBtn: 'Importer depuis le lien', importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : copiez le texte de la recette ci-dessous.',
+    pasteHint: 'Ou collez tout le texte d’une recette (d’un e-mail, d’un message…) :', pasteBtn: 'Remplir avec ce texte', pasteOk: 'C’est rempli. Vérifiez et enregistrez.',
+    title: 'Nom de la recette', titlePh: 'ex : Couscous de Mamie', link: 'Lien (site, vidéo…)', category: 'Catégorie', kashrut: 'Cacheroute',
+    holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: 'ex : facile, marocain, famille', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
+    ingF: 'Ingrédients', ingHint: 'Un ingrédient par ligne. Une ligne qui finit par « : » devient un titre (ex : « Pour la sauce : »).',
+    stepsF: 'Étapes', stepsHint: 'Une étape par ligne. Les durées (« 20 min », « 1 h ») deviennent des minuteurs.',
+    notesF: 'Notes personnelles', notesPh: 'Astuces, souvenirs, ce qu’il faut changer la prochaine fois…', sourceF: 'Recette de (qui ?)', sourcePh: 'ex : Maman, Tante Esther',
+    save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
+    draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
+    // shop
+    shopTitle: 'Liste de courses', shopAddPh: 'Ajouter un article…', shopEmpty: 'La liste est vide. Depuis une recette, touchez « Ajouter aux courses ».',
+    clearDone: 'Retirer les articles cochés', clearAll: 'Vider la liste', shareList: 'Partager la liste', other: 'Divers', clearAllQ: 'Vider toute la liste ?',
+    // more
+    moreTitle: 'Plus', settings: 'Réglages', yourName: 'Prénom affiché', language: 'Langue', textSize: 'Taille du texte', sizes: { normal: 'Normale', large: 'Grande', xl: 'Très grande' },
+    theme: 'Apparence', themes: { auto: 'Automatique', light: 'Clair', dark: 'Sombre' },
+    city: 'Ville pour les horaires de Chabbat', useGps: 'Utiliser ma position', myPos: 'Ma position', gpsFail: 'Position indisponible',
+    backup: 'Sauvegarde', backupText: 'Vos recettes sont gardées sur ce téléphone. Faites une sauvegarde de temps en temps et envoyez-la par e-mail ou sur Google Drive.',
+    exportB: 'Télécharger une sauvegarde', shareB: 'Envoyer la sauvegarde', importB: 'Restaurer une sauvegarde', importedN: n => `${n} recette${n > 1 ? 's' : ''} restaurée${n > 1 ? 's' : ''}`, badFile: 'Ce fichier n’est pas une sauvegarde valide',
+    lastBackup: d => d ? `Dernière sauvegarde : ${d}` : 'Aucune sauvegarde pour l’instant',
+    backupNudge: 'Pensez à faire une sauvegarde de vos recettes.', backupNow: 'Sauvegarder',
+    samples: 'Recettes d’exemple', samplesAdd: 'Ajouter les exemples', samplesDel: 'Retirer les exemples', samplesAdded: 'Exemples ajoutés', samplesRemoved: 'Exemples retirés',
+    stats: 'En chiffres', statRecipes: 'recettes', statFav: 'favoris', statCooked: 'fois cuisiné',
+    tools: 'Conversions', convFrom: 'Quantité', convIngr: 'Ingrédient (pour les tasses)', ovenTitle: 'Températures du four',
+    install: 'Installer l’appli sur le téléphone', installText: 'Pour l’avoir sur l’écran d’accueil, comme une vraie appli.',
+    installHow: 'Dans Chrome : menu ⋮ puis « Installer l’application » (ou « Ajouter à l’écran d’accueil »).',
+    eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
+    madeFor: 'Fait avec amour pour', withLove: 'Papa',
+    // jewish calendar
+    candles: 'Allumage des bougies', havdala: 'Fin de Chabbat', thisFriday: 'vendredi', approx: 'Horaires approximatifs',
+    shabbatCard: 'Les recettes de Chabbat', holidayIn: (h, n) => n === 1 ? `${h} commence demain soir` : n === 0 ? `${h} commence ce soir` : `${h} dans ${n} jours`,
+    holidayNow: h => `Hag saméa’h ! C’est ${h}`, eveOf: d => `à partir du soir du ${d}`, seeRecipes: h => `Mes recettes de ${h}`, noneYet: 'Aucune recette pour l’instant — taguez-en une !',
+    yomKippurNote: 'Pour la rupture du jeûne',
+    // cook
+    step: (i, n) => `Étape ${i} sur ${n}`, prev: 'Précédente', next: 'Suivante', finish: 'Terminé !', showIng: 'Ingrédients', close: 'Fermer',
+    timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
+    offlineSave: 'Le stockage n’est pas disponible : les recettes ne seront pas gardées.',
+  },
+  en: {
+    appName: "Abe's Kitchen",
+    hello: ['Good night', 'Good morning', 'Good afternoon', 'Good evening'], shabbatShalom: 'Shabbat Shalom',
+    nav: { list: 'Recipes', fav: 'Favorites', shop: 'Shopping', more: 'More' },
+    searchPh: 'Search: chicken, cinnamon, Pesach…', voice: 'Search by voice', clear: 'Clear',
+    all: 'All', favorites: 'Favorites', filters: 'Filters', quick: 'Quick (≤ 30 min)', pesachOk: 'Kosher for Pesach',
+    sort: { az: 'A to Z', recent: 'Recently added', cooked: 'Most cooked', rating: 'Top rated', time: 'Quickest' },
+    nRecipes: n => n === 0 ? 'No recipes' : n === 1 ? '1 recipe' : `${n} recipes`,
+    nOf: (n, total) => `${n} of ${total}`,
+    surprise: 'Surprise me', add: 'Add', newRecipe: 'New recipe', editRecipe: 'Edit recipe',
+    emptyTitle: 'Your recipe book is ready', emptyText: 'Add a recipe with a photo, a link, or by pasting text. Everything stays on your phone.',
+    firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
+    noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
+    cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads & challah', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', other: 'Other' },
+    hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot' },
+    kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
+    kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
+    prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
+    servings: n => n === 1 ? '1 serving' : `${fmtNum(n)} servings`, times: x => `Amounts ×${fmtNum(x)}`,
+    ingredients: 'Ingredients', steps: 'Method', notes: 'Abe’s notes', source: 'Recipe from',
+    cookMode: 'Cooking mode', addToShop: 'Add to shopping list', addedToShop: n => `${n} ingredient${n > 1 ? 's' : ''} added to shopping`,
+    openLink: 'Open original link', edit: 'Edit', share: 'Share', print: 'Print / PDF', duplicate: 'Duplicate', del: 'Delete',
+    copyText: 'Copy text', copied: 'Copied', deleteQ: t => `Delete “${t}”?`, deleteYes: 'Yes, delete', cancel: 'Cancel', deleted: 'Recipe deleted', undo: 'Undo',
+    cookedN: (n, d) => n ? `Cooked ${n} time${n > 1 ? 's' : ''}${d ? ' · last on ' + d : ''}` : 'Not cooked yet', cookedToday: 'I cooked this today', bravo: 'Well done! Enjoy',
+    addedOn: d => `Added ${d}`,
+    photo: 'Photo', addPhoto: 'Take or choose a photo', changePhoto: 'Change', removePhoto: 'Remove', photoUrl: 'or paste an image link',
+    importTitle: 'Fill in automatically', importLinkHint: 'Paste a recipe link (a website, a blog…) and the app tries to fill everything in.',
+    importBtn: 'Import from link', importing: 'Importing…', importOk: 'Recipe imported! Check it and save.', importFail: 'This site can’t be read. The link is kept: paste the recipe text below instead.',
+    pasteHint: 'Or paste the full text of a recipe (from an email, a message…):', pasteBtn: 'Fill in from this text', pasteOk: 'Filled in. Check it and save.',
+    title: 'Recipe name', titlePh: 'e.g. Grandma’s couscous', link: 'Link (website, video…)', category: 'Category', kashrut: 'Kashrut',
+    holidays: 'Holidays', tags: 'Keywords', tagsPh: 'e.g. easy, Moroccan, family', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
+    ingF: 'Ingredients', ingHint: 'One ingredient per line. A line ending with “:” becomes a heading (e.g. “For the sauce:”).',
+    stepsF: 'Steps', stepsHint: 'One step per line. Times like “20 min” or “1 hour” become timers.',
+    notesF: 'Personal notes', notesPh: 'Tips, memories, what to change next time…', sourceF: 'Recipe from (who?)', sourcePh: 'e.g. Mom, Aunt Esther',
+    save: 'Save', saved: 'Saved', needTitle: 'Give the recipe a name',
+    draftFound: 'An unsaved draft was found.', restore: 'Restore', discard: 'Discard',
+    shopTitle: 'Shopping list', shopAddPh: 'Add an item…', shopEmpty: 'The list is empty. On a recipe, tap “Add to shopping list”.',
+    clearDone: 'Remove checked items', clearAll: 'Clear the list', shareList: 'Share the list', other: 'Other', clearAllQ: 'Clear the whole list?',
+    moreTitle: 'More', settings: 'Settings', yourName: 'Name shown', language: 'Language', textSize: 'Text size', sizes: { normal: 'Normal', large: 'Large', xl: 'Extra large' },
+    theme: 'Appearance', themes: { auto: 'Automatic', light: 'Light', dark: 'Dark' },
+    city: 'City for Shabbat times', useGps: 'Use my location', myPos: 'My location', gpsFail: 'Location unavailable',
+    backup: 'Backup', backupText: 'Your recipes are kept on this phone. Make a backup now and then and email it or save it to Google Drive.',
+    exportB: 'Download a backup', shareB: 'Send the backup', importB: 'Restore a backup', importedN: n => `${n} recipe${n > 1 ? 's' : ''} restored`, badFile: 'This file isn’t a valid backup',
+    lastBackup: d => d ? `Last backup: ${d}` : 'No backup yet',
+    backupNudge: 'Remember to back up your recipes.', backupNow: 'Back up',
+    samples: 'Example recipes', samplesAdd: 'Add the examples', samplesDel: 'Remove the examples', samplesAdded: 'Examples added', samplesRemoved: 'Examples removed',
+    stats: 'By the numbers', statRecipes: 'recipes', statFav: 'favorites', statCooked: 'times cooked',
+    tools: 'Conversions', convFrom: 'Amount', convIngr: 'Ingredient (for cups)', ovenTitle: 'Oven temperatures',
+    install: 'Install the app on the phone', installText: 'Put it on the home screen, like a real app.',
+    installHow: 'In Chrome: menu ⋮ then “Install app” (or “Add to Home screen”).',
+    eraseAll: 'Erase everything', eraseQ: 'Erase every recipe from this phone? This can’t be undone.', erased: 'Everything erased',
+    madeFor: 'Made with love for', withLove: 'Dad',
+    candles: 'Candle lighting', havdala: 'Shabbat ends', thisFriday: 'Friday', approx: 'Approximate times',
+    shabbatCard: 'Shabbat recipes', holidayIn: (h, n) => n === 1 ? `${h} begins tomorrow evening` : n === 0 ? `${h} begins tonight` : `${h} in ${n} days`,
+    holidayNow: h => `Chag sameach! It’s ${h}`, eveOf: d => `from the evening of ${d}`, seeRecipes: h => `My ${h} recipes`, noneYet: 'No recipes yet — tag one!',
+    yomKippurNote: 'For breaking the fast',
+    step: (i, n) => `Step ${i} of ${n}`, prev: 'Back', next: 'Next', finish: 'Done!', showIng: 'Ingredients', close: 'Close',
+    timerDone: 'Timer done', stop: 'Stop', startTimer: 'Start', timerFor: 'Timer',
+    offlineSave: 'Storage is unavailable: recipes won’t be kept.',
+  }
+};
+
+// ---------- Small helpers ----------
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/œ/g, 'oe').replace(/æ/g, 'ae').replace(/[’'`]/g, ' ');
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const ls = {
+  get(k, d) { try { const v = localStorage.getItem('abe:' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('abe:' + k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem('abe:' + k); } catch {} },
+};
+let S = ls.get('settings', {});
+S = Object.assign({ lang: (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr', name: 'Abe', size: 'large', theme: 'auto', city: 'paris' }, S);
+const saveSettings = () => ls.set('settings', S);
+const T = () => STR[S.lang];
+const locale = () => S.lang === 'fr' ? 'fr-FR' : 'en-GB';
+function fmtNum(n) {
+  if (!isFinite(n)) return '';
+  if (n >= 10) return String(Math.round(n));
+  const whole = Math.floor(n), f = n - whole;
+  const fr = [[0, ''], [1 / 8, '⅛'], [1 / 4, '¼'], [1 / 3, '⅓'], [1 / 2, '½'], [2 / 3, '⅔'], [3 / 4, '¾'], [1, '']];
+  for (const [v, g] of fr) if (Math.abs(f - v) < 0.03) {
+    const w = v === 1 ? whole + 1 : whole;
+    return g ? (w ? w + g : g) : String(w);
+  }
+  return (Math.round(n * 10) / 10).toLocaleString(locale());
+}
+const fmtDate = (ts, opts = { day: 'numeric', month: 'long', year: 'numeric' }) => ts ? new Date(ts).toLocaleDateString(locale(), opts) : '';
+const fmtDur = m => { m = Math.round(m || 0); if (!m) return '—'; const h = Math.floor(m / 60), r = m % 60; return h ? `${h} h${r ? ' ' + String(r).padStart(2, '0') : ''}` : `${r} min`; };
+const PALETTE = ['#1E4FA8', '#8A5A12', '#2F7A52', '#9A3B3B', '#6B4C9A', '#1F7A86', '#9B6A00', '#4A5A7A'];
+const artColor = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return PALETTE[h % PALETTE.length]; };
+const sortKey = s => String(s || '').replace(/^[^\p{L}\p{N}]+/u, '');
+const initial = s => (sortKey(s)[0] || '?').toUpperCase();
+
+function applyLook() {
+  const r = document.documentElement;
+  r.lang = S.lang;
+  r.dataset.size = S.size;
+  if (S.theme === 'auto') r.removeAttribute('data-theme'); else r.dataset.theme = S.theme;
+  document.title = T().appName;
+}
+
+// ---------- Storage (IndexedDB, with memory fallback) ----------
+const DB = {
+  db: null, mem: null,
+  open() {
+    return new Promise(res => {
+      try {
+        const rq = indexedDB.open('abe-recettes', 1);
+        rq.onupgradeneeded = () => { const d = rq.result; d.createObjectStore('recipes', { keyPath: 'id' }); d.createObjectStore('kv'); };
+        rq.onsuccess = () => { this.db = rq.result; res(true); };
+        rq.onerror = () => { this.mem = new Map(); res(false); };
+        rq.onblocked = () => { this.mem = new Map(); res(false); };
+      } catch { this.mem = new Map(); res(false); }
+    });
+  },
+  _run(store, mode, fn) {
+    return new Promise((res, rej) => {
+      const tx = this.db.transaction(store, mode); const rq = fn(tx.objectStore(store));
+      tx.oncomplete = () => res(rq && 'result' in rq ? rq.result : undefined);
+      tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error);
+    });
+  },
+  async all() { return this.db ? this._run('recipes', 'readonly', s => s.getAll()) : [...this.mem.values()]; },
+  async put(r) { return this.db ? this._run('recipes', 'readwrite', s => s.put(r)) : this.mem.set(r.id, r); },
+  async del(id) { return this.db ? this._run('recipes', 'readwrite', s => s.delete(id)) : this.mem.delete(id); },
+  async clear() { return this.db ? this._run('recipes', 'readwrite', s => s.clear()) : this.mem.clear(); },
+};
+
+// ---------- App state ----------
+let recipes = [];
+const byId = id => recipes.find(r => r.id === id);
+const L = { q: '', kash: '', cat: '', hol: '', fav: false, quick: false, pesach: false, sort: 'az', scroll: 0 };
+let shop = ls.get('shop', []);
+const saveShop = () => { ls.set('shop', shop); updateNavCount(); };
+
+// ---------- Search ----------
+const SYN = [
+  ['hanoucca', 'hanukkah', 'chanukah', 'hanouka', 'hanukka', 'channukah'],
+  ['pessah', 'pesach', 'passover', 'paque', 'pessa h', 'pesah'],
+  ['chabbat', 'shabbat', 'sabbat', 'shabbos', 'shabat'],
+  ['hallah', 'challah', 'halla', 'hala', 'hallot', 'challot'],
+  ['matsa', 'matzo', 'matza', 'matzah', 'matsot'],
+  ['roch hachana', 'rosh hashanah', 'rosh hashana'], ['kippour', 'kippur'], ['souccot', 'sukkot', 'succot'],
+  ['pourim', 'purim'], ['chavouot', 'shavuot'], ['bassari', 'meat', 'viande', 'fleishig'], ['halavi', 'dairy', 'lait', 'milchig'], ['parve', 'pareve', 'parev'],
+  ['poulet', 'chicken'], ['boeuf', 'beef'], ['agneau', 'lamb'], ['poisson', 'fish'], ['oeuf', 'oeufs', 'egg', 'eggs'], ['pomme de terre', 'pommes de terre', 'potato', 'potatoes', 'patate'],
+  ['gateau', 'cake'], ['soupe', 'soup', 'potage'], ['miel', 'honey'], ['carotte', 'carrot'], ['oignon', 'onion'], ['ail', 'garlic'], ['cannelle', 'cinnamon'],
+].map(g => g.map(norm));
+function expand(tok) {
+  const out = new Set([tok]);
+  for (const g of SYN) if (g.some(w => w === tok || (tok.length >= 4 && w.startsWith(tok)))) g.forEach(w => out.add(w));
+  return [...out];
+}
+function lev1(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return false;
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let cur = [i], best = i;
+    for (let j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); best = Math.min(best, cur[j]); }
+    if (best > max) return false;
+    prev.splice(0, prev.length, ...cur);
+  }
+  return prev[b.length] <= max;
+}
+function indexRecipe(r) {
+  const both = (dict, k) => k ? [STR.fr[dict][k], STR.en[dict][k]].join(' ') : '';
+  const f = {
+    title: norm(r.title),
+    meta: norm([r.tags?.join(' '), both('cat', r.category), both('kash', r.kashrut), (r.holidays || []).map(h => both('hol', h)).join(' '), r.source, r.pesach ? 'pessah pesach passover' : ''].join(' ')),
+    ing: norm(r.ingredients),
+    rest: norm([r.steps, r.notes, r.link].join(' ')),
+  };
+  f.words = [...new Set((f.title + ' ' + f.meta + ' ' + f.ing).split(/[^a-z0-9]+/).filter(w => w.length > 3))];
+  Object.defineProperty(r, '_ix', { value: f, configurable: true, enumerable: false, writable: true });
+}
+function score(r, toks) {
+  const f = r._ix; let total = 0;
+  for (const tok of toks) {
+    let best = 0;
+    for (const v of expand(tok)) {
+      if (f.title.includes(v)) best = Math.max(best, f.title.startsWith(v) ? 14 : 10);
+      else if (f.meta.includes(v)) best = Math.max(best, 6);
+      else if (f.ing.includes(v)) best = Math.max(best, 4);
+      else if (f.rest.includes(v)) best = Math.max(best, 1);
+    }
+    if (!best && tok.length >= 4) { const max = tok.length >= 7 ? 2 : 1; if (f.words.some(w => lev1(tok, w.slice(0, tok.length + max), max))) best = 2; }
+    if (!best) return 0;
+    total += best;
+  }
+  return total;
+}
+const totalTime = r => (+r.prep || 0) + (+r.cook || 0);
+const letterOf = r => { const c = norm(sortKey(r.title)).trim()[0] || '#'; return /[a-z]/.test(c) ? c.toUpperCase() : '#'; };
+const collator = () => new Intl.Collator(locale(), { sensitivity: 'base', numeric: true });
+
+function filtered() {
+  const toks = norm(L.q).split(/\s+/).filter(Boolean);
+  let list = recipes.filter(r =>
+    (!L.fav || r.favorite) && (!L.kash || r.kashrut === L.kash) && (!L.cat || r.category === L.cat) &&
+    (!L.hol || (r.holidays || []).includes(L.hol)) && (!L.pesach || r.pesach) && (!L.quick || (totalTime(r) > 0 && totalTime(r) <= 30)));
+  if (toks.length) {
+    list = list.map(r => [r, score(r, toks)]).filter(x => x[1] > 0);
+    if (L.sort === 'az') list.sort((a, b) => b[1] - a[1] || collator().compare(sortKey(a[0].title), sortKey(b[0].title)));
+    list = list.map(x => x[0]);
+  }
+  const C = collator();
+  if (!toks.length || L.sort !== 'az') {
+    const s = {
+      az: (a, b) => C.compare(sortKey(a.title), sortKey(b.title)),
+      recent: (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
+      cooked: (a, b) => (b.cookCount || 0) - (a.cookCount || 0) || C.compare(a.title, b.title),
+      rating: (a, b) => (b.rating || 0) - (a.rating || 0) || C.compare(a.title, b.title),
+      time: (a, b) => (totalTime(a) || 1e9) - (totalTime(b) || 1e9),
+    }[L.sort];
+    list.sort(s);
+  }
+  return list;
+}
+
+// ---------- Hebrew calendar & Shabbat times ----------
+const HEB_START = { roshhashana: [1, ['Tishri'], 2], yomkippur: [10, ['Tishri'], 1], sukkot: [15, ['Tishri'], 8], hanukkah: [25, ['Kislev'], 8], tubishvat: [15, ['Shevat'], 1], purim: [14, ['Adar', 'Adar II'], 1], pesach: [15, ['Nisan'], 8], shavuot: [6, ['Sivan'], 2] };
+function hebParts(d) {
+  try {
+    const p = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(d);
+    return { day: +p.find(x => x.type === 'day').value, month: p.find(x => x.type === 'month').value };
+  } catch { return null; }
+}
+function hebDateLabel(d) {
+  try {
+    return new Intl.DateTimeFormat(S.lang === 'fr' ? 'fr-u-ca-hebrew' : 'en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' }).format(d).replace(/\s*A\.\s*M\.?$/i, '').replace(/\s*AM$/, '');
+  } catch { return ''; }
+}
+function nextHoliday(now = new Date()) {
+  const base = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
+  for (let off = -9; off <= 40; off++) {
+    const d = new Date(base); d.setDate(d.getDate() + off);
+    const p = hebParts(d); if (!p) return null;
+    for (const [k, [day, months, dur]] of Object.entries(HEB_START)) {
+      if (p.day === day && months.includes(p.month)) {
+        const end = off + dur - 1;
+        if (end >= 0) return { key: k, offset: off, start: d, dayN: off <= 0 ? 1 - off : 0 };
+      }
+    }
+  }
+  return null;
+}
+const CITIES = {
+  paris: ['Paris', 48.8566, 2.3522, 'Europe/Paris'], lyon: ['Lyon', 45.764, 4.8357, 'Europe/Paris'], marseille: ['Marseille', 43.2965, 5.3698, 'Europe/Paris'],
+  nice: ['Nice', 43.7102, 7.262, 'Europe/Paris'], toulouse: ['Toulouse', 43.6047, 1.4442, 'Europe/Paris'], strasbourg: ['Strasbourg', 48.5734, 7.7521, 'Europe/Paris'],
+  bordeaux: ['Bordeaux', 44.8378, -0.5792, 'Europe/Paris'], lille: ['Lille', 50.6292, 3.0573, 'Europe/Paris'], nantes: ['Nantes', 47.2184, -1.5536, 'Europe/Paris'],
+  montpellier: ['Montpellier', 43.6108, 3.8767, 'Europe/Paris'], sarcelles: ['Sarcelles', 48.9973, 2.3797, 'Europe/Paris'],
+  jerusalem: ['Jérusalem', 31.7683, 35.2137, 'Asia/Jerusalem'], telaviv: ['Tel Aviv', 32.0853, 34.7818, 'Asia/Jerusalem'],
+  london: ['London', 51.5072, -0.1276, 'Europe/London'], newyork: ['New York', 40.7128, -74.006, 'America/New_York'],
+};
+// Sun altitude crossing (sunrise equation). alt = -0.833 for sunset, -8.5 for nightfall (3 stars).
+function sunTime(date, lat, lng, alt) {
+  const rad = Math.PI / 180;
+  const J = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 12) / 86400000 + 2440587.5;
+  const n = Math.round(J - 2451545 + 0.0008);
+  const Js = n - lng / 360;
+  const M = ((357.5291 + 0.98560028 * Js) % 360 + 360) % 360;
+  const C = 1.9148 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 0.0003 * Math.sin(3 * M * rad);
+  const lam = (M + C + 180 + 102.9372) % 360;
+  const Jt = 2451545 + Js + 0.0053 * Math.sin(M * rad) - 0.0069 * Math.sin(2 * lam * rad);
+  const dec = Math.asin(Math.sin(lam * rad) * Math.sin(23.44 * rad));
+  const cw = (Math.sin(alt * rad) - Math.sin(lat * rad) * Math.sin(dec)) / (Math.cos(lat * rad) * Math.cos(dec));
+  if (cw < -1 || cw > 1) return null;
+  const w = Math.acos(cw) / rad;
+  return new Date((Jt + w / 360 - 2440587.5) * 86400000);
+}
+function shabbatTimes(now = new Date()) {
+  const c = S.city === 'gps' && S.gps ? [T().myPos, S.gps[0], S.gps[1], undefined] : CITIES[S.city] || CITIES.paris;
+  const dow = now.getDay();
+  const fri = new Date(now); fri.setDate(now.getDate() + ((5 - dow + 7) % 7) - (dow === 6 ? 7 : 0));
+  const sat = new Date(fri); sat.setDate(fri.getDate() + 1);
+  const ss = sunTime(fri, c[1], c[2], -0.833), tz = sunTime(sat, c[1], c[2], -8.5);
+  if (!ss || !tz) return null;
+  const candles = new Date(ss.getTime() - 18 * 60000);
+  const f = d => d.toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit', timeZone: c[3] });
+  return { city: c[0], candles: f(candles), havdala: f(tz), friday: fmtDate(fri, { weekday: 'long', day: 'numeric', month: 'long' }), candlesAt: candles, endAt: tz };
+}
+
+// ---------- Ingredient quantities ----------
+const FRAC = { '½': .5, '¼': .25, '¾': .75, '⅓': 1 / 3, '⅔': 2 / 3, '⅛': .125 };
+const QTY_RE = /^(\s*)(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:[.,]\d+)?(?:\s*[½¼¾⅓⅔⅛])?|[½¼¾⅓⅔⅛])(\s*(?:-|–|à|to)\s*(\d+(?:[.,]\d+)?))?/;
+function parseNum(s) {
+  s = s.trim(); let m;
+  if ((m = s.match(/^(\d+)\s+(\d+)\/(\d+)$/))) return +m[1] + m[2] / m[3];
+  if ((m = s.match(/^(\d+)\/(\d+)$/))) return m[1] / m[2];
+  if ((m = s.match(/^(\d+(?:[.,]\d+)?)?\s*([½¼¾⅓⅔⅛])?$/)) && (m[1] || m[2])) return (m[1] ? parseFloat(m[1].replace(',', '.')) : 0) + (m[2] ? FRAC[m[2]] : 0);
+  return NaN;
+}
+function splitQty(line, factor) {
+  const m = line.match(QTY_RE);
+  if (!m) return { q: '', rest: line };
+  const a = parseNum(m[2]); if (isNaN(a)) return { q: '', rest: line };
+  let q = factor === 1 ? m[2].trim() : fmtNum(a * factor);
+  if (m[3]) { const b = parseNum(m[4]); q += '–' + (factor === 1 ? m[4] : fmtNum(b * factor)); }
+  return { q, rest: line.slice(m[0].length) };
+}
+const lines = s => String(s || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+const isHeading = l => /:$/.test(l) || /^#+\s/.test(l);
+const cleanHeading = l => l.replace(/^#+\s*/, '').replace(/\s*:$/, '');
+const cleanStep = l => l.replace(/^(\d+[.)-]\s*|[-•*]\s+|(étape|step)\s*\d+\s*[:.-]?\s*)/i, '');
+
+// Turns "20 min", "1 h 30", "2 heures" into tappable timers.
+const TIME_RE = /(\d+(?:[.,]\d+)?)(?:\s*(?:-|–|à|to)\s*(\d+(?:[.,]\d+)?))?\s*(heures?|hours?|hrs?|h|minutes?|mins?|min|mn)\b(?:\s*(\d{1,2})(?!\s*(?:°|min|g\b)))?/gi;
+function withTimers(text) {
+  const out = []; let last = 0;
+  text.replace(TIME_RE, (m, a, b, unit, extra, idx) => {
+    const n = parseFloat((b || a).replace(',', '.'));
+    let mins = /^h/i.test(unit) ? n * 60 : n;
+    if (/^h/i.test(unit) && extra) mins += +extra;
+    if (mins > 0 && mins <= 24 * 60) {
+      out.push(esc(text.slice(last, idx)));
+      out.push(`<button class="timer-chip" data-act="timer" data-min="${mins}" data-label="${esc(text.slice(0, 60))}">${ico('clock')}${esc(m)}</button>`);
+      last = idx + m.length;
+    }
+    return m;
+  });
+  out.push(esc(text.slice(last)));
+  return out.join('');
+}
+
+// ---------- Images ----------
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+async function compress(fileOrBlob, max, q = 0.82) {
+  const url = URL.createObjectURL(fileOrBlob);
+  try {
+    const img = await loadImg(url);
+    const s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', q);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function thumbFrom(dataUrl) {
+  try { const b = await (await fetch(dataUrl)).blob(); return await compress(b, 240, 0.75); } catch { return dataUrl; }
+}
+const thumbHTML = r => r.thumb || r.photo
+  ? `<img class="thumb" src="${esc(r.thumb || r.photo)}" alt="" loading="lazy" decoding="async">`
+  : `<div class="thumb" style="background:${artColor(r.title)}">${esc(initial(r.title))}</div>`;
+
+// ---------- UI primitives ----------
+let toastTimer;
+function toast(msg, action) {
+  $('.toast')?.remove(); clearTimeout(toastTimer);
+  const el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status');
+  el.innerHTML = esc(msg) + (action ? ` &nbsp;<button class="btn small" style="min-height:32px">${esc(action.label)}</button>` : '');
+  if (action) el.querySelector('button').onclick = () => { action.fn(); el.remove(); };
+  document.body.append(el);
+  toastTimer = setTimeout(() => el.remove(), action ? 6000 : 2600);
+}
+function sheet(html, onReady) {
+  const scrim = document.createElement('div'); scrim.className = 'scrim';
+  scrim.innerHTML = `<div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  const close = () => { scrim.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  scrim.addEventListener('click', e => { if (e.target === scrim) close(); });
+  document.addEventListener('keydown', onKey);
+  document.body.append(scrim);
+  onReady?.(scrim.firstChild, close);
+  return close;
+}
+function confirmBox(msg, yes, danger = true) {
+  return new Promise(res => {
+    sheet(`<h2>${esc(msg)}</h2><div class="row2"><button class="btn" data-n>${esc(T().cancel)}</button><button class="btn ${danger ? 'danger' : 'primary'}" data-y>${esc(yes)}</button></div>`, (el, c) => {
+      el.querySelector('[data-n]').onclick = () => { c(); res(false); };
+      el.querySelector('[data-y]').onclick = () => { c(); res(true); };
+    });
+  });
+}
+
+// ---------- Navigation ----------
+function navHTML(active) {
+  const t = T().nav;
+  const items = [['', 'book', t.list, 'list'], ['fav', 'heart', t.fav, 'fav'], ['shop', 'cart', t.shop, 'shop'], ['more', 'more', t.more, 'more']];
+  $('#navin').innerHTML = items.map(([h, i, label, k]) => `<a href="#/${h}" class="${active === k ? 'on' : ''}" ${active === k ? 'aria-current="page"' : ''}>${ico(i)}<span>${esc(label)}</span>${k === 'shop' ? '<i class="count" id="shopCount" hidden></i>' : ''}</a>`).join('');
+  updateNavCount();
+}
+function updateNavCount() {
+  const el = $('#shopCount'); if (!el) return;
+  const n = shop.filter(x => !x.done).length; el.hidden = !n; el.textContent = n;
+}
+
+let current = '';
+function route() {
+  const h = location.hash.replace(/^#\/?/, '');
+  const [a = '', b = ''] = h.split('/').map(decodeURIComponent);
+  if (current === 'list' || current === 'fav') L.scroll = window.scrollY;
+  closeCook();
+  $$('.scrim').forEach(s => s.remove());
+  $('#view').dataset.id = '';
+  $('#nav').hidden = a === 'edit';
+  if (a === 'r' && byId(b)) return renderRecipe(byId(b));
+  if (a === 'cook' && byId(b)) { renderRecipe(byId(b)); return openCook(byId(b)); }
+  if (a === 'edit') return renderEdit(b === 'new' ? null : byId(b));
+  if (a === 'shop') return renderShop();
+  if (a === 'more') return renderMore();
+  return renderList(a === 'fav');
+}
+window.addEventListener('hashchange', route);
+const go = h => { location.hash = h; };
+
+// ---------- List view ----------
+function greeting() {
+  const now = new Date(), h = now.getHours(), dow = now.getDay();
+  const st = shabbatTimes(now);
+  if ((dow === 5 && h >= 12) || (dow === 6 && (!st || now < st.endAt))) return T().shabbatShalom;
+  return T().hello[h < 5 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3];
+}
+function bannerHTML() {
+  const t = T(), now = new Date(), dow = now.getDay();
+  const hol = nextHoliday(now);
+  let html = '';
+  if (hol && hol.offset <= 21) {
+    const name = t.hol[hol.key];
+    const eve = new Date(hol.start); eve.setDate(eve.getDate() - 1);
+    const n = recipes.filter(r => (r.holidays || []).includes(hol.key)).length;
+    const head = hol.offset <= 0 ? t.holidayNow(name) : t.holidayIn(name, hol.offset - 1);
+    html += `<section class="banner"><div class="eyebrow">${esc(hebDateLabel(hol.start))}</div><h3>${esc(head)}</h3>
+      ${hol.offset > 1 ? `<div class="muted">${esc(t.eveOf(fmtDate(eve, { weekday: 'long', day: 'numeric', month: 'long' })))}${hol.key === 'yomkippur' ? ' · ' + esc(t.yomKippurNote) : ''}</div>` : ''}
+      <div class="row">${n ? `<button class="btn small honey" data-act="holfilter" data-h="${hol.key}">${esc(t.seeRecipes(name))} (${n})</button>` : `<span class="muted">${esc(t.noneYet)}</span>`}</div></section>`;
+  }
+  if (dow >= 3 && dow <= 6) {
+    const st = shabbatTimes(now);
+    if (st && !(dow === 6 && now > st.endAt)) {
+      const n = recipes.filter(r => (r.holidays || []).includes('shabbat')).length;
+      html += `<section class="banner"><div class="eyebrow">${esc(st.city)} · ${esc(st.friday)}</div>
+        <div class="times"><span>${esc(t.candles)} <b>${esc(st.candles)}</b></span><span>${esc(t.havdala)} <b>${esc(st.havdala)}</b></span></div>
+        <div class="row">${n ? `<button class="btn small honey" data-act="holfilter" data-h="shabbat">${esc(t.shabbatCard)} (${n})</button>` : ''}<span class="muted" style="font-size:.8rem">${esc(t.approx)}</span></div></section>`;
+    }
+  }
+  const lb = ls.get('lastBackup', 0);
+  if (recipes.filter(r => !r.sample).length >= 10 && Date.now() - lb > 30 * 864e5 && ls.get('nudgeSnooze', 0) < Date.now()) {
+    html += `<section class="banner"><div class="row" style="justify-content:space-between"><span>${esc(t.backupNudge)}</span>
+      <span class="row"><button class="btn small" data-act="snooze">${esc(t.discard)}</button><button class="btn small primary" data-act="backup">${esc(t.backupNow)}</button></span></div></section>`;
+  }
+  return html;
+}
+function chipsHTML() {
+  const t = T();
+  const chip = (act, on, label, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-act="${act}" ${extra} aria-pressed="${on}">${label}</button>`;
+  const active = L.cat || L.hol || L.quick || L.pesach;
+  return chip('all', !L.kash && !L.fav && !active, esc(t.all)) +
+    (current === 'fav' ? '' : chip('fav', L.fav, ico('heart', 'star-fav') + esc(t.favorites))) +
+    KASHRUT.map(k => chip('kash', L.kash === k, `<span class="dot k-${k}"></span>${esc(t.kash[k])}`, `data-k="${k}"`)).join('') +
+    chip('filters', !!active, ico('filter') + esc(t.filters) + (active ? ` · ${[L.cat && t.cat[L.cat], L.hol && t.hol[L.hol], L.quick && '≤30′', L.pesach && t.hol.pesach].filter(Boolean).map(esc).join(', ')}` : ''));
+}
+function renderList(favOnly) {
+  const was = current;
+  current = favOnly ? 'fav' : 'list';
+  if (favOnly) L.fav = true; else if (was === 'fav') L.fav = false;
+  if (was !== 'recipe') L.scroll = 0;
+  navHTML(current);
+  const t = T(), now = new Date();
+  const hasSpeech = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  $('#view').innerHTML = `
+    <div class="wrap">
+      <header class="top">
+        <div class="dates"><span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span><span class="heb">${esc(hebDateLabel(now))}</span></div>
+        <h1 class="greet">${favOnly ? esc(t.favorites) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
+      </header>
+      ${favOnly ? '' : bannerHTML()}
+    </div>
+    <div class="searchbar"><div class="wrap">
+      <div class="search" role="search">${ico('search', 'lead')}
+        <input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="${esc(t.searchPh)}" value="${esc(L.q)}" aria-label="${esc(t.searchPh)}">
+        <button class="icon-btn" data-act="clearq" aria-label="${esc(t.clear)}" ${L.q ? '' : 'hidden'}>${ico('x')}</button>
+        ${hasSpeech ? `<button class="icon-btn" data-act="voice" aria-label="${esc(t.voice)}">${ico('mic')}</button>` : ''}
+      </div>
+      <div class="chips" id="chips">${chipsHTML()}</div>
+    </div></div>
+    <div class="wrap">
+      <div class="listmeta"><span class="muted" id="count"></span>
+        <span style="display:flex;gap:8px;align-items:center;min-width:0;flex-wrap:wrap;justify-content:flex-end">
+          <button class="btn small" data-act="surprise">${ico('dice')}${esc(t.surprise)}</button>
+          <select id="sort" aria-label="Tri">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
+        </span></div>
+      <div id="results"></div>
+    </div>
+    <button class="fab" data-act="new">${ico('plus')}${esc(t.add)}</button>
+    <div class="az" id="az" hidden></div>`;
+  renderResults();
+  requestAnimationFrame(() => window.scrollTo(0, L.scroll || 0));
+}
+function cardHTML(r) {
+  const t = T();
+  const meta = [r.category && t.cat[r.category], totalTime(r) && fmtDur(totalTime(r)), r.servings && t.servings(+r.servings)].filter(Boolean);
+  return `<a class="card" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}
+    <div class="min"><h3>${esc(r.title)}</h3><div class="meta">${meta.map(m => `<span>${esc(m)}</span>`).join('')}</div>
+    <div class="meta">${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${r.pesach ? `<span>${esc(t.hol.pesach)}</span>` : ''}${r.rating ? `<span style="color:var(--honey)">${'★'.repeat(r.rating)}</span>` : ''}</div></div>
+    <div class="side">${r.favorite ? ico('heart', 'star-fav') : ''}</div></a>`;
+}
+function renderResults() {
+  const t = T(), list = filtered(), box = $('#results'); if (!box) return;
+  const pool = current === 'fav' ? recipes.filter(r => r.favorite).length : recipes.length;
+  $('#count').textContent = list.length === pool ? t.nRecipes(pool) : t.nOf(list.length, pool);
+  $('[data-act="clearq"]').hidden = !L.q;
+  const az = $('#az'); az.hidden = true;
+  if (!recipes.length) {
+    box.innerHTML = `<div class="empty">${ico('pot', 'star-fav').replace('class="star-fav"', 'style="width:72px;height:72px;color:var(--accent)"')}
+      <h2>${esc(t.emptyTitle)}</h2><p>${esc(t.emptyText)}</p>
+      <button class="btn primary" data-act="new">${ico('plus')}${esc(t.firstRecipe)}</button>
+      <button class="btn" data-act="samples">${esc(t.loadSamples)}</button></div>`;
+    return;
+  }
+  if (!list.length) {
+    box.innerHTML = `<div class="empty"><h2>${esc(t.noResults)}</h2><p>${esc(t.noResultsHint)}</p><button class="btn" data-act="reset">${esc(t.resetFilters)}</button></div>`;
+    return;
+  }
+  if (L.sort === 'az' && !L.q) {
+    const groups = new Map();
+    for (const r of list) { const k = letterOf(r); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
+    box.innerHTML = [...groups].map(([k, rs]) => `<div class="letter" id="L-${k}">${k}</div><div class="cards">${rs.map(cardHTML).join('')}</div>`).join('');
+    if (list.length > 12) {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('');
+      az.innerHTML = letters.map(l => `<span data-l="${l}" class="${groups.has(l) ? 'has' : ''}">${l}</span>`).join('');
+      az.hidden = false;
+    }
+  } else {
+    box.innerHTML = `<div class="cards">${list.map(cardHTML).join('')}</div>`;
+  }
+}
+// A–Z rail: drag a finger down the letters to jump.
+function azJump(e) {
+  const pt = e.touches ? e.touches[0] : e;
+  const el = document.elementFromPoint(pt.clientX, pt.clientY);
+  const l = el?.dataset?.l; if (!l) return;
+  const avail = $$('#az span.has').map(s => s.dataset.l);
+  const target = avail.find(x => x >= l) || avail[avail.length - 1];
+  const sec = target && document.getElementById('L-' + target);
+  if (sec) { sec.scrollIntoView({ block: 'start' }); let p = $('.az-pop'); if (!p) { p = document.createElement('div'); p.className = 'az-pop'; document.body.append(p); } p.textContent = target; }
+}
+document.addEventListener('touchstart', e => { if (e.target.closest('#az')) { e.preventDefault(); azJump(e); } }, { passive: false });
+document.addEventListener('touchmove', e => { if (e.target.closest('#az')) { e.preventDefault(); azJump(e); } }, { passive: false });
+document.addEventListener('touchend', () => $('.az-pop')?.remove());
+document.addEventListener('click', e => { if (e.target.closest('#az')) { azJump(e); setTimeout(() => $('.az-pop')?.remove(), 500); } });
+
+function openFilters() {
+  const t = T();
+  const opt = (v, label, sel) => `<option value="${v}" ${sel === v ? 'selected' : ''}>${esc(label)}</option>`;
+  sheet(`<h2>${esc(t.filters)}</h2>
+    <div class="form" style="padding:0">
+      <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat">${opt('', t.all, L.cat)}${CATS.map(c => opt(c, t.cat[c], L.cat)).join('')}</select></div>
+      <div class="field"><label for="fHol">${esc(t.holidays)}</label><select id="fHol">${opt('', t.all, L.hol)}${HOLIDAYS.map(h => opt(h, t.hol[h], L.hol)).join('')}</select></div>
+      <label class="toggle">${esc(t.quick)}<input type="checkbox" id="fQuick" ${L.quick ? 'checked' : ''}></label>
+      <label class="toggle">${esc(t.pesachOk)}<input type="checkbox" id="fPes" ${L.pesach ? 'checked' : ''}></label>
+      <div class="row2"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">OK</button></div>
+    </div>`, (el, close) => {
+    el.querySelector('[data-x="ok"]').onclick = () => { L.cat = $('#fCat').value; L.hol = $('#fHol').value; L.quick = $('#fQuick').checked; L.pesach = $('#fPes').checked; close(); refreshList(); };
+    el.querySelector('[data-x="reset"]').onclick = () => { Object.assign(L, { cat: '', hol: '', quick: false, pesach: false, kash: '' }); close(); refreshList(); };
+  });
+}
+function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
+
+// Voice search (Chrome on Android)
+function voiceSearch() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return;
+  const rec = new SR(); rec.lang = S.lang === 'fr' ? 'fr-FR' : 'en-US'; rec.interimResults = false;
+  const btn = $('[data-act="voice"]'); btn.style.color = 'var(--danger)';
+  rec.onresult = e => { L.q = e.results[0][0].transcript; $('#q').value = L.q; renderResults(); };
+  rec.onend = () => { btn.style.color = ''; };
+  try { rec.start(); } catch { btn.style.color = ''; }
+}
+
+// ---------- Recipe view ----------
+let scale = {};
+function renderRecipe(r) {
+  current = 'recipe'; navHTML('list');
+  const t = T();
+  const base = +r.servings || 0;
+  const cur = scale[r.id] ?? (base || 1);
+  const factor = base ? cur / base : cur;
+  let ing = '';
+  for (const l of lines(r.ingredients)) {
+    if (isHeading(l)) { ing += `<li class="sub">${esc(cleanHeading(l))}</li>`; continue; }
+    const { q, rest } = splitQty(l, factor);
+    ing += `<li><label><input type="checkbox"><span>${q ? `<b>${esc(q)}</b>` : ''}${esc(rest)}</span></label></li>`;
+  }
+  let steps = '';
+  for (const l of lines(r.steps)) {
+    if (isHeading(l) && l.length < 60) { steps += `<li class="sub">${esc(cleanHeading(l))}</li>`; continue; }
+    steps += `<li class="step"><div>${withTimers(cleanStep(l))}</div></li>`;
+  }
+  const photo = r.photo
+    ? `<img class="ph" src="${esc(r.photo)}" alt="${esc(r.title)}">`
+    : `<div class="ph art" style="background:${artColor(r.title)}">${esc(initial(r.title))}</div>`;
+  const badges = [
+    r.kashrut && `<span class="badge kbadge k-${r.kashrut}">${esc(t.kashLong[r.kashrut])}</span>`,
+    r.pesach && `<span class="badge kosher-p">${esc(t.pesachOk)}</span>`,
+    r.category && `<span class="badge">${esc(t.cat[r.category])}</span>`,
+    ...(r.holidays || []).map(h => `<span class="badge">${esc(t.hol[h])}</span>`),
+    ...(r.tags || []).map(g => `<span class="badge">#${esc(g)}</span>`),
+  ].filter(Boolean).join('');
+  $('#view').innerHTML = `
+    <div class="hero">${photo}
+      <div class="bar"><button class="icon-btn on-photo" data-act="back" aria-label="Retour">${ico('back')}</button>
+      <span class="r"><button class="icon-btn on-photo" data-act="fav" aria-label="${esc(t.favorites)}" aria-pressed="${!!r.favorite}">${ico(r.favorite ? 'heart' : 'heartO')}</button>
+      <button class="icon-btn on-photo" data-act="menu" aria-label="Menu">${ico('dots')}</button></span></div>
+    </div>
+    <article class="wrap">
+      <div class="rtitle">
+        <h1>${esc(r.title)}</h1>
+        ${r.source ? `<div class="muted">${esc(t.source)} <b>${esc(r.source)}</b></div>` : ''}
+        <div class="badges">${badges}</div>
+        <div class="stars" role="group" aria-label="Note">${[1, 2, 3, 4, 5].map(i => `<button data-act="rate" data-v="${i}" class="${(r.rating || 0) >= i ? 'on' : ''}" aria-label="${i}/5">${ico('star')}</button>`).join('')}</div>
+      </div>
+      ${(r.prep || r.cook) ? `<div class="facts"><div class="fact"><b>${fmtDur(r.prep)}</b><span>${esc(t.prep)}</span></div><div class="fact"><b>${fmtDur(r.cook)}</b><span>${esc(t.cook)}</span></div><div class="fact"><b>${fmtDur(totalTime(r))}</b><span>${esc(t.total)}</span></div></div>` : ''}
+      <div class="actions">
+        ${lines(r.steps).length ? `<button class="btn primary" data-act="cook">${ico('fire')}${esc(t.cookMode)}</button>` : ''}
+        ${r.link ? `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">${ico('link')}${esc(t.openLink)}</a>` : ''}
+        <button class="btn" data-act="share">${ico('share')}${esc(t.share)}</button>
+      </div>
+      ${ing ? `<section class="section"><div class="section-h"><h2>${esc(t.ingredients)}</h2>
+        <div class="scaler" aria-label="Portions"><button data-act="scale" data-d="-1" aria-label="moins">−</button><span>${esc(base ? t.servings(cur) : t.times(cur))}</span><button data-act="scale" data-d="1" aria-label="plus">+</button></div></div>
+        <ul class="ing">${ing}</ul>
+        <button class="btn block" style="margin-top:10px" data-act="toshop">${ico('cart')}${esc(t.addToShop)}</button></section>` : ''}
+      ${steps ? `<section class="section"><div class="section-h"><h2>${esc(t.steps)}</h2></div><ol class="steps">${steps}</ol></section>` : ''}
+      ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.notes)}</h2></div><div class="notes">${esc(r.notes)}</div></section>` : ''}
+      <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small" data-act="cooked">${ico('check')}${esc(t.cookedToday)}</button></div>
+      <p class="muted" style="font-size:.85rem;text-align:center">${esc(t.addedOn(fmtDate(r.createdAt)))}</p>
+    </article>`;
+  $('#view').dataset.id = r.id;
+  window.scrollTo(0, 0);
+}
+function recipeText(r) {
+  const t = T();
+  return [r.title, r.source ? `${t.source} ${r.source}` : '', '', `— ${t.ingredients} —`, ...lines(r.ingredients).map(l => isHeading(l) ? `\n${cleanHeading(l)} :` : `• ${l}`), '', `— ${t.steps} —`,
+    ...lines(r.steps).map((l, i) => `${i + 1}. ${cleanStep(l)}`), r.notes ? `\n${t.notes} : ${r.notes}` : '', r.link ? `\n${r.link}` : '', `\n— ${T().appName}`].filter(x => x !== undefined).join('\n').replace(/\n{3,}/g, '\n\n');
+}
+async function shareText(title, text) {
+  if (navigator.share) { try { await navigator.share({ title, text }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(text); toast(T().copied); } catch { toast(T().copied); }
+}
+function recipeMenu(r) {
+  const t = T();
+  sheet(`<h2>${esc(r.title)}</h2><div class="menu">
+    <button data-m="edit">${ico('edit')}${esc(t.edit)}</button>
+    <button data-m="share">${ico('share')}${esc(t.share)}</button>
+    <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
+    <button data-m="print">${ico('print')}${esc(t.print)}</button>
+    <button data-m="dup">${ico('book')}${esc(t.duplicate)}</button>
+    <button data-m="del" class="danger">${ico('trash')}${esc(t.del)}</button></div>`, (el, close) => {
+    el.addEventListener('click', async e => {
+      const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return; close();
+      if (m === 'edit') go('#/edit/' + r.id);
+      if (m === 'share') shareText(r.title, recipeText(r));
+      if (m === 'copy') { try { await navigator.clipboard.writeText(recipeText(r)); } catch {} toast(t.copied); }
+      if (m === 'print') setTimeout(() => window.print(), 300);
+      if (m === 'dup') { const c = { ...r, id: uid(), title: r.title + ' (2)', createdAt: Date.now(), updatedAt: Date.now(), cookCount: 0, lastCooked: 0, sample: false }; await saveRecipe(c); go('#/r/' + c.id); }
+      if (m === 'del') {
+        if (!(await confirmBox(t.deleteQ(r.title), t.deleteYes))) return;
+        await DB.del(r.id); recipes = recipes.filter(x => x.id !== r.id); go('#/');
+        toast(t.deleted, { label: t.undo, fn: async () => { await saveRecipe(r); go('#/r/' + r.id); } });
+      }
+    });
+  });
+}
+
+// ---------- Cook mode ----------
+let cookState = null, wakeLock = null;
+async function keepAwake() { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {} }
+document.addEventListener('visibilitychange', () => { if (cookState && document.visibilityState === 'visible') keepAwake(); });
+function openCook(r) {
+  const st = lines(r.steps).filter(l => !(isHeading(l) && l.length < 60)).map(cleanStep);
+  if (!st.length) return;
+  cookState = { r, st, i: 0 };
+  const el = document.createElement('div'); el.className = 'cook'; el.id = 'cook';
+  document.body.append(el); document.body.style.overflow = 'hidden';
+  keepAwake(); drawCook();
+  let x0 = null;
+  el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 70) cookMove(dx < 0 ? 1 : -1); x0 = null; });
+}
+function drawCook() {
+  const { r, st, i } = cookState, t = T(), el = $('#cook');
+  el.innerHTML = `<div class="ch"><button class="icon-btn" data-act="cookclose" aria-label="${esc(t.close)}">${ico('x')}</button><h2>${esc(r.title)}</h2>
+      <button class="btn small" data-act="cooking">${esc(t.showIng)}</button></div>
+    <div class="body"><div class="progress"><i style="width:${((i + 1) / st.length) * 100}%"></i></div>
+      <div class="num">${esc(t.step(i + 1, st.length))}</div><div class="text">${withTimers(st[i])}</div></div>
+    <div class="foot"><button class="btn" data-act="cookprev" ${i === 0 ? 'disabled' : ''}>${esc(t.prev)}</button>
+      <button class="btn primary" data-act="cooknext">${esc(i === st.length - 1 ? t.finish : t.next)}</button></div>`;
+}
+function cookMove(d) {
+  const c = cookState; if (!c) return;
+  if (d > 0 && c.i === c.st.length - 1) { history.back(); return; }
+  c.i = Math.max(0, Math.min(c.st.length - 1, c.i + d)); drawCook();
+}
+function closeCook() {
+  if (!cookState) return;
+  $('#cook')?.remove(); document.body.style.overflow = ''; cookState = null;
+  try { wakeLock?.release(); } catch {} wakeLock = null;
+}
+
+// ---------- Timers ----------
+let timers = ls.get('timers', []), audioCtx = null, ringLoop = null;
+function addTimer(min, label) {
+  timers.push({ id: uid(), end: Date.now() + min * 60000, label, min });
+  ls.set('timers', timers); drawTimers();
+  try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch {}
+  try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch {}
+}
+function beep() {
+  try {
+    const ctx = audioCtx || (audioCtx = new (window.AudioContext || window.webkitAudioContext)());
+    [0, .25, .5].forEach(dt => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(ctx.destination); g.gain.setValueAtTime(.25, ctx.currentTime + dt); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + dt + .2); o.start(ctx.currentTime + dt); o.stop(ctx.currentTime + dt + .22); });
+  } catch {}
+  try { navigator.vibrate?.([300, 150, 300, 150, 300]); } catch {}
+}
+function drawTimers() {
+  const box = $('#timers'), now = Date.now(), t = T();
+  let ringing = false;
+  box.innerHTML = timers.map(x => {
+    const left = Math.max(0, Math.round((x.end - now) / 1000)); const done = left === 0; ringing ||= done;
+    const hh = Math.floor(left / 3600), mm = Math.floor(left / 60) % 60, ss = String(left % 60).padStart(2, '0');
+    const clock = hh ? `${hh}:${String(mm).padStart(2, '0')}:${ss}` : `${mm}:${ss}`;
+    return `<div class="tmr ${done ? 'ring' : ''}"><b>${done ? '⏰' : clock}</b><span>${esc(done ? t.timerDone : x.label)}</span><button data-act="tstop" data-id="${x.id}">${esc(t.stop)}</button></div>`;
+  }).join('');
+  document.body.style.paddingTop = timers.length ? box.offsetHeight + 8 + 'px' : '';
+  document.documentElement.style.setProperty('--tmr-h', timers.length ? box.offsetHeight + 8 + 'px' : '0px');
+  if (ringing && !ringLoop) {
+    beep(); ringLoop = setInterval(beep, 2500);
+    try { if (document.visibilityState !== 'visible' && Notification.permission === 'granted') new Notification(t.timerDone, { body: timers.find(x => x.end <= now)?.label || '', icon: 'icons/icon-192.png' }); } catch {}
+  }
+  if (!ringing && ringLoop) { clearInterval(ringLoop); ringLoop = null; }
+}
+setInterval(() => { if (timers.length) drawTimers(); }, 1000);
+function askTimer(min, label) {
+  const t = T();
+  sheet(`<h2>${esc(t.timerFor)} · ${fmtDur(min)}</h2><p class="muted" style="margin:0">${esc(label)}</p>
+    <div class="scaler" style="justify-self:center"><button data-d="-1">−</button><span id="tm">${fmtDur(min)}</span><button data-d="1">+</button></div>
+    <div class="row2"><button class="btn" data-x="no">${esc(t.cancel)}</button><button class="btn primary" data-x="go">${ico('clock')}${esc(t.startTimer)}</button></div>`, (el, close) => {
+    el.addEventListener('click', e => {
+      const d = e.target.closest('[data-d]')?.dataset.d;
+      if (d) { min = Math.max(1, min + (+d) * (min >= 20 ? 5 : 1)); $('#tm', el).textContent = fmtDur(min); }
+      const x = e.target.closest('[data-x]')?.dataset.x;
+      if (x === 'no') close();
+      if (x === 'go') { addTimer(min, label); close(); }
+    });
+  });
+}
+
+// ---------- Edit view ----------
+let formPhoto = null;
+function renderEdit(r) {
+  current = 'edit';
+  const t = T(), isNew = !r;
+  r = r || { title: '', holidays: [], tags: [] };
+  formPhoto = r.photo || null;
+  const draft = ls.get('draft');
+  const draftKey = isNew ? 'new' : r.id;
+  const showDraft = draft && draft.key === draftKey && draft.ts > (r.updatedAt || 0);
+  const kOpt = ['', ...KASHRUT].map(k => `<label class="${k ? 'k-' + k : ''}"><input type="radio" name="kashrut" value="${k}" ${(r.kashrut || '') === k ? 'checked' : ''}>${esc(k ? t.kash[k] : t.kash.none)}</label>`).join('');
+  $('#view').innerHTML = `
+    <div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.cancel)}">${ico('x')}</button><h1>${esc(isNew ? t.newRecipe : t.editRecipe)}</h1></div>
+    <form class="form wrap" id="form" novalidate>
+      ${showDraft ? `<div class="draft-note"><span>${esc(t.draftFound)}</span><span style="display:flex;gap:8px"><button type="button" class="btn small" data-act="draftno">${esc(t.discard)}</button><button type="button" class="btn small primary" data-act="draftyes">${esc(t.restore)}</button></span></div>` : ''}
+      <div class="field"><span class="lbl">${esc(t.photo)}</span><div class="photo-drop" id="photoBox"></div>
+        <input class="input" id="fPhotoUrl" type="url" inputmode="url" placeholder="${esc(t.photoUrl)}" value="${formPhoto && /^https?:/.test(formPhoto) ? esc(formPhoto) : ''}"></div>
+      <div class="importbox">
+        <h3>${esc(t.importTitle)}</h3>
+        <div class="field"><label for="fLink">${esc(t.link)}</label><input class="input" id="fLink" type="url" inputmode="url" placeholder="https://…" value="${esc(r.link || '')}">
+          <span class="hint">${esc(t.importLinkHint)}</span></div>
+        <button type="button" class="btn" data-act="import">${ico('download')}${esc(t.importBtn)}</button>
+        <div class="field"><label for="fPaste" class="hint">${esc(t.pasteHint)}</label><textarea id="fPaste" style="min-height:5em"></textarea></div>
+        <button type="button" class="btn" data-act="paste">${esc(t.pasteBtn)}</button>
+      </div>
+      <div class="field"><label for="fTitle">${esc(t.title)} *</label><input class="input" id="fTitle" required placeholder="${esc(t.titlePh)}" value="${esc(r.title)}" style="font-size:1.15rem;font-weight:700"></div>
+      <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat"><option value="">—</option>${CATS.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${esc(t.cat[c])}</option>`).join('')}</select></div>
+      <div class="field"><span class="lbl">${esc(t.kashrut)}</span><div class="seg">${kOpt}</div></div>
+      <label class="toggle">${esc(t.pesachOk)}<input type="checkbox" id="fPesach" ${r.pesach ? 'checked' : ''}></label>
+      <div class="field"><span class="lbl">${esc(t.holidays)}</span><div class="wrapchips" id="fHol">${HOLIDAYS.map(h => `<button type="button" class="chip ${(r.holidays || []).includes(h) ? 'on' : ''}" data-h="${h}" aria-pressed="${(r.holidays || []).includes(h)}">${esc(t.hol[h])}</button>`).join('')}</div></div>
+      <div class="row3">
+        <div class="field"><label for="fServ">${esc(t.servingsF)}</label><input class="input" id="fServ" type="number" inputmode="numeric" min="0" value="${esc(r.servings || '')}"></div>
+        <div class="field"><label for="fPrep">${esc(t.prepF)}</label><input class="input" id="fPrep" type="number" inputmode="numeric" min="0" value="${esc(r.prep || '')}"></div>
+        <div class="field"><label for="fCook">${esc(t.cookF)}</label><input class="input" id="fCook" type="number" inputmode="numeric" min="0" value="${esc(r.cook || '')}"></div>
+      </div>
+      <div class="field"><label for="fIng">${esc(t.ingF)}</label><span class="hint">${esc(t.ingHint)}</span><textarea id="fIng" rows="8">${esc(r.ingredients || '')}</textarea></div>
+      <div class="field"><label for="fSteps">${esc(t.stepsF)}</label><span class="hint">${esc(t.stepsHint)}</span><textarea id="fSteps" rows="10">${esc(r.steps || '')}</textarea></div>
+      <div class="field"><label for="fNotes">${esc(t.notesF)}</label><textarea id="fNotes" placeholder="${esc(t.notesPh)}" style="min-height:5em">${esc(r.notes || '')}</textarea></div>
+      <div class="field"><label for="fSource">${esc(t.sourceF)}</label><input class="input" id="fSource" placeholder="${esc(t.sourcePh)}" value="${esc(r.source || '')}"></div>
+      <div class="field"><label for="fTags">${esc(t.tags)}</label><input class="input" id="fTags" placeholder="${esc(t.tagsPh)}" value="${esc((r.tags || []).join(', '))}"></div>
+    </form>
+    <div class="savebar"><div class="in"><button class="btn" data-act="back">${esc(t.cancel)}</button><button class="btn primary" data-act="save">${ico('check')}${esc(t.save)}</button></div></div>`;
+  $('#view').dataset.id = isNew ? '' : r.id;
+  drawPhotoBox();
+  const form = $('#form');
+  form.addEventListener('input', () => ls.set('draft', { key: draftKey, ts: Date.now(), data: readForm() }));
+  form.addEventListener('submit', e => e.preventDefault());
+  $('#fPhotoUrl').addEventListener('change', e => { const v = e.target.value.trim(); if (/^https?:\/\//.test(v)) { formPhoto = v; drawPhotoBox(); } });
+  window.scrollTo(0, 0);
+  if (pendingShare) { const p = pendingShare; pendingShare = null; applyShare(p); }
+}
+function drawPhotoBox() {
+  const t = T(), box = $('#photoBox'); if (!box) return;
+  box.innerHTML = formPhoto
+    ? `<div style="display:grid;gap:10px;width:100%"><img src="${esc(formPhoto)}" alt=""><div class="acts"><button type="button" class="btn small" data-act="pickphoto">${ico('camera')}${esc(t.changePhoto)}</button><button type="button" class="btn small danger" data-act="rmphoto">${esc(t.removePhoto)}</button></div></div>`
+    : `<button type="button" class="btn primary" data-act="pickphoto">${ico('camera')}${esc(t.addPhoto)}</button>`;
+}
+function readForm() {
+  const v = id => $('#' + id)?.value?.trim() ?? '';
+  return {
+    title: v('fTitle'), link: v('fLink'), category: v('fCat'), kashrut: $('input[name="kashrut"]:checked')?.value || '',
+    pesach: !!$('#fPesach')?.checked, holidays: $$('#fHol .chip.on').map(b => b.dataset.h),
+    servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
+    ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', source: v('fSource'),
+    tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto,
+  };
+}
+function fillForm(d, onlyEmpty = false) {
+  const set = (id, val) => { const el = $('#' + id); if (!el || val == null || val === '') return; if (onlyEmpty && el.value.trim()) return; el.value = val; };
+  set('fTitle', d.title); set('fLink', d.link); set('fCat', d.category); set('fServ', d.servings); set('fPrep', d.prep); set('fCook', d.cook);
+  set('fIng', d.ingredients); set('fSteps', d.steps); set('fNotes', d.notes); set('fSource', d.source);
+  if (d.tags?.length) set('fTags', d.tags.join(', '));
+  if (d.kashrut !== undefined && !onlyEmpty) { const k = $(`input[name="kashrut"][value="${d.kashrut}"]`); if (k) k.checked = true; }
+  if (d.pesach !== undefined && !onlyEmpty) $('#fPesach').checked = d.pesach;
+  if (d.holidays && !onlyEmpty) $$('#fHol .chip').forEach(b => { const on = d.holidays.includes(b.dataset.h); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  if (d.photo && (!onlyEmpty || !formPhoto)) { formPhoto = d.photo; drawPhotoBox(); if (/^https?:/.test(d.photo)) $('#fPhotoUrl').value = d.photo; }
+}
+async function saveRecipe(r) {
+  indexRecipe(r);
+  await DB.put(r);
+  const i = recipes.findIndex(x => x.id === r.id);
+  if (i >= 0) recipes[i] = r; else recipes.push(r);
+  try { navigator.storage?.persist?.(); } catch {}
+}
+async function submitForm() {
+  const t = T(), d = readForm();
+  if (!d.title) { toast(t.needTitle); $('#fTitle').focus(); return; }
+  const id = $('#view').dataset.id;
+  const old = id ? byId(id) : null;
+  const r = Object.assign({}, old || { id: uid(), createdAt: Date.now(), cookCount: 0, rating: 0, favorite: false }, d, { updatedAt: Date.now() });
+  if (r.photo !== old?.photo) r.thumb = r.photo ? (r.photo.startsWith('data:') ? await thumbFrom(r.photo) : r.photo) : null;
+  if (old?.sample) r.sample = false;
+  await saveRecipe(r);
+  ls.del('draft');
+  toast(t.saved);
+  location.replace('#/r/' + r.id);
+}
+
+// Pasted text → fields
+function parseRecipeText(text) {
+  const ls_ = String(text).split(/\r?\n/).map(l => l.trim());
+  const H_ING = /^(ingr[eé]dients?|ingredients?|il vous faut|liste des ingr[eé]dients)\s*:?$/i;
+  const H_STEP = /^(pr[eé]paration|instructions?|[eé]tapes?|m[eé]thode|method|directions|recette|steps|preparation)\s*:?$/i;
+  const H_NOTE = /^(notes?|astuces?|conseils?|tips?)\s*:?$/i;
+  let mode = 'head', title = '', ing = [], steps = [], notes = [], head = [];
+  for (const l of ls_) {
+    if (!l) continue;
+    if (H_ING.test(l)) { mode = 'ing'; continue; }
+    if (H_STEP.test(l)) { mode = 'steps'; continue; }
+    if (H_NOTE.test(l)) { mode = 'notes'; continue; }
+    ({ head, ing, steps, notes })[mode === 'head' ? 'head' : mode].push(l);
+  }
+  if (!ing.length && !steps.length) {
+    // No headings: short lines that look like quantities are ingredients, long lines are steps.
+    const rest = head.slice(1); title = head[0] || '';
+    for (const l of rest) (l.length < 70 && !/[.!]$/.test(l) ? ing : steps).push(l);
+  } else { title = head[0] || ''; notes = notes.concat(head.slice(1).filter(l => l.length > 40)); }
+  const d = { title: title.replace(/^recette\s*:?\s*/i, ''), ingredients: ing.map(l => l.replace(/^[-•*▢☐]\s*/, '')).join('\n'), steps: steps.map(cleanStep).join('\n'), notes: notes.join('\n') };
+  const all = norm(text);
+  const pers = all.match(/(?:pour|for|serves?|portions?\s*:?)\s*(\d+)\s*(?:personnes?|pers|people|servings|portions)?/);
+  if (pers) d.servings = +pers[1];
+  const prep = all.match(/(?:preparation|prep(?:\s*time)?)\s*:?\s*(\d+)\s*(min|h)/); if (prep) d.prep = prep[2] === 'h' ? prep[1] * 60 : +prep[1];
+  const ck = all.match(/(?:cuisson|cook(?:ing)?(?:\s*time)?)\s*:?\s*(\d+)\s*(min|h)/); if (ck) d.cook = ck[2] === 'h' ? ck[1] * 60 : +ck[1];
+  const url = String(text).match(/https?:\/\/\S+/); if (url) d.link = url[0];
+  return d;
+}
+
+// Link → fields (reads schema.org Recipe data that most recipe sites publish)
+const PROXIES = [u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u), u => 'https://corsproxy.io/?url=' + encodeURIComponent(u), u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)];
+async function fetchVia(url, asBlob) {
+  try { const r = await fetch(url, { signal: AbortSignal.timeout(8000) }); if (r.ok) return asBlob ? r.blob() : r.text(); } catch {}
+  for (const p of PROXIES) {
+    try { const r = await fetch(p(url), { signal: AbortSignal.timeout(12000) }); if (r.ok) return asBlob ? r.blob() : r.text(); } catch {}
+  }
+  return null;
+}
+const isoMin = s => { if (!s || typeof s !== 'string') return ''; const m = s.match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/i); if (!m) return ''; return ((+m[1] || 0) * 1440 + (+m[2] || 0) * 60 + (+m[3] || 0)) || ''; };
+const txt = s => { const d = document.createElement('div'); d.innerHTML = String(s || ''); return d.textContent.replace(/\s+/g, ' ').trim(); };
+function findRecipeLD(doc) {
+  const out = [];
+  const walk = o => { if (!o || typeof o !== 'object') return; if (Array.isArray(o)) return o.forEach(walk); const ty = [].concat(o['@type'] || []); if (ty.some(x => /Recipe$/i.test(x))) out.push(o); if (o['@graph']) walk(o['@graph']); if (o.mainEntity) walk(o.mainEntity); };
+  for (const s of doc.querySelectorAll('script[type="application/ld+json"]')) { try { walk(JSON.parse(s.textContent)); } catch {} }
+  return out[0];
+}
+function stepsFromLD(ins) {
+  const out = [];
+  const walk = x => {
+    if (!x) return;
+    if (typeof x === 'string') return txt(x).split(/\n+/).forEach(l => l.trim() && out.push(l.trim()));
+    if (Array.isArray(x)) return x.forEach(walk);
+    if (/HowToSection/i.test(x['@type'])) { if (x.name) out.push(txt(x.name) + ' :'); return walk(x.itemListElement); }
+    if (x.text) out.push(txt(x.text)); else if (x.name) out.push(txt(x.name));
+  };
+  walk(ins); return out;
+}
+async function importFromLink(url) {
+  const html = await fetchVia(url);
+  if (!html) return null;
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const ld = findRecipeLD(doc);
+  const meta = n => doc.querySelector(`meta[property="${n}"],meta[name="${n}"]`)?.content;
+  if (!ld) { const title = meta('og:title') || doc.title; return title ? { title: txt(title), photo: meta('og:image') || null, link: url, partial: true } : null; }
+  let img = ld.image; if (Array.isArray(img)) img = img[0]; if (img && typeof img === 'object') img = img.url || img.contentUrl;
+  const yieldN = String([].concat(ld.recipeYield || [])[0] || '').match(/\d+/);
+  const kw = typeof ld.keywords === 'string' ? ld.keywords.split(',') : [].concat(ld.keywords || []);
+  return {
+    title: txt(ld.name), link: url, photo: img || meta('og:image') || null,
+    ingredients: [].concat(ld.recipeIngredient || ld.ingredients || []).map(txt).join('\n'),
+    steps: stepsFromLD(ld.recipeInstructions).join('\n'),
+    servings: yieldN ? +yieldN[0] : '', prep: isoMin(ld.prepTime), cook: isoMin(ld.cookTime) || (isoMin(ld.totalTime) && !isoMin(ld.prepTime) ? isoMin(ld.totalTime) : ''),
+    notes: ld.description ? txt(ld.description) : '', tags: kw.map(s => txt(s)).filter(s => s && s.length < 25).slice(0, 5),
+  };
+}
+async function localizePhoto(url) {
+  // Save a copy of a web image inside the app so it still shows offline.
+  try { const b = await fetchVia(url, true); if (b && b.type.startsWith('image/')) return await compress(b, 1400); } catch {}
+  return url;
+}
+
+// ---------- Share target (Android "Share" → this app) ----------
+let pendingShare = null;
+function readShareParams() {
+  const p = new URLSearchParams(location.search);
+  if (!p.has('url') && !p.has('text') && !p.has('title')) return;
+  const text = p.get('text') || '', url = p.get('url') || (text.match(/https?:\/\/\S+/) || [])[0] || '';
+  pendingShare = { url, text, title: p.get('title') || '' };
+  history.replaceState(null, '', location.pathname + '#/edit/new');
+}
+async function applyShare(p) {
+  if (p.url) { $('#fLink').value = p.url; doImport(); }
+  else if (p.text) { $('#fPaste').value = p.text; fillForm(parseRecipeText(p.text)); }
+  if (p.title && !$('#fTitle').value) $('#fTitle').value = p.title;
+}
+async function doImport() {
+  const t = T(), url = $('#fLink').value.trim(); if (!/^https?:\/\//.test(url)) { $('#fLink').focus(); return; }
+  const btn = $('[data-act="import"]'); btn.disabled = true; btn.textContent = t.importing;
+  const d = await importFromLink(url);
+  btn.disabled = false; btn.innerHTML = ico('download') + esc(t.importBtn);
+  if (!d || d.partial) { if (d) fillForm(d, true); toast(t.importFail); $('#fPaste').focus(); return; }
+  if (d.photo) d.photo = await localizePhoto(d.photo);
+  fillForm(d, false);
+  ls.set('draft', { key: $('#view').dataset.id || 'new', ts: Date.now(), data: readForm() });
+  toast(t.importOk);
+}
+
+// ---------- Shopping list ----------
+function renderShop() {
+  current = 'shop'; navHTML('shop');
+  const t = T();
+  const groups = new Map();
+  for (const it of shop) { const k = it.recipe || t.other; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(it); }
+  $('#view').innerHTML = `<div class="wrap stack">
+    <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.shopTitle)}</h1></header>
+    <form class="shop-add" id="shopAdd"><input class="input" id="shopIn" style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" placeholder="${esc(t.shopAddPh)}" enterkeyhint="done"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    ${shop.length ? [...groups].map(([g, items]) => `<div class="shop-group"><h3>${esc(g)}</h3>${items.map(it => `<div class="shop-item ${it.done ? 'done' : ''}"><label><input type="checkbox" data-act="shoptoggle" data-id="${it.id}" ${it.done ? 'checked' : ''}><span>${esc(it.text)}</span></label><button class="icon-btn" data-act="shopdel" data-id="${it.id}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}</div>`).join('')
+      : `<div class="empty"><p>${esc(t.shopEmpty)}</p></div>`}
+    ${shop.length ? `<div class="stack" style="padding-top:4px"><button class="btn primary" data-act="shopshare">${ico('share')}${esc(t.shareList)}</button>
+      <div class="row2"><button class="btn" data-act="shopclear">${esc(t.clearDone)}</button><button class="btn danger" data-act="shopall">${esc(t.clearAll)}</button></div></div>` : ''}
+  </div>`;
+  $('#shopAdd').onsubmit = e => { e.preventDefault(); const v = $('#shopIn').value.trim(); if (!v) return; shop.push({ id: uid(), text: v, done: false }); saveShop(); renderShop(); $('#shopIn').focus(); };
+}
+
+// ---------- More / settings ----------
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; });
+const CUP_G = { flour: [125, 'Farine', 'Flour'], sugar: [200, 'Sucre', 'Sugar'], brown: [220, 'Sucre roux', 'Brown sugar'], icing: [120, 'Sucre glace', 'Powdered sugar'], butter: [227, 'Beurre', 'Butter'], oil: [218, 'Huile', 'Oil'], rice: [185, 'Riz', 'Rice'], oats: [90, 'Flocons d’avoine', 'Oats'], cocoa: [85, 'Cacao', 'Cocoa'], honey: [340, 'Miel', 'Honey'], almonds: [95, 'Amandes en poudre', 'Ground almonds'], matza: [120, 'Farine de matsa', 'Matzo meal'], water: [240, 'Eau / lait (ml)', 'Water / milk (ml)'] };
+const UNITS = { cup: 'cup / tasse', tbsp: 'tbsp / c. à soupe', tsp: 'tsp / c. à café', floz: 'fl oz', oz: 'oz', lb: 'lb', stick: 'stick (butter)', f: '°F' };
+function convert(amount, unit, ingr) {
+  const g = CUP_G[ingr][0], isLiquid = ingr === 'water';
+  const unitG = isLiquid ? ' ml' : ' g';
+  switch (unit) {
+    case 'cup': return fmtNum(amount * g) + unitG;
+    case 'tbsp': return fmtNum(amount * g / 16) + unitG;
+    case 'tsp': return fmtNum(amount * g / 48) + unitG;
+    case 'floz': return fmtNum(amount * 29.57) + ' ml';
+    case 'oz': return fmtNum(amount * 28.35) + ' g';
+    case 'lb': return fmtNum(amount * 453.6) + ' g';
+    case 'stick': return fmtNum(amount * 113) + ' g';
+    case 'f': { const c = (amount - 32) * 5 / 9; return `${Math.round(c)} °C · Th. ${fmtNum(Math.round(c / 30 * 2) / 2)}`; }
+  }
+}
+function renderMore() {
+  current = 'more'; navHTML('more');
+  const t = T();
+  const nFav = recipes.filter(r => r.favorite).length, nCooked = recipes.reduce((a, r) => a + (r.cookCount || 0), 0);
+  const hasSamples = recipes.some(r => r.sample);
+  const isInstalled = matchMedia('(display-mode: standalone)').matches;
+  const opt = (v, l, s) => `<option value="${v}" ${s === v ? 'selected' : ''}>${esc(l)}</option>`;
+  $('#view').innerHTML = `<div class="wrap stack">
+    <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.moreTitle)}</h1></header>
+    <section class="panel"><h2>${esc(t.stats)}</h2><div class="stats"><div><b>${recipes.length}</b><span>${esc(t.statRecipes)}</span></div><div><b>${nFav}</b><span>${esc(t.statFav)}</span></div><div><b>${nCooked}</b><span>${esc(t.statCooked)}</span></div></div></section>
+    ${isInstalled ? '' : `<section class="panel"><h2>${esc(t.install)}</h2><p class="muted" style="margin:0">${esc(t.installText)}</p>
+      ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(t.installHow)}</p>`}</section>`}
+    <section class="panel"><h2>${esc(t.settings)}</h2>
+      <div class="form" style="padding:0;gap:14px">
+        <div class="field"><label for="sName">${esc(t.yourName)}</label><select id="sName">${['Abe', 'Abraham', 'Papa', 'Dad', 'Avraham'].map(n => opt(n, n, S.name)).join('')}</select></div>
+        <div class="field"><label for="sLang">${esc(t.language)}</label><select id="sLang">${opt('fr', 'Français', S.lang)}${opt('en', 'English', S.lang)}</select></div>
+        <div class="field"><label for="sSize">${esc(t.textSize)}</label><select id="sSize">${Object.entries(t.sizes).map(([k, v]) => opt(k, v, S.size)).join('')}</select></div>
+        <div class="field"><label for="sTheme">${esc(t.theme)}</label><select id="sTheme">${Object.entries(t.themes).map(([k, v]) => opt(k, v, S.theme)).join('')}</select></div>
+        <div class="field"><label for="sCity">${esc(t.city)}</label><select id="sCity">${Object.entries(CITIES).map(([k, c]) => opt(k, c[0], S.city)).join('')}${S.gps ? opt('gps', t.myPos, S.city) : ''}</select>
+          <button type="button" class="btn small" data-act="gps">${ico('pin')}${esc(t.useGps)}</button></div>
+      </div></section>
+    <section class="panel"><h2>${esc(t.backup)}</h2><p class="muted" style="margin:0">${esc(t.backupText)}</p>
+      <p style="margin:0;font-weight:700">${esc(t.lastBackup(ls.get('lastBackup', 0) && fmtDate(ls.get('lastBackup', 0))))}</p>
+      ${navigator.canShare ? `<button class="btn primary" data-act="backupshare">${ico('share')}${esc(t.shareB)}</button>` : ''}
+      <button class="btn" data-act="backup">${ico('download')}${esc(t.exportB)}</button>
+      <button class="btn" data-act="restore">${ico('upload')}${esc(t.importB)}</button></section>
+    <section class="panel" id="conv"><h2>${esc(t.tools)}</h2>
+      <div class="row2"><div class="field"><label for="cAmt">${esc(t.convFrom)}</label><input class="input" id="cAmt" type="text" inputmode="decimal" value="1"></div>
+        <div class="field"><label for="cUnit">&nbsp;</label><select class="input" id="cUnit">${Object.entries(UNITS).map(([k, v]) => opt(k, v, 'cup')).join('')}</select></div></div>
+      <div class="field"><label for="cIng">${esc(t.convIngr)}</label><select class="input" id="cIng">${Object.entries(CUP_G).map(([k, v]) => opt(k, S.lang === 'fr' ? v[1] : v[2], 'flour')).join('')}</select></div>
+      <div class="conv-out" id="cOut" aria-live="polite"></div>
+      <h3 style="font-size:1rem">${esc(t.ovenTitle)}</h3>
+      <div style="overflow-x:auto"><table class="ref"><tr><th>°F</th><th>°C</th><th>Thermostat</th></tr>
+        ${[[250, 120, 4], [300, 150, 5], [350, 180, 6], [375, 190, '6–7'], [400, 200, 7], [425, 220, '7–8'], [450, 230, 8], [475, 240, 8]].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table></div>
+    </section>
+    <section class="panel"><h2>${esc(t.samples)}</h2>
+      ${hasSamples ? `<button class="btn" data-act="rmsamples">${esc(t.samplesDel)}</button>` : `<button class="btn" data-act="samples">${esc(t.samplesAdd)}</button>`}
+      <button class="btn danger" data-act="erase">${ico('trash')}${esc(t.eraseAll)}</button></section>
+    <p class="love">${esc(t.madeFor)} <b>${esc(S.name === 'Abe' || S.name === 'Abraham' || S.name === 'Avraham' ? S.name : t.withLove)}</b> ♥</p>
+  </div>`;
+  const upd = () => { const a = parseNum($('#cAmt').value.replace(',', '.')) || parseFloat($('#cAmt').value.replace(',', '.')); $('#cOut').textContent = isFinite(a) ? convert(a, $('#cUnit').value, $('#cIng').value) : '—'; $('#cIng').closest('.field').hidden = !['cup', 'tbsp', 'tsp'].includes($('#cUnit').value); };
+  ['cAmt', 'cUnit', 'cIng'].forEach(id => $('#' + id).addEventListener('input', upd)); upd();
+  const bind = (id, key, after) => $('#' + id).addEventListener('change', e => { S[key] = e.target.value; saveSettings(); applyLook(); after?.(); });
+  bind('sName', 'name'); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city');
+}
+async function exportBackup(share) {
+  const t = T();
+  const data = JSON.stringify({ app: 'la-cuisine-d-abe', version: 1, exported: new Date().toISOString(), recipes, shop }, null, 1);
+  const name = `recettes-abe-${new Date().toISOString().slice(0, 10)}.json`;
+  const file = new File([data], name, { type: 'application/json' });
+  if (share && navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: name }); ls.set('lastBackup', Date.now()); renderMore(); return; } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  ls.set('lastBackup', Date.now()); if (current === 'more') renderMore(); else toast(t.saved);
+}
+async function importBackup(file) {
+  const t = T();
+  try {
+    const d = JSON.parse(await file.text());
+    const list = Array.isArray(d) ? d : d.recipes;
+    if (!Array.isArray(list)) throw 0;
+    let n = 0;
+    for (const r of list) {
+      if (!r || !r.id || !r.title) continue;
+      const old = byId(r.id);
+      if (old && (old.updatedAt || 0) > (r.updatedAt || 0)) continue;
+      await saveRecipe(r); n++;
+    }
+    if (Array.isArray(d.shop) && !shop.length) { shop = d.shop; saveShop(); }
+    toast(t.importedN(n)); renderMore();
+  } catch { toast(t.badFile); }
+}
+
+// ---------- Example recipes ----------
+function samples() {
+  const fr = S.lang === 'fr', now = Date.now();
+  const R = (o, i) => ({ id: 'sample-' + i, sample: true, createdAt: now - i * 1000, updatedAt: now - i * 1000, cookCount: 0, rating: 0, favorite: false, tags: [], ...o });
+  return [
+    R({ title: fr ? '’Halla du vendredi' : 'Friday Challah', category: 'breads', kashrut: 'parve', holidays: ['shabbat', 'roshhashana'], servings: 2, prep: 30, cook: 30, source: fr ? 'Exemple' : 'Example', rating: 5, favorite: true,
+      ingredients: fr ? '1 kg de farine\n2 sachets de levure boulangère (16 g)\n120 g de sucre\n2 c. à café de sel\n3 œufs (+ 1 jaune pour dorer)\n150 ml d’huile\n400 ml d’eau tiède\nGraines de sésame ou de pavot' : '1 kg flour\n2 packets dried yeast (16 g)\n120 g sugar\n2 tsp salt\n3 eggs (+ 1 yolk to glaze)\n150 ml oil\n400 ml warm water\nSesame or poppy seeds',
+      steps: fr ? 'Délayer la levure dans l’eau tiède avec une cuillère de sucre, laisser mousser 10 min.\nMélanger farine, sucre et sel. Ajouter les œufs, l’huile puis la levure.\nPétrir 10 minutes jusqu’à obtenir une pâte souple.\nCouvrir et laisser lever 1 h 30 dans un endroit tiède.\nPrélever un peu de pâte pour la bénédiction (hafracha). Diviser en deux, tresser chaque ’halla à 3 ou 6 brins.\nLaisser lever encore 45 min, dorer au jaune d’œuf et parsemer de graines.\nCuire 30 min à 180 °C jusqu’à ce que le dessous sonne creux.' : 'Dissolve the yeast in the warm water with a spoon of sugar; let it foam 10 min.\nMix flour, sugar and salt. Add eggs, oil, then the yeast.\nKnead for 10 minutes until smooth.\nCover and let rise 1 hour 30 in a warm place.\nSeparate a small piece of dough for the blessing (hafrashat challah). Divide in two and braid each loaf with 3 or 6 strands.\nLet rise another 45 min, brush with yolk and sprinkle with seeds.\nBake 30 min at 180 °C until the bottom sounds hollow.',
+      notes: fr ? 'Pour Roch Hachana : ajouter des raisins secs et former une couronne ronde.' : 'For Rosh Hashanah: add raisins and shape into a round crown.' }, 1),
+    R({ title: fr ? 'Soupe aux boulettes de matsa' : 'Matzo Ball Soup', category: 'soups', kashrut: 'meat', pesach: true, holidays: ['pesach', 'shabbat'], servings: 6, prep: 20, cook: 120, source: fr ? 'Exemple' : 'Example',
+      ingredients: fr ? 'Pour le bouillon :\n1 poulet entier (ou 1,5 kg de cuisses)\n3 carottes\n2 branches de céleri\n1 oignon\n1 panais\n1 bouquet d’aneth et de persil\nSel, poivre\nPour les boulettes :\n4 œufs\n4 c. à soupe de graisse de poulet ou d’huile\n1 tasse de farine de matsa\n4 c. à soupe de bouillon\n1 c. à café de sel' : 'For the broth:\n1 whole chicken (or 1.5 kg thighs)\n3 carrots\n2 celery sticks\n1 onion\n1 parsnip\n1 bunch dill and parsley\nSalt, pepper\nFor the matzo balls:\n4 eggs\n4 tbsp chicken fat or oil\n1 cup matzo meal\n4 tbsp broth\n1 tsp salt',
+      steps: fr ? 'Mettre le poulet dans une grande marmite, couvrir d’eau froide, porter à ébullition et écumer.\nAjouter les légumes et les herbes, laisser frémir 2 h.\nMélanger œufs, graisse, farine de matsa, bouillon et sel. Réfrigérer 30 min.\nAvec les mains mouillées, former des boulettes de la taille d’une noix.\nLes plonger dans de l’eau salée bouillante, couvrir et cuire 30 min sans soulever le couvercle.\nServir les boulettes dans le bouillon chaud avec les carottes et l’aneth.' : 'Put the chicken in a large pot, cover with cold water, bring to a boil and skim.\nAdd the vegetables and herbs; simmer 2 hours.\nMix eggs, fat, matzo meal, broth and salt. Chill 30 min.\nWith wet hands, roll into walnut-sized balls.\nDrop into boiling salted water, cover and cook 30 min without lifting the lid.\nServe the matzo balls in the hot broth with carrots and dill.' }, 2),
+    R({ title: fr ? 'Chakchouka' : 'Shakshuka', category: 'vegetarian', kashrut: 'parve', servings: 4, prep: 10, cook: 25, source: fr ? 'Exemple' : 'Example', tags: [fr ? 'facile' : 'easy', fr ? 'tunisien' : 'Tunisian'], rating: 4,
+      ingredients: fr ? '3 c. à soupe d’huile d’olive\n1 oignon émincé\n2 poivrons rouges en lanières\n3 gousses d’ail\n1 c. à café de cumin\n1 c. à café de paprika\n½ c. à café de harissa\n800 g de tomates concassées\n6 œufs\nCoriandre fraîche' : '3 tbsp olive oil\n1 onion, sliced\n2 red peppers, in strips\n3 garlic cloves\n1 tsp cumin\n1 tsp paprika\n½ tsp harissa\n800 g crushed tomatoes\n6 eggs\nFresh coriander',
+      steps: fr ? 'Faire revenir l’oignon et les poivrons dans l’huile 10 min.\nAjouter l’ail, le cumin, le paprika et la harissa, cuire 1 min.\nVerser les tomates, saler, laisser mijoter 10 min.\nCreuser 6 puits et y casser les œufs. Couvrir et cuire 6 à 8 min.\nParsemer de coriandre et servir avec du pain.' : 'Sauté the onion and peppers in the oil for 10 min.\nAdd garlic, cumin, paprika and harissa; cook 1 min.\nPour in the tomatoes, salt, and simmer 10 min.\nMake 6 wells and crack in the eggs. Cover and cook 6 to 8 min.\nSprinkle with coriander and serve with bread.' }, 3),
+    R({ title: fr ? 'Latkes (galettes de pommes de terre)' : 'Latkes', category: 'sides', kashrut: 'parve', holidays: ['hanukkah'], servings: 4, prep: 20, cook: 20, source: fr ? 'Exemple' : 'Example',
+      ingredients: fr ? '1 kg de pommes de terre\n1 oignon\n2 œufs\n3 c. à soupe de farine (ou de farine de matsa)\n1 c. à café de sel\nPoivre\nHuile pour la friture' : '1 kg potatoes\n1 onion\n2 eggs\n3 tbsp flour (or matzo meal)\n1 tsp salt\nPepper\nOil for frying',
+      steps: fr ? 'Râper les pommes de terre et l’oignon, puis bien presser dans un torchon pour enlever l’eau.\nMélanger avec les œufs, la farine, le sel et le poivre.\nChauffer 1 cm d’huile dans une poêle.\nDéposer des cuillerées de pâte, aplatir et frire 3 min de chaque côté.\nÉgoutter sur du papier absorbant. Servir avec compote de pommes ou crème.' : 'Grate the potatoes and onion, then squeeze hard in a towel to remove the water.\nMix with eggs, flour, salt and pepper.\nHeat 1 cm of oil in a frying pan.\nDrop in spoonfuls, flatten and fry 3 min per side.\nDrain on paper towels. Serve with apple sauce or sour cream.' }, 4),
+    R({ title: fr ? 'Gâteau au miel de Roch Hachana' : 'Rosh Hashanah Honey Cake', category: 'pastries', kashrut: 'parve', holidays: ['roshhashana', 'yomkippur'], servings: 10, prep: 15, cook: 50, source: fr ? 'Exemple' : 'Example',
+      ingredients: fr ? '300 g de farine\n1 sachet de levure chimique\n1 c. à café de bicarbonate\n2 c. à café de cannelle\n½ c. à café de gingembre\n3 œufs\n200 g de miel\n150 g de sucre roux\n150 ml d’huile\n200 ml de thé fort refroidi\n1 zeste d’orange' : '300 g flour\n1 packet baking powder\n1 tsp baking soda\n2 tsp cinnamon\n½ tsp ginger\n3 eggs\n200 g honey\n150 g brown sugar\n150 ml oil\n200 ml strong cooled tea\n1 orange zest',
+      steps: fr ? 'Préchauffer le four à 170 °C. Huiler un moule à cake.\nMélanger farine, levure, bicarbonate et épices.\nFouetter œufs, miel, sucre, huile, thé et zeste.\nIncorporer les ingrédients secs sans trop travailler.\nCuire 50 min, jusqu’à ce qu’une lame ressorte sèche.\nAttendre un jour avant de servir : il est encore meilleur. Chana tova !' : 'Preheat the oven to 170 °C. Oil a loaf pan.\nMix flour, baking powder, soda and spices.\nWhisk eggs, honey, sugar, oil, tea and zest.\nFold in the dry ingredients without overmixing.\nBake 50 min, until a knife comes out clean.\nWait a day before serving: it gets even better. Shana tova!' }, 5),
+    R({ title: fr ? 'Oreilles d’Aman' : 'Hamantaschen', category: 'pastries', kashrut: 'dairy', holidays: ['purim'], servings: 24, prep: 40, cook: 15, source: fr ? 'Exemple' : 'Example',
+      ingredients: fr ? 'Pour la pâte :\n250 g de farine\n125 g de beurre mou\n100 g de sucre\n1 œuf\n1 c. à café de vanille\n1 pincée de sel\nPour la garniture :\nConfiture d’abricots, pâte de pavot ou pâte de dattes' : 'For the dough:\n250 g flour\n125 g soft butter\n100 g sugar\n1 egg\n1 tsp vanilla\n1 pinch salt\nFor the filling:\nApricot jam, poppy seed paste or date paste',
+      steps: fr ? 'Battre le beurre et le sucre, ajouter l’œuf et la vanille.\nIncorporer la farine et le sel, former une boule et réfrigérer 30 min.\nÉtaler sur 3 mm et découper des disques de 8 cm.\nDéposer une cuillère de garniture au centre et replier en triangle en pinçant les coins.\nCuire 15 min à 180 °C jusqu’à ce que les bords soient dorés.' : 'Cream the butter and sugar, add the egg and vanilla.\nMix in flour and salt, form a ball and chill 30 min.\nRoll out to 3 mm and cut 8 cm circles.\nPut a spoon of filling in the center and fold into a triangle, pinching the corners.\nBake 15 min at 180 °C until the edges are golden.' }, 6),
+  ];
+}
+
+// ---------- Global click handling ----------
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act, t = T();
+  const rid = $('#view').dataset.id, r = rid ? byId(rid) : null;
+  switch (act) {
+    case 'new': go('#/edit/new'); break;
+    case 'back': if (history.length > 1) history.back(); else go('#/'); break;
+    case 'clearq': L.q = ''; $('#q').value = ''; renderResults(); $('#q').focus(); break;
+    case 'voice': voiceSearch(); break;
+    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', quick: false, pesach: false }); refreshList(); break;
+    case 'fav': if (current === 'recipe' && r) { r.favorite = !r.favorite; await saveRecipe(r); renderRecipe(r); } else { L.fav = !L.fav; refreshList(); } break;
+    case 'kash': L.kash = L.kash === b.dataset.k ? '' : b.dataset.k; refreshList(); break;
+    case 'filters': openFilters(); break;
+    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', quick: false, pesach: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
+    case 'holfilter': Object.assign(L, { hol: b.dataset.h, q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
+    case 'surprise': { const l = filtered(); if (l.length) go('#/r/' + l[Math.floor(Math.random() * l.length)].id); break; }
+    case 'samples': for (const s of samples()) if (!byId(s.id)) await saveRecipe(s); toast(t.samplesAdded); route(); break;
+    case 'rmsamples': for (const s of recipes.filter(x => x.sample)) await DB.del(s.id); recipes = recipes.filter(x => !x.sample); toast(t.samplesRemoved); route(); break;
+    case 'menu': if (r) recipeMenu(r); break;
+    case 'rate': if (r) { const v = +b.dataset.v; r.rating = r.rating === v ? 0 : v; await saveRecipe(r); $$('.stars button').forEach(x => x.classList.toggle('on', +x.dataset.v <= r.rating)); } break;
+    case 'scale': if (r) { const base = +r.servings || 0; const cur = scale[r.id] ?? (base || 1); const step = base ? 1 : 0.5; scale[r.id] = Math.max(step, cur + (+b.dataset.d) * step); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
+    case 'toshop': if (r) {
+      const base = +r.servings || 0, cur = scale[r.id] ?? (base || 1), f = base ? cur / base : cur; let n = 0;
+      for (const l of lines(r.ingredients)) { if (isHeading(l)) continue; const { q, rest } = splitQty(l, f); shop.push({ id: uid(), text: (q ? q + ' ' : '') + rest.trim(), done: false, recipe: r.title }); n++; }
+      saveShop(); toast(t.addedToShop(n)); } break;
+    case 'share': if (r) shareText(r.title, recipeText(r)); break;
+    case 'cooked': if (r) { r.cookCount = (r.cookCount || 0) + 1; r.lastCooked = Date.now(); await saveRecipe(r); toast(t.bravo); const y = window.scrollY; renderRecipe(r); window.scrollTo(0, y); } break;
+    case 'cook': if (r) go('#/cook/' + r.id); break;
+    case 'cookclose': history.back(); break;
+    case 'cookprev': cookMove(-1); break;
+    case 'cooknext': cookMove(1); break;
+    case 'cooking': if (cookState) { const rr = cookState.r; sheet(`<h2>${esc(t.ingredients)}</h2><ul class="ing">${lines(rr.ingredients).map(l => isHeading(l) ? `<li class="sub">${esc(cleanHeading(l))}</li>` : `<li><label><input type="checkbox"><span>${esc(l)}</span></label></li>`).join('')}</ul>`); } break;
+    case 'timer': askTimer(+b.dataset.min, b.dataset.label); break;
+    case 'tstop': timers = timers.filter(x => x.id !== b.dataset.id); ls.set('timers', timers); drawTimers(); break;
+    case 'save': submitForm(); break;
+    case 'pickphoto': $('#photoInput').click(); break;
+    case 'rmphoto': formPhoto = null; $('#fPhotoUrl').value = ''; drawPhotoBox(); break;
+    case 'import': doImport(); break;
+    case 'paste': { const v = $('#fPaste').value.trim(); if (!v) { $('#fPaste').focus(); break; } fillForm(parseRecipeText(v)); toast(t.pasteOk); break; }
+    case 'draftyes': { const d = ls.get('draft'); if (d) fillForm(d.data); b.closest('.draft-note').remove(); break; }
+    case 'draftno': ls.del('draft'); b.closest('.draft-note').remove(); break;
+    case 'shoptoggle': { const it = shop.find(x => x.id === b.dataset.id); if (it) { it.done = b.checked; saveShop(); b.closest('.shop-item').classList.toggle('done', it.done); } break; }
+    case 'shopdel': shop = shop.filter(x => x.id !== b.dataset.id); saveShop(); renderShop(); break;
+    case 'shopclear': shop = shop.filter(x => !x.done); saveShop(); renderShop(); break;
+    case 'shopall': if (await confirmBox(t.clearAllQ, t.clearAll)) { shop = []; saveShop(); renderShop(); } break;
+    case 'shopshare': shareText(t.shopTitle, t.shopTitle + '\n\n' + shop.filter(x => !x.done).map(x => '☐ ' + x.text).join('\n')); break;
+    case 'install': if (installEvt) { installEvt.prompt(); installEvt = null; } break;
+    case 'gps': navigator.geolocation?.getCurrentPosition(p => { S.gps = [p.coords.latitude, p.coords.longitude]; S.city = 'gps'; saveSettings(); renderMore(); }, () => toast(t.gpsFail), { timeout: 15000 }); break;
+    case 'backup': exportBackup(false); break;
+    case 'backupshare': exportBackup(true); break;
+    case 'snooze': ls.set('nudgeSnooze', Date.now() + 14 * 864e5); b.closest('.banner').remove(); break;
+    case 'restore': $('#backupInput').click(); break;
+    case 'erase': if (await confirmBox(t.eraseQ, t.eraseAll)) { await DB.clear(); recipes = []; toast(t.erased); renderMore(); } break;
+  }
+});
+document.addEventListener('click', e => {
+  const c = e.target.closest('#fHol .chip'); if (!c) return;
+  c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on'));
+  $('#form').dispatchEvent(new Event('input'));
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') { L.q = e.target.value; renderResults(); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'sort') { L.sort = e.target.value; renderResults(); }
+});
+document.addEventListener('keydown', e => {
+  if (!cookState) return;
+  if (e.key === 'ArrowRight') cookMove(1); if (e.key === 'ArrowLeft') cookMove(-1);
+});
+$('#photoInput').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try { formPhoto = await compress(f, 1400); $('#fPhotoUrl').value = ''; drawPhotoBox(); $('#form').dispatchEvent(new Event('input')); } catch { toast('Photo ?'); }
+});
+$('#backupInput').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importBackup(f); });
+
+// ---------- Start ----------
+(async function start() {
+  applyLook();
+  readShareParams();
+  const ok = await DB.open();
+  try { recipes = await DB.all(); } catch { recipes = []; }
+  recipes.forEach(indexRecipe);
+  if (!ok) setTimeout(() => toast(T().offlineSave), 800);
+  route();
+  drawTimers();
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>

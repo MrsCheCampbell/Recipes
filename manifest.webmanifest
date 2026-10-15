@@ -1,0 +1,28 @@
+{
+  "name": "La Cuisine d'Abe",
+  "short_name": "Cuisine d'Abe",
+  "description": "Les recettes d'Abe : chercher, cuisiner, partager.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F7FB",
+  "theme_color": "#1E4FA8",
+  "lang": "fr",
+  "categories": ["food", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  },
+  "shortcuts": [
+    { "name": "Nouvelle recette", "url": "./#/edit/new", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Liste de courses", "url": "./#/shop", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
