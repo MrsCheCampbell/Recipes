@@ -174,5 +174,16 @@ Set your own name in *Plus → Réglages → Prénom affiché* so the inbox says
 
 ## Tech
 
-No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed), `vendor/anthropic/` (the official Anthropic TypeScript SDK 0.130.0, bundled for the browser, MIT, loaded only when Claude is asked), and `vendor/firebase/` (Firebase JS SDK 12.19.0, app + auth + firestore, Apache-2.0, loaded only when the phone is in a family). `firestore.rules` holds the family security rules. Data lives in the phone's IndexedDB.
-Link import goes through public CORS proxies (allorigins, corsproxy.io, codetabs) because browsers can't read other sites directly. If a site blocks them, the link is still saved and he can paste the text instead.
+No build step. The app is plain files that Netlify serves as they are:
+
+- `index.html`: the page skeleton; it loads the styles and scripts below.
+- `css/app.css`: all the styles ("Le Carnet" design).
+- `js/`: the app, split by feature. The scripts share one scope and load in order:
+  `icons.js` (icons, artwork) · `strings.js` (every French/English word) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
+- `sw.js`: the service worker. The app opens from its saved copy (fast, and works offline); new versions download in the background and the app offers to reload. **When releasing, bump `VERSION` in `sw.js` and the `?v=` numbers in `index.html` together.**
+- `netlify/functions/fetch-page.mjs`: fetches recipe pages for link imports.
+- `firestore.rules`: the family's security rules.
+- `vendor/`: libraries loaded only when needed: `tesseract/` (Tesseract.js 5.1.1, French and English, Apache-2.0, for reading photos without Claude), `anthropic/` (Anthropic TypeScript SDK 0.130.0, MIT), `firebase/` (Firebase JS SDK 12.19.0, app + auth + firestore, Apache-2.0).
+- `art/`: drawings for avatars and the bottom bar (see `art/README.md`).
+
+Data lives on the phone (IndexedDB). In a family, Firebase is the shared copy and the phone keeps its own copy, so the app opens instantly and works offline.
