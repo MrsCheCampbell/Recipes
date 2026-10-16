@@ -328,6 +328,8 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
+Object.assign(STR.fr, { mine: 'Les miennes' });
+Object.assign(STR.en, { mine: 'Mine' });
 Object.assign(STR.fr, { updateReady: 'Nouvelle version de l’appli prête', reload: 'Recharger' });
 Object.assign(STR.en, { updateReady: 'A new version of the app is ready', reload: 'Reload' });
 Object.assign(STR.fr, { autoTagBtn: 'Ranger automatiquement', autoTagHint: 'Saisons, météo, occasions, catégorie : tout reste modifiable.', autoTagBusy: 'Claude range la recette…',

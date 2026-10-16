@@ -55,11 +55,12 @@ document.addEventListener('click', async e => {
     case 'back': if (history.length > 1) history.back(); else go('#/'); break;
     case 'clearq': L.q = ''; $('#q').value = ''; renderResults(); $('#q').focus(); break;
     case 'voice': voiceSearch(); break;
-    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', mood: '', quick: false }); refreshList(); break;
+    case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', mood: '', quick: false, who: '' }); refreshList(); break;
+    case 'who': L.who = L.who === b.dataset.id ? '' : b.dataset.id; refreshList(); break;
     case 'fav': if (current === 'recipe' && r) { r.favorite = !r.favorite; await saveRecipe(r); renderRecipe(r); } else { L.fav = !L.fav; refreshList(); } break;
     case 'cat': L.cat = L.cat === b.dataset.c ? '' : b.dataset.c; refreshList(); break;
     case 'filters': openFilters(); break;
-    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', mood: '', quick: false, fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
+    case 'reset': Object.assign(L, { q: '', kash: '', cat: '', hol: '', mood: '', quick: false, who: '', fav: current === 'fav' }); $('#q').value = ''; refreshList(); break;
     case 'moodfilter': Object.assign(L, { mood: b.dataset.m, hol: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
     case 'moodoff': L.mood = ''; refreshList(); break;
     case 'holfilter': Object.assign(L, { hol: b.dataset.h, mood: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
