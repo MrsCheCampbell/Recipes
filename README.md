@@ -91,12 +91,11 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 
 - **Just a photo**: the bar at the top of the feed (or the + button) shares a photo with no recipe attached: a plate at a restaurant, a dish at friends', anything too pretty or too funny. Add where it was if you like.
 
-- **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
+- **One family cookbook**: every recipe anyone adds goes into the shared list in **Recettes**, with a small avatar showing who added it. Nothing is hidden. Your hearts and favourites stay your own.
+- **Feed** (the **Famille** tab): food photos, of something someone cooked (tagged to the recipe) or any plate worth sharing, with hearts and comments. New recipes show up as one quiet line ("Papa a ajouté 3 recettes").
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
 - **Ratings**: everyone rates with their own stars; the recipe shows the family average.
-- **Privacy, per recipe** (in the recipe form, "Qui peut la voir ?"): *Toute la famille*, *Moi seul(e)*, or *Choisir* exactly who (Mom's secret birthday cake can be hidden from you). This is enforced by the server rules, so a hidden recipe never even reaches the other phones.
-- **Search the whole family**: the "Toute la famille" chip above the search results.
 - **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
 - **Avatars**: each person picks a drawn avatar and a colour.
 - **Cocktails** have their own section (and illustration).
@@ -115,7 +114,7 @@ The family's recipes live in your own free Firebase project (Google). Nobody els
 6. In the app: **Plus → La famille → Créer la famille**, paste that block, name the family, pick your name and avatar.
 7. **Inviter quelqu'un** → send the link to Mom and Dad. When they tap it, the app opens on "Rejoindre", they choose their name and avatar, done.
 
-When joining, the app offers to bring the recipes already on that phone into the family (visible to everyone, or private for now).
+When joining, the app offers to add the recipes already on that phone to the family cookbook.
 
 Notes: the Firebase web config isn't a secret (security comes from the rules). Accounts are tied to each phone; if someone leaves or resets their phone, they rejoin with a new invite link (their earlier recipes stay in the family). The free plan's limits (50,000 reads and 20,000 writes a day, 1 GB) are far beyond what a family uses.
 
@@ -133,6 +132,13 @@ The **Carnets** tab (bottom bar) is private to each person, even in the family.
 Everything is in the backup file (*Plus → Sauvegarder*). In a family it is also stored in your own private space on the server, which only you can read.
 
 > **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts and the private notebooks.
+
+## Smart tags and suggestions
+
+- When a recipe is saved, the app files it under its seasons, weather (scorching day, cold day, rainy day) and occasions (barbecue, brunch, quick weeknight…), and picks a category if none was chosen. It never removes a tag you set, and you can always change them.
+- With a Claude key, Claude also reads each new recipe and adds the tags that fit, including Jewish holidays when the dish is traditional for them. *Plus → Claude → Ranger toutes mes recettes avec Claude* does the same for older recipes.
+- The top of **Recettes** always shows a row of ideas for today: from the weather (hot, cold, rainy) or the season, or a daily pick when nothing matches.
+- In **Filtres**, seasons and weather come first, then occasions, Jewish holidays, category and kashrut.
 
 ## Adding recipes from links and screenshots
 

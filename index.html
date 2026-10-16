@@ -725,6 +725,10 @@ a.chip { text-decoration: none; color: inherit; }
 .fgroup { display: grid; gap: 8px; } .fgroup .wrapchips { gap: 7px; } .fgroup .chip { min-height: 36px; font-size: .86rem; }
 .fbar { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0 calc(16px + env(safe-area-inset-bottom, 0px)); margin-top: 4px; grid-template-columns: 1fr 1.4fr; box-shadow: 0 -10px 14px -10px rgba(36,28,22,.18); }
 .fbar .btn { white-space: nowrap; font-size: .95rem; padding-inline: .7em; }
+.addline { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; }
+.addline.fresh { border-style: solid; border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.addline .min { display: grid; gap: 4px; } .addwho { font-size: .9rem; color: var(--muted); }
+.addlist { display: flex; flex-wrap: wrap; gap: 4px 12px; } .addlist a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration-color: var(--line); }
 .composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
 .composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .composer .icon-btn { width: 40px; height: 40px; } .composer .mill { width: 26px; height: 26px; }
@@ -927,7 +931,7 @@ const STR = {
     comments: 'Commentaires', commentPh: 'Un commentaire', triedIt: 'Je l’ai essayée', noComments: 'Pas encore de commentaire.', commentSent: 'Commentaire publié',
     recommendTo: 'Recommander à…', nobodyYet: 'Personne d’autre dans la famille pour l’instant.', recoNote: 'Un petit mot (facultatif)', recoNotePh: '',
     recoSent: n => `Recommandée à ${n}`, recoFor: n => `${n} vous recommande`, recoLater: 'Plus tard', you: 'Vous', postedAgo: a => `a ajouté une recette · ${a}`, like: 'J’aime',
-    feedEmptyT: 'Le fil est encore vide', feedEmpty: 'Quand quelqu’un de la famille ajoute une recette, elle apparaît ici.',
+    feedEmptyT: 'Rien en cuisine pour l’instant', feedEmpty: 'Quand quelqu’un cuisine quelque chose (ou voit une jolie assiette), la photo arrive ici.',
     agoNow: 'à l’instant', agoMin: n => `il y a ${n} min`, agoH: n => `il y a ${n} h`, agoYesterday: 'hier', agoD: n => `il y a ${n} jours`,
     family: 'La famille', famIntroT: 'Cuisiner ensemble, chacun chez soi', famIntro: 'Chacun garde son livre, et on voit ce que les autres cuisinent : un fil de recettes, des cœurs, des étoiles, des commentaires et des recommandations. Chaque recette peut rester privée ou être cachée à quelqu’un.',
     famJoinT: 'Rejoindre ma famille', famJoinText: 'Quelqu’un vous a envoyé un lien d’invitation ? Touchez-le, ou collez-le ici.', famJoinPh: 'Collez le lien d’invitation', famJoinBtn: 'Rejoindre la famille',
@@ -938,8 +942,8 @@ const STR = {
     famCfgBad: 'Je ne trouve pas apiKey, projectId et appId dans ce texte.', famErr: 'La famille n’a pas pu être créée. Vérifiez la configuration et que la connexion anonyme est activée.',
     famJoinBad: 'Ce lien d’invitation n’est pas valide.', invitation: 'Invitation', joinTitle: n => `Rejoindre « ${n} »`, yourNamePh: '', needName: 'Choisissez un prénom',
     welcomeFam: n => `Bienvenue dans « ${n} » !`, famJoinErr: 'Impossible de rejoindre. Vérifiez la connexion internet, ou demandez un nouveau lien.',
-    migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone vont dans votre livre familial. Qui peut les voir ? (Modifiable ensuite, recette par recette.)',
-    migrateAll: 'Toute la famille', migrateMe: 'Moi seul(e) pour l’instant', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
+    migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
+    migrateAll: 'Les ajouter au livre de la famille', migrateMe: '', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
     familyShare: 'Partage avec la famille', noteF: 'Un petit mot pour le fil', notePh: '', whoSees: 'Qui peut la voir ?', audAll: 'Toute la famille', audMe: 'Moi seul(e)', audSome: 'Choisir',
     audSomeHint: 'Touchez les personnes qui peuvent la voir. Les autres ne la verront pas.', famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans La Cuisine d’Abe, pour voir et partager nos recettes :`,
     fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
@@ -1047,7 +1051,7 @@ const STR = {
     comments: 'Comments', commentPh: 'Add a comment', triedIt: 'I tried it', noComments: 'No comments yet.', commentSent: 'Comment posted',
     recommendTo: 'Recommend to…', nobodyYet: 'Nobody else in the family yet.', recoNote: 'A little note (optional)', recoNotePh: '',
     recoSent: n => `Recommended to ${n}`, recoFor: n => `${n} recommends`, recoLater: 'Later', you: 'You', postedAgo: a => `added a recipe · ${a}`, like: 'Like',
-    feedEmptyT: 'The feed is empty for now', feedEmpty: 'When someone in the family adds a recipe, it shows up here.',
+    feedEmptyT: 'Nothing cooking yet', feedEmpty: 'When someone cooks something (or spots a lovely plate), the photo lands here.',
     agoNow: 'just now', agoMin: n => `${n} min ago`, agoH: n => `${n} h ago`, agoYesterday: 'yesterday', agoD: n => `${n} days ago`,
     family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. Any recipe can stay private or be hidden from someone.',
     famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Tap it, or paste it here.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family',
@@ -1058,8 +1062,8 @@ const STR = {
     famCfgBad: 'I can’t find apiKey, projectId and appId in this text.', famErr: 'The family couldn’t be created. Check the configuration and that anonymous sign-in is enabled.',
     famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: '', needName: 'Choose a name',
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
-    migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone go into your family book. Who can see them? (You can change it later, recipe by recipe.)',
-    migrateAll: 'The whole family', migrateMe: 'Only me for now', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
+    migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
+    migrateAll: 'Add them to the family cookbook', migrateMe: '', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     familyShare: 'Sharing with the family', noteF: 'A little note for the feed', notePh: '', whoSees: 'Who can see it?', audAll: 'Whole family', audMe: 'Only me', audSome: 'Choose',
     audSomeHint: 'Tap the people who can see it. Everyone else won’t.', famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in La Cuisine d’Abe to see and share our recipes:`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
@@ -1160,6 +1164,10 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
+Object.assign(STR.fr, { addedLine: (who, n) => `${who ? who + ' a ajouté' : 'Vous avez ajouté'} ${n === 1 ? 'une recette' : n + ' recettes'}`, tonightRail: 'Idées pour ce soir',
+  tagAll: 'Ranger toutes mes recettes avec Claude', tagAllProgress: (i, n) => `Claude range les recettes… ${i} / ${n}`, tagAllDone: n => n ? `${n} recette${n > 1 ? 's' : ''} rangée${n > 1 ? 's' : ''}` : 'Tout est déjà rangé' });
+Object.assign(STR.en, { addedLine: (who, n) => `${who ? who + ' added' : 'You added'} ${n === 1 ? 'a recipe' : n + ' recipes'}`, tonightRail: 'Ideas for tonight',
+  tagAll: 'Sort all my recipes with Claude', tagAllProgress: (i, n) => `Claude is sorting recipes… ${i} / ${n}`, tagAllDone: n => n ? `${n} recipe${n > 1 ? 's' : ''} sorted` : 'Everything is already sorted' });
 Object.assign(STR.fr, { claudeReading: 'Claude lit la recette…', claudeReadOk: 'Recette lue par Claude. Vérifiez, puis enregistrez.', claudeTip: 'Astuce : avec une clé Claude (Plus → Claude), les captures d’écran et les sites difficiles sont bien mieux lus.' });
 Object.assign(STR.en, { claudeReading: 'Claude is reading the recipe…', claudeReadOk: 'Recipe read by Claude. Check it, then save.', claudeTip: 'Tip: with a Claude key (More → Claude), screenshots and difficult sites are read much better.' }); STR.fr.sortBy = 'Trier par'; STR.en.sortBy = 'Sort by';
 Object.assign(STR.fr, { newPosts: n => `${n} nouveauté${n > 1 ? 's' : ''} dans la famille`, composerPh: 'Une photo à partager ?', photoPost: 'Une photo, juste comme ça', photoPostSub: 'Au restaurant, chez des amis, une assiette trop belle ou trop drôle.', cookPlace: 'Où ?', choose: 'Choisir', anyF: 'Tout', filtersShow: n => n ? `Voir ${n} recette${n > 1 ? 's' : ''}` : 'Aucune recette' });
@@ -1193,7 +1201,7 @@ Object.assign(STR.en, {
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/œ/g, 'oe').replace(/æ/g, 'ae').replace(/[’'`]/g, ' ');
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/œ/g, 'oe').replace(/æ/g, 'ae').replace(/[’'`-]/g, ' ');
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 const ls = {
   get(k, d) { try { const v = localStorage.getItem('abe:' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
@@ -1832,12 +1840,17 @@ const tilesHTML = items => `<div class="rail">${items.slice(0, 10).map(x => { co
   : artHTML(r, 'img')}${x.why ? `<span class="why">${esc(x.why)}</span>` : ''}<b>${esc(r.title)}</b></a>`; }).join('')}</div>`;
 function railHTML() {
   const t = T();
-  if (current !== 'list' || L.q || L.cat || L.hol || L.mood || L.kash || L.quick || L.fav || recipes.length < 4) return '';
+  if (current !== 'list' || L.q || L.cat || L.hol || L.mood || L.kash || L.quick || L.fav || !recipes.length) return '';
   let items = recipes.filter(r => r.favorite), title = t.favRail;
   if (items.length < 2) { items = [...recipes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); title = t.recentRail; }
-  const mood = moodRail();
-  return (mood ? `<div class="rail-h"><h2>${esc(mood.title)}</h2><button class="linkish" data-act="moodfilter" data-m="${mood.key}">${esc(t.seeAll)}${ico('arrow')}</button></div>${tilesHTML(mood.items)}` : '') +
-    `<div class="rail-h"><h2>${esc(title)}</h2>${title === t.favRail ? `<a href="#/fav" class="linkish">${esc(t.seeAll)}${ico('arrow')}</a>` : ''}</div>${tilesHTML(items)}`;
+  const mood = moodRail() || { key: '', title: t.tonightRail, items: dailyPicks() };
+  return `<div class="rail-h"><h2>${esc(mood.title)}</h2>${mood.key ? `<button class="linkish" data-act="moodfilter" data-m="${mood.key}">${esc(t.seeAll)}${ico('arrow')}</button>` : ''}</div>${tilesHTML(mood.items)}` +
+    (recipes.length < 4 ? '' : `<div class="rail-h"><h2>${esc(title)}</h2>${title === t.favRail ? `<a href="#/fav" class="linkish">${esc(t.seeAll)}${ico('arrow')}</a>` : ''}</div>${tilesHTML(items)}`);
+}
+// When nothing matches today's weather or season: a few recipes, changing each day (best rated first).
+function dailyPicks() {
+  const day = Math.floor(Date.now() / 864e5), h = s => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, day);
+  return [...recipes].filter(r => !r.sample || recipes.length < 6).sort((a, b) => (b.rating || 0) - (a.rating || 0) || h(a.id) - h(b.id)).slice(0, 8);
 }
 function chipsHTML() {
   const t = T();
@@ -1845,7 +1858,7 @@ function chipsHTML() {
   const counts = {}; recipes.forEach(r => { if (r.category) counts[r.category] = (counts[r.category] || 0) + 1; });
   const cats = CATS.filter(c => counts[c] && c !== 'cocktails').sort((a, b) => counts[b] - counts[a]).concat('cocktails');
   const extra = L.hol || L.quick || L.kash;
-  return (FAM.on && current !== 'fav' ? chip('scope', L.scope === 'family', ico('users') + esc(t.searchFamily)) : '') + chip('all', !L.cat && !L.fav && !extra, esc(t.all)) +
+  return chip('all', !L.cat && !L.fav && !extra, esc(t.all)) +
     (current === 'fav' ? '' : chip('fav', L.fav, ico('bookmark', 'heart') + esc(t.favorites))) +
     cats.map(c => chip('cat', L.cat === c, esc(t.cat[c]), `data-c="${c}"`)).join('') +
     (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
@@ -1990,11 +2003,11 @@ function openFilters() {
   const group = (title, key, items) => `<div class="fgroup"><h3 class="eyebrow">${esc(title)}</h3><div class="wrapchips">${items.map(([v, label]) => `<button type="button" class="chip ${st[key] === v ? 'on' : ''}" data-f="${key}" data-v="${esc(v)}" aria-pressed="${st[key] === v}">${esc(label)}</button>`).join('')}</div></div>`;
   const count = () => { const saved = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick }; Object.assign(L, st); const n = filtered().length; Object.assign(L, saved); return n; };
   const body = () => `<h2>${esc(t.filters)}</h2>
+    ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
+    ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
+    ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
     ${group(t.category, 'cat', [['', t.anyF], ...CATS.filter(c => c === st.cat || recipes.some(r => r.category === c)).map(c => [c, t.cat[c]])])}
     ${group(t.kashrutF, 'kash', [['', t.anyF], ...KASHRUT.map(k => [k, t.kashLong[k]])])}
-    ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
-    ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
-    ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
     <div class="fgroup"><button type="button" class="chip ${st.quick ? 'on' : ''}" data-f="quick" aria-pressed="${st.quick}">${ico('clock')}${esc(t.quick)}</button></div>
     <div class="row2 fbar"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">${esc(t.filtersShow(count()))}</button></div>`;
   sheet(body(), (el, close) => {
@@ -2100,7 +2113,6 @@ function renderRecipe(r) {
         ${lines(r.steps).length ? `<button class="btn primary" data-act="cook">${ico('fire')}${esc(t.cookMode)}</button>` : ''}
         ${r.link ? `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">${ico('link')}${esc(t.openLink)}</a>` : ''}
         ${FAM.on && FAM.raw.has(r.id) ? `<button class="btn" data-act="recommend">${ico('reco')}${esc(t.recommend)}</button>` : `<button class="btn" data-act="send">${ico('mail')}${esc(t.send)}</button>`}
-        ${FAM.on && FAM.raw.has(r.id) && r.owner !== FAM.uid ? `<button class="btn ${r.inBook ? '' : 'primary'}" data-act="bookmark" data-id="${r.id}">${ico(r.inBook ? 'bookmark' : 'bookmarkO')}${esc(r.inBook ? t.inMyBook : t.addToBook)}</button>` : ''}
       </div>
       ${!ing && !steps ? pagesHTML(r) : ''}
       ${ing ? `<section class="section"><div class="section-h"><h2>${esc(t.ingredients)}</h2>
@@ -2157,7 +2169,7 @@ function recipeMenu(r) {
     <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
     <button data-m="print">${ico('print')}${esc(t.print)}</button>
     <button data-m="dup">${ico('book')}${esc(t.duplicate)}</button>
-    ${isMine(r) ? `<button data-m="del" class="danger">${ico('trash')}${esc(t.del)}</button>` : r.inBook ? `<button data-m="unbook" class="danger">${ico('bookmarkO')}${esc(t.removeFromBook)}</button>` : ''}</div>`, (el, close) => {
+    ${isMine(r) ? `<button data-m="del" class="danger">${ico('trash')}${esc(t.del)}</button>` : ''}</div>`, (el, close) => {
     el.addEventListener('click', async e => {
       const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return; close();
       if (m === 'edit') go('#/edit/' + r.id);
@@ -2265,16 +2277,6 @@ function askTimer(min, label) {
 
 // ---------- Edit view ----------
 let formPhoto = null;
-function audienceField(r) {
-  const t = T(), aud = r.audience || ['all'], mode = aud.includes('all') ? 'all' : aud.length <= 1 ? 'me' : 'some';
-  const others = Object.keys(FAM.members).filter(id => id !== FAM.uid);
-  return `<section class="panel audience"><h2>${ico('users')} ${esc(t.familyShare)}</h2>
-    <div class="field"><label for="fNote">${esc(t.noteF)}</label><input class="input" id="fNote" maxlength="200" placeholder="${esc(t.notePh)}" value="${esc(r.note || '')}"></div>
-    <div class="field"><span class="lbl">${esc(t.whoSees)}</span>
-      <div class="seg aud" id="fAud">${[['all', t.audAll], ['me', t.audMe], ['some', t.audSome]].map(([k, l]) => `<label><input type="radio" name="aud" value="${k}" ${mode === k ? 'checked' : ''}>${esc(l)}</label>`).join('')}</div>
-      <div class="wrapchips" id="fAudWho" ${mode === 'some' ? '' : 'hidden'}><span class="hint" style="width:100%">${esc(t.audSomeHint)}</span>${others.map(id => `<button type="button" class="chip person ${aud.includes(id) ? 'on' : ''}" data-id="${id}">${avatarHTML(id, 'sm')}${esc(member(id).name)}</button>`).join('')}</div></div>
-  </section>`;
-}
 function renderEdit(r) {
   current = 'edit';
   const t = T(), isNew = !r;
@@ -2322,7 +2324,6 @@ function renderEdit(r) {
       </div>
       <div class="field"><label for="fIng">${esc(t.ingF)}</label><span class="hint">${esc(t.ingHint)}</span><textarea id="fIng" rows="8">${esc(r.ingredients || '')}</textarea></div>
       <div class="field"><label for="fSteps">${esc(t.stepsF)}</label><span class="hint">${esc(t.stepsHint)}</span><textarea id="fSteps" rows="10">${esc(r.steps || '')}</textarea></div>
-      ${FAM.on ? audienceField(r) : ''}
       <div class="field"><label for="fNotes">${esc(t.notesF)}</label><textarea id="fNotes" placeholder="${esc(t.notesPh)}" style="min-height:5em">${esc(r.notes || '')}</textarea></div>
       <div class="field"><label for="fSource">${esc(t.sourceF)}</label><input class="input" id="fSource" placeholder="${esc(t.sourcePh)}" value="${esc(r.source || '')}"></div>
       <div class="field"><label for="fTags">${esc(t.tags)}</label><input class="input" id="fTags" placeholder="${esc(t.tagsPh)}" value="${esc((r.tags || []).join(', '))}"></div>
@@ -2351,7 +2352,6 @@ function readForm() {
     servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
     ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', source: v('fSource'),
     tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto, pages: formPages,
-    ...(FAM.on ? { note: v('fNote'), audience: (() => { const m = $('input[name="aud"]:checked')?.value || 'all'; return m === 'all' ? ['all'] : m === 'me' ? [FAM.uid] : [FAM.uid, ...$$('#fAudWho .chip.on').map(c => c.dataset.id)]; })() } : {}),
   };
 }
 function fillForm(d, onlyEmpty = false) {
@@ -2381,10 +2381,75 @@ async function submitForm() {
   const r = Object.assign({}, old || { id: uid(), createdAt: Date.now(), cookCount: 0, rating: 0, favorite: false }, d, { updatedAt: Date.now() });
   if (r.photo !== old?.photo) r.thumb = r.photo ? (r.photo.startsWith('data:') ? await thumbFrom(r.photo) : r.photo) : null;
   if (old?.sample) r.sample = false;
+  autoTag(r);
   await saveRecipe(r);
   ls.del('draft');
   toast(t.saved);
   location.replace('#/r/' + r.id);
+  claudeTagRecipe(r).then(done => { if (done && current === 'recipe' && $('#view').dataset.id === r.id) { const y = window.scrollY; renderRecipe(byId(r.id) || r); window.scrollTo(0, y); } });
+}
+
+// ---------- Smart tags: each recipe is filed under its seasons, weather and occasions ----------
+// On the phone: the same word lists as the suggestions. With a Claude key: Claude reads the recipe too.
+const OCC_WORDS = { bbq: 'barbecue|bbq|plancha|grill|brochette|kebab|burger', brunch: 'brunch|pancake|granola|oeufs? brouill|scrambled|pain perdu|french toast|muffin|shakshuka|chakchouka', friends: 'apero|aperitif|tapas|mezze|houmous|hummus|plateau|amuse' };
+const PROTEIN = [[/\b(poulet|dinde|canard|chicken|turkey|duck)/, 'poultry'], [/\b(boeuf|agneau|veau|porc|beef|lamb|veal|pork)/, 'meat'], [/\b(poisson|saumon|dorade|thon|cabillaud|crevette|fish|salmon|tuna|cod|shrimp)/, 'fish']];
+// From the title first; otherwise from the main protein in the ingredients.
+const guessCat = r => (GUESS.find(([re]) => re.test(norm(r.title))) || PROTEIN.find(([re]) => re.test(norm(r.ingredients))) || [])[1] || '';
+function guessTags(r) {
+  indexRecipe(r);
+  const tags = new Set(r.holidays || []);
+  for (const key of ['hotday', 'coldday', 'rainyday', 'spring', 'summer', 'autumn', 'winter']) if (moodScore(r, key).score >= 5) tags.add(key);
+  const body = r._ix.title + ' ' + r._ix.ing + ' ' + norm(r.steps);
+  for (const [k, pat] of Object.entries(OCC_WORDS)) if (new RegExp('\\b(' + pat + ')').test(body)) tags.add(k);
+  const category = r.category || guessCat(r);
+  if (totalTime(r) && totalTime(r) <= 30 && ['mains', 'meat', 'poultry', 'fish', 'vegetarian'].includes(category)) tags.add('weeknight');
+  return { holidays: [...tags], category };
+}
+function autoTag(r) {
+  if (r.autoTagged) return;
+  Object.assign(r, guessTags(r), { autoTagged: true });
+}
+const TAG_KEYS = [...OCCASIONS, ...SEASONS, ...HOLIDAYS];
+async function claudeTags(r) {
+  const client = await claudeClient();
+  const msg = await client.beta.messages.create({
+    model: 'claude-opus-5-5', max_tokens: 4000,
+    betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
+    output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags'], properties: {
+      category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } } } } } },
+    messages: [{ role: 'user', content: `File this recipe for a family cookbook (French-Jewish-American family in Bordeaux).
+Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, thanksgiving, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner); Jewish holidays only if the dish is traditional for that holiday (shabbat, roshhashana, yomkippur for the meal before or after the fast, sukkot, hanukkah, tubishvat, purim, pesach only if kosher for Passover, shavuot). Usually 2 to 5 tags. Leave out anything doubtful.
+
+<recipe>
+${[r.title, r.category && 'Category: ' + r.category, 'Ingredients:\n' + (r.ingredients || ''), 'Steps:\n' + (r.steps || ''), r.notes].filter(Boolean).join('\n').slice(0, 12000)}
+</recipe>` }],
+  });
+  if (msg.stop_reason === 'refusal') return null;
+  return JSON.parse(msg.content.filter(b => b.type === 'text').map(b => b.text).join(''));
+}
+// Adds Claude's tags (never removes the ones already there). Quietly does nothing without a key.
+async function claudeTagRecipe(r) {
+  if (!hasClaude() || !navigator.onLine || r.aiTagged || (FAM.on && r.owner && r.owner !== FAM.uid)) return false;
+  let d; try { d = await claudeTags(r); } catch (e) { console.warn(e); return false; }
+  if (!d) return false;
+  const cur = byId(r.id) || r;
+  cur.holidays = [...new Set([...(cur.holidays || []), ...d.tags.filter(k => TAG_KEYS.includes(k))])];
+  if (!cur.category && CATS.includes(d.category)) cur.category = d.category;
+  cur.aiTagged = true;
+  await saveRecipe(cur);
+  return true;
+}
+// Once per phone: file the recipes that were added before smart tags existed.
+async function tagSweep() {
+  const mine = recipes.filter(r => !r.autoTagged && !r.sample && (!FAM.on || r.owner === FAM.uid));
+  for (const r of mine) { autoTag(r); await saveRecipe(r); }
+}
+async function claudeTagAll() {
+  const t = T(), todo = recipes.filter(r => !r.aiTagged && !r.sample && (!FAM.on || r.owner === FAM.uid));
+  if (!todo.length) { toast(t.tagAllDone(0)); return; }
+  let n = 0;
+  for (const r of todo) { toast(t.tagAllProgress(n + 1, todo.length)); if (await claudeTagRecipe(r)) n++; }
+  toast(t.tagAllDone(n));
 }
 
 // Pasted text → fields
@@ -2781,7 +2846,7 @@ const FAM = {
 let FB = null;
 const AV_KEYS = ['whisk', 'teapot', 'mitt', 'apron', 'pan', 'pot', 'kettle', 'rollingpin', 'grater', 'spoon', 'desserts', 'cocktails', 'breads', 'salads', 'vegetarian'];
 const AV_COLORS = ['#C2452D', '#3D6C97', '#4C7E59', '#B98316', '#8A4F9E', '#2F7F86', '#B5576F', '#6B5A4C'];
-const CONTENT = ['title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
+const CONTENT = ['autoTagged', 'aiTagged', 'title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
 const member = id => FAM.members[id] || { name: T().someone, avatar: 'other', color: '#8C7A6B' };
 const avatarHTML = (id, cls = '') => { const m = member(id); return `<span class="av ${cls}" style="--c:${esc(m.color || '#8C7A6B')}" title="${esc(m.name)}" aria-hidden="true">${illus(m.avatar || 'other')}</span>`; };
 const isMine = r => !FAM.on || !r.owner || r.owner === FAM.uid;
@@ -2835,6 +2900,9 @@ async function famStart() {
   psListen();
   await ready;
   FAM.ready = true;
+  for (const r of FAM.raw.values()) if (r.owner === FAM.uid && !r.sample && !(r.audience || []).includes('all')) {
+    r.audience = ['all']; quiet(FB.updateDoc(fref('recipes', r.id), { audience: ['all'] })); syncCooksAudience(r.id, ['all']);
+  }
   psMigrate().catch(e => console.warn(e));
   return true;
 }
@@ -2849,7 +2917,7 @@ function rebuild() {
   if (!FAM.on) return;
   FAM.all = [...FAM.raw.values()].map(famRecipe);
   FAM.all.forEach(indexRecipe);
-  recipes = FAM.all.filter(r => r.inBook);
+  recipes = FAM.all;
   famChanged();
 }
 // Live updates: redraw the screen unless the person is typing.
@@ -2871,8 +2939,7 @@ async function cloudSave(r) {
   if (own) {
     const c = {}; for (const k of CONTENT) if (r[k] !== undefined && r[k] !== null) c[k] = r[k];
     c.owner = FAM.uid;
-    c.audience = Array.isArray(r.audience) && r.audience.length ? r.audience : ['all'];
-    if (!c.audience.includes('all') && !c.audience.includes(FAM.uid)) c.audience.push(FAM.uid);
+    c.audience = r.sample ? [FAM.uid] : ['all'];  // one family cookbook: every recipe is shared (examples stay on your own phone)
     if (c.photo && c.photo.length > 450000) c.photo = await recompressDataUrl(c.photo, 1100, 0.72);
     if (r.pages && r.pages.length) {
       c.pageCount = r.pages.length;
@@ -2982,30 +3049,21 @@ function feedHTML() {
   const recos = FAM.recos.filter(x => !x.done && FAM.raw.has(x.rid));
   const posts = FAM.all.filter(r => !r.sample && (r.owner === FAM.uid || !muted.has(r.owner)));
   const cooks = [...FAM.cooks.values()].filter(c => c.uid === FAM.uid || !muted.has(c.uid));
-  const items = [...posts.map(r => ({ at: r.createdAt || 0, r })), ...cooks.map(c => ({ at: c.at || 0, c }))].sort((a, b) => b.at - a.at).slice(0, 80);
+  // New recipes are already in the cookbook: here they're one line per person per day.
+  const adds = new Map();
+  for (const r of posts) { const k = r.owner + '|' + new Date(r.createdAt || 0).toDateString(), g = adds.get(k) || { owner: r.owner, at: 0, list: [] }; g.list.push(r); g.at = Math.max(g.at, r.createdAt || 0); adds.set(k, g); }
+  const items = [...[...adds.values()].map(g => ({ at: g.at, g })), ...cooks.map(c => ({ at: c.at || 0, c }))].sort((a, b) => b.at - a.at).slice(0, 80);
   const recoHTML = recos.map(x => { const r = famRecipe(FAM.raw.get(x.rid)); return `<article class="reco">
       <div class="reco-h">${avatarHTML(x.from)}<div class="min"><span class="eyebrow">${esc(t.recoFor(member(x.from).name))}</span>${x.note ? `<p class="hand">${esc(x.note)}</p>` : ''}</div></div>
       <a class="card" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}<div class="min"><h3>${esc(r.title)}</h3><div class="meta">${[r.category && t.cat[r.category], totalTime(r) && fmtDur(totalTime(r))].filter(Boolean).map(m => `<span>${esc(m)}</span>`).join('')}</div></div><div class="side"></div></a>
-      <div class="row2"><button class="btn small" data-act="recodone" data-id="${x.id}">${esc(t.recoLater)}</button>${r.inBook ? `<a class="btn small primary" href="#/r/${encodeURIComponent(r.id)}">${esc(t.open)}</a>` : `<button class="btn small primary" data-act="recokeep" data-id="${x.id}">${ico('bookmark')}${esc(t.addToBook)}</button>`}</div>
+      <div class="row2"><button class="btn small" data-act="recodone" data-id="${x.id}">${esc(t.recoLater)}</button><button class="btn small primary" data-act="recokeep" data-id="${x.id}">${esc(t.open)}</button></div>
     </article>`; }).join('');
-  const postHTML = items.map(({ r, c }) => {
+  const postHTML = items.map(({ g, c }) => {
     if (c) return cookPostHTML(c);
-    const hearts = Object.keys(r.hearts || {}), liked = !!(r.hearts || {})[FAM.uid];
-    const lock = !(r.audience || []).includes('all');
-    const fresh = r.owner !== FAM.uid && (r.createdAt || 0) > feedPrevSeen;
-    return `<article class="post ${fresh ? 'fresh' : ''}">
-      <header>${avatarHTML(r.owner)}<div class="min"><b>${esc(r.owner === FAM.uid ? t.you : member(r.owner).name)}</b><span class="muted">${esc(t.postedAgo(ago(r.createdAt || Date.now())))}</span></div>${lock ? `<span class="lockbadge" title="${esc(t.audPrivateShort)}">${ico('lock')}</span>` : ''}</header>
-      <a class="post-photo" href="#/r/${encodeURIComponent(r.id)}">${r.photo || r.thumb ? `<img src="${esc(r.photo && r.photo.length < 400000 ? r.photo : r.thumb || r.photo)}" alt="" loading="lazy">` : artHTML(r, 'ph')}</a>
-      <a class="post-title" href="#/r/${encodeURIComponent(r.id)}"><h3>${esc(r.title)}</h3></a>
-      ${r.note ? `<p class="hand">${esc(r.note)}</p>` : ''}
-      <div class="post-acts">
-        <button class="pa ${liked ? 'on' : ''}" data-act="like" data-id="${r.id}" aria-pressed="${liked}" aria-label="${esc(t.like)}">${ico(liked ? 'heart' : 'heartO')}<span>${hearts.length || ''}</span></button>
-        <a class="pa" href="#/r/${encodeURIComponent(r.id)}" data-scroll="comments" aria-label="${esc(t.comments)}">${ico('chat')}<span>${r.commentCount || ''}</span></a>
-        ${r.famCount ? `<span class="pa stars-mini">${ico('star')}<span>${fmtNum(Math.round(r.famRating * 10) / 10)}</span></span>` : ''}
-        <span style="flex:1"></span>
-        ${r.owner !== FAM.uid ? `<button class="pa ${r.inBook ? 'on' : ''}" data-act="bookmark" data-id="${r.id}" aria-pressed="${r.inBook}">${ico(r.inBook ? 'bookmark' : 'bookmarkO')}<span>${esc(r.inBook ? t.inMyBook : t.addToBook)}</span></button>` : ''}
-      </div>
-    </article>`;
+    const fresh = g.owner !== FAM.uid && g.at > feedPrevSeen, shown = g.list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 4);
+    return `<div class="addline ${fresh ? 'fresh' : ''}">${avatarHTML(g.owner, 'sm')}<div class="min">
+      <span class="addwho">${esc(t.addedLine(g.owner === FAM.uid ? '' : member(g.owner).name, g.list.length))} · ${esc(ago(g.at))}</span>
+      <span class="addlist">${shown.map(r => `<a href="#/r/${encodeURIComponent(r.id)}">${esc(r.title)}</a>`).join('')}${g.list.length > shown.length ? `<span class="muted">+${g.list.length - shown.length}</span>` : ''}</span></div></div>`;
   }).join('');
   return `<div class="feed">${recoHTML}${postHTML || `<div class="empty">${artImg('pot', 'ill-big')}<h2>${esc(t.feedEmptyT)}</h2><p>${esc(t.feedEmpty)}</p></div>`}</div>`;
 }
@@ -3120,11 +3178,12 @@ async function offerMigration() {
   if (!local.length || ls.get('famMigrated_' + FAM.fid, false)) return;
   await new Promise(res => {
     sheet(`<h2>${esc(t.migrateT(local.length))}</h2><p style="margin:0">${esc(t.migrateText)}</p>
-      <div class="menu"><button data-m="all">${ico('users')}${esc(t.migrateAll)}</button><button data-m="me">${ico('lock')}${esc(t.migrateMe)}</button></div>`, (el, close) => {
+      <div class="menu"><button data-m="all">${ico('users')}${esc(t.migrateAll)}</button><button data-m="later">${ico('clock')}${esc(t.later)}</button></div>`, (el, close) => {
       el.addEventListener('click', async e => {
         const m = e.target.closest('[data-m]')?.dataset.m; if (!m) return;
         close();
-        for (const r of local) await cloudSave({ ...r, audience: m === 'all' ? ['all'] : [FAM.uid], note: '' });
+        if (m === 'later') { res(); return; }
+        for (const r of local) await cloudSave({ ...r, note: '' });
         ls.set('famMigrated_' + FAM.fid, true); toast(t.migrated(local.length)); res();
       });
     });
@@ -3882,7 +3941,7 @@ function renderMore() {
       </div>
       <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></section>
     <section class="panel" id="claudePanel"><h2>${ico('spark')} ${esc(t.claudePanel)}</h2><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
-      ${ls.get('claudeKey', '') ? `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`
+      ${ls.get('claudeKey', '') ? `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`
         : `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div><button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`}</section>
     <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
       ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
@@ -4047,7 +4106,7 @@ document.addEventListener('click', async e => {
     case 'bookmark': { const x = FAM.all.find(y => y.id === b.dataset.id); if (x) { setInBook(x.id, !x.inBook); toast(!x.inBook ? t.addedToBook : t.removedFromBook); } break; }
     case 'recommend': if (r) recommendSheet(r); break;
     case 'recodone': quiet(FB.updateDoc(fref('recos', b.dataset.id), { done: true })); FAM.recos = FAM.recos.filter(x => x.id !== b.dataset.id); route(); break;
-    case 'recokeep': { const x = FAM.recos.find(y => y.id === b.dataset.id); if (x) { setInBook(x.rid, true); quiet(FB.updateDoc(fref('recos', x.id), { done: true })); FAM.recos = FAM.recos.filter(y => y.id !== x.id); toast(t.addedToBook); route(); } break; }
+    case 'recokeep': { const x = FAM.recos.find(y => y.id === b.dataset.id); if (x) { quiet(FB.updateDoc(fref('recos', x.id), { done: true })); FAM.recos = FAM.recos.filter(y => y.id !== x.id); go('#/r/' + x.rid); } break; }
     case 'postcomment': if (r) postComment(r.id); break;
     case 'delcomment': quiet(FB.deleteDoc(fref('recipes', rid, 'comments', b.dataset.c))); quiet(FB.updateDoc(fref('recipes', rid), { commentCount: FB.increment(-1) })); break;
     case 'famcreate': famCreate(); break;
@@ -4064,6 +4123,7 @@ document.addEventListener('click', async e => {
     case 'askclaude': askClaude(); break;
     case 'saveidea': { const x = ls.get('claudeLast', {}).newIdeas?.[+b.dataset.i]; if (x) { pendingShare = { url: x.url, text: '', title: x.title }; go('#/edit/new'); } break; }
     case 'claudekeysave': { const v = $('#claudeKeyIn').value.trim(); if (!v) break; ls.set('claudeKey', v); toast(t.claudeKeySaved); renderMore(); break; }
+    case 'tagall': b.disabled = true; await claudeTagAll(); b.disabled = false; break;
     case 'claudekeyrm': ls.del('claudeKey'); renderMore(); break;
     case 'home': go('#/'); break;
     case 'keep': keepLetter(b.dataset.id); break;
@@ -4279,6 +4339,7 @@ document.addEventListener('visibilitychange', () => {
   route();
   drawTimers();
   refreshWeather();
+  tagSweep().then(() => { if (current === 'list') renderResults(); }).catch(e => console.warn(e));
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>
