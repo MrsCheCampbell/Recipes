@@ -187,6 +187,8 @@ main.enter { animation: enter .32s var(--ease); }
 /* ---------- Illustrated placeholders ---------- */
 .art { background: color-mix(in srgb, var(--c) 18%, var(--surface)) !important; color: var(--ink); }
 .art .ill { width: 74%; height: 74%; object-fit: contain; }
+.art { container-type: size; }
+.art .ini { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 62cqmin; line-height: 1; color: color-mix(in srgb, var(--c) 70%, var(--ink)); opacity: .85; user-select: none; }
 img.ill { display: block; }
 
 /* ---------- Recipe list ---------- */
@@ -577,7 +579,8 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
 }
 /* ---- "I made it" posts and the recipe's photo panel ---- */
 .choice { display: grid; gap: 10px; }
-.choice button { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); transition: transform .15s var(--ease); }
+.chico { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--accent); } .chico svg.i { width: 24px; height: 24px; }
+.choice button { display: grid; grid-template-columns: 48px 1fr; gap: 14px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); transition: transform .15s var(--ease); }
 .choice button:active { transform: scale(.98); }
 .choice .ill { width: 60px; height: 60px; object-fit: contain; }
 .choice b { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; display: block; }
@@ -729,6 +732,8 @@ a.chip { text-decoration: none; color: inherit; }
 .addline.fresh { border-style: solid; border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
 .addline .min { display: grid; gap: 4px; } .addwho { font-size: .9rem; color: var(--muted); }
 .addlist { display: flex; flex-wrap: wrap; gap: 4px 12px; } .addlist a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration-color: var(--line); }
+.spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid color-mix(in srgb, var(--accent) 22%, transparent); border-top-color: var(--accent); animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
 .composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .composer .icon-btn { width: 40px; height: 40px; } .composer .mill { width: 26px; height: 26px; }
@@ -762,6 +767,7 @@ const I = {
   mic: `<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>`,
   x: `<path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/>`,
   plus: `<path d="M12 5v14M5 12h14"/>`,
+  glass: `<path d="M7.5 3.5h9c0 5-1.6 8.2-4.5 8.2S7.5 8.5 7.5 3.5Z"/><path d="M8 7.5h8"/><path d="M12 11.7v7.8M8.5 20.5h7"/>`,
   chev: `<path d="m7 9.5 5 5 5-5"/>`,
   // open cookbook with a ribbon bookmark
   book: `<path d="M3 5.6c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8V19c-3-1.2-6-1.2-9 .8-3-2-6-2-9-.8Z"/><path d="M12 6.4v13.4"/><path d="M15.6 4.9v6.2l1.5-1.1 1.5 1.1V4.7" ${F} opacity=".9"/>`,
@@ -836,7 +842,8 @@ const GUESS = [[/cocktail|martini|mojito|spritz|margarita|negroni|daiquiri|sangr
   [/boeuf|agneau|veau|steak|beef|lamb|roti|boulette/, 'meat'], [/poisson|saumon|dorade|thon|cabillaud|fish|salmon|tuna/, 'fish'], [/sauce|confiture|pesto|vinaigrette|jam/, 'sauces'],
   [/the\b|cafe|jus|limonade|cocktail|smoothie|tea\b|juice/, 'drinks'], [/puree|gratin|frites|riz|pates|potato|rice|pasta/, 'sides'], [/legume|carotte|courgette|aubergine|ratatouille|vegetable/, 'vegetarian']];
 const catOf = r => r.category || (GUESS.find(([re]) => re.test(norm(r.title))) || [])[1] || 'mains';
-const artHTML = (r, cls) => { const c = catOf(r); return `<div class="${cls} art" style="--c:${CAT_C[c] || '#8C7A6B'}">${illus(c)}</div>`; };
+// No photo: the recipe's initial, like a letter on a card-catalogue tab, on its category's tint.
+const artHTML = (r, cls) => { const c = catOf(r); return `<div class="${cls} art" style="--c:${CAT_C[c] || '#8C7A6B'}"><span class="ini" aria-hidden="true">${esc(initial(r.title))}</span></div>`; };
 
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
@@ -1867,13 +1874,13 @@ function chipsHTML() {
 function composerHTML() {
   const t = T();
   return `<div class="composer">${avatarHTML(FAM.uid)}<button class="composer-in" data-act="photopost">${esc(t.composerPh)}</button>
-    <button class="icon-btn" data-act="photopost" aria-label="${esc(t.photoPost)}">${ico('camera')}</button><button class="icon-btn" data-act="cookpick" aria-label="${esc(t.madeItQ)}">${artImg('pan', 'mill')}</button></div>`;
+    <button class="icon-btn" data-act="photopost" aria-label="${esc(t.photoPost)}">${ico('camera')}</button><button class="icon-btn" data-act="cookpick" aria-label="${esc(t.madeItQ)}">${ico('fire')}</button></div>`;
 }
 function feedIntroHTML() {
   const t = T();
   return `<div class="feedintro">
     <article class="post sample" data-label="${esc(t.example)}"><header><span class="av" style="--c:#C2452D" aria-hidden="true">${illus('mitt')}</span><div class="min"><b>${esc(t.exampleWho)}</b><span class="muted">${esc(t.cookedVerb)} · ${esc(t.agoYesterday)}</span></div></header>
-      <div class="post-photo"><div class="ph art" style="--c:${CAT_C.desserts}">${illus('desserts')}</div></div><p class="hand">${esc(t.exampleNote)}</p>
+      <div class="post-photo"><div class="ph art" style="--c:${CAT_C.desserts}"><span class="ini" aria-hidden="true">G</span></div></div><p class="hand">${esc(t.exampleNote)}</p>
       <div class="post-acts"><span class="pa on">${ico('heart')}<span>3</span></span><span class="pa">${ico('chat')}<span>2</span></span></div></article>
     <section class="panel"><h2>${ico('users')} ${esc(t.feedIntroT)}</h2><p>${esc(t.feedIntro)}</p><p class="muted">${esc(t.feedIntroHow)}</p>
       <a class="btn primary" href="#/famille">${ico('users')}${esc(t.feedIntroBtn)}</a></section></div>`;
@@ -1958,7 +1965,7 @@ function renderResults() {
   $('[data-act="clearq"]').hidden = !L.q;
   const az = $('#az'); az.hidden = true;
   if (!recipes.length) {
-    box.innerHTML = `<div class="empty">${artImg('pot', 'ill-big')}
+    box.innerHTML = `<div class="empty">
       <h2>${esc(t.emptyTitle)}</h2><p>${esc(t.emptyText)}</p>
       <button class="btn primary" data-act="new">${ico('plus')}${esc(t.firstRecipe)}</button>
       <button class="btn" data-act="samples">${esc(t.loadSamples)}</button></div>`;
@@ -2163,7 +2170,7 @@ function recipeMenu(r) {
   sheet(`<h2>${esc(r.title)}</h2><div class="menu">
     ${isMine(r) ? `<button data-m="edit">${ico('edit')}${esc(t.edit)}</button>` : `<button data-m="dup">${ico('copy')}${esc(t.copyToMine)}</button>`}
     <button data-m="event">${ico('book')}${esc(t.addToEvent)}</button>
-    <button data-m="wine">${artImg('wine', 'mill')}${esc(t.pairWine)}</button>
+    <button data-m="wine">${ico('glass')}${esc(t.pairWine)}</button>
     <button data-m="send">${ico('mail')}${esc(t.send)}</button>
     <button data-m="share">${ico('share')}${esc(t.share)}</button>
     <button data-m="copy">${ico('copy')}${esc(t.copyText)}</button>
@@ -2750,7 +2757,7 @@ function drawClaude(res) {
   const key = ls.get('claudeKey', '');
   const ask = `<button class="btn primary block" data-act="askclaude" ${!pantry.length || claudeBusy ? 'disabled' : ''}>${ico('spark')}${esc(res ? t.askAgain : t.askClaude)}</button>`;
   if (!key) { box.innerHTML = `<div class="panel"><h2>${ico('spark')} Claude</h2><p style="margin:0">${esc(t.claudeNoKey)}</p><a class="btn" href="#/more" data-goto="claude">${esc(t.claudeSetup)}</a></div>`; return; }
-  if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><div class="whisk">${artImg('whisk')}</div><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
+  if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><span class="spinner" aria-hidden="true"></span><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
   if (!res) { box.innerHTML = ask; return; }
   if (res.error) { box.innerHTML = `<p class="banner" style="margin:0">${esc(res.error)}</p>${ask}`; return; }
   const book = (res.fromBook || []).map(x => ({ ...x, r: byId(x.id) })).filter(x => x.r);
@@ -3065,7 +3072,7 @@ function feedHTML() {
       <span class="addwho">${esc(t.addedLine(g.owner === FAM.uid ? '' : member(g.owner).name, g.list.length))} · ${esc(ago(g.at))}</span>
       <span class="addlist">${shown.map(r => `<a href="#/r/${encodeURIComponent(r.id)}">${esc(r.title)}</a>`).join('')}${g.list.length > shown.length ? `<span class="muted">+${g.list.length - shown.length}</span>` : ''}</span></div></div>`;
   }).join('');
-  return `<div class="feed">${recoHTML}${postHTML || `<div class="empty">${artImg('pot', 'ill-big')}<h2>${esc(t.feedEmptyT)}</h2><p>${esc(t.feedEmpty)}</p></div>`}</div>`;
+  return `<div class="feed">${recoHTML}${postHTML || `<div class="empty"><h2>${esc(t.feedEmptyT)}</h2><p>${esc(t.feedEmpty)}</p></div>`}</div>`;
 }
 
 // ---------- Family page: create, join, members, settings ----------
@@ -3403,9 +3410,9 @@ async function cookPick() { const t = T(), pick = await pickRecipes({ title: t.p
 function fabSheet() {
   const t = T();
   sheet(`<h2>${esc(t.fabQ)}</h2><div class="choice">
-    <button data-x="cook">${artImg('pan')}<span class="min"><b>${esc(t.madeItQ)}</b><small>${esc(t.madeItSub)}</small></span></button>
-    ${FAM.on ? `<button data-x="photo">${artImg('nav-feed')}<span class="min"><b>${esc(t.photoPost)}</b><small>${esc(t.photoPostSub)}</small></span></button>` : ''}
-    <button data-x="new">${artImg('mains')}<span class="min"><b>${esc(t.newRecipeChoice)}</b><small>${esc(t.newRecipeSub)}</small></span></button>
+    <button data-x="cook"><span class="chico">${ico('fire')}</span><span class="min"><b>${esc(t.madeItQ)}</b><small>${esc(t.madeItSub)}</small></span></button>
+    ${FAM.on ? `<button data-x="photo"><span class="chico">${ico('camera')}</span><span class="min"><b>${esc(t.photoPost)}</b><small>${esc(t.photoPostSub)}</small></span></button>` : ''}
+    <button data-x="new"><span class="chico">${ico('edit')}</span><span class="min"><b>${esc(t.newRecipeChoice)}</b><small>${esc(t.newRecipeSub)}</small></span></button>
   </div>`, (el, close) => el.addEventListener('click', async e => {
     const x = e.target.closest('[data-x]')?.dataset.x; if (!x) return; close();
     if (x === 'new') go('#/edit/new');
@@ -3515,9 +3522,9 @@ function renderCarnets() {
   const body = tab === 'wines' ? winesBodyHTML() : tab === 'events'
     ? (evs.length ? `${up.length ? `<h2 class="eyebrow list-h">${esc(t.upcoming)}</h2><div class="evlist">${up.map(evCardHTML).join('')}</div>` : ''}
         ${past.length ? `<h2 class="eyebrow list-h">${esc(t.memories)}</h2><div class="evlist">${past.map(evCardHTML).join('')}</div>` : ''}`
-      : `<div class="empty">${artImg('teapot', 'ill-big')}<h2>${esc(t.eventsEmptyT)}</h2><p>${esc(t.eventsEmpty)}</p><button class="btn primary" data-act="newevent">${ico('plus')}${esc(t.newEvent)}</button></div>`)
+      : `<div class="empty"><h2>${esc(t.eventsEmptyT)}</h2><p>${esc(t.eventsEmpty)}</p><button class="btn primary" data-act="newevent">${ico('plus')}${esc(t.newEvent)}</button></div>`)
     : (gs.length ? `<div class="evlist" style="margin-top:16px">${gs.map(guestCardHTML).join('')}</div>`
-      : `<div class="empty">${artImg('kettle', 'ill-big')}<h2>${esc(t.guestsEmptyT)}</h2><p>${esc(t.guestsEmpty)}</p><button class="btn primary" data-act="newguest">${ico('plus')}${esc(t.newGuest)}</button></div>`);
+      : `<div class="empty"><h2>${esc(t.guestsEmptyT)}</h2><p>${esc(t.guestsEmpty)}</p><button class="btn primary" data-act="newguest">${ico('plus')}${esc(t.newGuest)}</button></div>`);
   $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div><div class="wrap">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.nEvents(evs.length))}</span></div>
       <h1 class="greet">${esc(t.carnets)}</h1><p class="muted" style="margin:0">${esc(t.carnetsSub)}</p></header>
@@ -3571,7 +3578,7 @@ function renderEvent(id) {
         ${prev ? `<button class="btn small ghost" data-act="evreuse" data-from="${prev.id}">${ico('copy')}${esc(t.reuseMenu(evLabel(prev), new Date(evTime(prev)).getFullYear()))}</button>` : ''}
       </section>
 
-      <section class="panel"><h2>${artImg('wine', 'h2ill')} ${esc(t.wines)}</h2>
+      <section class="panel"><h2>${ico('glass')} ${esc(t.wines)}</h2>
         <div class="wrapchips">${winesRowHTML(e.wines || [])}<button class="chip" data-act="evwines">${ico('plus')}${esc(t.aWine)}</button></div></section>
 
       <section class="panel evening"><h2>${ico('chat')} ${esc(t.evening)}</h2>
@@ -3647,7 +3654,7 @@ function renderGuest(id) {
           <small>${esc(t.servedTimes(s.count, fmtDate(s.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small>${verdictBadge(bestVerdict(s.verdicts))}</span></div>`).join('')}</div>`
           : `<p class="muted" style="margin:0">${esc(t.servedNone)}</p>`}
       </section>
-      ${winesServedTo(id).length ? `<section class="panel"><h2>${artImg('wine', 'h2ill')} ${esc(t.winesServed)}</h2><div class="served">${winesServedTo(id).map(o => `<div class="srow">${wineThumb(o.w)}<span class="min"><b><a href="#/vin/${encodeURIComponent(o.w.id)}">${esc(wineLabel(o.w))}</a></b><small>${esc(t.servedTimes(o.count, fmtDate(o.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small></span></div>`).join('')}</div></section>` : ''}
+      ${winesServedTo(id).length ? `<section class="panel"><h2>${ico('glass')} ${esc(t.winesServed)}</h2><div class="served">${winesServedTo(id).map(o => `<div class="srow">${wineThumb(o.w)}<span class="min"><b><a href="#/vin/${encodeURIComponent(o.w.id)}">${esc(wineLabel(o.w))}</a></b><small>${esc(t.servedTimes(o.count, fmtDate(o.last, { day: 'numeric', month: 'short', year: 'numeric' })))}</small></span></div>`).join('')}</div></section>` : ''}
       <section><h2 class="eyebrow list-h">${esc(t.theirEvenings)}</h2>
         ${evs.length ? `<div class="evlist">${evs.map(evCardHTML).join('')}</div>` : `<p class="muted">${esc(t.noEveningsYet)}</p>`}</section>
     </div>`;
@@ -3671,12 +3678,12 @@ const winesFor = rid => winesSorted().filter(w => (w.pairs || []).includes(rid))
 const eventsWithWine = wid => eventsSorted().filter(e => (e.wines || []).includes(wid));
 const wineThumb = (w, cls = 'thumb') => w.thumb || w.photo
   ? `<img class="${cls}" src="${esc(w.thumb || w.photo)}" alt="" loading="lazy">`
-  : `<span class="${cls} art" style="--c:${WCOL_C[w.color] || '#7A1F2B'}">${artImg('wine')}</span>`;
+  : `<span class="${cls} art" style="--c:${WCOL_C[w.color] || '#7A1F2B'}"><span class="ini" aria-hidden="true">${esc(initial(w.name || '?'))}</span></span>`;
 const wstars = n => n ? `<span class="stars-mini" aria-label="${n}/5">${ico('star').repeat(n)}</span>` : '';
 function newWine() { const w = { id: uid(), name: '', producer: '', appellation: '', vintage: '', color: '', rating: 0, notes: '', pairs: [], createdAt: Date.now() }; psPut('wines', w); return w; }
 function winesBodyHTML() {
   const t = T(), all = winesSorted(), col = L.wcol || '', q = norm(L.wq || '').trim();
-  if (!all.length) return `<div class="empty">${artImg('wine', 'ill-big')}<h2>${esc(t.winesEmptyT)}</h2><p>${esc(t.winesEmpty)}</p><button class="btn primary" data-act="newwine">${ico('camera')}${esc(t.newWine)}</button></div>`;
+  if (!all.length) return `<div class="empty"><h2>${esc(t.winesEmptyT)}</h2><p>${esc(t.winesEmpty)}</p><button class="btn primary" data-act="newwine">${ico('camera')}${esc(t.newWine)}</button></div>`;
   const list = all.filter(w => (!col || w.color === col) && (!q || norm([w.name, w.producer, w.appellation, w.vintage, w.notes].join(' ')).includes(q)));
   return `<div class="search wsearch" role="search">${ico('search', 'lead')}<input id="wq" type="search" autocomplete="off" value="${esc(L.wq || '')}" placeholder="${esc(t.searchPh)}" aria-label="${esc(t.searchPh)}"></div>
     <div class="chips">${['', ...WCOLS].map(c => `<button class="chip ${col === c ? 'on' : ''}" data-act="wcol" data-c="${c}" aria-pressed="${col === c}">${c ? `<i class="wdot" style="--c:${WCOL_C[c]}"></i>` : ''}${esc(c ? t.wcol[c] : t.allWines)}</button>`).join('')}</div>
