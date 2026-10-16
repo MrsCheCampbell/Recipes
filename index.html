@@ -734,6 +734,7 @@ a.chip { text-decoration: none; color: inherit; }
 .addlist { display: flex; flex-wrap: wrap; gap: 4px 12px; } .addlist a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration-color: var(--line); }
 .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid color-mix(in srgb, var(--accent) 22%, transparent); border-top-color: var(--accent); animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.srcnotes { margin: 0; white-space: pre-wrap; color: var(--ink); line-height: 1.55; border-left: 2px solid var(--line); padding-left: 14px; }
 .composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
 .composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .composer .icon-btn { width: 40px; height: 40px; } .composer .mill { width: 26px; height: 26px; }
@@ -874,7 +875,7 @@ const STR = {
     kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
     prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 personne' : `${fmtNum(n)} personnes`, times: x => `Quantités ×${fmtNum(x)}`,
-    ingredients: 'Ingrédients', steps: 'Préparation', notes: 'Notes d’Abe', source: 'Recette de',
+    ingredients: 'Ingrédients', steps: 'Préparation', notes: 'Notes', source: 'Recette de',
     cookMode: 'Mode cuisine', addToShop: 'Ajouter aux courses', addedToShop: n => `${n} ingrédient${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} aux courses`,
     openLink: 'Ouvrir le lien d’origine', edit: 'Modifier', share: 'Partager', print: 'Imprimer / PDF', duplicate: 'Dupliquer', del: 'Supprimer',
     copyText: 'Copier le texte', copied: 'Copié', deleteQ: t => `Supprimer « ${t} » ?`, deleteYes: 'Oui, supprimer', cancel: 'Annuler', deleted: 'Recette supprimée', undo: 'Annuler',
@@ -889,7 +890,7 @@ const STR = {
     holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
     ingF: 'Ingrédients', ingHint: 'Un ingrédient par ligne. Une ligne qui finit par « : » devient un titre (ex : « Pour la sauce : »).',
     stepsF: 'Étapes', stepsHint: 'Une étape par ligne. Les durées (« 20 min », « 1 h ») deviennent des minuteurs.',
-    notesF: 'Notes personnelles', notesPh: '', sourceF: 'Recette de (qui ?)', sourcePh: '',
+    notesF: 'Notes de la recette', notesHint: 'Astuces ou introduction de la recette d’origine.', noteF: 'Vos notes', notesPh: '', sourceF: 'Recette de (qui ?)', sourcePh: '',
     save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
     draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
     // shop
@@ -951,7 +952,7 @@ const STR = {
     welcomeFam: n => `Bienvenue dans « ${n} » !`, famJoinErr: 'Impossible de rejoindre. Vérifiez la connexion internet, ou demandez un nouveau lien.',
     migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
     migrateAll: 'Les ajouter au livre de la famille', migrateMe: '', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
-    familyShare: 'Partage avec la famille', noteF: 'Un petit mot pour le fil', notePh: '', whoSees: 'Qui peut la voir ?', audAll: 'Toute la famille', audMe: 'Moi seul(e)', audSome: 'Choisir',
+    familyShare: 'Partage avec la famille',  notePh: '', whoSees: 'Qui peut la voir ?', audAll: 'Toute la famille', audMe: 'Moi seul(e)', audSome: 'Choisir',
     audSomeHint: 'Touchez les personnes qui peuvent la voir. Les autres ne la verront pas.', famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans La Cuisine d’Abe, pour voir et partager nos recettes :`,
     fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
     fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
@@ -999,7 +1000,7 @@ const STR = {
     kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 serving' : `${fmtNum(n)} servings`, times: x => `Amounts ×${fmtNum(x)}`,
-    ingredients: 'Ingredients', steps: 'Method', notes: 'Abe’s notes', source: 'Recipe from',
+    ingredients: 'Ingredients', steps: 'Method', notes: 'Notes', source: 'Recipe from',
     cookMode: 'Cooking mode', addToShop: 'Add to shopping list', addedToShop: n => `${n} ingredient${n > 1 ? 's' : ''} added to shopping`,
     openLink: 'Open original link', edit: 'Edit', share: 'Share', print: 'Print / PDF', duplicate: 'Duplicate', del: 'Delete',
     copyText: 'Copy text', copied: 'Copied', deleteQ: t => `Delete “${t}”?`, deleteYes: 'Yes, delete', cancel: 'Cancel', deleted: 'Recipe deleted', undo: 'Undo',
@@ -1013,7 +1014,7 @@ const STR = {
     holidays: 'Holidays', tags: 'Keywords', tagsPh: '', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
     ingF: 'Ingredients', ingHint: 'One ingredient per line. A line ending with “:” becomes a heading (e.g. “For the sauce:”).',
     stepsF: 'Steps', stepsHint: 'One step per line. Times like “20 min” or “1 hour” become timers.',
-    notesF: 'Personal notes', notesPh: '', sourceF: 'Recipe from (who?)', sourcePh: '',
+    notesF: 'Notes from the recipe', notesHint: 'Tips or introduction from the original recipe.', noteF: 'Your notes', notesPh: '', sourceF: 'Recipe from (who?)', sourcePh: '',
     save: 'Save', saved: 'Saved', needTitle: 'Give the recipe a name',
     draftFound: 'An unsaved draft was found.', restore: 'Restore', discard: 'Discard',
     shopTitle: 'Shopping list', shopAddPh: 'Add an item…', shopEmpty: 'The list is empty. On a recipe, tap “Add to shopping list”.',
@@ -1071,7 +1072,7 @@ const STR = {
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrateMe: '', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
-    familyShare: 'Sharing with the family', noteF: 'A little note for the feed', notePh: '', whoSees: 'Who can see it?', audAll: 'Whole family', audMe: 'Only me', audSome: 'Choose',
+    familyShare: 'Sharing with the family',  notePh: '', whoSees: 'Who can see it?', audAll: 'Whole family', audMe: 'Only me', audSome: 'Choose',
     audSomeHint: 'Tap the people who can see it. Everyone else won’t.', famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in La Cuisine d’Abe to see and share our recipes:`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
@@ -1171,6 +1172,8 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
+Object.assign(STR.fr, { recipeNotes: 'Notes de la recette', notesOf: n => !n ? 'Vos notes' : /^[aeiouyhâàéèêëîïôûü]/i.test(n) ? `Notes d’${n}` : `Notes de ${n}` });
+Object.assign(STR.en, { recipeNotes: 'Notes from the recipe', notesOf: n => !n ? 'Your notes' : `${n}’s notes` });
 Object.assign(STR.fr, { addedLine: (who, n) => `${who ? who + ' a ajouté' : 'Vous avez ajouté'} ${n === 1 ? 'une recette' : n + ' recettes'}`, tonightRail: 'Idées pour ce soir',
   tagAll: 'Ranger toutes mes recettes avec Claude', tagAllProgress: (i, n) => `Claude range les recettes… ${i} / ${n}`, tagAllDone: n => n ? `${n} recette${n > 1 ? 's' : ''} rangée${n > 1 ? 's' : ''}` : 'Tout est déjà rangé' });
 Object.assign(STR.en, { addedLine: (who, n) => `${who ? who + ' added' : 'You added'} ${n === 1 ? 'a recipe' : n + ' recipes'}`, tonightRail: 'Ideas for tonight',
@@ -1328,7 +1331,7 @@ function indexRecipe(r) {
     title: norm(r.title),
     meta: norm([r.tags?.join(' '), both('cat', r.category), both('kash', r.kashrut), (r.holidays || []).map(h => occLabel(h, 'fr') + ' ' + occLabel(h, 'en')).join(' '), r.source].join(' ')),
     ing: norm(r.ingredients),
-    rest: norm([r.steps, r.notes, r.link].join(' ')),
+    rest: norm([r.steps, r.notes, r.note, r.link].join(' ')),
   };
   f.words = [...new Set((f.title + ' ' + f.meta + ' ' + f.ing).split(/[^a-z0-9]+/).filter(w => w.length > 3))];
   Object.defineProperty(r, '_ix', { value: f, configurable: true, enumerable: false, writable: true });
@@ -2110,7 +2113,6 @@ function renderRecipe(r) {
         <h1>${esc(r.title)}</h1>
         ${FAM.on && r.owner && r.owner !== FAM.uid ? `<div class="byline">${avatarHTML(r.owner, 'sm')}<span>${esc(t.addedBy(member(r.owner).name))} · ${esc(ago(r.createdAt || Date.now()))}</span></div>` : ''}
         ${r.source ? `<div class="muted">${esc(t.source)} <b>${esc(r.source)}</b></div>` : ''}
-        ${FAM.on && r.note ? `<p class="hand" style="margin:0">${esc(r.note)}</p>` : ''}
         <div class="badges">${badges}</div>
         <div class="stars" role="group" aria-label="Note">${[1, 2, 3, 4, 5].map(i => `<button data-act="rate" data-v="${i}" class="${(r.rating || 0) >= i ? 'on' : ''}" aria-label="${i}/5">${ico('star')}</button>`).join('')}</div>
         ${FAM.on && FAM.raw.has(r.id) ? socialHTML(r) : ''}
@@ -2129,7 +2131,8 @@ function renderRecipe(r) {
         <ul class="ing">${ing}</ul>
         <button class="btn block" style="margin-top:10px" data-act="toshop">${ico('cart')}${esc(t.addToShop)}</button></section>` : ''}
       ${steps ? `<section class="section"><div class="section-h"><h2>${esc(t.steps)}</h2></div><ol class="steps">${steps}</ol></section>` : ''}
-      ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.notes)}</h2></div><div class="notes">${esc(r.notes)}</div></section>` : ''}
+      ${r.notes ? `<section class="section"><div class="section-h"><h2>${esc(t.recipeNotes)}</h2></div><p class="srcnotes">${esc(r.notes)}</p></section>` : ''}
+      ${r.note ? `<section class="section"><div class="section-h"><h2>${esc(t.notesOf(FAM.on && r.owner ? member(r.owner).name : S.name || ''))}</h2></div><div class="notes">${esc(r.note)}</div></section>` : ''}
       ${ing || steps ? pagesHTML(r) : ''}
       <div class="cooked"><span>${esc(t.cookedN(r.cookCount || 0, r.lastCooked && fmtDate(r.lastCooked)))}</span><button class="btn small primary" data-act="cooked">${ico('camera')}${esc(t.madeIt)}</button>
         ${eventsWith(r.id).length ? `<div class="served-line"><span>${esc(t.servedAt)}</span>${eventsWith(r.id).slice(0, 6).map(e => `<a href="#/carnet/${encodeURIComponent(e.id)}">${esc(evLabel(e))}${evLabel(e).includes(String(new Date(evTime(e)).getFullYear())) ? '' : ' · ' + new Date(evTime(e)).getFullYear()}</a>`).join('')}</div>` : ''}
@@ -2159,7 +2162,7 @@ function socialHTML(r) {
 function recipeText(r) {
   const t = T();
   return [r.title, r.source ? `${t.source} ${r.source}` : '', '', `— ${t.ingredients} —`, ...lines(r.ingredients).map(l => isHeading(l) ? `\n${cleanHeading(l)} :` : `• ${l}`), '', `— ${t.steps} —`,
-    ...lines(r.steps).map((l, i) => `${i + 1}. ${cleanStep(l)}`), r.notes ? `\n${t.notes} : ${r.notes}` : '', r.link ? `\n${r.link}` : '', `\n— ${T().appName}`].filter(x => x !== undefined).join('\n').replace(/\n{3,}/g, '\n\n');
+    ...lines(r.steps).map((l, i) => `${i + 1}. ${cleanStep(l)}`), r.notes ? `\n${t.recipeNotes} : ${r.notes}` : '', r.note ? `\n${t.notesOf(FAM.on && r.owner ? member(r.owner).name : S.name || '')} : ${r.note}` : '', r.link ? `\n${r.link}` : '', `\n— ${T().appName}`].filter(x => x !== undefined).join('\n').replace(/\n{3,}/g, '\n\n');
 }
 async function shareText(title, text) {
   if (navigator.share) { try { await navigator.share({ title, text }); return; } catch (e) { if (e.name === 'AbortError') return; } }
@@ -2331,7 +2334,8 @@ function renderEdit(r) {
       </div>
       <div class="field"><label for="fIng">${esc(t.ingF)}</label><span class="hint">${esc(t.ingHint)}</span><textarea id="fIng" rows="8">${esc(r.ingredients || '')}</textarea></div>
       <div class="field"><label for="fSteps">${esc(t.stepsF)}</label><span class="hint">${esc(t.stepsHint)}</span><textarea id="fSteps" rows="10">${esc(r.steps || '')}</textarea></div>
-      <div class="field"><label for="fNotes">${esc(t.notesF)}</label><textarea id="fNotes" placeholder="${esc(t.notesPh)}" style="min-height:5em">${esc(r.notes || '')}</textarea></div>
+      <div class="field"><label for="fNote">${esc(t.noteF)}</label><textarea id="fNote" style="min-height:5em">${esc(r.note || '')}</textarea></div>
+      <div class="field"><label for="fNotes">${esc(t.notesF)}</label><span class="hint">${esc(t.notesHint)}</span><textarea id="fNotes" style="min-height:4em">${esc(r.notes || '')}</textarea></div>
       <div class="field"><label for="fSource">${esc(t.sourceF)}</label><input class="input" id="fSource" placeholder="${esc(t.sourcePh)}" value="${esc(r.source || '')}"></div>
       <div class="field"><label for="fTags">${esc(t.tags)}</label><input class="input" id="fTags" placeholder="${esc(t.tagsPh)}" value="${esc((r.tags || []).join(', '))}"></div>
     </form>
@@ -2357,7 +2361,7 @@ function readForm() {
     title: v('fTitle'), link: v('fLink'), category: v('fCat'), kashrut: $('input[name="kashrut"]:checked')?.value || '',
     holidays: $$('.occ-chips .chip.on[data-h]').map(b => b.dataset.h),
     servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
-    ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', source: v('fSource'),
+    ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', note: $('#fNote')?.value || '', source: v('fSource'),
     tags: v('fTags').split(',').map(s => s.trim()).filter(Boolean), photo: formPhoto, pages: formPages,
   };
 }
