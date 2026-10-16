@@ -134,6 +134,17 @@ Everything is in the backup file (*Plus → Sauvegarder*). In a family it is als
 
 > **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts and the private notebooks.
 
+## Adding recipes from links and screenshots
+
+- **Links**: the app first asks the site's own little helper on Netlify (`netlify/functions/fetch-page.mjs`, at `/api/fetch`) to fetch the page, which gets past the browser restriction that blocks most recipe sites. It falls back to public proxies if that fails. If the page has recipe data built in (most big sites do), the form fills in instantly, with no AI involved.
+- **With a Claude key** (*Plus → Claude*, the same key as the Frigo), anything that doesn't fill in cleanly is read by Claude instead:
+  - pages without recipe data (blogs): Claude reads the page text;
+  - sites that refuse the helper: Claude fetches the page itself;
+  - **screenshots and cookbook photos**: Claude reads the pictures directly, several at once, joined into one recipe, in the recipe's own language. This is much better than the reader built into the phone;
+  - pasted text: Claude sorts it into ingredients and steps.
+  Each recipe read this way costs a few cents on the Claude account. Without a key, the phone's own reader is used as before.
+- The Netlify helper is free on Netlify's free plan (it counts as a function call, not a deploy). It only fetches public web pages and images, only for the app itself.
+
 ## Frigo: what can I make?
 
 The **Frigo** tab (the little fridge in the bottom bar):
