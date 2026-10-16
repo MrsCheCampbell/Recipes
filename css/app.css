@@ -141,6 +141,7 @@ main.enter { animation: enter .32s var(--ease); }
 .chip.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 .chip svg.i { width: 18px; height: 18px; }
 .chip .heart { color: var(--accent); }
+.chip .av.xs { margin-left: -6px; }
 .chip.on .heart { color: var(--bg); }
 .listmeta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 12px 2px; flex-wrap: wrap; }
 .listmeta > * { min-width: 0; }

@@ -164,7 +164,7 @@ const tilesHTML = items => `<div class="rail">${items.slice(0, 10).map(x => { co
   : artHTML(r, 'img')}${x.why ? `<span class="why">${esc(x.why)}</span>` : ''}<b>${esc(r.title)}</b></a>`; }).join('')}</div>`;
 function railHTML() {
   const t = T();
-  if (current !== 'list' || L.q || L.cat || L.hol || L.mood || L.kash || L.quick || L.fav || !recipes.length) return '';
+  if (current !== 'list' || L.q || L.cat || L.hol || L.mood || L.kash || L.quick || L.fav || L.who || !recipes.length) return '';
   let items = recipes.filter(r => r.favorite), title = t.favRail;
   if (items.length < 2) { items = [...recipes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); title = t.recentRail; }
   const mood = moodRail() || { key: '', title: t.tonightRail, items: dailyPicks() };
@@ -182,8 +182,11 @@ function chipsHTML() {
   const counts = {}; recipes.forEach(r => { if (r.category) counts[r.category] = (counts[r.category] || 0) + 1; });
   const cats = CATS.filter(c => counts[c] && c !== 'cocktails').sort((a, b) => counts[b] - counts[a]).concat('cocktails');
   const extra = L.hol || L.quick || L.kash;
-  return chip('all', !L.cat && !L.fav && !extra, esc(t.all)) +
-    (current === 'fav' ? '' : chip('fav', L.fav, ico('bookmark', 'heart') + esc(t.favorites))) +
+  // In the family: one chip per person who has added recipes (mine first).
+  const owners = FAM.on ? [...new Set(recipes.filter(r => !r.sample && r.owner).map(r => r.owner))].sort((a, b) => (b === FAM.uid) - (a === FAM.uid)) : [];
+  const people = owners.length > 1 || L.who ? owners.map(id => chip('who', L.who === id, avatarHTML(id, 'xs') + esc(id === FAM.uid ? t.mine : member(id).name), `data-id="${id}"`)).join('') : '';
+  return chip('all', !L.cat && !L.fav && !L.who && !extra, esc(t.all)) +
+    (current === 'fav' ? '' : chip('fav', L.fav, ico('bookmark', 'heart') + esc(t.favorites))) + people +
     cats.map(c => chip('cat', L.cat === c, esc(t.cat[c]), `data-c="${c}"`)).join('') +
     (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
     chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));

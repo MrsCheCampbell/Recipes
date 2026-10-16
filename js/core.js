@@ -88,7 +88,7 @@ function migrate(r) {
   if ((r.holidays || []).includes('momsbday')) { r.holidays = [...new Set(r.holidays.map(h => h === 'momsbday' ? 'birthday' : h))]; changed = true; }
   return changed;
 }
-const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, sort: 'az', scroll: 0 };
+const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, who: '', sort: 'az', scroll: 0 };
 let shop = ls.get('shop', []);
 const saveShop = () => { ls.set('shop', shop); updateNavCount(); };
 
@@ -151,9 +151,18 @@ const totalTime = r => (+r.prep || 0) + (+r.cook || 0);
 const letterOf = r => { const c = norm(sortKey(r.title)).trim()[0] || '#'; return /[a-z]/.test(c) ? c.toUpperCase() : '#'; };
 const collator = () => new Intl.Collator(locale(), { sensitivity: 'base', numeric: true });
 
+// A word in the search that is someone's name ("maman") means "recipes added by them".
+function nameTokens(toks) {
+  if (!FAM.on) return { who: [], rest: toks };
+  const names = Object.entries(FAM.members).map(([id, m]) => [id, norm(m.name).split(/\s+/)]);
+  const who = [], rest = [];
+  for (const tk of toks) { const hit = names.filter(([, ws]) => ws.includes(tk)).map(([id]) => id); if (hit.length) who.push(hit); else rest.push(tk); }
+  return { who, rest };
+}
 function filtered() {
-  const toks = norm(L.q).split(/\s+/).filter(Boolean);
+  const parts = nameTokens(norm(L.q).split(/\s+/).filter(Boolean)), toks = parts.rest;
   let list = recipes.filter(r =>
+    (!L.who || r.owner === L.who) && parts.who.every(ids => ids.includes(r.owner)) &&
     (!L.fav || r.favorite) && (!L.kash || r.kashrut === L.kash) && (!L.cat || r.category === L.cat) &&
     (!L.hol || (r.holidays || []).includes(L.hol)) && (!L.quick || (totalTime(r) > 0 && totalTime(r) <= 30)));
   if (L.mood && !toks.length) {
