@@ -734,6 +734,10 @@ a.chip { text-decoration: none; color: inherit; }
 .addlist { display: flex; flex-wrap: wrap; gap: 4px 12px; } .addlist a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration-color: var(--line); }
 .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid color-mix(in srgb, var(--accent) 22%, transparent); border-top-color: var(--accent); animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.autotag { display: grid; gap: 6px; justify-items: start; padding: 12px 14px; border: 1px dashed var(--line); border-radius: var(--radius); }
+.autotag .btn svg.i { color: var(--accent); }
+.spinner.sm { width: 18px; height: 18px; border-width: 2px; }
+.occ-chips .chip.just { animation: pop .45s var(--ease); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
 .srcnotes { margin: 0; white-space: pre-wrap; color: var(--ink); line-height: 1.55; border-left: 2px solid var(--line); padding-left: 14px; }
 .composer { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 8px; box-shadow: var(--shadow); }
 .composer-in { text-align: left; border: 0; background: none; color: var(--muted); font-size: 1rem; padding: 8px 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1172,6 +1176,10 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
+Object.assign(STR.fr, { autoTagBtn: 'Ranger automatiquement', autoTagHint: 'Saisons, météo, occasions, catégorie : tout reste modifiable.', autoTagBusy: 'Claude range la recette…',
+  autoTagDone: n => `${n} étiquette${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''} : touchez pour retirer`, autoTagNone: 'Rien de plus à ajouter', autoTagEmpty: 'Ajoutez d’abord le titre ou les ingrédients' });
+Object.assign(STR.en, { autoTagBtn: 'Sort automatically', autoTagHint: 'Seasons, weather, occasions, category: you can change everything.', autoTagBusy: 'Claude is sorting the recipe…',
+  autoTagDone: n => `${n} tag${n > 1 ? 's' : ''} added: tap one to remove it`, autoTagNone: 'Nothing more to add', autoTagEmpty: 'Add the title or ingredients first' });
 Object.assign(STR.fr, { recipeNotes: 'Notes de la recette', notesOf: n => !n ? 'Vos notes' : /^[aeiouyhâàéèêëîïôûü]/i.test(n) ? `Notes d’${n}` : `Notes de ${n}` });
 Object.assign(STR.en, { recipeNotes: 'Notes from the recipe', notesOf: n => !n ? 'Your notes' : `${n}’s notes` });
 Object.assign(STR.fr, { addedLine: (who, n) => `${who ? who + ' a ajouté' : 'Vous avez ajouté'} ${n === 1 ? 'une recette' : n + ' recettes'}`, tonightRail: 'Idées pour ce soir',
@@ -2288,6 +2296,7 @@ function askTimer(min, label) {
 // ---------- Edit view ----------
 let formPhoto = null;
 function renderEdit(r) {
+  formTag = { auto: false, ai: false };
   current = 'edit';
   const t = T(), isNew = !r;
   r = r || { title: '', holidays: [], tags: [], audience: ['all'] };
@@ -2316,12 +2325,13 @@ function renderEdit(r) {
         <button type="button" class="btn" data-act="paste">${esc(t.pasteBtn)}</button>
       </div>
       <div class="field"><label for="fTitle">${esc(t.title)} *</label><input class="input" id="fTitle" required placeholder="${esc(t.titlePh)}" value="${esc(r.title)}" style="font-size:1.15rem;font-weight:700"></div>
+      <div class="autotag"><button type="button" class="btn" data-act="autotag">${ico('spark')}${esc(t.autoTagBtn)}</button><span class="hint">${esc(t.autoTagHint)}</span></div>
       <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat"><option value="">—</option>${CATS.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${esc(t.cat[c])}</option>`).join('')}</select></div>
       <div class="field"><span class="lbl">${esc(t.occasions)}</span>
-        <span class="eyebrow">${esc(t.occMoments)}</span>
-        <div class="wrapchips occ-chips" id="fOcc">${generalOcc().map(h => occChip(h, r.holidays)).join('')}<button type="button" class="chip add" data-act="addocc">${ico('plus')}${esc(t.addOcc)}</button></div>
-        <span class="eyebrow" style="margin-top:6px">${esc(t.occSeasons)}</span>
+        <span class="eyebrow">${esc(t.occSeasons)}</span>
         <div class="wrapchips occ-chips" id="fSeason">${SEASONS.map(h => occChip(h, r.holidays)).join('')}</div>
+        <span class="eyebrow" style="margin-top:6px">${esc(t.occMoments)}</span>
+        <div class="wrapchips occ-chips" id="fOcc">${generalOcc().map(h => occChip(h, r.holidays)).join('')}<button type="button" class="chip add" data-act="addocc">${ico('plus')}${esc(t.addOcc)}</button></div>
         <span class="eyebrow" style="margin-top:6px">${esc(t.occJewish)}</span>
         <div class="wrapchips occ-chips" id="fHol">${HOLIDAYS.map(h => occChip(h, r.holidays)).join('')}</div></div>
       <details class="more-box" ${r.kashrut ? 'open' : ''}><summary>${esc(t.kashrut)}</summary><div class="in">
@@ -2392,6 +2402,8 @@ async function submitForm() {
   const r = Object.assign({}, old || { id: uid(), createdAt: Date.now(), cookCount: 0, rating: 0, favorite: false }, d, { updatedAt: Date.now() });
   if (r.photo !== old?.photo) r.thumb = r.photo ? (r.photo.startsWith('data:') ? await thumbFrom(r.photo) : r.photo) : null;
   if (old?.sample) r.sample = false;
+  if (formTag.auto) r.autoTagged = true;
+  if (formTag.ai) r.aiTagged = true;
   autoTag(r);
   await saveRecipe(r);
   ls.del('draft');
@@ -2426,10 +2438,11 @@ async function claudeTags(r) {
   const msg = await client.beta.messages.create({
     model: 'claude-opus-5-5', max_tokens: 4000,
     betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
-    output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags'], properties: {
-      category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } } } } } },
+    output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags', 'keywords'], properties: {
+      category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } }, keywords: { type: 'array', items: { type: 'string' } } } } } },
     messages: [{ role: 'user', content: `File this recipe for a family cookbook (French-Jewish-American family in Bordeaux).
 Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, thanksgiving, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner); Jewish holidays only if the dish is traditional for that holiday (shabbat, roshhashana, yomkippur for the meal before or after the fast, sukkot, hanukkah, tubishvat, purim, pesach only if kosher for Passover, shavuot). Usually 2 to 5 tags. Leave out anything doubtful.
+keywords: up to 5 short search words in the recipe's own language (main ingredient, dish type, cuisine), not repeating the title.
 
 <recipe>
 ${[r.title, r.category && 'Category: ' + r.category, 'Ingredients:\n' + (r.ingredients || ''), 'Steps:\n' + (r.steps || ''), r.notes].filter(Boolean).join('\n').slice(0, 12000)}
@@ -2446,9 +2459,33 @@ async function claudeTagRecipe(r) {
   const cur = byId(r.id) || r;
   cur.holidays = [...new Set([...(cur.holidays || []), ...d.tags.filter(k => TAG_KEYS.includes(k))])];
   if (!cur.category && CATS.includes(d.category)) cur.category = d.category;
+  if (!(cur.tags || []).length && d.keywords?.length) cur.tags = d.keywords.map(x => x.trim()).filter(x => x && x.length < 25).slice(0, 5);
   cur.aiTagged = true;
   await saveRecipe(cur);
   return true;
+}
+// The "Ranger automatiquement" button in the form (also run after an import): fills in what fits, all still editable.
+let formTag = { auto: false, ai: false };
+async function formAutoTag(quiet) {
+  const t = T(), btn = $('[data-act="autotag"]'); if (!btn || btn.disabled) return;
+  const r = readForm();
+  if (!r.title && !r.ingredients.trim()) { if (!quiet) toast(t.autoTagEmpty); return; }
+  const before = new Set(r.holidays), catBefore = r.category;
+  const apply = (keys, cat, kw) => {
+    if (cat && !$('#fCat').value) { $('#fCat').value = cat; $('#fCat').dispatchEvent(new Event('change')); }
+    for (const k of keys) { const c = $(`.occ-chips .chip[data-h="${k}"]`); if (c && !c.classList.contains('on')) { c.classList.add('on', 'just'); c.setAttribute('aria-pressed', true); } }
+    if (kw?.length && !$('#fTags').value.trim()) $('#fTags').value = kw.slice(0, 5).join(', ');
+  };
+  const g = guessTags(r); apply(g.holidays, g.category); formTag.auto = true;
+  if (hasClaude() && navigator.onLine) {
+    btn.disabled = true; btn.innerHTML = `<span class="spinner sm" aria-hidden="true"></span>${esc(t.autoTagBusy)}`;
+    try { const c = await claudeTags({ ...r, holidays: readForm().holidays }); if (c && $('#form')) { apply(c.tags, c.category, c.keywords); formTag.ai = true; } } catch (e) { console.warn(e); }
+    btn.disabled = false; btn.innerHTML = ico('spark') + esc(t.autoTagBtn);
+  }
+  if (!$('#form')) return;
+  const after = readForm(), n = after.holidays.filter(h => !before.has(h)).length + (after.category !== catBefore ? 1 : 0);
+  $('#form').dispatchEvent(new Event('input'));
+  if (!quiet || n) toast(n ? t.autoTagDone(n) : t.autoTagNone);
 }
 // Once per phone: file the recipes that were added before smart tags existed.
 async function tagSweep() {
@@ -2665,7 +2702,7 @@ async function readBookPages(files) {
       const imgs = []; for (const p of pages) imgs.push(await recompressDataUrl(p, 1800, 0.85));
       const c = await claudeRecipe({ images: imgs });
       if (btn) btn.disabled = false;
-      if (c) { st.hidden = true; fillForm(c, true); $('#form')?.dispatchEvent(new Event('input')); toast(t.claudeReadOk); return; }
+      if (c) { st.hidden = true; fillForm(c, true); $('#form')?.dispatchEvent(new Event('input')); toast(t.claudeReadOk); formAutoTag(true); return; }
       set(t.ocrEmpty, 0); $('#form')?.dispatchEvent(new Event('input')); return;
     } catch (e) { console.warn(e); }  // fall back to reading on the phone
   }
@@ -2689,6 +2726,7 @@ async function readBookPages(files) {
   fillForm(parseRecipeText(text), true);
   $('#form')?.dispatchEvent(new Event('input'));
   toast(hasClaude() ? t.ocrOk : t.ocrOk + ' ' + t.claudeTip);
+  formAutoTag(true);
 }
 
 // ---------- Fridge: what can I make? ----------
@@ -3880,6 +3918,7 @@ async function doImport() {
   fillForm(d, false);
   ls.set('draft', { key: $('#view').dataset.id || 'new', ts: Date.now(), data: readForm() });
   toast(t.importOk);
+  formAutoTag(true);
 }
 
 // ---------- Shopping list ----------
@@ -4134,6 +4173,7 @@ document.addEventListener('click', async e => {
     case 'askclaude': askClaude(); break;
     case 'saveidea': { const x = ls.get('claudeLast', {}).newIdeas?.[+b.dataset.i]; if (x) { pendingShare = { url: x.url, text: '', title: x.title }; go('#/edit/new'); } break; }
     case 'claudekeysave': { const v = $('#claudeKeyIn').value.trim(); if (!v) break; ls.set('claudeKey', v); toast(t.claudeKeySaved); renderMore(); break; }
+    case 'autotag': formAutoTag(false); break;
     case 'tagall': b.disabled = true; await claudeTagAll(); b.disabled = false; break;
     case 'claudekeyrm': ls.del('claudeKey'); renderMore(); break;
     case 'home': go('#/'); break;
@@ -4164,8 +4204,8 @@ document.addEventListener('click', async e => {
     case 'paste': { const v = $('#fPaste').value.trim(); if (!v) { $('#fPaste').focus(); break; }
       if (hasClaude() && navigator.onLine && v.length > 80) { const label = b.innerHTML; b.disabled = true; b.textContent = t.claudeReading;
         let c = null; try { c = await claudeRecipe({ text: v }); } catch (e) { console.warn(e); }
-        b.disabled = false; b.innerHTML = label; if (c) { fillForm(c); toast(t.claudeReadOk); break; } }
-      fillForm(parseRecipeText(v)); toast(t.pasteOk); break; }
+        b.disabled = false; b.innerHTML = label; if (c) { fillForm(c); toast(t.claudeReadOk); formAutoTag(true); break; } }
+      fillForm(parseRecipeText(v)); toast(t.pasteOk); formAutoTag(true); break; }
     case 'draftyes': { const d = ls.get('draft'); if (d) fillForm(d.data); b.closest('.draft-note').remove(); break; }
     case 'draftno': ls.del('draft'); b.closest('.draft-note').remove(); break;
     case 'shoptoggle': { const it = shop.find(x => x.id === b.dataset.id); if (it) { it.done = b.checked; saveShop(); b.closest('.shop-item').classList.toggle('done', it.done); } break; }
@@ -4203,7 +4243,7 @@ document.addEventListener('click', e => {
   const cv = e.target.closest('b.conv');
   if (cv) { e.preventDefault(); const o = cv.dataset.orig; cv.dataset.orig = cv.textContent; cv.textContent = o; return; }
   const c = e.target.closest('.occ-chips .chip[data-h]'); if (!c) return;
-  c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on'));
+  c.classList.toggle('on'); c.classList.remove('just'); c.setAttribute('aria-pressed', c.classList.contains('on'));
   $('#form').dispatchEvent(new Event('input'));
 });
 document.addEventListener('input', e => {

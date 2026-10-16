@@ -135,7 +135,8 @@ Everything is in the backup file (*Plus → Sauvegarder*). In a family it is als
 
 ## Smart tags and suggestions
 
-- When a recipe is saved, the app files it under its seasons, weather (scorching day, cold day, rainy day) and occasions (barbecue, brunch, quick weeknight…), and picks a category if none was chosen. It never removes a tag you set, and you can always change them.
+- **Ranger automatiquement**: a button in the recipe form fills in the category, seasons, weather and occasions right away (and keywords, with a Claude key). New ones are ringed, so you can see them and tap any to remove it before saving. It also runs by itself after importing from a link, screenshots or pasted text.
+- When a recipe is saved without that, the app files it under its seasons, weather (scorching day, cold day, rainy day) and occasions (barbecue, brunch, quick weeknight…), and picks a category if none was chosen. It never removes a tag you set, and you can always change them.
 - With a Claude key, Claude also reads each new recipe and adds the tags that fit, including Jewish holidays when the dish is traditional for them. *Plus → Claude → Ranger toutes mes recettes avec Claude* does the same for older recipes.
 - The top of **Recettes** always shows a row of ideas for today: from the weather (hot, cold, rainy) or the season, or a daily pick when nothing matches.
 - In **Filtres**, seasons and weather come first, then occasions, Jewish holidays, category and kashrut.
