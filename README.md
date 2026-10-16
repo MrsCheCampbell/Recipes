@@ -91,12 +91,11 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 
 - **Just a photo**: the bar at the top of the feed (or the + button) shares a photo with no recipe attached: a plate at a restaurant, a dish at friends', anything too pretty or too funny. Add where it was if you like.
 
-- **Feed** (home screen, "La famille" tab): recently added recipes with the person's avatar and a little note, newest first. Tap the **heart** to say you like it, the bubble to comment ("Je l'ai essayée", "délicieux !"), and **Ajouter à mon livre** to keep it in your own book. "Mon livre" switches back to your alphabetical book.
+- **One family cookbook**: every recipe anyone adds goes into the shared list in **Recettes**, with a small avatar showing who added it. Nothing is hidden. Your hearts and favourites stay your own.
+- **Feed** (the **Famille** tab): food photos, of something someone cooked (tagged to the recipe) or any plate worth sharing, with hearts and comments. New recipes show up as one quiet line ("Papa a ajouté 3 recettes").
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
 - **Ratings**: everyone rates with their own stars; the recipe shows the family average.
-- **Privacy, per recipe** (in the recipe form, "Qui peut la voir ?"): *Toute la famille*, *Moi seul(e)*, or *Choisir* exactly who (Mom's secret birthday cake can be hidden from you). This is enforced by the server rules, so a hidden recipe never even reaches the other phones.
-- **Search the whole family**: the "Toute la famille" chip above the search results.
 - **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
 - **Avatars**: each person picks a drawn avatar and a colour.
 - **Cocktails** have their own section (and illustration).
@@ -115,7 +114,7 @@ The family's recipes live in your own free Firebase project (Google). Nobody els
 6. In the app: **Plus → La famille → Créer la famille**, paste that block, name the family, pick your name and avatar.
 7. **Inviter quelqu'un** → send the link to Mom and Dad. When they tap it, the app opens on "Rejoindre", they choose their name and avatar, done.
 
-When joining, the app offers to bring the recipes already on that phone into the family (visible to everyone, or private for now).
+When joining, the app offers to add the recipes already on that phone to the family cookbook.
 
 Notes: the Firebase web config isn't a secret (security comes from the rules). Accounts are tied to each phone; if someone leaves or resets their phone, they rejoin with a new invite link (their earlier recipes stay in the family). The free plan's limits (50,000 reads and 20,000 writes a day, 1 GB) are far beyond what a family uses.
 
@@ -133,6 +132,25 @@ The **Carnets** tab (bottom bar) is private to each person, even in the family.
 Everything is in the backup file (*Plus → Sauvegarder*). In a family it is also stored in your own private space on the server, which only you can read.
 
 > **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts and the private notebooks.
+
+## Smart tags and suggestions
+
+- **Ranger automatiquement**: a button in the recipe form fills in the category, seasons, weather and occasions right away (and keywords, with a Claude key). New ones are ringed, so you can see them and tap any to remove it before saving. It also runs by itself after importing from a link, screenshots or pasted text.
+- When a recipe is saved without that, the app files it under its seasons, weather (scorching day, cold day, rainy day) and occasions (barbecue, brunch, quick weeknight…), and picks a category if none was chosen. It never removes a tag you set, and you can always change them.
+- With a Claude key, Claude also reads each new recipe and adds the tags that fit, including Jewish holidays when the dish is traditional for them. *Plus → Claude → Ranger toutes mes recettes avec Claude* does the same for older recipes.
+- The top of **Recettes** always shows a row of ideas for today: from the weather (hot, cold, rainy) or the season, or a daily pick when nothing matches.
+- In **Filtres**, seasons and weather come first, then occasions, Jewish holidays, category and kashrut.
+
+## Adding recipes from links and screenshots
+
+- **Links**: the app first asks the site's own little helper on Netlify (`netlify/functions/fetch-page.mjs`, at `/api/fetch`) to fetch the page, which gets past the browser restriction that blocks most recipe sites. It falls back to public proxies if that fails. If the page has recipe data built in (most big sites do), the form fills in instantly, with no AI involved.
+- **With a Claude key** (*Plus → Claude*, the same key as the Frigo), anything that doesn't fill in cleanly is read by Claude instead:
+  - pages without recipe data (blogs): Claude reads the page text;
+  - sites that refuse the helper: Claude fetches the page itself;
+  - **screenshots and cookbook photos**: Claude reads the pictures directly, several at once, joined into one recipe, in the recipe's own language. This is much better than the reader built into the phone;
+  - pasted text: Claude sorts it into ingredients and steps.
+  Each recipe read this way costs a few cents on the Claude account. Without a key, the phone's own reader is used as before.
+- The Netlify helper is free on Netlify's free plan (it counts as a function call, not a deploy). It only fetches public web pages and images, only for the app itself.
 
 ## Frigo: what can I make?
 
@@ -156,5 +174,16 @@ Set your own name in *Plus → Réglages → Prénom affiché* so the inbox says
 
 ## Tech
 
-No build step and no server: `index.html` (the whole app), `manifest.webmanifest`, `sw.js` (offline cache), `icons/`, and `vendor/tesseract/` (Tesseract.js 5.1.1 text recognition with French and English data, Apache-2.0, loaded only when a page is photographed), `vendor/anthropic/` (the official Anthropic TypeScript SDK 0.130.0, bundled for the browser, MIT, loaded only when Claude is asked), and `vendor/firebase/` (Firebase JS SDK 12.19.0, app + auth + firestore, Apache-2.0, loaded only when the phone is in a family). `firestore.rules` holds the family security rules. Data lives in the phone's IndexedDB.
-Link import goes through public CORS proxies (allorigins, corsproxy.io, codetabs) because browsers can't read other sites directly. If a site blocks them, the link is still saved and he can paste the text instead.
+No build step. The app is plain files that Netlify serves as they are:
+
+- `index.html`: the page skeleton; it loads the styles and scripts below.
+- `css/app.css`: all the styles ("Le Carnet" design).
+- `js/`: the app, split by feature. The scripts share one scope and load in order:
+  `icons.js` (icons, artwork) · `strings.js` (every French/English word) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
+- `sw.js`: the service worker. The app opens from its saved copy (fast, and works offline); new versions download in the background and the app offers to reload. **When releasing, bump `VERSION` in `sw.js` and the `?v=` numbers in `index.html` together.**
+- `netlify/functions/fetch-page.mjs`: fetches recipe pages for link imports.
+- `firestore.rules`: the family's security rules.
+- `vendor/`: libraries loaded only when needed: `tesseract/` (Tesseract.js 5.1.1, French and English, Apache-2.0, for reading photos without Claude), `anthropic/` (Anthropic TypeScript SDK 0.130.0, MIT), `firebase/` (Firebase JS SDK 12.19.0, app + auth + firestore, Apache-2.0).
+- `art/`: drawings for avatars and the bottom bar (see `art/README.md`).
+
+Data lives on the phone (IndexedDB). In a family, Firebase is the shared copy and the phone keeps its own copy, so the app opens instantly and works offline.

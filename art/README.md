@@ -8,7 +8,7 @@ Every illustration in the app is one file in this folder. The current set is a m
 
 | File | Shows | Used for |
 |---|---|---|
-| `soups.svg` | soup bowl | recipes in Soupes, placeholder when there's no photo |
+| `soups.svg` | soup bowl | Soupes (recipes without a photo now show their initial letter instead of a drawing) |
 | `salads.svg` | salad bowl | Salades |
 | `mains.svg` | serving dish with a cover (cloche) | Plats, and recipes with no category |
 | `meat.svg` | steak | Viandes |
@@ -25,7 +25,7 @@ Every illustration in the app is one file in this folder. The current set is a m
 | `wine.svg` | bottle and glass | the Cave (wine notes): wines without a label photo |
 | `starters.svg` | small bites on a plate | Entrées |
 | `other.svg` | whisk | Autre |
-| `whisk.svg`, `teapot.svg`, `kettle.svg`, `mitt.svg`, `apron.svg`, `pan.svg`, `pot.svg`, `rollingpin.svg`, `grater.svg`, `spoon.svg` | kitchen tools | family avatars (plus a few category drawings); `pot.svg` is also the empty-page drawing, `whisk.svg` the "Claude is thinking" animation |
+| `whisk.svg`, `teapot.svg`, `kettle.svg`, `mitt.svg`, `apron.svg`, `pan.svg`, `pot.svg`, `rollingpin.svg`, `grater.svg`, `spoon.svg` | kitchen tools | family avatars (plus a few category drawings); empty pages and the "Claude is thinking" spinner no longer use drawings |
 | `nav-book.svg` | open recipe book | bottom bar: Recettes |
 | `nav-feed.svg` | stacked photos with a heart | bottom bar: Famille (the feed) |
 | `nav-notebook.svg` | spiral notebook with a bookmark | bottom bar: Carnets |

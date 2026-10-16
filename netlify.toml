@@ -1,0 +1,3 @@
+# The app is plain static files at the repo root; the only server code is the page fetcher.
+[functions]
+  directory = "netlify/functions"
