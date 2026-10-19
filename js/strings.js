@@ -19,7 +19,7 @@ const STR = {
     sort: { az: 'De A à Z', recent: 'Ajoutées récemment', cooked: 'Les plus cuisinées', rating: 'Les mieux notées', time: 'Les plus rapides' },
     nRecipes: n => n === 0 ? 'Aucune recette' : n === 1 ? '1 recette' : `${n} recettes`,
     nOf: (n, total) => `${n} sur ${total}`,
-    surprise: 'Surprends-moi', add: 'Ajouter', newRecipe: 'Nouvelle recette', editRecipe: 'Modifier la recette',
+    add: 'Ajouter', newRecipe: 'Nouvelle recette', editRecipe: 'Modifier la recette',
     emptyTitle: 'Votre livre de recettes est prêt', emptyText: 'Ajoutez une recette avec une photo, un lien, ou en copiant un texte. Tout reste sur votre téléphone.',
     firstRecipe: 'Ajouter ma première recette', loadSamples: 'Voir des recettes d’exemple',
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
@@ -39,14 +39,10 @@ const STR = {
     addedOn: d => `Ajoutée le ${d}`,
     // form
     photo: 'Photo', addPhoto: 'Prendre ou choisir une photo', changePhoto: 'Changer', removePhoto: 'Retirer', photoUrl: 'ou coller le lien d’une image',
-    importTitle: 'Remplir automatiquement', importLinkHint: 'Collez le lien d’une recette (Marmiton, 750g, un blog…) et l’appli essaie de tout remplir.',
-    importBtn: 'Importer depuis le lien', importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : copiez le texte de la recette ci-dessous.',
-    pasteHint: 'Ou collez tout le texte d’une recette (d’un e-mail, d’un message…) :', pasteBtn: 'Remplir avec ce texte', pasteOk: 'C’est rempli. Vérifiez et enregistrez.',
+    importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : collez le texte de la recette, ou faites des captures d’écran et touchez « Photos ».',
     title: 'Nom de la recette', titlePh: '', link: 'Lien (site, vidéo…)', category: 'Catégorie', kashrut: 'Cacheroute',
     holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
-    ingF: 'Ingrédients', ingHint: 'Un ingrédient par ligne. Une ligne qui finit par « : » devient un titre (ex : « Pour la sauce : »).',
-    stepsF: 'Étapes', stepsHint: 'Une étape par ligne. Les durées (« 20 min », « 1 h ») deviennent des minuteurs.',
-    notesF: 'Notes de la recette', notesHint: 'Astuces ou introduction de la recette d’origine.', noteF: 'Vos notes', sourceF: 'Recette de (qui ?)', sourcePh: '',
+    ingF: 'Ingrédients', stepsF: 'Étapes', notesF: 'Notes de la recette', noteF: 'Vos notes', sourceF: 'Recette de (qui ?)', sourcePh: '',
     save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
     draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
     // shop
@@ -79,7 +75,6 @@ const STR = {
     timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
     offlineSave: 'Le stockage n’est pas disponible : les recettes ne seront pas gardées.',
     units: { orig: 'Comme écrit', metric: 'Métrique', us: 'Tasses & oz' }, unitsLabel: 'Unités', unitsNote: 'Conversions approximatives. Touchez une quantité pour voir l’originale.',
-    bookBtn: 'Photographier une page de livre', bookHint: 'Posez le livre bien à plat, avec une bonne lumière. Vous pouvez prendre plusieurs pages.',
     ocrLoading: 'Préparation de la lecture… (la première fois prend un peu plus de temps)', ocrReading: (i, n, p) => n > 1 ? `Lecture de la page ${i} sur ${n}… ${p} %` : `Lecture de la page… ${p} %`,
     ocrOk: 'Page lue ! Vérifiez le texte, puis enregistrez.', ocrFail: 'Le texte n’a pas pu être lu. La photo de la page est quand même gardée avec la recette.', ocrEmpty: 'Aucun texte trouvé. La photo de la page est quand même gardée avec la recette.',
     pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
@@ -144,7 +139,7 @@ const STR = {
     sort: { az: 'A to Z', recent: 'Recently added', cooked: 'Most cooked', rating: 'Top rated', time: 'Quickest' },
     nRecipes: n => n === 0 ? 'No recipes' : n === 1 ? '1 recipe' : `${n} recipes`,
     nOf: (n, total) => `${n} of ${total}`,
-    surprise: 'Surprise me', add: 'Add', newRecipe: 'New recipe', editRecipe: 'Edit recipe',
+    add: 'Add', newRecipe: 'New recipe', editRecipe: 'Edit recipe',
     emptyTitle: 'Your recipe book is ready', emptyText: 'Add a recipe with a photo, a link, or by pasting text. Everything stays on your phone.',
     firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
@@ -163,14 +158,10 @@ const STR = {
     cookedN: (n, d) => n ? `Cooked ${n} time${n > 1 ? 's' : ''}${d ? ' · last on ' + d : ''}` : 'Not cooked yet', bravo: 'Well done! Enjoy',
     addedOn: d => `Added ${d}`,
     photo: 'Photo', addPhoto: 'Take or choose a photo', changePhoto: 'Change', removePhoto: 'Remove', photoUrl: 'or paste an image link',
-    importTitle: 'Fill in automatically', importLinkHint: 'Paste a recipe link (a website, a blog…) and the app tries to fill everything in.',
-    importBtn: 'Import from link', importing: 'Importing…', importOk: 'Recipe imported! Check it and save.', importFail: 'This site can’t be read. The link is kept: paste the recipe text below instead.',
-    pasteHint: 'Or paste the full text of a recipe (from an email, a message…):', pasteBtn: 'Fill in from this text', pasteOk: 'Filled in. Check it and save.',
+    importing: 'Importing…', importOk: 'Recipe imported! Check it and save.', importFail: 'This site can’t be read. The link is kept: paste the recipe text, or take screenshots and tap “Photos”.',
     title: 'Recipe name', titlePh: '', link: 'Link (website, video…)', category: 'Category', kashrut: 'Kashrut',
     holidays: 'Holidays', tags: 'Keywords', tagsPh: '', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
-    ingF: 'Ingredients', ingHint: 'One ingredient per line. A line ending with “:” becomes a heading (e.g. “For the sauce:”).',
-    stepsF: 'Steps', stepsHint: 'One step per line. Times like “20 min” or “1 hour” become timers.',
-    notesF: 'Notes from the recipe', notesHint: 'Tips or introduction from the original recipe.', noteF: 'Your notes', sourceF: 'Recipe from (who?)', sourcePh: '',
+    ingF: 'Ingredients', stepsF: 'Steps', notesF: 'Notes from the recipe', noteF: 'Your notes', sourceF: 'Recipe from (who?)', sourcePh: '',
     save: 'Save', saved: 'Saved', needTitle: 'Give the recipe a name',
     draftFound: 'An unsaved draft was found.', restore: 'Restore', discard: 'Discard',
     shopTitle: 'Shopping list', shopAddPh: 'Add an item…', shopEmpty: 'The list is empty. On a recipe, tap “Add to shopping list”.',
@@ -199,7 +190,6 @@ const STR = {
     timerDone: 'Timer done', stop: 'Stop', startTimer: 'Start', timerFor: 'Timer',
     offlineSave: 'Storage is unavailable: recipes won’t be kept.',
     units: { orig: 'As written', metric: 'Metric', us: 'Cups & oz' }, unitsLabel: 'Units', unitsNote: 'Approximate conversions. Tap a quantity to see the original.',
-    bookBtn: 'Photograph a cookbook page', bookHint: 'Lay the book flat, in good light. You can take several pages.',
     ocrLoading: 'Getting ready to read… (the first time takes a little longer)', ocrReading: (i, n, p) => n > 1 ? `Reading page ${i} of ${n}… ${p}%` : `Reading the page… ${p}%`,
     ocrOk: 'Page read! Check the text, then save.', ocrFail: 'The text couldn’t be read. The page photo is still kept with the recipe.', ocrEmpty: 'No text found. The page photo is still kept with the recipe.',
     pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
@@ -328,13 +318,23 @@ Object.assign(STR.en, {
 });
 STR.en.nav.carnets = 'Notebooks';
 STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
-Object.assign(STR.fr, { mine: 'Les miennes' });
-Object.assign(STR.en, { mine: 'Mine' });
+Object.assign(STR.fr, { mine: 'Les miennes', whoAdded: 'Ajoutées par' });
+Object.assign(STR.fr, { smartLabel: 'Lien ou texte de la recette', smartFill: 'Remplir', photosBtn: 'Photos',
+  filledWithoutClaude: 'Rempli sans Claude : vérifiez les champs.', noRecipeInPhotos: 'Claude n’a pas trouvé de recette sur ces photos.',
+  claudeErrCredit: 'Le compte Claude n’a plus de crédit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude est très occupé, réessayez dans un instant.',
+  claudeKeyFam: 'Claude est prêt (clé de la famille).', claudeShared: 'Toute la famille utilise cette clé.', claudeNotShared: 'Seul ce téléphone utilise cette clé.',
+  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeSharedToast: 'Clé partagée avec la famille' });
+Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
+  filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
+  claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
+  claudeKeyFam: 'Claude is ready (family key).', claudeShared: 'The whole family uses this key.', claudeNotShared: 'Only this phone uses this key.',
+  claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeSharedToast: 'Key shared with the family' });
+Object.assign(STR.en, { mine: 'Mine', whoAdded: 'Added by' });
 Object.assign(STR.fr, { updateReady: 'Nouvelle version de l’appli prête', reload: 'Recharger' });
 Object.assign(STR.en, { updateReady: 'A new version of the app is ready', reload: 'Reload' });
-Object.assign(STR.fr, { autoTagBtn: 'Ranger automatiquement', autoTagHint: 'Saisons, météo, occasions, catégorie : tout reste modifiable.', autoTagBusy: 'Claude range la recette…',
+Object.assign(STR.fr, { autoTagBtn: 'Ranger automatiquement', autoTagBusy: 'Claude range la recette…',
   autoTagDone: n => `${n} étiquette${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''} : touchez pour retirer`, autoTagNone: 'Rien de plus à ajouter', autoTagEmpty: 'Ajoutez d’abord le titre ou les ingrédients' });
-Object.assign(STR.en, { autoTagBtn: 'Sort automatically', autoTagHint: 'Seasons, weather, occasions, category: you can change everything.', autoTagBusy: 'Claude is sorting the recipe…',
+Object.assign(STR.en, { autoTagBtn: 'Sort automatically', autoTagBusy: 'Claude is sorting the recipe…',
   autoTagDone: n => `${n} tag${n > 1 ? 's' : ''} added: tap one to remove it`, autoTagNone: 'Nothing more to add', autoTagEmpty: 'Add the title or ingredients first' });
 Object.assign(STR.fr, { recipeNotes: 'Notes de la recette', notesOf: n => !n ? 'Vos notes' : /^[aeiouyhâàéèêëîïôûü]/i.test(n) ? `Notes d’${n}` : `Notes de ${n}` });
 Object.assign(STR.en, { recipeNotes: 'Notes from the recipe', notesOf: n => !n ? 'Your notes' : `${n}’s notes` });

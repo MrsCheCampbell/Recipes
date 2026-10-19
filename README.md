@@ -35,10 +35,9 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - This is a privacy lock for the phone. The recipes never leave his phone, so nobody visiting the website sees them.
 
 **Recipes**
-- Add a photo with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
-- **Import from a link**: paste a recipe URL (Marmiton, 750g, most blogs) and it fills in the title, photo, ingredients, steps, times and servings.
-- **Photograph a cookbook page**: take one or more photos of a book page and the app reads the text (French or English) and fills in the title, servings, times, ingredients and steps. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom). Reading happens on the phone itself, so the photos are never sent anywhere.
-- **Paste text**: paste a recipe from an email or a WhatsApp message and it splits it into ingredients and steps.
+- **One box at the top of the form** (*Lien ou texte de la recette*): paste a link, or a whole recipe from an email or a WhatsApp message, and tap **Remplir**. Or tap **Photos** to photograph a cookbook page or pick screenshots. A line under the box always says what happened (read by Claude, filled without Claude, site blocked…), so nothing fails silently.
+- Ingredients typed or pasted on one line with commas ("200 g de farine, 3 œufs, 100 g de sucre") are split into one per line. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom).
+- Add a photo of the dish with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
 - **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
 - Category, **occasions** (having friends over, family dinner, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
@@ -47,10 +46,9 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Alphabetical list grouped by letter, with an A–Z rail to slide through.
 - Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
 - Voice search (microphone button).
-- Quick filters for Favorites and each category he uses, plus kashrut, occasion and "quick (≤ 30 min)" under Filters.
-- At the top, a carousel that fits the moment, worked out from each recipe itself (name, ingredients, type, cooking time), not only from tags. A small stamp on each polaroid says why it was picked ("SOUPE", "POMMES", "MIJOTÉ"). Seasons use what's in season in France (asparagus in spring, tomatoes in summer, squash, apples and mushrooms in autumn, leeks and citrus in winter). The moments: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
+- One quiet **Filtres** button next to the sort: favorites, quick (≤ 30 min), who added it, seasons and weather, occasions, Jewish holidays, category and kashrut. Active filters show as small pills under the search bar; tap one to remove it.
+- At the top, a row of ideas that fits the moment, shown every time the app opens, worked out from each recipe itself (name, ingredients, type, cooking time), not only from tags. A small label on each one says why it was picked ("SOUPE", "POMMES", "MIJOTÉ"). Seasons use what's in season in France (asparagus in spring, tomatoes in summer, squash, apples and mushrooms in autumn, leeks and citrus in winter). The moments: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
-- "Surprends-moi" opens a random recipe.
 
 **Cooking**
 - Servings scaler that recalculates the quantities (½, ¼, ⅓ fractions).
@@ -73,7 +71,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Look**
-- Grandma's recipe box, re-engineered: gingham with a perforated tear-off edge, paper grain, recipe photos as taped polaroids on a gingham tablecloth, ruled recipe cards with crop marks, a catalogue number on every recipe (N° 001 is the first one he added), thumb-index tabs for A–Z, and his notes on a sticky note.
+- Calm and classic: the home page is a greeting, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.
 - Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
 - Illustrations (category drawings, family avatars, bottom bar, empty pages) are flat kitchen doodles in `art/`, one file per name, so a purchased set can be dropped in with the same file names. See [`art/README.md`](art/README.md). Small button icons are drawn in code. No emoji anywhere.
 - Motion: pages slide in, polaroids drop onto the tablecloth, ticked ingredients get crossed out with a drawn line. Turned off automatically if the phone asks for reduced motion.
@@ -92,7 +90,7 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 - **Just a photo**: the bar at the top of the feed (or the + button) shares a photo with no recipe attached: a plate at a restaurant, a dish at friends', anything too pretty or too funny. Add where it was if you like.
 
 - **One family cookbook**: every recipe anyone adds goes into the shared list in **Recettes**, with a small avatar showing who added it. Nothing is hidden. Your hearts and favourites stay your own.
-- **Finding someone's recipes**: the chips above the list include **Les miennes** and each person who has added recipes (Maman, Papa…). Typing a name in the search works too: "maman gâteau" finds Mom's cakes.
+- **Finding someone's recipes**: *Filtres → Ajoutées par* lists **Les miennes** and each person who has added recipes (Maman, Papa…). Typing a name in the search works too: "maman gâteau" finds Mom's cakes.
 - **Feed** (the **Famille** tab): food photos, of something someone cooked (tagged to the recipe) or any plate worth sharing, with hearts and comments. New recipes show up as one quiet line ("Papa a ajouté 3 recettes").
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
@@ -132,7 +130,7 @@ The **Carnets** tab (bottom bar) is private to each person, even in the family.
 
 Everything is in the backup file (*Plus → Sauvegarder*). In a family it is also stored in your own private space on the server, which only you can read.
 
-> **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts and the private notebooks.
+> **If the family was set up before this update:** open Firestore → **Rules** once more, paste the new [`firestore.rules`](firestore.rules) and **Publish**. The new rules add the "J'ai cuisiné" posts, the private notebooks and the shared Claude key.
 
 ## Smart tags and suggestions
 
@@ -150,7 +148,8 @@ Everything is in the backup file (*Plus → Sauvegarder*). In a family it is als
   - sites that refuse the helper: Claude fetches the page itself;
   - **screenshots and cookbook photos**: Claude reads the pictures directly, several at once, joined into one recipe, in the recipe's own language. This is much better than the reader built into the phone;
   - pasted text: Claude sorts it into ingredients and steps.
-  Each recipe read this way costs a few cents on the Claude account. Without a key, the phone's own reader is used as before.
+  Each recipe read this way costs a few cents on the Claude account. Without a key, the phone's own reader is used as before (good for pasted text, weak for photos).
+- **One key for the whole family**: when you save the key in *Plus → Claude*, the box *Partager avec la famille* is ticked, so Maman and Papa get it the next time they open the app, with nothing to type. It is stored in the family's private space on Firebase, which only members can read. *Ne plus partager* takes it back.
 - The Netlify helper is free on Netlify's free plan (it counts as a function call, not a deploy). It only fetches public web pages and images, only for the app itself.
 
 ## Frigo: what can I make?
@@ -161,7 +160,7 @@ The **Frigo** tab (the little fridge in the bottom bar):
 2. **Dans votre livre** instantly lists your own recipes that fit, ranked by how much you have (the ring shows the %), then by your stars, favorites and how often you've cooked them, with what's missing. Salt, pepper, oil and water don't count as missing.
 3. **Demander des idées à Claude**: Claude reads your fridge, your best recipes, the season and the weather, writes a short suggestion, picks from your book, and searches the web for 3–5 real recipe pages (French sites first when the app is in French). Each idea has **Voir le site** and **Enregistrer**, which opens the normal new-recipe form with the link and imports it.
 
-Claude needs an API key: create one at console.anthropic.com → API keys, then paste it in *Plus → Claude*. The key is stored only on that phone and requests go straight from the phone to Anthropic (Claude Opus 5.5 with web search). Each request costs a few cents; you can set a monthly spending limit in the Console. Only links Claude actually found in its search are shown.
+Claude needs an API key: create one at console.anthropic.com → API keys, then paste it in *Plus → Claude*. The key is stored on that phone (and, if you share it, in the family's private space) and requests go straight from the phone to Anthropic (Claude Opus 5.5 with web search). Each request costs a few cents; you can set a monthly spending limit in the Console. Only links Claude actually found in its search are shown.
 
 ## Sending recipes to each other
 

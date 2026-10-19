@@ -64,6 +64,7 @@ async function famStart() {
   FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, 'saved'), s => { FAM.saved = new Map(); s.forEach(d => FAM.saved.set(d.id, d.data())); rebuild(); }, e => console.warn(e)));
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('recos'), FB.where('to', '==', FAM.uid)), s => { FAM.recos = []; s.forEach(d => FAM.recos.push({ ...d.data(), id: d.id })); FAM.recos.sort((a, b) => b.at - a.at); famChanged(); }, e => console.warn(e)));
   psListen();
+  FB.getDoc(fref('secrets', 'claude')).then(d => { const k = d.exists() ? d.data().key : ''; if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey'); }).catch(() => {});
   await ready;
   FAM.ready = true;
   for (const r of FAM.raw.values()) if (r.owner === FAM.uid && !r.sample && !(r.audience || []).includes('all')) {
@@ -177,6 +178,10 @@ async function loadPages(r) {
     rebuild();
   } catch {}
 }
+
+// One Claude key for the whole family: stored where only family members can read it (firestore.rules → secrets).
+function shareClaudeKey(k) { if (!k) return; ls.set('famClaudeKey', k); quiet(FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() })); toast(T().claudeSharedToast); }
+function unshareClaudeKey() { ls.del('famClaudeKey'); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
 
 // Comments on the open recipe (live).
 let commentUnsub = null, openComments = [];
@@ -330,7 +335,7 @@ function renderJoin(code) {
   if (!inv) { toast(t.famJoinBad); go('#/famille'); return; }
   if (FAM.on && FAM.fid === inv.f) { go('#/'); return; }
   const st = { avatar: 'teapot', color: AV_COLORS[1] };
-  $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div><div class="wrap stack">
+  $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
     <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name && S.name !== 'Abe' ? S.name : '')}" placeholder="${esc(t.yourNamePh)}"></div>
       <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
