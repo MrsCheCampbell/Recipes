@@ -57,6 +57,8 @@ document.addEventListener('click', async e => {
     case 'voice': voiceSearch(); break;
     case 'all': Object.assign(L, { kash: '', fav: current === 'fav', cat: '', hol: '', mood: '', quick: false, who: '' }); refreshList(); break;
     case 'who': L.who = L.who === b.dataset.id ? '' : b.dataset.id; refreshList(); break;
+    case 'viewphoto': if (r?.photo) viewImage(r.photo); break;
+    case 'unfilter': { const f = b.dataset.f; L[f] = ['fav', 'quick'].includes(f) ? false : ''; refreshList(); break; }
     case 'fav': if (current === 'recipe' && r) { r.favorite = !r.favorite; await saveRecipe(r); renderRecipe(r); } else { L.fav = !L.fav; refreshList(); } break;
     case 'cat': L.cat = L.cat === b.dataset.c ? '' : b.dataset.c; refreshList(); break;
     case 'filters': openFilters(); break;
@@ -64,7 +66,6 @@ document.addEventListener('click', async e => {
     case 'moodfilter': Object.assign(L, { mood: b.dataset.m, hol: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
     case 'moodoff': L.mood = ''; refreshList(); break;
     case 'holfilter': Object.assign(L, { hol: b.dataset.h, mood: '', q: '', kash: '', cat: '' }); $('#q').value = ''; refreshList(); $('#results').scrollIntoView({ behavior: 'smooth' }); break;
-    case 'surprise': { const l = filtered(); if (l.length) go('#/r/' + l[Math.floor(Math.random() * l.length)].id); break; }
     case 'samples': for (const s of samples()) if (!byId(s.id)) await saveRecipe(s); toast(t.samplesAdded); route(); break;
     case 'rmsamples': for (const s of recipes.filter(x => x.sample)) { if (FAM.on) await cloudDelete(s); else await DB.del(s.id); } recipes = recipes.filter(x => !x.sample); toast(t.samplesRemoved); route(); break;
     case 'menu': if (r) recipeMenu(r); break;
@@ -96,10 +97,14 @@ document.addEventListener('click', async e => {
     case 'pantryquick': addPantry(b.dataset.q); break;
     case 'askclaude': askClaude(); break;
     case 'saveidea': { const x = ls.get('claudeLast', {}).newIdeas?.[+b.dataset.i]; if (x) { pendingShare = { url: x.url, text: '', title: x.title }; go('#/edit/new'); } break; }
-    case 'claudekeysave': { const v = $('#claudeKeyIn').value.trim(); if (!v) break; ls.set('claudeKey', v); toast(t.claudeKeySaved); renderMore(); break; }
+    case 'claudekeysave': { const v = $('#claudeKeyIn').value.trim(); if (!v) break; ls.set('claudeKey', v);
+      if (FAM.on && $('#claudeShareIn')?.checked) shareClaudeKey(v);
+      toast(t.claudeKeySaved); renderMore(); break; }
+    case 'claudeshare': shareClaudeKey(ls.get('claudeKey', '')); renderMore(); break;
+    case 'claudeunshare': unshareClaudeKey(); renderMore(); break;
     case 'autotag': formAutoTag(false); break;
     case 'tagall': b.disabled = true; await claudeTagAll(); b.disabled = false; break;
-    case 'claudekeyrm': ls.del('claudeKey'); renderMore(); break;
+    case 'claudekeyrm': if (FAM.on && ls.get('famClaudeKey', '') === ls.get('claudeKey', '')) unshareClaudeKey(); ls.del('claudeKey'); renderMore(); break;
     case 'home': go('#/'); break;
     case 'keep': keepLetter(b.dataset.id); break;
     case 'toss': inbox = inbox.filter(y => y.id !== b.dataset.id); saveInbox(); toast(t.tossed); renderInbox(false); break;
@@ -124,12 +129,7 @@ document.addEventListener('click', async e => {
     case 'rmpage': formPages.splice(+b.dataset.i, 1); drawFormPages(); $('#form').dispatchEvent(new Event('input')); break;
     case 'viewpage': { const src = current === 'edit' ? formPages[+b.dataset.i] : r?.pages?.[+b.dataset.i]; if (src) viewImage(src); break; }
     case 'rmphoto': formPhoto = null; $('#fPhotoUrl').value = ''; drawPhotoBox(); break;
-    case 'import': doImport(); break;
-    case 'paste': { const v = $('#fPaste').value.trim(); if (!v) { $('#fPaste').focus(); break; }
-      if (hasClaude() && navigator.onLine && v.length > 80) { const label = b.innerHTML; b.disabled = true; b.textContent = t.claudeReading;
-        let c = null; try { c = await claudeRecipe({ text: v }); } catch (e) { console.warn(e); }
-        b.disabled = false; b.innerHTML = label; if (c) { fillForm(c); toast(t.claudeReadOk); formAutoTag(true); break; } }
-      fillForm(parseRecipeText(v)); toast(t.pasteOk); formAutoTag(true); break; }
+    case 'smartfill': smartFill(b); break;
     case 'draftyes': { const d = ls.get('draft'); if (d) fillForm(d.data); b.closest('.draft-note').remove(); break; }
     case 'draftno': ls.del('draft'); b.closest('.draft-note').remove(); break;
     case 'shoptoggle': { const it = shop.find(x => x.id === b.dataset.id); if (it) { it.done = b.checked; saveShop(); b.closest('.shop-item').classList.toggle('done', it.done); } break; }

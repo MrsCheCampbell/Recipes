@@ -316,7 +316,7 @@ function renderCarnets() {
       : `<div class="empty"><h2>${esc(t.eventsEmptyT)}</h2><p>${esc(t.eventsEmpty)}</p><button class="btn primary" data-act="newevent">${ico('plus')}${esc(t.newEvent)}</button></div>`)
     : (gs.length ? `<div class="evlist" style="margin-top:16px">${gs.map(guestCardHTML).join('')}</div>`
       : `<div class="empty"><h2>${esc(t.guestsEmptyT)}</h2><p>${esc(t.guestsEmpty)}</p><button class="btn primary" data-act="newguest">${ico('plus')}${esc(t.newGuest)}</button></div>`);
-  $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div><div class="wrap">
+  $('#view').innerHTML = `<div class="wrap">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.nEvents(evs.length))}</span></div>
       <h1 class="greet">${esc(t.carnets)}</h1><p class="muted" style="margin:0">${esc(t.carnetsSub)}</p></header>
     ${carnetTabs(tab)}

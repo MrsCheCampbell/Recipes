@@ -177,19 +177,18 @@ function dailyPicks() {
   return [...recipes].filter(r => !r.sample || recipes.length < 6).sort((a, b) => (b.rating || 0) - (a.rating || 0) || h(a.id) - h(b.id)).slice(0, 8);
 }
 function chipsHTML() {
-  const t = T();
-  const chip = (act, on, label, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-act="${act}" ${extra} aria-pressed="${on}">${label}</button>`;
-  const counts = {}; recipes.forEach(r => { if (r.category) counts[r.category] = (counts[r.category] || 0) + 1; });
-  const cats = CATS.filter(c => counts[c] && c !== 'cocktails').sort((a, b) => counts[b] - counts[a]).concat('cocktails');
-  const extra = L.hol || L.quick || L.kash;
-  // In the family: one chip per person who has added recipes (mine first).
-  const owners = FAM.on ? [...new Set(recipes.filter(r => !r.sample && r.owner).map(r => r.owner))].sort((a, b) => (b === FAM.uid) - (a === FAM.uid)) : [];
-  const people = owners.length > 1 || L.who ? owners.map(id => chip('who', L.who === id, avatarHTML(id, 'xs') + esc(id === FAM.uid ? t.mine : member(id).name), `data-id="${id}"`)).join('') : '';
-  return chip('all', !L.cat && !L.fav && !L.who && !extra, esc(t.all)) +
-    (current === 'fav' ? '' : chip('fav', L.fav, ico('bookmark', 'heart') + esc(t.favorites))) + people +
-    cats.map(c => chip('cat', L.cat === c, esc(t.cat[c]), `data-c="${c}"`)).join('') +
-    (L.mood ? chip('moodoff', true, esc(moodTitle(L.mood)) + ico('x')) : '') +
-    chip('filters', !!extra, ico('filter') + esc(t.filters) + (extra ? ` · ${[L.kash && t.kash[L.kash], L.hol && occLabel(L.hol), L.quick && '≤30′'].filter(Boolean).map(esc).join(', ')}` : ''));
+  const t = T(), pill = (f, label, extra = '') => `<button class="fpill" data-act="unfilter" data-f="${f}" ${extra}>${label}${ico('x')}</button>`;
+  const on = [
+    L.fav && current !== 'fav' && pill('fav', ico('bookmark') + esc(t.favorites)),
+    L.who && pill('who', avatarHTML(L.who, 'xs') + esc(L.who === FAM.uid ? t.mine : member(L.who).name)),
+    L.cat && pill('cat', esc(t.cat[L.cat])),
+    L.hol && pill('hol', esc(occLabel(L.hol))),
+    L.kash && pill('kash', esc(t.kash[L.kash])),
+    L.quick && pill('quick', '≤ 30 min'),
+    L.mood && pill('mood', esc(moodTitle(L.mood))),
+  ].filter(Boolean);
+  const n = on.length; queueMicrotask(() => { const fb = $('#filtersBtn'); if (fb) fb.classList.toggle('on', !!n); });
+  return on.join('');
 }
 function composerHTML() {
   const t = T();
@@ -211,7 +210,7 @@ function renderFeed() {
   current = 'feed'; navHTML('fil');
   if (FAM.on && document.visibilityState !== 'hidden') { ls.set('feedSeen', Date.now()); updateNavCount(); }
   const t = T();
-  $('#view').innerHTML = `<div class="valance" aria-hidden="true"></div>
+  $('#view').innerHTML = `
     <div class="wrap">
       <header class="top">
         <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
@@ -230,14 +229,10 @@ function renderList(favOnly) {
   const t = T();
   const hasSpeech = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   $('#view').innerHTML = `
-    <div class="valance" aria-hidden="true"></div>
     <div class="wrap">
-      <header class="top">
-        <div class="mast"><span>${esc(t.appName)}</span><span class="mast-r">${esc(t.collection(recipes.length))}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
-        <h1 class="greet">${favOnly ? esc(t.carnets) : `${esc(greeting())}, <span class="name">${esc(S.name || 'Abe')}</span>`}</h1>
-        ${favOnly ? '' : calHTML()}
-      </header>
-      ${favOnly ? carnetTabs('fav') : bannerHTML()}
+      <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
+        <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
+      ${favOnly ? carnetTabs('fav') : `<p class="hello">${esc(greeting())}, ${esc(S.name || 'Abe')}</p>${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}
@@ -245,14 +240,12 @@ function renderList(favOnly) {
         <button class="icon-btn" data-act="clearq" aria-label="${esc(t.clear)}" ${L.q ? '' : 'hidden'}>${ico('x')}</button>
         ${hasSpeech ? `<button class="icon-btn" data-act="voice" aria-label="${esc(t.voice)}">${ico('mic')}</button>` : ''}
       </div>
-      <div class="chips" id="chips">${chipsHTML()}</div>
+      <div class="tools"><span class="muted" id="count"></span><span class="tools-r">
+        <button class="toolbtn" data-act="filters" id="filtersBtn">${ico('filter')}${esc(t.filters)}</button>
+        <select id="sort" aria-label="${esc(t.sortBy)}">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></span></div>
+      <div class="activef" id="chips">${chipsHTML()}</div>
     </div></div>
     <div class="wrap">
-      <div class="listmeta"><span class="muted" id="count"></span>
-        <span style="display:flex;gap:8px;align-items:center;min-width:0">
-          <button class="icon-btn" data-act="surprise" aria-label="${esc(t.surprise)}" title="${esc(t.surprise)}" style="width:42px;height:42px;border:1px solid var(--line);background:var(--surface)">${ico('dice')}</button>
-          <select id="sort" aria-label="${esc(t.sortBy)}">${Object.entries(t.sort).map(([k, v]) => `<option value="${k}" ${L.sort === k ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>
-        </span></div>
       <div id="railbox"></div>
       <div id="results"></div>
     </div>
@@ -271,10 +264,13 @@ const starsMini = n => n ? `<span class="stars-mini" aria-label="${n}/5">${ico('
 function cardHTML(r) {
   const t = T();
   const meta = [r.category && t.cat[r.category], totalTime(r) && fmtDur(totalTime(r)), r.servings && t.servings(+r.servings)].filter(Boolean);
-  return `<a class="card" href="#/r/${encodeURIComponent(r.id)}">${thumbHTML(r)}
-    <div class="min"><div class="meta"><span class="no">N° ${catNo(r)}</span>${meta.map(m => `<span>${esc(m)}</span>`).join('')}</div><h3>${esc(r.title)}</h3>
-    <div class="meta">${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${starsMini(r.rating)}</div></div>
-    <div class="side">${r.favorite ? ico('bookmark') : ''}${FAM.on && r.owner && r.owner !== FAM.uid ? avatarHTML(r.owner, 'sm') : ''}</div></a>`;
+  const pic = r.thumb || r.photo;
+  return `<a class="card ${pic ? 'has-pic' : ''}" href="#/r/${encodeURIComponent(r.id)}">
+    <div class="min"><h3>${esc(r.title)}</h3>
+      <div class="meta">${meta.map(m => `<span>${esc(m)}</span>`).join('')}${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${starsMini(r.rating)}</div>
+      ${FAM.on && r.owner ? `<div class="by">${avatarHTML(r.owner, 'xs')}<span>${esc(r.owner === FAM.uid ? t.you : member(r.owner).name)}</span></div>` : ''}</div>
+    ${pic ? `<img class="cpic" src="${esc(pic)}" alt="" loading="lazy" decoding="async">` : ''}
+    ${r.favorite ? `<span class="cfav" aria-label="${esc(t.favorites)}">${ico('bookmark')}</span>` : ''}</a>`;
 }
 function renderResults() {
   const t = T(), list = filtered(), box = $('#results'); if (!box) return;
@@ -326,25 +322,27 @@ window.addEventListener('scroll', azVisibility, { passive: true });
 document.addEventListener('click', e => { if (e.target.closest('#az')) { azJump(e); setTimeout(() => $('.az-pop')?.remove(), 500); } });
 
 function openFilters() {
-  const t = T(), st = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick };
+  const t = T(), st = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick, fav: L.fav, who: L.who };
+  const owners = FAM.on ? [...new Set(recipes.filter(r => !r.sample && r.owner).map(r => r.owner))].sort((a, b) => (b === FAM.uid) - (a === FAM.uid)) : [];
   const group = (title, key, items) => `<div class="fgroup"><h3 class="eyebrow">${esc(title)}</h3><div class="wrapchips">${items.map(([v, label]) => `<button type="button" class="chip ${st[key] === v ? 'on' : ''}" data-f="${key}" data-v="${esc(v)}" aria-pressed="${st[key] === v}">${esc(label)}</button>`).join('')}</div></div>`;
-  const count = () => { const saved = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick }; Object.assign(L, st); const n = filtered().length; Object.assign(L, saved); return n; };
+  const count = () => { const saved = { cat: L.cat, kash: L.kash, hol: L.hol, quick: L.quick, fav: L.fav, who: L.who }; Object.assign(L, st); const n = filtered().length; Object.assign(L, saved); return n; };
   const body = () => `<h2>${esc(t.filters)}</h2>
+    <div class="fgroup"><div class="wrapchips"><button type="button" class="chip ${st.fav ? 'on' : ''}" data-f="fav" aria-pressed="${st.fav}">${ico('bookmark', 'heart')}${esc(t.favorites)}</button><button type="button" class="chip ${st.quick ? 'on' : ''}" data-f="quick" aria-pressed="${st.quick}">${ico('clock')}${esc(t.quick)}</button></div></div>
+    ${owners.length > 1 ? group(t.whoAdded, 'who', [['', t.anyF], ...owners.map(id => [id, id === FAM.uid ? t.mine : member(id).name])]) : ''}
     ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
     ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
     ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
     ${group(t.category, 'cat', [['', t.anyF], ...CATS.filter(c => c === st.cat || recipes.some(r => r.category === c)).map(c => [c, t.cat[c]])])}
     ${group(t.kashrutF, 'kash', [['', t.anyF], ...KASHRUT.map(k => [k, t.kashLong[k]])])}
-    <div class="fgroup"><button type="button" class="chip ${st.quick ? 'on' : ''}" data-f="quick" aria-pressed="${st.quick}">${ico('clock')}${esc(t.quick)}</button></div>
     <div class="row2 fbar"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">${esc(t.filtersShow(count()))}</button></div>`;
   sheet(body(), (el, close) => {
     el.classList.add('filters');
     el.addEventListener('click', e => {
       const c = e.target.closest('[data-f]');
-      if (c) { const k = c.dataset.f; if (k === 'quick') st.quick = !st.quick; else st[k] = st[k] === c.dataset.v && c.dataset.v ? '' : c.dataset.v; const y = el.scrollTop; el.innerHTML = '<div class="grab"></div>' + body(); el.scrollTop = y; return; }
+      if (c) { const k = c.dataset.f; if (k === 'quick' || k === 'fav') st[k] = !st[k]; else st[k] = st[k] === c.dataset.v && c.dataset.v ? '' : c.dataset.v; const y = el.scrollTop; el.innerHTML = '<div class="grab"></div>' + body(); el.scrollTop = y; return; }
       const x = e.target.closest('[data-x]')?.dataset.x;
       if (x === 'ok') { Object.assign(L, st); close(); refreshList(); }
-      if (x === 'reset') { Object.assign(L, { cat: '', hol: '', quick: false, kash: '' }); close(); refreshList(); }
+      if (x === 'reset') { Object.assign(L, { cat: '', hol: '', quick: false, kash: '', fav: current === 'fav', who: '' }); close(); refreshList(); }
     });
   });
 }
@@ -409,9 +407,7 @@ function renderRecipe(r) {
     if (isHeading(l) && l.length < 60) { steps += `<li class="sub">${esc(cleanHeading(l))}</li>`; continue; }
     steps += `<li class="step"><div>${withTimers(convertTemps(cleanStep(l)))}</div></li>`;
   }
-  const photo = r.photo
-    ? `<img class="ph" src="${esc(r.photo)}" alt="${esc(r.title)}">`
-    : artHTML(r, 'ph');
+
   const badges = [
     r.kashrut && `<span class="badge kbadge k-${r.kashrut}">${esc(t.kashLong[r.kashrut])}</span>`,
     r.category && `<span class="badge">${esc(t.cat[r.category])}</span>`,
@@ -419,13 +415,12 @@ function renderRecipe(r) {
     ...(r.tags || []).map(g => `<span class="badge">#${esc(g)}</span>`),
   ].filter(Boolean).join('');
   $('#view').innerHTML = `
-    <div class="hero"><figure class="polaroid" style="margin:0 auto">${photo}<figcaption>${esc(r.title)}</figcaption></figure>
-      <div class="bar"><button class="icon-btn on-photo" data-act="back" aria-label="Retour">${ico('back')}</button>
-      <span class="r"><button class="icon-btn on-photo" data-act="fav" aria-label="${esc(t.favorites)}" aria-pressed="${!!r.favorite}">${ico(r.favorite ? 'bookmark' : 'bookmarkO')}</button>
-      <button class="icon-btn on-photo" data-act="menu" aria-label="Menu">${ico('dots')}</button></span></div>
-    </div>
+    <div class="rbar wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button>
+      <span class="r"><button class="icon-btn" data-act="fav" aria-label="${esc(t.favorites)}" aria-pressed="${!!r.favorite}">${ico(r.favorite ? 'bookmark' : 'bookmarkO')}</button>
+      <button class="icon-btn" data-act="menu" aria-label="Menu">${ico('dots')}</button></span></div>
     <article class="wrap paper">
-      <div class="catrow"><span class="no">N° ${catNo(r)}</span>${r.category ? `<span>${esc(t.cat[r.category])}</span>` : ''}<span>${esc(t.added)} ${esc(fmtDate(r.createdAt, { day: '2-digit', month: '2-digit', year: 'numeric' }))}</span></div>
+      ${r.photo ? `<img class="rphoto" src="${esc(r.photo)}" alt="${esc(r.title)}" data-act="viewphoto">` : ''}
+      <div class="catrow">${r.category ? `<span>${esc(t.cat[r.category])}</span>` : ''}<span>${esc(t.added)} ${esc(fmtDate(r.createdAt, { day: 'numeric', month: 'short', year: 'numeric' }))}</span></div>
       <div class="rtitle">
         <h1>${esc(r.title)}</h1>
         ${FAM.on && r.owner && r.owner !== FAM.uid ? `<div class="byline">${avatarHTML(r.owner, 'sm')}<span>${esc(t.addedBy(member(r.owner).name))} · ${esc(ago(r.createdAt || Date.now()))}</span></div>` : ''}
@@ -615,22 +610,19 @@ function renderEdit(r) {
     <div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.cancel)}">${ico('x')}</button><h1>${esc(isNew ? t.newRecipe : t.editRecipe)}</h1></div>
     <form class="form wrap" id="form" novalidate>
       ${showDraft ? `<div class="draft-note"><span>${esc(t.draftFound)}</span><span style="display:flex;gap:8px"><button type="button" class="btn small" data-act="draftno">${esc(t.discard)}</button><button type="button" class="btn small primary" data-act="draftyes">${esc(t.restore)}</button></span></div>` : ''}
-      <div class="field"><span class="lbl">${esc(t.photo)}</span><div class="photo-drop" id="photoBox"></div>
-        <input class="input" id="fPhotoUrl" type="url" inputmode="url" placeholder="${esc(t.photoUrl)}" value="${formPhoto && /^https?:/.test(formPhoto) ? esc(formPhoto) : ''}"></div>
-      <div class="importbox">
-        <h3>${esc(t.importTitle)}</h3>
-        <button type="button" class="btn primary" data-act="book">${ico('bookCam')}${esc(t.bookBtn)}</button>
-        <span class="hint">${esc(t.bookHint)}</span>
+      <div class="addbox">
+        <label for="fSmart">${esc(t.smartLabel)}</label>
+        <textarea id="fSmart" rows="3" autocapitalize="off" spellcheck="false"></textarea>
+        <div class="addbtns"><button type="button" class="btn primary" data-act="smartfill">${ico('download')}${esc(t.smartFill)}</button>
+          <button type="button" class="btn" data-act="book">${ico('camera')}${esc(t.photosBtn)}</button></div>
+        <p class="addstatus" id="addStatus" role="status" hidden></p>
         <div id="ocrStatus" class="ocr" hidden><span id="ocrText"></span><div class="bar"><i id="ocrBar"></i></div></div>
         <div class="pages" id="formPages"></div>
-        <div class="field"><label for="fLink">${esc(t.link)}</label><input class="input" id="fLink" type="url" inputmode="url" placeholder="https://…" value="${esc(r.link || '')}">
-          <span class="hint">${esc(t.importLinkHint)}</span></div>
-        <button type="button" class="btn" data-act="import">${ico('download')}${esc(t.importBtn)}</button>
-        <div class="field"><label for="fPaste" class="hint">${esc(t.pasteHint)}</label><textarea id="fPaste" style="min-height:5em"></textarea></div>
-        <button type="button" class="btn" data-act="paste">${esc(t.pasteBtn)}</button>
       </div>
+      <div class="field"><span class="lbl">${esc(t.photo)}</span><div class="photo-drop" id="photoBox"></div>
+        <input class="input" id="fPhotoUrl" type="url" inputmode="url" placeholder="${esc(t.photoUrl)}" value="${formPhoto && /^https?:/.test(formPhoto) ? esc(formPhoto) : ''}"></div>
       <div class="field"><label for="fTitle">${esc(t.title)} *</label><input class="input" id="fTitle" required placeholder="${esc(t.titlePh)}" value="${esc(r.title)}" style="font-size:1.15rem;font-weight:700"></div>
-      <div class="autotag"><button type="button" class="btn" data-act="autotag">${ico('spark')}${esc(t.autoTagBtn)}</button><span class="hint">${esc(t.autoTagHint)}</span></div>
+      <div class="autotag"><button type="button" class="btn" data-act="autotag">${ico('spark')}${esc(t.autoTagBtn)}</button></div>
       <div class="field"><label for="fCat">${esc(t.category)}</label><select id="fCat"><option value="">—</option>${CATS.map(c => `<option value="${c}" ${r.category === c ? 'selected' : ''}>${esc(t.cat[c])}</option>`).join('')}</select></div>
       <div class="field"><span class="lbl">${esc(t.occasions)}</span>
         <span class="eyebrow">${esc(t.occSeasons)}</span>
@@ -647,11 +639,12 @@ function renderEdit(r) {
         <div class="field"><label for="fPrep">${esc(t.prepF)}</label><input class="input" id="fPrep" type="number" inputmode="numeric" min="0" value="${esc(r.prep || '')}"></div>
         <div class="field"><label for="fCook">${esc(t.cookF)}</label><input class="input" id="fCook" type="number" inputmode="numeric" min="0" value="${esc(r.cook || '')}"></div>
       </div>
-      <div class="field"><label for="fIng">${esc(t.ingF)}</label><span class="hint">${esc(t.ingHint)}</span><textarea id="fIng" rows="8">${esc(r.ingredients || '')}</textarea></div>
-      <div class="field"><label for="fSteps">${esc(t.stepsF)}</label><span class="hint">${esc(t.stepsHint)}</span><textarea id="fSteps" rows="10">${esc(r.steps || '')}</textarea></div>
+      <div class="field"><label for="fIng">${esc(t.ingF)}</label><textarea id="fIng" rows="8">${esc(r.ingredients || '')}</textarea></div>
+      <div class="field"><label for="fSteps">${esc(t.stepsF)}</label><textarea id="fSteps" rows="10">${esc(r.steps || '')}</textarea></div>
       <div class="field"><label for="fNote">${esc(t.noteF)}</label><textarea id="fNote" style="min-height:5em">${esc(r.note || '')}</textarea></div>
-      <div class="field"><label for="fNotes">${esc(t.notesF)}</label><span class="hint">${esc(t.notesHint)}</span><textarea id="fNotes" style="min-height:4em">${esc(r.notes || '')}</textarea></div>
+      <div class="field"><label for="fNotes">${esc(t.notesF)}</label><textarea id="fNotes" style="min-height:4em">${esc(r.notes || '')}</textarea></div>
       <div class="field"><label for="fSource">${esc(t.sourceF)}</label><input class="input" id="fSource" placeholder="${esc(t.sourcePh)}" value="${esc(r.source || '')}"></div>
+      <div class="field"><label for="fLink">${esc(t.link)}</label><input class="input" id="fLink" type="url" inputmode="url" value="${esc(r.link || '')}"></div>
       <div class="field"><label for="fTags">${esc(t.tags)}</label><input class="input" id="fTags" placeholder="${esc(t.tagsPh)}" value="${esc((r.tags || []).join(', '))}"></div>
     </form>
     <div class="savebar"><div class="in"><button class="btn" data-act="back">${esc(t.cancel)}</button><button class="btn primary" data-act="save">${ico('check')}${esc(t.save)}</button></div></div>`;
@@ -707,6 +700,7 @@ async function submitForm() {
   const r = Object.assign({}, old || { id: uid(), createdAt: Date.now(), cookCount: 0, rating: 0, favorite: false }, d, { updatedAt: Date.now() });
   if (r.photo !== old?.photo) r.thumb = r.photo ? (r.photo.startsWith('data:') ? await thumbFrom(r.photo) : r.photo) : null;
   if (old?.sample) r.sample = false;
+  const ingLines = lines(r.ingredients); if (ingLines.length <= 3) r.ingredients = ingLines.flatMap(splitList).join('\n');
   if (formTag.auto) r.autoTagged = true;
   if (formTag.ai) r.aiTagged = true;
   autoTag(r);
@@ -806,19 +800,32 @@ async function claudeTagAll() {
 }
 
 // Pasted text → fields
+// "200 g de farine, 3 œufs, 100 g de sucre" → one ingredient per line. "1,5 kg" (no space) and "2 oignons, émincés" (two parts) stay whole.
+const splitList = l => { const parts = l.split(/[,;]\s+/).map(x => x.trim()).filter(Boolean); return parts.length >= 3 ? parts : [l]; };
 function parseRecipeText(text) {
   const ls_ = String(text).split(/\r?\n/).map(l => l.trim());
   const H_ING = /^(ingr[eé]dients?|ingredients?|il vous faut|liste des ingr[eé]dients)\s*:?$/i;
   const H_STEP = /^(pr[eé]paration|instructions?|[eé]tapes?|m[eé]thode|method|directions|recette|steps|preparation)\s*:?$/i;
   const H_NOTE = /^(notes?|astuces?|conseils?|tips?)\s*:?$/i;
   let mode = 'head', title = '', ing = [], steps = [], notes = [], head = [];
-  for (const l of ls_) {
+  // "Ingrédients : 200 g de farine, 3 œufs" — a heading with its content on the same line
+  const inline = (l, re) => { const m = l.match(new RegExp(re.source.replace('\\s*:?$', '\\s*:\\s*(.+)$'), 'i')); return m && m[m.length - 1]; };
+  for (let l of ls_) {
     if (!l) continue;
+    l = l.replace(/^[-•*▢☐◦·]\s*/, '');
     if (H_ING.test(l)) { mode = 'ing'; continue; }
     if (H_STEP.test(l)) { mode = 'steps'; continue; }
     if (H_NOTE.test(l)) { mode = 'notes'; continue; }
+    let rest;
+    if ((rest = inline(l, H_ING))) { mode = 'ing'; l = rest; }
+    else if ((rest = inline(l, H_STEP))) { mode = 'steps'; l = rest; }
+    else if ((rest = inline(l, H_NOTE))) { mode = 'notes'; l = rest; }
     ({ head, ing, steps, notes })[mode === 'head' ? 'head' : mode].push(l);
   }
+  // Ingredients written as a list on one line: "200 g de farine, 3 œufs, 100 g de sucre" (but not "1,5 kg")
+  ing = ing.flatMap(splitList);
+  // Steps written as one paragraph: one step per sentence
+  if (steps.length === 1 && steps[0].length > 160) steps = steps[0].split(/(?<=[.!])\s+(?=[A-ZÀ-Ý0-9])/);
   if (!ing.length && !steps.length) {
     // No headings: short lines that look like quantities are ingredients, long lines are steps.
     const rest = head.slice(1); title = head[0] || '';
@@ -832,6 +839,43 @@ function parseRecipeText(text) {
   const ck = all.match(/(?:cuisson|cook(?:ing)?(?:\s*time)?)\s*:?\s*(\d+)\s*(min|h)/); if (ck) d.cook = ck[2] === 'h' ? ck[1] * 60 : +ck[1];
   const url = String(text).match(/https?:\/\/\S+/); if (url) d.link = url[0];
   return d;
+}
+
+// ---------- Adding a recipe: one box for a link or a whole recipe, and Photos ----------
+function addStatus(msg, kind = '') {
+  const el = $('#addStatus'); if (!el) { if (msg) toast(msg); return; }
+  el.hidden = !msg; el.className = 'addstatus ' + kind; el.textContent = msg || '';
+}
+// What went wrong with Claude, in plain words.
+function claudeErrorText(e) {
+  const t = T(), s = e?.status, m = String(e?.error?.error?.message || e?.message || '');
+  if (e?.refusal) return t.claudeRefused;
+  if (s === 401 || s === 403) return t.claudeErrKey;
+  if (/credit|billing|balance/i.test(m)) return t.claudeErrCredit;
+  if (s === 429 || s === 529 || s >= 500) return t.claudeErrBusy;
+  if (!navigator.onLine || !s) return t.claudeOffline;
+  return t.claudeErr + ` (${s})`;
+}
+async function smartFill(btn) {
+  const t = T(), box = $('#fSmart'), v = box.value.trim();
+  if (!v) { box.focus(); return; }
+  const url = (v.match(/https?:\/\/[^\s<>"]+/) || [])[0];
+  const label = btn?.innerHTML; if (btn) { btn.disabled = true; btn.textContent = t.importing; }
+  try {
+    if (url && v.length - url.length < 40) { $('#fLink').value = url; await importLink(url, btn); }
+    else { if (url) $('#fLink').value = url; await importText(v, btn); }
+  } finally { if (btn) { btn.disabled = false; btn.innerHTML = label; } }
+}
+async function importText(v, btn) {
+  const t = T();
+  let failed = '';
+  if (hasClaude() && navigator.onLine) {
+    if (btn) btn.textContent = t.claudeReading;
+    try { const c = await claudeRecipe({ text: v }); if (c) { fillForm(c); addStatus(t.claudeReadOk, 'ok'); formAutoTag(true); return; } }
+    catch (e) { console.warn(e); failed = claudeErrorText(e); }
+  }
+  fillForm(parseRecipeText(v)); formAutoTag(true);
+  addStatus(failed ? failed + ' ' + t.filledWithoutClaude : t.filledWithoutClaude + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn');
 }
 
 // Link → fields (reads schema.org Recipe data that most recipe sites publish)
@@ -903,7 +947,8 @@ const RECIPE_SCHEMA = {
     notes: { type: 'string' }, category: { type: 'string', enum: [...CATS, ''] }, source: { type: 'string' }, tags: { type: 'array', items: { type: 'string' } },
   },
 };
-const hasClaude = () => !!ls.get('claudeKey', '');
+const claudeKey = () => ls.get('claudeKey', '') || (FAM.on ? ls.get('famClaudeKey', '') : '');
+const hasClaude = () => !!claudeKey();
 async function claudeRecipe({ images = [], text = '', url = '' }) {
   const client = await claudeClient();
   const what = images.length ? (images.length > 1 ? `${images.length} screenshots or photos, in order, of one recipe` : 'a screenshot or photo of a recipe') : text ? 'the text of a recipe page' : 'a recipe web page';
@@ -1001,15 +1046,17 @@ async function readBookPages(files) {
   if (!pages.length) return;
   formPages.push(...pages); drawFormPages();
   const btn = $('[data-act="book"]'); if (btn) btn.disabled = true;
+  addStatus('');
+  let claudeFailed = '';
   if (hasClaude() && navigator.onLine) {
     set(t.claudeReading, 0.35);
     try {
       const imgs = []; for (const p of pages) imgs.push(await recompressDataUrl(p, 1800, 0.85));
       const c = await claudeRecipe({ images: imgs });
       if (btn) btn.disabled = false;
-      if (c) { st.hidden = true; fillForm(c, true); $('#form')?.dispatchEvent(new Event('input')); toast(t.claudeReadOk); formAutoTag(true); return; }
-      set(t.ocrEmpty, 0); $('#form')?.dispatchEvent(new Event('input')); return;
-    } catch (e) { console.warn(e); }  // fall back to reading on the phone
+      if (c) { st.hidden = true; fillForm(c, true); $('#form')?.dispatchEvent(new Event('input')); addStatus(t.claudeReadOk, 'ok'); formAutoTag(true); return; }
+      st.hidden = true; addStatus(t.noRecipeInPhotos, 'warn'); $('#form')?.dispatchEvent(new Event('input')); return;
+    } catch (e) { console.warn(e); claudeFailed = claudeErrorText(e); }  // fall back to reading on the phone
   }
   set(t.ocrLoading, 0.02);
   let text = '', cur = 1, worker;
@@ -1027,9 +1074,8 @@ async function readBookPages(files) {
   text = unwrapOcr(text).trim();
   if (text.replace(/\W/g, '').length < 10) { set(t.ocrEmpty, 0); $('#form')?.dispatchEvent(new Event('input')); return; }
   st.hidden = true;
-  const paste = $('#fPaste'); if (paste) paste.value = text;
   fillForm(parseRecipeText(text), true);
   $('#form')?.dispatchEvent(new Event('input'));
-  toast(hasClaude() ? t.ocrOk : t.ocrOk + ' ' + t.claudeTip);
+  addStatus(claudeFailed ? claudeFailed + ' ' + t.filledWithoutClaude : hasClaude() ? t.ocrOk : t.filledWithoutClaude + ' ' + t.claudeTip, claudeFailed || !hasClaude() ? 'warn' : 'ok');
   formAutoTag(true);
 }

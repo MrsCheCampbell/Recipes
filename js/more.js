@@ -99,24 +99,23 @@ function readShareParams() {
   history.replaceState(null, '', location.pathname + '#/edit/new');
 }
 async function applyShare(p) {
-  if (p.url) { $('#fLink').value = p.url; doImport(); }
-  else if (p.text) { $('#fPaste').value = p.text; fillForm(parseRecipeText(p.text)); }
+  const v = [p.text, p.url].filter(Boolean).join('\n');
+  if (v) { $('#fSmart').value = v; smartFill($('[data-act="smartfill"]')); }
   if (p.title && !$('#fTitle').value) $('#fTitle').value = p.title;
 }
-async function doImport() {
-  const t = T(), url = $('#fLink').value.trim(); if (!/^https?:\/\//.test(url)) { $('#fLink').focus(); return; }
-  const btn = $('[data-act="import"]'); btn.disabled = true; btn.textContent = t.importing;
-  let d = await importFromLink(url);
+async function importLink(url, btn) {
+  const t = T();
+  let d = await importFromLink(url), failed = '';
   if ((!d || d.partial) && hasClaude()) {
-    btn.textContent = t.claudeReading;
-    try { const c = await claudeRecipe(lastPageText.length > 300 ? { text: lastPageText, url } : { url }); if (c) d = { ...c, link: url, photo: d?.photo || null }; } catch (e) { console.warn(e); }
+    if (btn) btn.textContent = t.claudeReading;
+    try { const c = await claudeRecipe(lastPageText.length > 300 ? { text: lastPageText, url } : { url }); if (c) d = { ...c, link: url, photo: d?.photo || null }; }
+    catch (e) { console.warn(e); failed = claudeErrorText(e); }
   }
-  btn.disabled = false; btn.innerHTML = ico('download') + esc(t.importBtn);
-  if (!d || d.partial) { if (d) fillForm(d, true); toast(hasClaude() ? t.importFail : t.importFail + ' ' + t.claudeTip); $('#fPaste').focus(); return; }
+  if (!d || d.partial) { if (d) fillForm(d, true); addStatus((failed ? failed + ' ' : '') + t.importFail + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn'); return; }
   if (d.photo) d.photo = await localizePhoto(d.photo);
   fillForm(d, false);
   ls.set('draft', { key: $('#view').dataset.id || 'new', ts: Date.now(), data: readForm() });
-  toast(t.importOk);
+  addStatus(t.importOk, 'ok');
   formAutoTag(true);
 }
 
@@ -190,8 +189,14 @@ function renderMore() {
       </div>
       <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></section>
     <section class="panel" id="claudePanel"><h2>${ico('spark')} ${esc(t.claudePanel)}</h2><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
-      ${ls.get('claudeKey', '') ? `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`
-        : `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div><button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`}</section>
+      ${(() => { const own = ls.get('claudeKey', ''), shared = FAM.on && own && ls.get('famClaudeKey', '') === own;
+        if (own) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p>
+          ${FAM.on ? `<p class="muted" style="margin:0">${esc(shared ? t.claudeShared : t.claudeNotShared)}</p><button class="btn" data-act="${shared ? 'claudeunshare' : 'claudeshare'}">${ico('users')}${esc(shared ? t.claudeUnshare : t.claudeShare)}</button>` : ''}
+          <button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`;
+        if (hasClaude()) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyFam)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button>`;
+        return `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div>
+          ${FAM.on ? `<label class="tried-toggle"><input type="checkbox" id="claudeShareIn" checked><span>${esc(t.claudeShareToo)}</span></label>` : ''}
+          <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</section>
     <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
       ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
         <button class="btn" data-act="locknow">${esc(t.lockNow)}</button>` : `<button class="btn primary" data-act="lockchange">${esc(t.lockAdd)}</button>`}</section>

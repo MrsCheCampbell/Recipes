@@ -69,7 +69,7 @@ function drawBookMatches() {
 }
 function drawClaude(res) {
   const t = T(), box = $('#claudeBox'); if (!box) return;
-  const key = ls.get('claudeKey', '');
+  const key = claudeKey();
   const ask = `<button class="btn primary block" data-act="askclaude" ${!pantry.length || claudeBusy ? 'disabled' : ''}>${ico('spark')}${esc(res ? t.askAgain : t.askClaude)}</button>`;
   if (!key) { box.innerHTML = `<div class="panel"><h2>${ico('spark')} Claude</h2><p style="margin:0">${esc(t.claudeNoKey)}</p><a class="btn" href="#/more" data-goto="claude">${esc(t.claudeSetup)}</a></div>`; return; }
   if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><span class="spinner" aria-hidden="true"></span><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
@@ -93,7 +93,7 @@ const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } 
 let AnthropicSDK = null;
 async function claudeClient() {
   if (!AnthropicSDK) AnthropicSDK = (await import(new URL('vendor/anthropic/anthropic-sdk.mjs', document.baseURI).href)).default;
-  return new AnthropicSDK({ apiKey: ls.get('claudeKey', ''), dangerouslyAllowBrowser: true });
+  return new AnthropicSDK({ apiKey: claudeKey(), dangerouslyAllowBrowser: true });
 }
 function claudePrompt() {
   const kosher = recipes.filter(r => r.kashrut).length >= Math.max(2, recipes.length * 0.3);
