@@ -104,7 +104,16 @@ const STR = {
     migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
     migrateAll: 'Les ajouter au livre de la famille', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
     
-    famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans Our Kitchen, pour voir et partager nos recettes :`,
+    famCardText: 'Partager vos recettes avec vos proches.', inviteText: (n, url) => `Rejoins « ${n} » dans Our Kitchen, pour voir et partager nos recettes.
+
+1. Touche ce lien (sur iPhone, ouvre-le dans Safari ; sur Android, dans Chrome) :
+${url}
+
+2. Choisis ton prénom, puis touche « Rejoindre la famille ».
+
+3. Pour l’avoir sur l’écran d’accueil, comme une vraie appli :
+- iPhone : bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».
+- Android : menu ⋮ en haut à droite, puis « Installer l’application ».`,
     fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
     fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
     haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
@@ -219,7 +228,16 @@ const STR = {
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in Our Kitchen to see and share our recipes:`,
+    famCardText: 'Share your recipes with your family.', inviteText: (n, url) => `Join “${n}” in Our Kitchen to see and share our recipes.
+
+1. Tap this link (on iPhone, open it in Safari; on Android, in Chrome):
+${url}
+
+2. Pick your name, then tap “Join the family”.
+
+3. To put it on your home screen like a real app:
+- iPhone: tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
+- Android: tap the ⋮ menu at the top right, then “Install app”.`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
