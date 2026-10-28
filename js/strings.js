@@ -323,12 +323,12 @@ Object.assign(STR.fr, { smartLabel: 'Lien ou texte de la recette', smartFill: 'R
   filledWithoutClaude: 'Rempli sans Claude : vérifiez les champs.', noRecipeInPhotos: 'Claude n’a pas trouvé de recette sur ces photos.',
   claudeErrCredit: 'Le compte Claude n’a plus de crédit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude est très occupé, réessayez dans un instant.',
   claudeKeyFam: 'Claude est prêt (clé de la famille).', claudeShared: 'Toute la famille utilise cette clé.', claudeNotShared: 'Seul ce téléphone utilise cette clé.',
-  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeSharedToast: 'Clé partagée avec la famille' });
+  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeShareRules: 'Pas encore partagée : publiez les nouvelles règles dans la console Firebase, puis touchez « Partager avec la famille ».', claudeShareFail: 'Pas encore partagée (pas de connexion ?). Réessayez avec « Partager avec la famille ».', claudeSharedToast: 'Clé partagée avec la famille' });
 Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
   filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
   claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
   claudeKeyFam: 'Claude is ready (family key).', claudeShared: 'The whole family uses this key.', claudeNotShared: 'Only this phone uses this key.',
-  claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeSharedToast: 'Key shared with the family' });
+  claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeShareRules: 'Not shared yet: publish the new rules in the Firebase console, then tap “Share with the family”.', claudeShareFail: 'Not shared yet (no connection?). Try again with “Share with the family”.', claudeSharedToast: 'Key shared with the family' });
 Object.assign(STR.en, { mine: 'Mine', whoAdded: 'Added by' });
 Object.assign(STR.fr, { updateReady: 'Nouvelle version de l’appli prête', reload: 'Recharger' });
 Object.assign(STR.en, { updateReady: 'A new version of the app is ready', reload: 'Reload' });

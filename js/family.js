@@ -180,7 +180,13 @@ async function loadPages(r) {
 }
 
 // One Claude key for the whole family: stored where only family members can read it (firestore.rules → secrets).
-function shareClaudeKey(k) { if (!k) return; ls.set('famClaudeKey', k); quiet(FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() })); toast(T().claudeSharedToast); }
+// Only says "shared" once Firebase has accepted it (old rules refuse it).
+async function shareClaudeKey(k) {
+  if (!k) return; const w = fbWait(); if (w) await w;
+  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); toast(T().claudeSharedToast); }
+  catch (e) { console.warn('share key', e && e.code); toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
+  if (current === 'more') renderMore();
+}
 function unshareClaudeKey() { ls.del('famClaudeKey'); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
 
 // Comments on the open recipe (live).
