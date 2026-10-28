@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Every word the app shows, in French and English.
+// Our Kitchen: Every word the app shows, in French and English.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Vocabulary ----------
@@ -11,7 +11,7 @@ const KASHRUT = ['meat','dairy','parve'];
 
 const STR = {
   fr: {
-    appName: "La Cuisine d'Abe",
+    appName: 'Our Kitchen',
     hello: ['Bonne nuit', 'Bonjour', 'Bon après-midi', 'Bonsoir'], shabbatShalom: 'Chabbat Chalom',
     nav: { list: 'Recettes', fav: 'Favoris', fridge: 'Frigo', shop: 'Courses', more: 'Plus' },
     searchPh: 'Chercher', voice: 'Chercher à la voix', clear: 'Effacer',
@@ -104,7 +104,7 @@ const STR = {
     migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
     migrateAll: 'Les ajouter au livre de la famille', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
     
-    famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans La Cuisine d’Abe, pour voir et partager nos recettes :`,
+    famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans Our Kitchen, pour voir et partager nos recettes :`,
     fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
     fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
     haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
@@ -116,11 +116,11 @@ const STR = {
     claudeKey: 'Clé Claude', claudeKeySaved: 'Clé enregistrée', claudeKeyRemove: 'Retirer la clé', claudeKeyOn: 'Claude est prêt.', 
     inbox: 'Boîte de réception', parAvion: 'Par avion', inboxEmpty: 'Rien pour l’instant. Quand quelqu’un vous envoie une recette depuis son appli, elle arrive ici.',
     fromWho: n => `De la part de ${n}`, receivedOn: d => `reçue le ${d}`, keep: 'Garder', toss: 'Supprimer', kept: 'Ajoutée à vos recettes', tossed: 'Recette supprimée',
-    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli La Cuisine d’Abe :`,
+    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli Our Kitchen :`,
     inboxBanner: (n, from) => n === 1 ? `${from} vous a envoyé une recette` : `${n} recettes vous attendent`, open: 'Ouvrir', preview: 'Voir la recette',
     pasteLink: 'Coller une recette reçue', pasteHelp: 'Sur iPhone, ou si le lien s’est ouvert ailleurs : copiez le message reçu, puis touchez ce bouton.', pastePh: 'Collez ici le message ou le lien reçu',
     pasteGo: 'Ajouter à la boîte', pasteBad: 'Aucune recette trouvée dans ce texte.', alreadyIn: 'Cette recette est déjà dans votre boîte.', gotOne: 'Nouvelle recette reçue !',
-    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez La Cuisine d’Abe, puis Boîte de réception → « Coller une recette reçue ».',
+    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez Our Kitchen, puis Boîte de réception → « Coller une recette reçue ».',
     copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
     kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
@@ -219,7 +219,7 @@ const STR = {
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in La Cuisine d’Abe to see and share our recipes:`,
+    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in Our Kitchen to see and share our recipes:`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
@@ -231,11 +231,11 @@ const STR = {
     claudeKey: 'Claude key', claudeKeySaved: 'Key saved', claudeKeyRemove: 'Remove the key', claudeKeyOn: 'Claude is ready.', 
     inbox: 'Inbox', parAvion: 'Par avion', inboxEmpty: 'Nothing yet. When someone sends you a recipe from their app, it lands here.',
     fromWho: n => `From ${n}`, receivedOn: d => `received ${d}`, keep: 'Keep it', toss: 'Delete', kept: 'Added to your recipes', tossed: 'Recipe deleted',
-    send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your La Cuisine d’Abe app:`,
+    send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your Our Kitchen app:`,
     inboxBanner: (n, from) => n === 1 ? `${from} sent you a recipe` : `${n} recipes are waiting for you`, open: 'Open', preview: 'See the recipe',
     pasteLink: 'Paste a received recipe', pasteHelp: 'On iPhone, or if the link opened somewhere else: copy the message you received, then tap this button.', pastePh: 'Paste the message or link here',
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
-    iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open La Cuisine d’Abe, then Inbox → “Paste a received recipe”.',
+    iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
     kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,

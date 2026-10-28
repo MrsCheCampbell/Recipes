@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Sending recipes between phones, sharing into the app, shopping list, settings, examples.
+// Our Kitchen: Sending recipes between phones, sharing into the app, shopping list, settings, examples.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Sending recipes between phones ----------

@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Helpers, storage, search, calendar, quantities and units, images, sheets, navigation.
+// Our Kitchen: Helpers, storage, search, calendar, quantities and units, images, sheets, navigation.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Small helpers ----------

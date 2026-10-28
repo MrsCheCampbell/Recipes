@@ -1,7 +1,7 @@
 {
-  "name": "La Cuisine d'Abe",
-  "short_name": "Cuisine d'Abe",
-  "description": "Les recettes d'Abe : chercher, cuisiner, partager.",
+  "name": "Our Kitchen",
+  "short_name": "Our Kitchen",
+  "description": "Les recettes de la famille : chercher, cuisiner, partager.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

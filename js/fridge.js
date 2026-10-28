@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Frigo: what can I make with what I have?
+// Our Kitchen: Frigo: what can I make with what I have?
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Fridge: what can I make? ----------

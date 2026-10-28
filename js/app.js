@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Taps, the passcode, and starting the app.
+// Our Kitchen: Taps, the passcode, and starting the app.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Global click handling ----------

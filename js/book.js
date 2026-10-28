@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: The recipe book: list, suggestions, recipe page, cook mode, timers, the form, smart tags, importing.
+// Our Kitchen: The recipe book: list, suggestions, recipe page, cook mode, timers, the form, smart tags, importing.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- List view ----------

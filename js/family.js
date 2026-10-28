@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: The family: Firebase sync, hearts, comments, recommendations, the feed, creating and joining.
+// Our Kitchen: The family: Firebase sync, hearts, comments, recommendations, the feed, creating and joining.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Family: shared recipes, feed, hearts, comments, recommendations ----------

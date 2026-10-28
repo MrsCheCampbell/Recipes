@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: "J'ai cuisiné" photos and the private Carnets: evenings, guests, wine.
+// Our Kitchen: "J'ai cuisiné" photos and the private Carnets: evenings, guests, wine.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Personal notebooks (events, guests) and "I made it" posts ----------
