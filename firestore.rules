@@ -1,5 +1,5 @@
 rules_version = '2';
-// La Cuisine d'Abe — family sharing rules.
+// Our Kitchen — family sharing rules.
 // Everything lives under /families/{familyId}. Only members can read anything there.
 // A recipe is visible to the people in its `audience` list: 'all' means the whole family,
 // otherwise it lists exactly who may see it (always including its owner).
@@ -12,6 +12,24 @@ service cloud.firestore {
     function family(fid) { return get(/databases/$(database)/documents/families/$(fid)).data; }
     function canSee(r) { return r.owner == uid() || r.audience.hasAny(['all', uid()]); }
     function recipe(fid, rid) { return get(/databases/$(database)/documents/families/$(fid)/recipes/$(rid)).data; }
+
+    // Family codes (K7P-M2Q): a code can be looked up, never listed. Whoever created the family makes it.
+    // Its "people" list lets a reinstalled phone show "tap your name"; each member writes only their own line.
+    function joinFid(c) { return get(/databases/$(database)/documents/joincodes/$(c)).data.fid; }
+    match /joincodes/{c} {
+      allow get: if signedIn();
+      allow create: if signedIn() && family(request.resource.data.fid).createdBy == uid()
+        && request.resource.data.code == family(request.resource.data.fid).code;
+      allow update: if signedIn() && family(resource.data.fid).createdBy == uid()
+        && request.resource.data.fid == resource.data.fid && request.resource.data.code == family(resource.data.fid).code;
+      allow delete: if signedIn() && family(resource.data.fid).createdBy == uid();
+      match /people/{p} {
+        allow read: if signedIn();
+        allow create, update: if p == uid() && isMember(joinFid(c))
+          && request.resource.data.name is string && request.resource.data.name.size() <= 40;
+        allow delete: if p == uid();
+      }
+    }
 
     match /families/{fid} {
       allow read: if isMember(fid);
@@ -102,6 +120,14 @@ service cloud.firestore {
         );
         allow delete: if isMember(fid) && (resource.data.uid == uid()
           || (resource.data.get('rid', null) != null && recipe(fid, resource.data.rid).owner == uid()));
+      }
+
+      // Ideas and suggestions: anyone in the family can send one; only whoever set up the family reads them.
+      match /feedback/{id} {
+        allow create: if isMember(fid) && request.resource.data.by == uid()
+          && request.resource.data.text is string && request.resource.data.text.size() <= 4000;
+        allow read: if isMember(fid) && (family(fid).createdBy == uid() || resource.data.by == uid());
+        allow delete: if isMember(fid) && family(fid).createdBy == uid();
       }
 
       // One Claude key shared by the family, so nobody has to set it up on their own phone.

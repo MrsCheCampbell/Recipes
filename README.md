@@ -11,13 +11,13 @@ The app is hosted on Netlify: every merge to `master` deploys it (see CLAUDE.md 
 1. Open the link above in **Chrome**.
 2. Tap **⋮** → **Installer l'application** / **Install app** (or "Ajouter à l'écran d'accueil").
 3. The green pot icon appears on his home screen. It opens full screen like any other app.
-4. The first time it opens, it asks to **choose a 4-digit code** (and an optional hint). Set it up with him, or pick it for him and tell him.
+4. Open it. There's no code to set up.
 
 ## Installing on an iPhone
 
 1. Open the same link in **Safari**.
 2. Tap the **Share** button (the square with an arrow pointing up) → **Add to Home Screen** / **Sur l'écran d'accueil** → **Add**.
-3. Open it from the home screen icon. It runs full screen and asks for its own 4-digit code.
+3. Open it from the home screen icon. It runs full screen.
 
 Install it to the home screen rather than using it in a Safari tab: Safari can clear data from websites you haven't visited for a while, but it keeps data for home-screen apps.
 
@@ -25,17 +25,12 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 ## What it does
 
-**Passcode**
-- A 4-digit code is asked each time the app opens, and again after 15 minutes in the background.
-- "Code oublié ?" shows the hint he saved. The code can be changed, removed, or the app locked straight away from *Plus → Code d'accès*.
-- This is a privacy lock for the phone. The recipes never leave his phone, so nobody visiting the website sees them.
-
 **Recipes**
 - **One box at the top of the form** (*Lien ou texte de la recette*): paste a link, or a whole recipe from an email or a WhatsApp message, and tap **Remplir**. Or tap **Photos** to photograph a cookbook page or pick screenshots. A line under the box always says what happened (read by Claude, filled without Claude, site blocked…), so nothing fails silently.
 - Ingredients typed or pasted on one line with commas ("200 g de farine, 3 œufs, 100 g de sucre") are split into one per line. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom).
 - Add a photo of the dish with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
 - **Share to the app**: in Chrome or any app, tap *Share → Our Kitchen* on a recipe page to start a new recipe from it.
-- Category, **occasions** (having friends over, family dinner, birthdays, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, birthdays, New Year's Eve, brunch, BBQ & picnic, weeknight, Shabbat dinner and the Jewish holidays, plus your own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
@@ -60,11 +55,17 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Two weeks before, a quiet line at the top says e.g. "Réveillon du Nouvel An dans 9 jours". Tapping it shows the recipes tagged for it.
 - The app is in English. It still reads French recipes (links, pasted text, photos). Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
-**Birthday (until October 31, 2026)**
-- A teal *¡Feliz cumpleaños, Harold!* card (with a *28 de octubre* tag) at the top of Recipes, and a shower of confetti every time the app opens. While the card is up, the date line reads Wednesday, October 28. Both go away at midnight after October 31, on the phone's own clock, so it works the same in Spain and France.
+**More**
+- Open: the family, **Ideas & suggestions**, and *Install the app* until it's installed. Everything else is a folded card you tap open: By the numbers, Settings, Occasions, Conversions, Example recipes, and at the bottom Claude and Backup.
+- **Ideas & suggestions**: anyone in the family can send any idea, from a word to a whole new page. They go to whoever set up the family, who sees them listed on that page and ticks them off when done. Without a family, the idea goes out with the phone's share menu.
+- The envelope (inbox) is for recipes sent by link from outside the family; in a family it only shows when one is waiting. Inside the family there's no need to send recipes: everyone sees them all, and **Recommend** on a recipe points one person to it.
+
+**Harold's birthday (temporary)**
+- A teal *¡Feliz cumpleaños, Harold!* card (with a *¡41 años!* tag) at the top of Recipes, and a shower of confetti every time the app opens. While the card is up, the date line reads Wednesday, October 28. It waits for Harold: once his phone has shown it, it stays two more days on everyone's phone, then goes away (and in any case after December 31, 2026).
 - A phone in Spain uses Madrid for the weather (Barcelona, Valencia, Sevilla, Málaga and Bilbao are in *More → Settings*, or use your location).
 
 **Look**
+- Dark mode by default (Automatic or Light in *More → Settings*).
 - Calm and classic: the home page is the date, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.
 - Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
 - Illustrations (category drawings, family avatars, bottom bar, empty pages) are flat kitchen doodles in `art/`, one file per name, so a purchased set can be dropped in with the same file names. See [`art/README.md`](art/README.md). Small button icons are drawn in code. No emoji anywhere.
@@ -85,13 +86,15 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 
 - **One family cookbook**: every recipe anyone adds goes into the shared list in **Recettes**, with a small avatar showing who added it. Nothing is hidden. Your hearts and favourites stay your own.
 - **Finding someone's recipes**: *Filtres → Ajoutées par* lists **Les miennes** and each person who has added recipes (Maman, Papa…). Typing a name in the search works too: "maman gâteau" finds Mom's cakes.
-- **Feed** (the **Famille** tab): food photos, of something someone cooked (tagged to the recipe) or any plate worth sharing, with hearts and comments. New recipes show up as one quiet line ("Papa a ajouté 3 recettes").
+- **Instagram** (the tab, formerly Famille): food photos, of something someone cooked (tagged to the recipe) or any plate worth sharing, with hearts and comments. New recipes show up as one quiet line ("Papa a ajouté 3 recettes").
 - **"J'ai cuisiné" (I made it)**: the **+** button now asks *J'ai cuisiné…* or *Une nouvelle recette*. Pick the recipe you made, add a photo if you like (or just a word), and it goes in the feed with the recipe attached. Anyone can make anyone's recipe and post their own photo ("Moi aussi" on a post). Every photo and note shows up on the recipe itself, in a **Fait par la famille** panel of little polaroids. A post is seen by exactly the people who can see the recipe: if Mom's cake is secret, so are the photos of it, and if she later shares the cake, the photos follow. The recipe button **J'ai cuisiné** does the same and counts the times you've made it. Without the family, the photos stay on the phone as your own "Mes essais".
 - **Recommend**: on any recipe, **Recommander** → pick who → a note. It appears at the top of their feed (not in their messages) until they keep it or tap "Plus tard".
 - **Ratings**: everyone rates with their own stars; the recipe shows the family average.
 - **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
 - **Avatars**: each person picks a drawn avatar and a colour.
 - **Cocktails** have their own section (and illustration).
+- **Family code**: every family has a short code (like `K7P-M2Q`) shown in *More → Family* with **Copy**; the invite message sends it with the steps. To join: install the app, *More → Family*, type the code, tap **I'm new here**, pick a name and a 4-digit code.
+- **Coming back after deleting the app or changing phones**: type the family code, tap your name, type your 4-digit code. You're back as yourself, with your recipes, notebooks and favorites. The 4-digit code is only ever asked then. People who joined before codes existed get a one-time "Pick your 4-digit code" card in *More → Family*.
 - **Renaming the family**: whoever created it can change the name in *More → Family*; everyone sees it the next time they open the app.
 - **Adding someone later** (your brother): *More → Family → Invite someone* shares a message with the steps and the invite link (the same link is shown under the button, with **Copy link**). They pick a name and avatar; everything already there stays.
 - Works offline: everything is cached on the phone, and changes sync when the connection comes back.
@@ -174,7 +177,7 @@ No build step. The app is plain files that Netlify serves as they are:
 - `index.html`: the page skeleton; it loads the styles and scripts below.
 - `css/app.css`: all the styles ("Le Carnet" design).
 - `js/`: the app, split by feature. The scripts share one scope and load in order:
-  `icons.js` (icons, artwork) · `strings.js` (every French/English word) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
+  `icons.js` (icons, artwork) · `strings.js` (every word, English) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
 - `sw.js`: the service worker. The app opens from its saved copy (fast, and works offline); new versions download in the background and the app offers to reload. **When releasing, bump `VERSION` in `sw.js` and the `?v=` numbers in `index.html` together.**
 - `netlify/functions/fetch-page.mjs`: fetches recipe pages for link imports.
 - `firestore.rules`: the family's security rules.

@@ -4,7 +4,7 @@
 
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
-const HOLIDAYS = [];
+const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','purim','pesach','shavuot'];
 const OCCASIONS = ['friends','family','birthday','newyear','brunch','bbq','weeknight'];
 const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
 const KASHRUT = [];
@@ -24,7 +24,8 @@ const STR = {
     firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', cocktails: 'Cocktails', other: 'Other' },
-    hol: { friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+    hol: { shabbat: 'Shabbat dinner', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur break-fast', sukkot: 'Sukkot', hanukkah: 'Hanukkah', purim: 'Purim', pesach: 'Passover', shavuot: 'Shavuot',
+      friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
       hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 serving' : `${fmtNum(n)} servings`, times: x => `Amounts ×${fmtNum(x)}`,
@@ -71,7 +72,7 @@ const STR = {
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
-    tabFeed: 'Family', addedBy: n => `Added by ${n}`, famStars: (a, n) => `Family: ${a} of 5 (${n} ratings)`,
+    tabFeed: 'Instagram', addedBy: n => `Added by ${n}`, famStars: (a, n) => `Family: ${a} of 5 (${n} ratings)`,
     recommend: 'Recommend', 
     copyToMine: 'Copy to edit it',
     comments: 'Comments', commentPh: 'Add a comment', triedIt: 'I tried it', noComments: 'No comments yet.', commentSent: 'Comment posted',
@@ -79,20 +80,44 @@ const STR = {
     recoSent: n => `Recommended to ${n}`, recoFor: n => `${n} recommends`, recoLater: 'Later', you: 'You', like: 'Like',
     feedEmptyT: 'Nothing cooking yet', feedEmpty: 'When someone cooks something (or spots a lovely plate), the photo lands here.',
     agoNow: 'just now', agoMin: n => `${n} min ago`, agoH: n => `${n} h ago`, agoYesterday: 'yesterday', agoD: n => `${n} days ago`,
-    family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. Any recipe can stay private or be hidden from someone.',
-    famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Copy it, then tap the button.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family', pasteInvite: 'Paste invite link', famRename: 'Rename the family', famRenameHint: 'Everyone sees the new name the next time they open the app.', famRenameFail: 'Couldn’t rename. Check the internet connection.', famNewT: 'Set up a new family instead', invLinkLbl: 'Or copy the invite link', copyLink: 'Copy link', linkCopied: 'Link copied',
+    family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. One family cookbook, everyone’s recipes in one place.',
+    famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Copy it, then tap the button.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family', pasteInvite: 'Paste invite link',
+    codeJoinText: 'Type the family code someone sent you.', famCodeLbl: 'Family code', codeGo: 'Continue', haveLink: 'I have an invite link instead',
+    codeBad: 'That family code doesn’t exist. Check the letters and try again.', copyCode: 'Copy', codeCopied: 'Code copied',
+    famCodeHint: 'Send this code to anyone you want in the family. They type it in More → Family.', invLinkLbl2: 'Or send the invite link',
+    backT: 'Already in the family?', backText: 'Tap your name and type your 4-digit code to get everything back.', backGo: 'That’s me', newHereT: 'I’m new here',
+    pinLbl: 'Your 4-digit code', pinHint: 'Only asked if you ever reinstall the app, so you come back as you.', pinNeed: 'Choose 4 digits.',
+    pinWrong: 'That’s not the right code.', pinTooMany: 'Too many tries. Wait a few minutes and try again.', pinFail: 'Couldn’t save the code. Try again in More → Family.',
+    pinNotEnabled: 'Codes need one switch in Firebase: Authentication → Sign-in method → Email/Password → Enable.', pinSaved: 'Code saved. You can always come back as you.',
+    secureT: 'Pick your 4-digit code', secureText: 'If you ever delete the app or change phones, this gets you back in as you, with your recipes and notebooks. You only need it then.',
+    welcomeBack: n => n ? `Welcome back, ${n}!` : 'Welcome back!',
+    fbCardT: 'Ideas & suggestions', fbCardText: 'Anything at all you’d change, add or take away. Big or tiny, it all helps.',
+    fbTitle: 'Ideas & suggestions', fbHeroT: 'Literally anything can change', fbHero: 'This app was made for us, so it should work the way you like. Any single thing can be changed, added or removed: a word, a colour, a button, a whole new page.',
+    fbIdeas: ['“This button is too small.”', '“I never use the Fridge tab, hide it.”', '“Can it remind me to buy challah on Fridays?”', '“I wish I could see who cooked my recipe.”', '“The text is hard to read.”', '“This bit confuses me.”'],
+    fbNoWrong: 'There’s no idea too small, too big or too silly. Something that annoys you even a little is exactly the kind of thing worth saying.',
+    fbTo: 'Your idea', fbToName: n => `Your idea (it goes straight to ${n})`, fbSend: 'Send', fbAgain: 'Send as many as you like, whenever they come to you.',
+    fbThanks: 'Thank you! Keep them coming.', fbFail: 'Couldn’t send. Check the internet connection.', fbShareIntro: 'An idea for Our Kitchen:',
+    fbInboxT: 'What people suggested', fbNone: 'Nothing yet. They’ll show up here.', fbDone: 'Done, remove it', loading: 'Loading…', famRename: 'Rename the family', famRenameHint: 'Everyone sees the new name the next time they open the app.', famRenameFail: 'Couldn’t rename. Check the internet connection.', famNewT: 'Set up a new family instead', invLinkLbl: 'Or copy the invite link', copyLink: 'Copy link', linkCopied: 'Link copied',
     iosJoinT: 'On iPhone, do this first', iosJoinSteps: ['Tap Share (the square with an arrow pointing up), then <b>Add to Home Screen</b>, then <b>Add</b>.', 'Tap <b>Copy link</b> below.', 'Open <b>Our Kitchen</b> from your home screen, go to More → Family, and tap <b>Paste invite link</b>.'],
     famCreateT: 'Create the family (only once, for everyone)', famSteps: ['At <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, create a project (free). Google Analytics isn’t needed.', '<b>Authentication</b> → Get started → enable <b>Anonymous</b>.', '<b>Firestore Database</b> → Create database (production mode, any region).', '<b>Rules</b> tab: replace everything with <a href="firestore.rules" target="_blank" rel="noopener">these rules</a>, then <b>Publish</b>.', '<b>Project settings</b> → Your apps → Web icon <b>&lt;/&gt;</b> → register the app, then copy the <b>firebaseConfig</b> block below.'],
     famCfg: 'Firebase configuration', famName: 'Family name', famNameDefault: 'The family', yourAvatar: 'Your avatar', famCreateBtn: 'Create the family',
-    famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Send the link by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
-    yourProfile: 'My profile', feedT: 'Feed', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
+    famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Sends the family code and the steps by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
+    yourProfile: 'My profile', feedT: 'Instagram', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back, type the family code, tap your name and your 4-digit code.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
     famCfgBad: 'I can’t find apiKey, projectId and appId in this text.', famErr: 'The family couldn’t be created. Check the configuration and that anonymous sign-in is enabled.',
     famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: '', needName: 'Choose a name',
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in Our Kitchen to see and share our recipes. The invite link is below.
+    famCardText: 'Share your recipes with your family.', inviteText: (n, code) => code ? `Join “${n}” in Our Kitchen to see and share our recipes!
+
+Our family code: ${code}
+
+1. Put the app on your phone:
+- iPhone: open the link below in Safari, tap Share (the square with an arrow), then “Add to Home Screen”, then “Add”.
+- Android: open the link below in Chrome, tap ⋮ at the top right, then “Install app”.
+2. Open Our Kitchen, go to More → Family, and type the code ${code}.
+3. Tap “I’m new here”, pick your name, and choose a 4-digit code (only needed if you ever reinstall the app).` : `Join “${n}” in Our Kitchen to see and share our recipes. The invite link is below.
 
 On iPhone:
 1. Open the link in Safari, tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
@@ -103,7 +128,7 @@ On Android:
 1. Open the link in Chrome, pick your name and tap “Join the family”.
 2. Tap the ⋮ menu at the top right, then “Install app”.`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
-    fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
+    fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!', noBookMatchPlain: 'None of your recipes fit yet.',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
     askClaude: 'Ask Claude for ideas', askAgain: 'Ask Claude again', claudeThinking: 'Claude is looking in your fridge and searching for recipes…', claudeSec: s => `${s}s`,
     claudeSummary: 'Claude’s take', claudeFromBook: 'In your book', claudeNew: 'New ideas', openSite: 'Open the site', saveIdea: 'Save', claudeUses: 'Uses', claudeOld: d => `Answer from ${d}`,
@@ -119,12 +144,8 @@ On Android:
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
-    bdayT: '¡Feliz cumpleaños, Harold!', bdayDate: '28 de octubre', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
-    lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
-    lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
-    lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
-    lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
-    lockChange: 'Change the code', lockRemove: 'Remove the code', lockAdd: 'Add a code', lockRemoveQ: 'Remove the passcode?', lockRemoved: 'Code removed', lockNow: 'Lock now', erase: 'Delete', later: 'Later',
+    bdayT: '¡Feliz cumpleaños, Harold!', bdayAge: '¡41 años!', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
+    erase: 'Delete', later: 'Later',
   }
 };
 // Notebooks and "I made it" vocabulary.
@@ -163,7 +184,7 @@ Object.assign(STR.en, {
   delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
 });
 STR.en.nav.carnets = 'Notebooks';
-STR.en.nav.feed = 'Family';
+STR.en.nav.feed = 'Instagram';
 Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
   filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
   claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
@@ -186,7 +207,7 @@ Object.assign(STR.en, {
   vintage: 'Vintage', appellation: 'Appellation', producer: 'Château or estate', wineRating: 'Rating', wineNotes: 'Notes',
   pairsWith: 'Goes with', aRecipe: 'A recipe', drunkAt: 'Served at', delWineQ: name => `Remove “${name}” from the cellar?`,
   wines: 'The wines', aWine: 'A wine', pairings: 'Pairings:', pairWine: 'Pair a wine', winesServed: 'Wines served', pickWinesT: 'Which wines?',
-  feedIntroT: 'The family feed', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
+  feedIntroT: 'Instagram', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
   feedIntroHow: 'To turn it on, one person creates the family (once, about 10 minutes), then sends the others a link. They just tap “Join”.',
   feedIntroBtn: 'Create or join the family', example: 'Example', exampleWho: 'Mom', exampleNote: 'Sunday’s cake, everyone had seconds.',
 });

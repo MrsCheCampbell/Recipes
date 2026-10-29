@@ -1,5 +1,5 @@
 'use strict';
-// Our Kitchen: Taps, the passcode, and starting the app.
+// Our Kitchen: Taps and starting the app.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Global click handling ----------
@@ -87,11 +87,19 @@ document.addEventListener('click', async e => {
     case 'famcreate': famCreate(); break;
     case 'famjoin': famJoin(); break;
     case 'famjoinpaste': { const m = ($('#joinIn').value.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1]; if (m) go('#/join/' + m); else toast(t.famJoinBad); break; }
-    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family);
+    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family, FAM.joinCode ? fmtJoinCode(FAM.joinCode) : '');
       // The link goes in "url" too: without it Safari shares the plain address of the app instead.
       if (navigator.share) { try { await navigator.share({ title: FAM.name, text, url }); break; } catch (e) { if (e.name === 'AbortError') break; } }
       try { await navigator.clipboard.writeText(text + '\n\n' + url); } catch {} toast(t.copied); break; }
     case 'famrename': famRename(); break;
+    case 'codejoin': codeJoin(); break;
+    case 'codejoinnew': codeJoinNew(); break;
+    case 'backpick': renderCodeJoin.who = b.dataset.id; $$('.whoback .mrow').forEach(x => x.classList.toggle('on', x === b)); $('#backPin').hidden = false; $('#pinBack').focus(); break;
+    case 'backgo': codeJoinBack(); break;
+    case 'pinsave': pinSave(); break;
+    case 'codecopy': try { await navigator.clipboard.writeText(fmtJoinCode(FAM.joinCode)); toast(t.codeCopied); } catch {} break;
+    case 'fbsend': sendFeedback(); break;
+    case 'fbdone': if (FAM.createdBy === FAM.uid) { try { await FB.deleteDoc(fref('feedback', b.dataset.id)); } catch (e) { console.warn(e); } loadFeedback(); } break;
     case 'invcopy': try { await navigator.clipboard.writeText(famInviteLink()); toast(t.linkCopied); } catch { $('#invLink').select(); } break;
     case 'invcopyhere': try { await navigator.clipboard.writeText(location.href); toast(t.linkCopied); } catch {} break;
     case 'joinclip': { let v = ''; try { v = await navigator.clipboard.readText(); } catch {} const m = (v.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1];
@@ -160,9 +168,6 @@ document.addEventListener('click', async e => {
       S.customOcc = customOcc().filter(x => x.key !== c.key); saveSettings();
       for (const r2 of recipes.filter(x => (x.holidays || []).includes(c.key))) { r2.holidays = r2.holidays.filter(h => h !== c.key); await saveRecipe(r2); }
       if (L.hol === c.key) L.hol = ''; renderMore(); break; }
-    case 'lockchange': showLock('setup', ok => { if (ok) renderMore(); }); lockState.cancellable = true; drawLock(); break;
-    case 'lockremove': if (await confirmBox(t.lockRemoveQ, t.lockRemove)) { ls.del('lock'); S.lockOff = true; saveSettings(); toast(t.lockRemoved); renderMore(); } break;
-    case 'locknow': try { sessionStorage.removeItem('abe:ok'); } catch {} showLock('unlock'); break;
     case 'erase': if (await confirmBox(t.eraseQ, t.eraseAll)) { await DB.clear(); recipes = []; toast(t.erased); renderMore(); } break;
   }
 });
@@ -202,108 +207,8 @@ $('#photoInput').addEventListener('change', async e => {
 $('#backupInput').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importBackup(f); });
 
 // ---------- Passcode lock ----------
-// A privacy lock for the phone (the recipes themselves stay on the device).
-async function hashCode(code, salt) {
-  const text = salt + ':' + code;
-  try {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-    return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, '0')).join('');
-  } catch {
-    let h = 5381; for (const c of text) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return 'x' + h.toString(16);
-  }
-}
-const lockData = () => ls.get('lock', null);
-const sessionOk = () => { try { return sessionStorage.getItem('abe:ok') === '1'; } catch { return false; } };
-const markOk = () => { try { sessionStorage.setItem('abe:ok', '1'); } catch {} };
-let lockState = null;
-function showLock(mode, done, msg = '') {
-  const el = $('#lock');
-  lockState = { mode, buf: '', first: '', fails: 0, done, msg, err: false };
-  el.hidden = false; document.body.style.overflow = 'hidden';
-  // Build the card once; key presses only update the text and dots, so nothing moves under the finger.
-  el.innerHTML = `<div class="lock-in intro" role="dialog" aria-modal="true">
-    <div class="mono">${esc(initial(T().appName))}</div>
-    <h1 id="lockTitle"></h1><p id="lockSub" aria-live="polite"></p>
-    <div class="dots" id="dots"><span></span><span></span><span></span><span></span></div>
-    <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-k="${n}">${n}</button>`).join('')}<span id="lockLeft"></span><button type="button" data-k="0">0</button>
-      <button type="button" class="ghost" data-k="del" aria-label="${esc(T().clear)}">${ico('back')}</button></div></div>`;
-  drawLock();
-}
-function drawLock() {
-  const t = T(), st = lockState, el = $('#lock'); if (!st || !el.firstChild) return;
-  const title = st.mode === 'unlock' ? t.appName : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
-  const sub = st.msg || (st.mode === 'unlock' ? t.lockEnter : st.mode === 'setup' ? t.lockSetupSub : '');
-  $('#lockTitle').textContent = title;
-  el.firstChild.setAttribute('aria-label', title);
-  const p = $('#lockSub'); p.textContent = sub; p.className = st.err ? 'err' : '';
-  $$('#dots span').forEach((d, i) => d.classList.toggle('on', i < st.buf.length));
-  const left = st.mode === 'unlock' ? ['forgot', t.lockForgot] : st.mode === 'setup' && st.cancellable ? ['cancel', t.cancel] : null;
-  const slot = $('#lockLeft');
-  const want = left ? left[0] : '';
-  if (slot.dataset.k !== want) { slot.dataset.k = want; slot.innerHTML = left ? `<button type="button" class="ghost" data-k="${left[0]}">${esc(left[1])}</button>` : ''; }
-}
-async function lockKey(k) {
-  const st = lockState, t = T(); if (!st) return;
-  if (k === 'del') { st.buf = st.buf.slice(0, -1); return drawLock(); }
-  if (k === 'cancel') { return closeLock(false); }
-  if (k === 'forgot') { const h = lockData()?.hint; st.msg = h ? t.lockHintIs(h) : t.lockNoHint; st.err = false; return drawLock(); }
-  if (st.buf.length >= 4) return;
-  st.buf += k; drawLock();
-  if (st.buf.length < 4) return;
-  if (st.mode === 'unlock') {
-    const d = lockData();
-    if (d && (await hashCode(st.buf, d.salt)) === d.hash) { markOk(); return closeLock(true); }
-    st.fails++; st.buf = ''; st.msg = st.fails >= 3 && d?.hint ? t.lockHintIs(d.hint) : t.lockWrong; st.err = st.fails < 3 || !d?.hint;
-    drawLock(); shake();
-  } else if (st.mode === 'setup') {
-    st.first = st.buf; st.buf = ''; st.mode = 'confirm'; st.msg = ''; st.err = false; drawLock();
-  } else if (st.mode === 'confirm') {
-    if (st.buf !== st.first) { st.mode = 'setup'; st.buf = ''; st.first = ''; st.msg = t.lockMismatch; st.err = true; drawLock(); shake(); return; }
-    const salt = uid();
-    ls.set('lock', { v: 2, salt, hash: await hashCode(st.buf, salt), hint: '' });
-    S.lockOff = false; saveSettings(); markOk();
-    closeLock(true);
-    setTimeout(askHint, 400);
-  }
-}
-function shake() { const d = $('#dots'); if (!d) return; d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); setTimeout(() => d.classList.remove('shake'), 450); try { navigator.vibrate?.(120); } catch {} }
-function closeLock(ok) {
-  const st = lockState; lockState = null;
-  $('#lock').hidden = true; $('#lock').innerHTML = ''; document.body.style.overflow = '';
-  st?.done?.(ok);
-}
-function askHint() {
-  const t = T();
-  sheet(`<h2>${esc(t.lockSaved)}</h2><div class="field"><label for="hintIn">${esc(t.lockHintQ)}</label><input class="input" id="hintIn" style="border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" placeholder="${esc(t.lockHintPh)}"></div>
-    <div class="row2"><button class="btn" data-x="no">${esc(t.later)}</button><button class="btn primary" data-x="ok">${esc(t.save)}</button></div>`, (el, close) => {
-    el.querySelector('[data-x="no"]').onclick = close;
-    el.querySelector('[data-x="ok"]').onclick = () => { const d = lockData(); if (d) { d.hint = $('#hintIn').value.trim(); ls.set('lock', d); } close(); };
-  });
-}
-function gate() {
-  return new Promise(res => {
-    const d = lockData();
-    if (!d && S.lockOff) return res();
-    // Codes saved before the keypad fix may not be the digits that were typed: ask once for a new one.
-    if (d && d.v !== 2) { ls.del('lock'); return showLock('setup', () => res(), T().lockRedo); }
-    if (d && sessionOk()) return res();
-    showLock(d ? 'unlock' : 'setup', () => res());
-  });
-}
-$('#lock').addEventListener('click', e => { const k = e.target.closest('[data-k]')?.dataset.k; if (k !== undefined) lockKey(k); });
-document.addEventListener('keydown', e => {
-  if (!lockState) return;
-  if (/^\d$/.test(e.key)) lockKey(e.key); else if (e.key === 'Backspace') lockKey('del');
-});
-// Lock again after the app has been in the background for a while.
-let hiddenAt = 0;
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') { hiddenAt = Date.now(); return; }
-  if (lockData() && !lockState && hiddenAt && Date.now() - hiddenAt > 15 * 60000) {
-    try { sessionStorage.removeItem('abe:ok'); } catch {}
-    showLock('unlock');
-  }
-});
+// No passcode any more: clear one left from an older version.
+ls.del('lock');
 
 // ---------- Start ----------
 // A new version was downloaded in the background: offer it now (it also applies by itself next time).
@@ -333,9 +238,9 @@ async function dropOldSamples() {
   }
   if (!ok) setTimeout(() => toast(T().offlineSave), 800);
   famBoot = inFamily ? famStart().catch(e => { console.warn(e); return false; }) : null;
-  await gate();
   if (famBoot && !cached) await Promise.race([famBoot, new Promise(r => setTimeout(r, 4000))]);
   route();
+  try { const wb = sessionStorage.getItem('abe:welcomeBack'); if (wb) { sessionStorage.removeItem('abe:welcomeBack'); toast(T().welcomeBack(wb === '1' ? '' : wb)); } } catch {}
   drawTimers();
   refreshWeather();
   Promise.resolve(famBoot).then(dropOldSamples).then(() => tagSweep()).then(() => { if (current === 'list') renderResults(); }).catch(e => console.warn(e));

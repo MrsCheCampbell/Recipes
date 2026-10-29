@@ -29,13 +29,30 @@ function datedOccasions(now = new Date()) {
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
-// Harold's birthday (Oct 28): a little card that goes away by itself after Oct 31, 2026, wherever the phone is
-// (midnight on the phone's own clock, so Spain and France alike). While it shows, the date line stays on Oct 28.
-const BDAY_END = new Date(2026, 10, 1).getTime(), BDAY_DAY = new Date(2026, 9, 28, 12);
+// Harold's birthday (Oct 28): the card waits for Harold. Once his phone has shown it, it stays two more days
+// (on everyone's phone), then goes away. It ends on Dec 31, 2026 whatever happens. While it shows, the date line says Oct 28.
+const BDAY_DAY = new Date(2026, 9, 28, 12), BDAY_CAP = new Date(2027, 0, 1).getTime(), BDAY_KEEP = 2 * 864e5;
+const isHarold = name => /^harold\b/i.test(norm(name || '').trim());
+function bdaySeenAt() {
+  const mine = ls.get('bdaySeen', 0); if (mine) return mine;
+  if (!FAM.on) return 0;
+  return Object.values(FAM.members || {}).filter(m => isHarold(m.name)).reduce((t, m) => Math.max(t, m.bdaySeen || 0), 0);
+}
+function bdayOn() {
+  const now = Date.now(), seen = bdaySeenAt();
+  return now < BDAY_CAP && (!seen || now < seen + BDAY_KEEP);
+}
+// Harold's own phone notes the first time he sees it, and tells the family.
+function bdayMarkSeen() {
+  const me = FAM.on ? member(FAM.uid).name : S.name;
+  if (!isHarold(me) || ls.get('bdaySeen', 0)) return;
+  const now = Date.now(); ls.set('bdaySeen', now);
+  if (FAM.on) quiet(FB.updateDoc(fref('members', FAM.uid), { bdaySeen: now }));
+}
 // A shower of confetti over the whole screen each time the app opens, while the card is up.
 let bdayShown = false;
 function bdayConfetti() {
-  if (bdayShown || Date.now() >= BDAY_END || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (bdayShown || !bdayOn() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   bdayShown = true;
   const el = document.createElement('div'); el.className = 'bday-rain'; el.setAttribute('aria-hidden', 'true');
   const cols = ['#FFD23F', '#FF8FA3', '#2EC4B6', '#F0412E', '#7B5CFA', '#FFF4E0'];
@@ -43,16 +60,18 @@ function bdayConfetti() {
   document.body.appendChild(el); setTimeout(() => el.remove(), 4800);
 }
 function bdayHTML() {
-  if (Date.now() >= BDAY_END) return '';
-  setTimeout(bdayConfetti, 300);
+  if (!bdayOn()) return '';
+  setTimeout(bdayConfetti, 300); bdayMarkSeen();
   const t = T();
   return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
-    <img src="icons/icon.svg" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
+    <div><span class="bdate">${esc(t.bdayAge)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
 }
+// The inbox is for recipes sent by link from outside the family: in a family, the envelope only shows when one is waiting.
+const mailBtn = () => FAM.on && !inbox.length ? '' : `<a href="#/inbox" class="mailbtn" aria-label="${esc(T().inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a>`;
 function calHTML() {
   // A quiet line at the top: the date, and an occasion only when near.
   const t = T(), now = new Date();
-  const bits = [`<span>${esc(fmtDate(Date.now() < BDAY_END ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
+  const bits = [`<span>${esc(fmtDate(bdayOn() ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   for (const o of datedOccasions(now).filter(o => o.days <= 14).slice(0, 2)) {
     const n = recipes.filter(r => (r.holidays || []).includes(o.key)).length, label = t.occSoon(occLabel(o.key), o.days);
     bits.push(n ? `<button data-act="holfilter" data-h="${o.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);
@@ -214,7 +233,7 @@ function renderFeed() {
   $('#view').innerHTML = `
     <div class="wrap">
       <header class="top">
-        <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
+        <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}${mailBtn()}</span></div>
         <h1 class="greet">${esc(t.tabFeed)}</h1>
       </header>
       ${FAM.on ? composerHTML() + feedHTML() : feedIntroHTML()}
@@ -231,13 +250,13 @@ function renderList(favOnly) {
   const hasSpeech = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   $('#view').innerHTML = `
     <div class="wrap">
-      <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
-        <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
+      <header class="hbar"><span class="hname">${favOnly ? '' : '<img class="hlogo" src="icons/logo-128.png" alt="" width="34" height="34">'}${esc(favOnly ? t.carnets : t.appName)}</span>
+        ${mailBtn()}</header>
       ${favOnly ? carnetTabs('fav') : `${bdayHTML()}${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
-      <div class="search" role="search">${ico('search', 'lead')}
-        <input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="${esc(t.searchPh)}" value="${esc(L.q)}" aria-label="${esc(t.searchPh)}">
+      <div class="search" role="search">
+        <input id="q" type="search" enterkeyhint="search" autocomplete="off" value="${esc(L.q)}" aria-label="${esc(t.searchPh)}">
         <button class="icon-btn" data-act="clearq" aria-label="${esc(t.clear)}" ${L.q ? '' : 'hidden'}>${ico('x')}</button>
         ${hasSpeech ? `<button class="icon-btn" data-act="voice" aria-label="${esc(t.voice)}">${ico('mic')}</button>` : ''}
       </div>
@@ -731,7 +750,7 @@ async function claudeTags(r) {
     output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags', 'keywords'], properties: {
       category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } }, keywords: { type: 'array', items: { type: 'string' } } } } } },
     messages: [{ role: 'user', content: `File this recipe for a family cookbook (an American family in Bordeaux).
-Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner). Usually 2 to 5 tags. Leave out anything doubtful.
+Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner; Jewish holidays only if the dish is traditional for them: shabbat, roshhashana, yomkippur for the break-fast, sukkot, hanukkah, purim, pesach, shavuot). Usually 2 to 5 tags. Leave out anything doubtful.
 keywords: up to 5 short search words in the recipe's own language (main ingredient, dish type, cuisine), not repeating the title.
 
 <recipe>
@@ -866,7 +885,7 @@ async function importText(v, btn) {
     catch (e) { console.warn(e); failed = claudeErrorText(e); }
   }
   fillForm(parseRecipeText(v)); formAutoTag(true);
-  addStatus(failed ? failed + ' ' + t.filledWithoutClaude : t.filledWithoutClaude + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn');
+  addStatus(failed ? failed + ' ' + t.filledWithoutClaude : t.filledWithoutClaude + claudeTipFor(), 'warn');
 }
 
 // Link → fields (reads schema.org Recipe data that most recipe sites publish)
@@ -939,6 +958,9 @@ const RECIPE_SCHEMA = {
   },
 };
 const claudeKey = () => ls.get('claudeKey', '') || (FAM.on ? ls.get('famClaudeKey', '') : '');
+// Claude setup is shown only to whoever looks after it: no family yet, the family's creator, or a phone with its own key.
+const claudeAdmin = () => !FAM.on || FAM.createdBy === FAM.uid || !!ls.get('claudeKey', '');
+const claudeTipFor = () => hasClaude() || !claudeAdmin() ? '' : ' ' + T().claudeTip;
 const hasClaude = () => !!claudeKey();
 async function claudeRecipe({ images = [], text = '', url = '' }) {
   const client = await claudeClient();
@@ -1067,6 +1089,6 @@ async function readBookPages(files) {
   st.hidden = true;
   fillForm(parseRecipeText(text), true);
   $('#form')?.dispatchEvent(new Event('input'));
-  addStatus(claudeFailed ? claudeFailed + ' ' + t.filledWithoutClaude : hasClaude() ? t.ocrOk : t.filledWithoutClaude + ' ' + t.claudeTip, claudeFailed || !hasClaude() ? 'warn' : 'ok');
+  addStatus(claudeFailed ? claudeFailed + ' ' + t.filledWithoutClaude : hasClaude() ? t.ocrOk : t.filledWithoutClaude + claudeTipFor(), claudeFailed || !hasClaude() ? 'warn' : 'ok');
   formAutoTag(true);
 }
