@@ -1,6 +1,6 @@
 // Offline support and fast opening: the app opens from its saved copy, and new versions download in the background.
 // When releasing, bump VERSION here together with the ?v= numbers in index.html.
-const VERSION = 'abe-v30';
+const VERSION = 'abe-v31';
 const SCRIPTS = ['icons', 'strings', 'core', 'book', 'fridge', 'family', 'notebooks', 'more', 'app'].map(n => `./js/${n}.js?v=${VERSION}`);
 const SHELL = ['./', './index.html', `./css/app.css?v=${VERSION}`, ...SCRIPTS, './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/logo-128.png', './icons/apple-touch-icon.png'];

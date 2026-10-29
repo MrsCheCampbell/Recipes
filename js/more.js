@@ -111,7 +111,7 @@ async function importLink(url, btn) {
     try { const c = await claudeRecipe(lastPageText.length > 300 ? { text: lastPageText, url } : { url }); if (c) d = { ...c, link: url, photo: d?.photo || null }; }
     catch (e) { console.warn(e); failed = claudeErrorText(e); }
   }
-  if (!d || d.partial) { if (d) fillForm(d, true); addStatus((failed ? failed + ' ' : '') + t.importFail + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn'); return; }
+  if (!d || d.partial) { if (d) fillForm(d, true); addStatus((failed ? failed + ' ' : '') + t.importFail + claudeTipFor(), 'warn'); return; }
   if (d.photo) d.photo = await localizePhoto(d.photo);
   fillForm(d, false);
   ls.set('draft', { key: $('#view').dataset.id || 'new', ts: Date.now(), data: readForm() });
@@ -200,7 +200,7 @@ function renderMore() {
     <details class="panel fold"><summary>${esc(t.samples)}</summary>
       ${hasSamples ? `<button class="btn" data-act="rmsamples">${esc(t.samplesDel)}</button>` : `<button class="btn" data-act="samples">${esc(t.samplesAdd)}</button>`}
       ${FAM.on ? '' : `<button class="btn danger" data-act="erase">${ico('trash')}${esc(t.eraseAll)}</button>`}</details>
-    <details class="panel fold" id="claudePanel"><summary>${esc(t.claudePanel)}</summary><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
+    ${claudeAdmin() ? `<details class="panel fold" id="claudePanel"><summary>${esc(t.claudePanel)}</summary><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
       ${(() => { const own = ls.get('claudeKey', ''), shared = FAM.on && own && ls.get('famClaudeKey', '') === own;
         if (own) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p>
           ${FAM.on ? `<p class="muted" style="margin:0">${esc(shared ? t.claudeShared : t.claudeNotShared)}</p><button class="btn" data-act="${shared ? 'claudeunshare' : 'claudeshare'}">${ico('users')}${esc(shared ? t.claudeUnshare : t.claudeShare)}</button>` : ''}
@@ -208,7 +208,7 @@ function renderMore() {
         if (hasClaude()) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyFam)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button>`;
         return `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div>
           ${FAM.on ? `<label class="tried-toggle"><input type="checkbox" id="claudeShareIn" checked><span>${esc(t.claudeShareToo)}</span></label>` : ''}
-          <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</details>
+          <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</details>` : ''}
     <details class="panel fold"><summary>${esc(t.backup)}</summary><p class="muted" style="margin:0">${esc(t.backupText)}</p>
       <p style="margin:0;font-weight:700">${esc(t.lastBackup(ls.get('lastBackup', 0) && fmtDate(ls.get('lastBackup', 0))))}</p>
       ${navigator.canShare ? `<button class="btn primary" data-act="backupshare">${ico('share')}${esc(t.shareB)}</button>` : ''}

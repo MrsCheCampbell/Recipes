@@ -64,12 +64,13 @@ function drawBookMatches() {
       <div class="min"><div class="meta"><span class="no">${esc(t.haveOf(x.have, x.total))}</span>${starsMini(x.r.rating)}</div><h3>${esc(x.r.title)}</h3>
       <div class="meta">${x.miss.length ? `<span>${esc(t.missing)} : ${esc(x.miss.slice(0, 4).join(', '))}${x.miss.length > 4 ? '…' : ''}</span>` : `<span style="color:var(--parve)">${esc(t.nothingMissing)}</span>`}</div></div>
       <div class="side"><span class="match" style="--p:${Math.round(x.cover * 100)}">${Math.round(x.cover * 100)}<small>%</small></span></div></a>`).join('')}</div>`
-    : `<p class="muted" style="margin:0">${esc(t.noBookMatch)}</p>`;
+    : `<p class="muted" style="margin:0">${esc(hasClaude() || claudeAdmin() ? t.noBookMatch : t.noBookMatchPlain)}</p>`;
 }
 function drawClaude(res) {
   const t = T(), box = $('#claudeBox'); if (!box) return;
   const key = claudeKey();
   const ask = `<button class="btn primary block" data-act="askclaude" ${!pantry.length || claudeBusy ? 'disabled' : ''}>${ico('spark')}${esc(res ? t.askAgain : t.askClaude)}</button>`;
+  if (!key && !claudeAdmin()) { box.innerHTML = ''; return; }
   if (!key) { box.innerHTML = `<div class="panel"><h2>${ico('spark')} Claude</h2><p style="margin:0">${esc(t.claudeNoKey)}</p><a class="btn" href="#/more" data-goto="claude">${esc(t.claudeSetup)}</a></div>`; return; }
   if (claudeBusy) { box.innerHTML = `<div class="panel thinking"><span class="spinner" aria-hidden="true"></span><p style="margin:0">${esc(t.claudeThinking)}</p><span class="eyebrow" id="claudeSec"></span></div>`; return; }
   if (!res) { box.innerHTML = ask; return; }

@@ -111,7 +111,7 @@ On Android:
 1. Open the link in Chrome, pick your name and tap “Join the family”.
 2. Tap the ⋮ menu at the top right, then “Install app”.`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
-    fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
+    fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!', noBookMatchPlain: 'None of your recipes fit yet.',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
     askClaude: 'Ask Claude for ideas', askAgain: 'Ask Claude again', claudeThinking: 'Claude is looking in your fridge and searching for recipes…', claudeSec: s => `${s}s`,
     claudeSummary: 'Claude’s take', claudeFromBook: 'In your book', claudeNew: 'New ideas', openSite: 'Open the site', saveIdea: 'Save', claudeUses: 'Uses', claudeOld: d => `Answer from ${d}`,

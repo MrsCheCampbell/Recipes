@@ -885,7 +885,7 @@ async function importText(v, btn) {
     catch (e) { console.warn(e); failed = claudeErrorText(e); }
   }
   fillForm(parseRecipeText(v)); formAutoTag(true);
-  addStatus(failed ? failed + ' ' + t.filledWithoutClaude : t.filledWithoutClaude + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn');
+  addStatus(failed ? failed + ' ' + t.filledWithoutClaude : t.filledWithoutClaude + claudeTipFor(), 'warn');
 }
 
 // Link → fields (reads schema.org Recipe data that most recipe sites publish)
@@ -958,6 +958,9 @@ const RECIPE_SCHEMA = {
   },
 };
 const claudeKey = () => ls.get('claudeKey', '') || (FAM.on ? ls.get('famClaudeKey', '') : '');
+// Claude setup is shown only to whoever looks after it: no family yet, the family's creator, or a phone with its own key.
+const claudeAdmin = () => !FAM.on || FAM.createdBy === FAM.uid || !!ls.get('claudeKey', '');
+const claudeTipFor = () => hasClaude() || !claudeAdmin() ? '' : ' ' + T().claudeTip;
 const hasClaude = () => !!claudeKey();
 async function claudeRecipe({ images = [], text = '', url = '' }) {
   const client = await claudeClient();
@@ -1086,6 +1089,6 @@ async function readBookPages(files) {
   st.hidden = true;
   fillForm(parseRecipeText(text), true);
   $('#form')?.dispatchEvent(new Event('input'));
-  addStatus(claudeFailed ? claudeFailed + ' ' + t.filledWithoutClaude : hasClaude() ? t.ocrOk : t.filledWithoutClaude + ' ' + t.claudeTip, claudeFailed || !hasClaude() ? 'warn' : 'ok');
+  addStatus(claudeFailed ? claudeFailed + ' ' + t.filledWithoutClaude : hasClaude() ? t.ocrOk : t.filledWithoutClaude + claudeTipFor(), claudeFailed || !hasClaude() ? 'warn' : 'ok');
   formAutoTag(true);
 }

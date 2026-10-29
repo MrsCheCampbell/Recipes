@@ -6,7 +6,7 @@
 // Backend: the family's own Firebase project (Firestore + anonymous sign-in).
 // Data lives in /families/{fid}; firestore.rules decides who sees what, on the server.
 const FAM = {
-  cfg: ls.get('fbConfig', null), fid: ls.get('famId', null), name: ls.get('famName', ''), code: ls.get('famCode', ''), on: false, ready: false,
+  cfg: ls.get('fbConfig', null), fid: ls.get('famId', null), name: ls.get('famName', ''), code: ls.get('famCode', ''), createdBy: ls.get('famCreatedBy', ''), on: false, ready: false,
   uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], cooks: new Map(), all: [], unsub: [], fb: null, db: null, auth: null,
 };
 let FB = null;
@@ -65,9 +65,14 @@ async function famStart() {
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('recos'), FB.where('to', '==', FAM.uid)), s => { FAM.recos = []; s.forEach(d => FAM.recos.push({ ...d.data(), id: d.id })); FAM.recos.sort((a, b) => b.at - a.at); famChanged(); }, e => console.warn(e)));
   psListen();
   // The family's name can be changed by whoever created it; everyone picks it up here.
-  FB.getDoc(fref()).then(d => { if (!d.exists()) return; const f = d.data(); FAM.createdBy = f.createdBy;
+  FB.getDoc(fref()).then(d => { if (!d.exists()) return; const f = d.data(); FAM.createdBy = f.createdBy; ls.set('famCreatedBy', f.createdBy || '');
     if (f.name && f.name !== FAM.name) { FAM.name = f.name; ls.set('famName', f.name); if (current === 'famille') renderFamily(); } }).catch(() => {});
-  FB.getDoc(fref('secrets', 'claude')).then(d => { const k = d.exists() ? d.data().key : ''; if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey'); }).catch(() => {});
+  FB.getDoc(fref('secrets', 'claude')).then(d => {
+    const k = d.exists() ? d.data().key : '', own = ls.get('claudeKey', '');
+    if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey');
+    // A key saved on this phone before it joined the family (or before the rules allowed it) is shared now, once.
+    if (!k && own && !ls.get('claudeNoShare', false)) shareClaudeKey(own, true);
+  }).catch(() => {});
   await ready;
   FAM.ready = true;
   for (const r of FAM.raw.values()) if (r.owner === FAM.uid && !r.sample && !(r.audience || []).includes('all')) {
@@ -184,13 +189,13 @@ async function loadPages(r) {
 
 // One Claude key for the whole family: stored where only family members can read it (firestore.rules → secrets).
 // Only says "shared" once Firebase has accepted it (old rules refuse it).
-async function shareClaudeKey(k) {
+async function shareClaudeKey(k, quietly = false) {
   if (!k) return; const w = fbWait(); if (w) await w;
-  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); toast(T().claudeSharedToast); }
-  catch (e) { console.warn('share key', e && e.code); toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
+  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); ls.del('claudeNoShare'); toast(T().claudeSharedToast); }
+  catch (e) { console.warn('share key', e && e.code); if (!quietly) toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
   if (current === 'more') renderMore();
 }
-function unshareClaudeKey() { ls.del('famClaudeKey'); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
+function unshareClaudeKey() { ls.del('famClaudeKey'); ls.set('claudeNoShare', true); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
 
 // Comments on the open recipe (live).
 let commentUnsub = null, openComments = [];
@@ -332,6 +337,7 @@ async function famCreate() {
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
     const fid = 'f' + randCode(10), code = randCode(20), famName = $('#famNameIn').value.trim() || t.famNameDefault;
     await FB.setDoc(FB.doc(FAM.db, 'families', fid), { name: famName, code, createdBy: u.uid, createdAt: Date.now() });
+    FAM.createdBy = u.uid; ls.set('famCreatedBy', u.uid);
     await FB.setDoc(FB.doc(FAM.db, 'families', fid, 'members', u.uid), { name, avatar: st.avatar, color: st.color, code, joinedAt: Date.now() });
     famSaveLocal(cfg, fid, famName, code); S.name = name; saveSettings();
     await famStart(); await offerMigration();
