@@ -29,8 +29,9 @@ function datedOccasions(now = new Date()) {
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
-// The app opened for a birthday: a little card that goes away by itself after Oct 31, 2026.
-const BDAY_END = Date.parse('2026-11-01T00:00:00+01:00');
+// Harold's birthday (Oct 28): a little card that goes away by itself after Oct 31, 2026, wherever the phone is
+// (midnight on the phone's own clock, so Spain and France alike). While it shows, the date line stays on Oct 28.
+const BDAY_END = new Date(2026, 10, 1).getTime(), BDAY_DAY = new Date(2026, 9, 28, 12);
 // A shower of confetti over the whole screen each time the app opens, while the card is up.
 let bdayShown = false;
 function bdayConfetti() {
@@ -46,12 +47,12 @@ function bdayHTML() {
   setTimeout(bdayConfetti, 300);
   const t = T();
   return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
-    <img src="icons/icon.svg" alt="" width="56" height="56"><div><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
+    <img src="icons/icon.svg" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
 }
 function calHTML() {
   // A quiet line at the top: the date, and an occasion only when near.
   const t = T(), now = new Date();
-  const bits = [`<span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
+  const bits = [`<span>${esc(fmtDate(Date.now() < BDAY_END ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   for (const o of datedOccasions(now).filter(o => o.days <= 14).slice(0, 2)) {
     const n = recipes.filter(r => (r.holidays || []).includes(o.key)).length, label = t.occSoon(occLabel(o.key), o.days);
     bits.push(n ? `<button data-act="holfilter" data-h="${o.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);

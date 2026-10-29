@@ -118,7 +118,7 @@ ${url}
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
-    bdayT: '¡Feliz cumpleaños!', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
+    bdayT: '¡Feliz cumpleaños, Harold!', bdayDate: '28 de octubre', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',

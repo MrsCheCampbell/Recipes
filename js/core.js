@@ -14,7 +14,9 @@ const ls = {
   del(k) { try { localStorage.removeItem('abe:' + k); } catch {} },
 };
 let S = ls.get('settings', {});
-S = Object.assign({ name: '', size: 'large', theme: 'auto', city: 'paris' }, S);
+// Weather city: a phone in Spain starts on Madrid, anywhere else on Paris (both can be changed in More).
+const homeCity = () => { try { return /^(Europe\/Madrid|Atlantic\/Canary|Africa\/Ceuta)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone) ? 'madrid' : 'paris'; } catch { return 'paris'; } };
+S = Object.assign({ name: '', size: 'large', theme: 'auto', city: homeCity() }, S);
 // "Abe" was the default name in early versions; nobody chose it.
 if (S.name === 'Abe') S.name = '';
 const saveSettings = () => ls.set('settings', S);
@@ -198,6 +200,8 @@ const CITIES = {
   bordeaux: ['Bordeaux', 44.8378, -0.5792, 'Europe/Paris'], lille: ['Lille', 50.6292, 3.0573, 'Europe/Paris'], nantes: ['Nantes', 47.2184, -1.5536, 'Europe/Paris'],
   montpellier: ['Montpellier', 43.6108, 3.8767, 'Europe/Paris'], sarcelles: ['Sarcelles', 48.9973, 2.3797, 'Europe/Paris'],
   jerusalem: ['Jérusalem', 31.7683, 35.2137, 'Asia/Jerusalem'], telaviv: ['Tel Aviv', 32.0853, 34.7818, 'Asia/Jerusalem'],
+  madrid: ['Madrid', 40.4168, -3.7038, 'Europe/Madrid'], barcelona: ['Barcelona', 41.3874, 2.1686, 'Europe/Madrid'], valencia: ['Valencia', 39.4699, -0.3763, 'Europe/Madrid'],
+  sevilla: ['Sevilla', 37.3891, -5.9845, 'Europe/Madrid'], malaga: ['Málaga', 36.7213, -4.4214, 'Europe/Madrid'], bilbao: ['Bilbao', 43.263, -2.935, 'Europe/Madrid'],
   london: ['London', 51.5072, -0.1276, 'Europe/London'], newyork: ['New York', 40.7128, -74.006, 'America/New_York'],
 };
 
