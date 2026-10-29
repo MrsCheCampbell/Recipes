@@ -190,7 +190,7 @@ Object.assign(STR.en, {
   vintage: 'Vintage', appellation: 'Appellation', producer: 'Château or estate', wineRating: 'Rating', wineNotes: 'Notes',
   pairsWith: 'Goes with', aRecipe: 'A recipe', drunkAt: 'Served at', delWineQ: name => `Remove “${name}” from the cellar?`,
   wines: 'The wines', aWine: 'A wine', pairings: 'Pairings:', pairWine: 'Pair a wine', winesServed: 'Wines served', pickWinesT: 'Which wines?',
-  feedIntroT: 'Our Instagram', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
+  feedIntroT: 'Instagram', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
   feedIntroHow: 'To turn it on, one person creates the family (once, about 10 minutes), then sends the others a link. They just tap “Join”.',
   feedIntroBtn: 'Create or join the family', example: 'Example', exampleWho: 'Mom', exampleNote: 'Sunday’s cake, everyone had seconds.',
 });
