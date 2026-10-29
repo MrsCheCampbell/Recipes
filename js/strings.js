@@ -72,7 +72,7 @@ const STR = {
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
-    tabFeed: 'Family', addedBy: n => `Added by ${n}`, famStars: (a, n) => `Family: ${a} of 5 (${n} ratings)`,
+    tabFeed: 'Instagram', addedBy: n => `Added by ${n}`, famStars: (a, n) => `Family: ${a} of 5 (${n} ratings)`,
     recommend: 'Recommend', 
     copyToMine: 'Copy to edit it',
     comments: 'Comments', commentPh: 'Add a comment', triedIt: 'I tried it', noComments: 'No comments yet.', commentSent: 'Comment posted',
@@ -93,7 +93,7 @@ const STR = {
     famCreateT: 'Create the family (only once, for everyone)', famSteps: ['At <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, create a project (free). Google Analytics isn’t needed.', '<b>Authentication</b> → Get started → enable <b>Anonymous</b>.', '<b>Firestore Database</b> → Create database (production mode, any region).', '<b>Rules</b> tab: replace everything with <a href="firestore.rules" target="_blank" rel="noopener">these rules</a>, then <b>Publish</b>.', '<b>Project settings</b> → Your apps → Web icon <b>&lt;/&gt;</b> → register the app, then copy the <b>firebaseConfig</b> block below.'],
     famCfg: 'Firebase configuration', famName: 'Family name', famNameDefault: 'The family', yourAvatar: 'Your avatar', famCreateBtn: 'Create the family',
     famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Send the link by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
-    yourProfile: 'My profile', feedT: 'Feed', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
+    yourProfile: 'My profile', feedT: 'Instagram', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
     famCfgBad: 'I can’t find apiKey, projectId and appId in this text.', famErr: 'The family couldn’t be created. Check the configuration and that anonymous sign-in is enabled.',
     famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: '', needName: 'Choose a name',
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
@@ -167,7 +167,7 @@ Object.assign(STR.en, {
   delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
 });
 STR.en.nav.carnets = 'Notebooks';
-STR.en.nav.feed = 'Family';
+STR.en.nav.feed = 'Instagram';
 Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
   filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
   claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
@@ -190,7 +190,7 @@ Object.assign(STR.en, {
   vintage: 'Vintage', appellation: 'Appellation', producer: 'Château or estate', wineRating: 'Rating', wineNotes: 'Notes',
   pairsWith: 'Goes with', aRecipe: 'A recipe', drunkAt: 'Served at', delWineQ: name => `Remove “${name}” from the cellar?`,
   wines: 'The wines', aWine: 'A wine', pairings: 'Pairings:', pairWine: 'Pair a wine', winesServed: 'Wines served', pickWinesT: 'Which wines?',
-  feedIntroT: 'The family feed', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
+  feedIntroT: 'Our Instagram', feedIntro: 'This is where the whole family’s recipes and photos show up: who made what, hearts, comments, recommendations.',
   feedIntroHow: 'To turn it on, one person creates the family (once, about 10 minutes), then sends the others a link. They just tap “Join”.',
   feedIntroBtn: 'Create or join the family', example: 'Example', exampleWho: 'Mom', exampleNote: 'Sunday’s cake, everyone had seconds.',
 });

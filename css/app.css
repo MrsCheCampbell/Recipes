@@ -219,7 +219,7 @@ img.ill { display: block; }
 .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(14px) saturate(1.1);
   padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); border-top: 1px solid var(--line); }
 .nav .in { display: grid; grid-template-columns: repeat(6, 1fr); max-width: 760px; margin: 0 auto; height: var(--nav-h); }
-.nav a { display: grid; justify-items: center; align-content: center; gap: 1px; text-decoration: none; color: var(--muted); font-size: .66rem; letter-spacing: -.01em; white-space: nowrap; font-weight: 700; position: relative; transition: color .2s; }
+.nav a { display: grid; justify-items: center; align-content: center; gap: 1px; text-decoration: none; color: var(--muted); font-size: .62rem; letter-spacing: -.02em; white-space: nowrap; font-weight: 700; position: relative; transition: color .2s; }
 .nav a svg.i, .nav a .navart { width: 27px; height: 27px; transition: transform .25s var(--ease), filter .25s, opacity .25s; }
 .nav a:not(.on) .navart { filter: saturate(.35); opacity: .7; }
 .nav a.on { color: var(--accent); }
