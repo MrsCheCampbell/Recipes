@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Icons and artwork.
+// Our Kitchen: Icons and artwork.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Icons (drawn for this app: round strokes, small friendly details) ----------

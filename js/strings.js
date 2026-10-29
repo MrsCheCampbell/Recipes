@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Every word the app shows, in French and English.
+// Our Kitchen: Every word the app shows, in French and English.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Vocabulary ----------
@@ -11,7 +11,7 @@ const KASHRUT = ['meat','dairy','parve'];
 
 const STR = {
   fr: {
-    appName: "La Cuisine d'Abe",
+    appName: 'Our Kitchen',
     hello: ['Bonne nuit', 'Bonjour', 'Bon après-midi', 'Bonsoir'], shabbatShalom: 'Chabbat Chalom',
     nav: { list: 'Recettes', fav: 'Favoris', fridge: 'Frigo', shop: 'Courses', more: 'Plus' },
     searchPh: 'Chercher', voice: 'Chercher à la voix', clear: 'Effacer',
@@ -64,7 +64,7 @@ const STR = {
     installIos: 'Dans Safari : touchez le bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».',
     iosNudge: 'Pour l’avoir comme une vraie appli : Partager, puis « Sur l’écran d’accueil ».', ok: 'OK',
     eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
-    madeFor: 'Fait avec amour pour', withLove: 'Papa',
+    
     // jewish calendar
     candles: 'Allumage des bougies', havdala: 'Fin de Chabbat', approx: 'Horaires approximatifs',
     
@@ -104,7 +104,16 @@ const STR = {
     migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
     migrateAll: 'Les ajouter au livre de la famille', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
     
-    famCardText: 'Partager vos recettes avec vos proches.', inviteText: n => `Rejoins « ${n} » dans La Cuisine d’Abe, pour voir et partager nos recettes :`,
+    famCardText: 'Partager vos recettes avec vos proches.', inviteText: (n, url) => `Rejoins « ${n} » dans Our Kitchen, pour voir et partager nos recettes.
+
+1. Touche ce lien (sur iPhone, ouvre-le dans Safari ; sur Android, dans Chrome) :
+${url}
+
+2. Choisis ton prénom, puis touche « Rejoindre la famille ».
+
+3. Pour l’avoir sur l’écran d’accueil, comme une vraie appli :
+- iPhone : bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».
+- Android : menu ⋮ en haut à droite, puis « Installer l’application ».`,
     fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
     fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
     haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
@@ -116,22 +125,22 @@ const STR = {
     claudeKey: 'Clé Claude', claudeKeySaved: 'Clé enregistrée', claudeKeyRemove: 'Retirer la clé', claudeKeyOn: 'Claude est prêt.', 
     inbox: 'Boîte de réception', parAvion: 'Par avion', inboxEmpty: 'Rien pour l’instant. Quand quelqu’un vous envoie une recette depuis son appli, elle arrive ici.',
     fromWho: n => `De la part de ${n}`, receivedOn: d => `reçue le ${d}`, keep: 'Garder', toss: 'Supprimer', kept: 'Ajoutée à vos recettes', tossed: 'Recette supprimée',
-    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli La Cuisine d’Abe :`,
+    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli Our Kitchen :`,
     inboxBanner: (n, from) => n === 1 ? `${from} vous a envoyé une recette` : `${n} recettes vous attendent`, open: 'Ouvrir', preview: 'Voir la recette',
     pasteLink: 'Coller une recette reçue', pasteHelp: 'Sur iPhone, ou si le lien s’est ouvert ailleurs : copiez le message reçu, puis touchez ce bouton.', pastePh: 'Collez ici le message ou le lien reçu',
     pasteGo: 'Ajouter à la boîte', pasteBad: 'Aucune recette trouvée dans ce texte.', alreadyIn: 'Cette recette est déjà dans votre boîte.', gotOne: 'Nouvelle recette reçue !',
-    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez La Cuisine d’Abe, puis Boîte de réception → « Coller une recette reçue ».',
+    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez Our Kitchen, puis Boîte de réception → « Coller une recette reçue ».',
     copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
     kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
-    lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
+    lockHello: n => n ? `Bonjour ${n}` : 'Bonjour', lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
     lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
     lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: '',
     lockSaved: 'Code enregistré', lockRedo: 'Petite mise à jour : choisissez à nouveau votre code. Vos recettes ne changent pas.', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
     lockChange: 'Changer le code', lockRemove: 'Retirer le code', lockAdd: 'Ajouter un code', lockRemoveQ: 'Retirer le code d’accès ?', lockRemoved: 'Code retiré', lockNow: 'Verrouiller maintenant', erase: 'Effacer', later: 'Plus tard',
   },
   en: {
-    appName: "Abe's Kitchen",
+    appName: 'Our Kitchen',
     hello: ['Good night', 'Good morning', 'Good afternoon', 'Good evening'], shabbatShalom: 'Shabbat Shalom',
     nav: { list: 'Recipes', fav: 'Favorites', fridge: 'Fridge', shop: 'Shopping', more: 'More' },
     searchPh: 'Search', voice: 'Search by voice', clear: 'Clear',
@@ -181,7 +190,7 @@ const STR = {
     installIos: 'In Safari: tap the Share button (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.',
     iosNudge: 'To use it like a real app: tap Share, then “Add to Home Screen”.', ok: 'OK',
     eraseAll: 'Erase everything', eraseQ: 'Erase every recipe from this phone? This can’t be undone.', erased: 'Everything erased',
-    madeFor: 'Made with love for', withLove: 'Dad',
+    
     candles: 'Candle lighting', havdala: 'Shabbat ends', approx: 'Approximate times',
     
     
@@ -219,7 +228,16 @@ const STR = {
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in La Cuisine d’Abe to see and share our recipes:`,
+    famCardText: 'Share your recipes with your family.', inviteText: (n, url) => `Join “${n}” in Our Kitchen to see and share our recipes.
+
+1. Tap this link (on iPhone, open it in Safari; on Android, in Chrome):
+${url}
+
+2. Pick your name, then tap “Join the family”.
+
+3. To put it on your home screen like a real app:
+- iPhone: tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
+- Android: tap the ⋮ menu at the top right, then “Install app”.`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',
@@ -231,15 +249,15 @@ const STR = {
     claudeKey: 'Claude key', claudeKeySaved: 'Key saved', claudeKeyRemove: 'Remove the key', claudeKeyOn: 'Claude is ready.', 
     inbox: 'Inbox', parAvion: 'Par avion', inboxEmpty: 'Nothing yet. When someone sends you a recipe from their app, it lands here.',
     fromWho: n => `From ${n}`, receivedOn: d => `received ${d}`, keep: 'Keep it', toss: 'Delete', kept: 'Added to your recipes', tossed: 'Recipe deleted',
-    send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your La Cuisine d’Abe app:`,
+    send: 'Send', sendText: (n, title) => `${n} sent you a recipe: “${title}”. Tap the link to add it to your Our Kitchen app:`,
     inboxBanner: (n, from) => n === 1 ? `${from} sent you a recipe` : `${n} recipes are waiting for you`, open: 'Open', preview: 'See the recipe',
     pasteLink: 'Paste a received recipe', pasteHelp: 'On iPhone, or if the link opened somewhere else: copy the message you received, then tap this button.', pastePh: 'Paste the message or link here',
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
-    iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open La Cuisine d’Abe, then Inbox → “Paste a received recipe”.',
+    iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
     kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
-    lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
+    lockHello: n => n ? `Hello ${n}` : 'Hello', lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
     lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
@@ -323,12 +341,12 @@ Object.assign(STR.fr, { smartLabel: 'Lien ou texte de la recette', smartFill: 'R
   filledWithoutClaude: 'Rempli sans Claude : vérifiez les champs.', noRecipeInPhotos: 'Claude n’a pas trouvé de recette sur ces photos.',
   claudeErrCredit: 'Le compte Claude n’a plus de crédit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude est très occupé, réessayez dans un instant.',
   claudeKeyFam: 'Claude est prêt (clé de la famille).', claudeShared: 'Toute la famille utilise cette clé.', claudeNotShared: 'Seul ce téléphone utilise cette clé.',
-  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeSharedToast: 'Clé partagée avec la famille' });
+  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeShareRules: 'Pas encore partagée : publiez les nouvelles règles dans la console Firebase, puis touchez « Partager avec la famille ».', claudeShareFail: 'Pas encore partagée (pas de connexion ?). Réessayez avec « Partager avec la famille ».', claudeSharedToast: 'Clé partagée avec la famille' });
 Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
   filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
   claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
   claudeKeyFam: 'Claude is ready (family key).', claudeShared: 'The whole family uses this key.', claudeNotShared: 'Only this phone uses this key.',
-  claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeSharedToast: 'Key shared with the family' });
+  claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeShareRules: 'Not shared yet: publish the new rules in the Firebase console, then tap “Share with the family”.', claudeShareFail: 'Not shared yet (no connection?). Try again with “Share with the family”.', claudeSharedToast: 'Key shared with the family' });
 Object.assign(STR.en, { mine: 'Mine', whoAdded: 'Added by' });
 Object.assign(STR.fr, { updateReady: 'Nouvelle version de l’appli prête', reload: 'Recharger' });
 Object.assign(STR.en, { updateReady: 'A new version of the app is ready', reload: 'Reload' });

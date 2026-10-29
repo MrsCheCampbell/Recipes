@@ -1,6 +1,6 @@
-# La Cuisine d'Abe
+# Our Kitchen
 
-A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight from Chrome, works offline, and keeps every recipe on the phone.
+A recipe app for our family. It installs on a phone straight from Chrome or Safari, works offline, and keeps every recipe on the phone.
 
 ## Putting it online (one time, ~2 minutes)
 
@@ -38,7 +38,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - **One box at the top of the form** (*Lien ou texte de la recette*): paste a link, or a whole recipe from an email or a WhatsApp message, and tap **Remplir**. Or tap **Photos** to photograph a cookbook page or pick screenshots. A line under the box always says what happened (read by Claude, filled without Claude, site blocked…), so nothing fails silently.
 - Ingredients typed or pasted on one line with commas ("200 g de farine, 3 œufs, 100 g de sucre") are split into one per line. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom).
 - Add a photo of the dish with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
-- **Share to the app**: in Chrome or any app, tap *Share → La Cuisine d'Abe* on a recipe page to start a new recipe from it.
+- **Share to the app**: in Chrome or any app, tap *Share → Our Kitchen* on a recipe page to start a new recipe from it.
 - Category, **occasions** (having friends over, family dinner, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
@@ -60,14 +60,13 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Shopping list: add a recipe's ingredients in one tap, check items off, share the list.
 
 **Jewish touches (kept discreet)**
-- Hebrew date under the greeting.
-- One quiet line under the greeting: the Hebrew date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
+- One quiet line under the greeting: the date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
 - Jewish holidays are one group of occasions; kashrut sits in a fold-away section of the recipe form and in Filters.
 
 **Occasions with dates**
 - Thanksgiving and New Year's Eve are dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
 - Two weeks before, a quiet line under the greeting says e.g. "Thanksgiving dans 9 jours". Tapping it shows the recipes tagged for it.
-- "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
+- "Chabbat Chalom" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Look**

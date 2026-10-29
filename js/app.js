@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: Taps, the passcode, and starting the app.
+// Our Kitchen: Taps, the passcode, and starting the app.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Global click handling ----------
@@ -87,7 +87,7 @@ document.addEventListener('click', async e => {
     case 'famcreate': famCreate(); break;
     case 'famjoin': famJoin(); break;
     case 'famjoinpaste': { const m = ($('#joinIn').value.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1]; if (m) go('#/join/' + m); else toast(t.famJoinBad); break; }
-    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family); if (navigator.share) { try { await navigator.share({ title: FAM.name, text, url }); break; } catch (e) { if (e.name === 'AbortError') break; } } try { await navigator.clipboard.writeText(text + '\n' + url); } catch {} toast(t.copied); break; }
+    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family, url); if (navigator.share) { try { await navigator.share({ title: FAM.name, text }); break; } catch (e) { if (e.name === 'AbortError') break; } } try { await navigator.clipboard.writeText(text); } catch {} toast(t.copied); break; }
     case 'famprofile': { const st = renderFamily.st, name = $('#meNameIn').value.trim(); if (!name) break; S.name = name; saveSettings(); quiet(FB.updateDoc(fref('members', FAM.uid), { name, avatar: st.avatar, color: st.color })); FAM.members[FAM.uid] = { ...member(FAM.uid), name, avatar: st.avatar, color: st.color }; toast(t.saved); renderFamily(); break; }
     case 'feedtoggle': S.feedOff = !b.checked; saveSettings(); break;
     case 'mute': { const set = new Set(S.muted || []); if (b.checked) set.delete(b.dataset.id); else set.add(b.dataset.id); S.muted = [...set]; saveSettings(); break; }
@@ -214,7 +214,7 @@ function showLock(mode, done, msg = '') {
   el.hidden = false; document.body.style.overflow = 'hidden';
   // Build the card once; key presses only update the text and dots, so nothing moves under the finger.
   el.innerHTML = `<div class="lock-in intro" role="dialog" aria-modal="true">
-    <div class="mono">${esc(initial(S.name || 'Abe'))}</div>
+    <div class="mono">${esc(initial(S.name || T().appName))}</div>
     <h1 id="lockTitle"></h1><p id="lockSub" aria-live="polite"></p>
     <div class="dots" id="dots"><span></span><span></span><span></span><span></span></div>
     <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-k="${n}">${n}</button>`).join('')}<span id="lockLeft"></span><button type="button" data-k="0">0</button>
@@ -223,7 +223,7 @@ function showLock(mode, done, msg = '') {
 }
 function drawLock() {
   const t = T(), st = lockState, el = $('#lock'); if (!st || !el.firstChild) return;
-  const title = st.mode === 'unlock' ? t.lockHello(S.name || 'Abe') : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
+  const title = st.mode === 'unlock' ? t.lockHello(S.name) : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
   const sub = st.msg || (st.mode === 'unlock' ? t.lockEnter : st.mode === 'setup' ? t.lockSetupSub : '');
   $('#lockTitle').textContent = title;
   el.firstChild.setAttribute('aria-label', title);

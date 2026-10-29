@@ -1,5 +1,5 @@
 'use strict';
-// La Cuisine d'Abe: The family: Firebase sync, hearts, comments, recommendations, the feed, creating and joining.
+// Our Kitchen: The family: Firebase sync, hearts, comments, recommendations, the feed, creating and joining.
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Family: shared recipes, feed, hearts, comments, recommendations ----------
@@ -180,7 +180,13 @@ async function loadPages(r) {
 }
 
 // One Claude key for the whole family: stored where only family members can read it (firestore.rules → secrets).
-function shareClaudeKey(k) { if (!k) return; ls.set('famClaudeKey', k); quiet(FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() })); toast(T().claudeSharedToast); }
+// Only says "shared" once Firebase has accepted it (old rules refuse it).
+async function shareClaudeKey(k) {
+  if (!k) return; const w = fbWait(); if (w) await w;
+  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); toast(T().claudeSharedToast); }
+  catch (e) { console.warn('share key', e && e.code); toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
+  if (current === 'more') renderMore();
+}
 function unshareClaudeKey() { ls.del('famClaudeKey'); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
 
 // Comments on the open recipe (live).
@@ -312,7 +318,7 @@ function renderFamily() {
 async function famCreate() {
   const t = T(), cfg = parseFirebaseConfig($('#cfgIn').value);
   if (!cfg) { toast(t.famCfgBad); $('#cfgIn').focus(); return; }
-  const name = $('#meNameIn').value.trim() || S.name || 'Abe', st = renderFamily.st;
+  const name = $('#meNameIn').value.trim() || S.name || t.someone, st = renderFamily.st;
   try {
     await fbInit(cfg);
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
@@ -337,7 +343,7 @@ function renderJoin(code) {
   const st = { avatar: 'teapot', color: AV_COLORS[1] };
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
-    <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name && S.name !== 'Abe' ? S.name : '')}" placeholder="${esc(t.yourNamePh)}"></div>
+    <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}" placeholder="${esc(t.yourNamePh)}"></div>
       <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
       <button class="btn primary block" data-act="famjoin">${esc(t.famJoinBtn)}</button></section>
   </div>`;
