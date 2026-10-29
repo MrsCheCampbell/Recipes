@@ -2,13 +2,9 @@
 
 A recipe app for our family. It installs on a phone straight from Chrome or Safari, works offline, and keeps every recipe on the phone.
 
-## Putting it online (one time, ~2 minutes)
+## Putting it online
 
-1. On GitHub, open this repo → **Settings** → **Pages**.
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**, pick **master** and **/ (root)**, then **Save**.
-3. After about a minute the app is live at **https://mrschecampbell.github.io/Recipes/**
-
-(GitHub Pages needs the repo to be public on a free plan.)
+The app is hosted on Netlify: every merge to `master` deploys it (see CLAUDE.md — deploys are limited, so changes go through pull requests).
 
 ## Installing on Dad's Android phone
 
