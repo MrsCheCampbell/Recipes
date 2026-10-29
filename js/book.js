@@ -3,12 +3,6 @@
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- List view ----------
-function greeting() {
-  const now = new Date(), h = now.getHours(), dow = now.getDay();
-  const st = shabbatTimes(now);
-  if ((dow === 5 && h >= 12) || (dow === 6 && (!st || now < st.endAt))) return T().shabbatShalom;
-  return T().hello[h < 5 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3].replace('-', '\u2011');
-}
 const occChip = (h, sel = []) => { const on = (sel || []).includes(h); return `<button type="button" class="chip ${on ? 'on' : ''}" data-h="${h}" aria-pressed="${on}">${esc(occLabel(h))}</button>`; };
 function addOccasion(onAdded) {
   const t = T();
@@ -38,7 +32,7 @@ function datedOccasions(now = new Date()) {
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
 function calHTML() {
-  // A quiet line under the greeting: the date, and Shabbat/holiday only when near.
+  // A quiet line at the top: the date, and Shabbat/holiday only when near.
   const t = T(), now = new Date(), dow = now.getDay();
   const bits = [`<span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   if (dow >= 4 && dow <= 6) {
@@ -232,7 +226,7 @@ function renderList(favOnly) {
     <div class="wrap">
       <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
         <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
-      ${favOnly ? carnetTabs('fav') : `<p class="hello">${esc(S.name ? `${greeting()}, ${S.name}` : greeting())}</p>${calHTML()}${bannerHTML()}`}
+      ${favOnly ? carnetTabs('fav') : `${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}

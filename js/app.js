@@ -214,7 +214,7 @@ function showLock(mode, done, msg = '') {
   el.hidden = false; document.body.style.overflow = 'hidden';
   // Build the card once; key presses only update the text and dots, so nothing moves under the finger.
   el.innerHTML = `<div class="lock-in intro" role="dialog" aria-modal="true">
-    <div class="mono">${esc(initial(S.name || T().appName))}</div>
+    <div class="mono">${esc(initial(T().appName))}</div>
     <h1 id="lockTitle"></h1><p id="lockSub" aria-live="polite"></p>
     <div class="dots" id="dots"><span></span><span></span><span></span><span></span></div>
     <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-k="${n}">${n}</button>`).join('')}<span id="lockLeft"></span><button type="button" data-k="0">0</button>
@@ -223,7 +223,7 @@ function showLock(mode, done, msg = '') {
 }
 function drawLock() {
   const t = T(), st = lockState, el = $('#lock'); if (!st || !el.firstChild) return;
-  const title = st.mode === 'unlock' ? t.lockHello(S.name) : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
+  const title = st.mode === 'unlock' ? t.appName : st.mode === 'confirm' ? t.lockConfirm : t.lockSetup;
   const sub = st.msg || (st.mode === 'unlock' ? t.lockEnter : st.mode === 'setup' ? t.lockSetupSub : '');
   $('#lockTitle').textContent = title;
   el.firstChild.setAttribute('aria-label', title);

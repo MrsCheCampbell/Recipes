@@ -111,7 +111,6 @@ main.enter { animation: enter .32s var(--ease); }
 .mast span { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
 .hbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; }
 .hname { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
-.hello { margin: 10px 0 2px; font-family: var(--font-display); font-size: 1.35rem; font-style: italic; }
 .tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; }
 .tools .muted { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
 .tools-r { display: flex; align-items: center; gap: 6px; min-width: 0; }

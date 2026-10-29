@@ -15,6 +15,8 @@ const ls = {
 };
 let S = ls.get('settings', {});
 S = Object.assign({ lang: (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr', name: '', size: 'large', theme: 'auto', city: 'paris' }, S);
+// "Abe" was the default name in early versions; nobody chose it.
+if (S.name === 'Abe') S.name = '';
 const saveSettings = () => ls.set('settings', S);
 const T = () => STR[S.lang];
 const locale = () => S.lang === 'fr' ? 'fr-FR' : 'en-GB';
