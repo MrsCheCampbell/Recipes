@@ -87,7 +87,14 @@ document.addEventListener('click', async e => {
     case 'famcreate': famCreate(); break;
     case 'famjoin': famJoin(); break;
     case 'famjoinpaste': { const m = ($('#joinIn').value.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1]; if (m) go('#/join/' + m); else toast(t.famJoinBad); break; }
-    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family, url); if (navigator.share) { try { await navigator.share({ title: FAM.name, text }); break; } catch (e) { if (e.name === 'AbortError') break; } } try { await navigator.clipboard.writeText(text); } catch {} toast(t.copied); break; }
+    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family);
+      // The link goes in "url" too: without it Safari shares the plain address of the app instead.
+      if (navigator.share) { try { await navigator.share({ title: FAM.name, text, url }); break; } catch (e) { if (e.name === 'AbortError') break; } }
+      try { await navigator.clipboard.writeText(text + '\n\n' + url); } catch {} toast(t.copied); break; }
+    case 'invcopy': try { await navigator.clipboard.writeText(famInviteLink()); toast(t.linkCopied); } catch { $('#invLink').select(); } break;
+    case 'invcopyhere': try { await navigator.clipboard.writeText(location.href); toast(t.linkCopied); } catch {} break;
+    case 'joinclip': { let v = ''; try { v = await navigator.clipboard.readText(); } catch {} const m = (v.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1];
+      if (m) go('#/join/' + m); else { toast(t.famJoinBad); $('#joinIn').focus(); } break; }
     case 'famprofile': { const st = renderFamily.st, name = $('#meNameIn').value.trim(); if (!name) break; S.name = name; saveSettings(); quiet(FB.updateDoc(fref('members', FAM.uid), { name, avatar: st.avatar, color: st.color })); FAM.members[FAM.uid] = { ...member(FAM.uid), name, avatar: st.avatar, color: st.color }; toast(t.saved); renderFamily(); break; }
     case 'feedtoggle': S.feedOff = !b.checked; saveSettings(); break;
     case 'mute': { const set = new Set(S.muted || []); if (b.checked) set.delete(b.dataset.id); else set.add(b.dataset.id); S.muted = [...set]; saveSettings(); break; }

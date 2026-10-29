@@ -283,14 +283,16 @@ function renderFamily() {
       <div class="wrap stack">
         <section class="panel"><h2>${esc(t.famIntroT)}</h2><p style="margin:0">${esc(t.famIntro)}</p></section>
         <section class="panel"><h2>${esc(t.famJoinT)}</h2><p class="muted" style="margin:0">${esc(t.famJoinText)}</p>
-          <textarea class="input" id="joinIn" rows="2" placeholder="${esc(t.famJoinPh)}"></textarea><button class="btn primary" data-act="famjoinpaste">${esc(t.famJoinBtn)}</button></section>
-        <section class="panel"><h2>${esc(t.famCreateT)}</h2>
+          ${navigator.clipboard?.readText ? `<button class="btn primary" data-act="joinclip">${esc(t.pasteInvite)}</button>` : ''}
+          <textarea class="input" id="joinIn" rows="2" placeholder="${esc(t.famJoinPh)}"></textarea><button class="btn" data-act="famjoinpaste">${esc(t.famJoinBtn)}</button></section>
+        <details class="panel more-box newfam"><summary>${esc(t.famNewT)}</summary>
+        <section class="stack" style="margin-top:12px"><h2>${esc(t.famCreateT)}</h2>
           <ol class="howto">${t.famSteps.map(s => `<li>${s}</li>`).join('')}</ol>
           <div class="field"><label for="cfgIn">${esc(t.famCfg)}</label><textarea class="input" id="cfgIn" rows="5" spellcheck="false" placeholder="const firebaseConfig = { apiKey: &quot;…&quot;, … }"></textarea></div>
           <div class="field"><label for="famNameIn">${esc(t.famName)}</label><input class="input" id="famNameIn"></div>
           <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}"></div>
           <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
-          <button class="btn primary" data-act="famcreate">${esc(t.famCreateBtn)}</button></section>
+          <button class="btn primary" data-act="famcreate">${esc(t.famCreateBtn)}</button></section></details>
       </div>`;
     wireAvatarPicker(st); renderFamily.st = st; return;
   }
@@ -304,7 +306,8 @@ function renderFamily() {
           <span class="muted">${esc(t.nRecipesBy(FAM.all.filter(r => r.owner === id).length))}</span></div>
           ${id === FAM.uid ? '' : `<label class="mute"><input type="checkbox" data-act="mute" data-id="${id}" ${muted.has(id) ? '' : 'checked'}><span>${esc(t.inMyFeed)}</span></label>`}</div>`).join('')}</div>
         <button class="btn primary" data-act="faminvite">${ico('reco')}${esc(t.famInvite)}</button>
-        <p class="hint" style="margin:0">${esc(t.famInviteHint)}</p></section>
+        <p class="hint" style="margin:0">${esc(t.famInviteHint)}</p>
+        <div class="field"><label for="invLink">${esc(t.invLinkLbl)}</label><div class="invbox"><input class="input" id="invLink" readonly value="${esc(famInviteLink())}"><button class="btn" data-act="invcopy">${esc(t.copyLink)}</button></div></div></section>
       <section class="panel"><h2>${esc(t.yourProfile)}</h2>
         <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(me.name || '')}"></div>
         <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
@@ -343,6 +346,8 @@ function renderJoin(code) {
   const st = { avatar: 'teapot', color: AV_COLORS[1] };
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
+    ${isIOS && !installed() ? `<section class="panel iosjoin"><h2>${esc(t.iosJoinT)}</h2><ol class="howto">${t.iosJoinSteps.map(s => `<li>${s}</li>`).join('')}</ol>
+      <button class="btn primary" data-act="invcopyhere">${esc(t.copyLink)}</button></section>` : ''}
     <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}" placeholder="${esc(t.yourNamePh)}"></div>
       <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
       <button class="btn primary block" data-act="famjoin">${esc(t.famJoinBtn)}</button></section>
