@@ -87,11 +87,17 @@ document.addEventListener('click', async e => {
     case 'famcreate': famCreate(); break;
     case 'famjoin': famJoin(); break;
     case 'famjoinpaste': { const m = ($('#joinIn').value.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1]; if (m) go('#/join/' + m); else toast(t.famJoinBad); break; }
-    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family);
+    case 'faminvite': { const url = famInviteLink(), text = t.inviteText(FAM.name || t.family, FAM.joinCode ? fmtJoinCode(FAM.joinCode) : '');
       // The link goes in "url" too: without it Safari shares the plain address of the app instead.
       if (navigator.share) { try { await navigator.share({ title: FAM.name, text, url }); break; } catch (e) { if (e.name === 'AbortError') break; } }
       try { await navigator.clipboard.writeText(text + '\n\n' + url); } catch {} toast(t.copied); break; }
     case 'famrename': famRename(); break;
+    case 'codejoin': codeJoin(); break;
+    case 'codejoinnew': codeJoinNew(); break;
+    case 'backpick': renderCodeJoin.who = b.dataset.id; $$('.whoback .mrow').forEach(x => x.classList.toggle('on', x === b)); $('#backPin').hidden = false; $('#pinBack').focus(); break;
+    case 'backgo': codeJoinBack(); break;
+    case 'pinsave': pinSave(); break;
+    case 'codecopy': try { await navigator.clipboard.writeText(fmtJoinCode(FAM.joinCode)); toast(t.codeCopied); } catch {} break;
     case 'fbsend': sendFeedback(); break;
     case 'fbdone': if (FAM.createdBy === FAM.uid) { try { await FB.deleteDoc(fref('feedback', b.dataset.id)); } catch (e) { console.warn(e); } loadFeedback(); } break;
     case 'invcopy': try { await navigator.clipboard.writeText(famInviteLink()); toast(t.linkCopied); } catch { $('#invLink').select(); } break;
@@ -234,6 +240,7 @@ async function dropOldSamples() {
   famBoot = inFamily ? famStart().catch(e => { console.warn(e); return false; }) : null;
   if (famBoot && !cached) await Promise.race([famBoot, new Promise(r => setTimeout(r, 4000))]);
   route();
+  try { const wb = sessionStorage.getItem('abe:welcomeBack'); if (wb) { sessionStorage.removeItem('abe:welcomeBack'); toast(T().welcomeBack(wb === '1' ? '' : wb)); } } catch {}
   drawTimers();
   refreshWeather();
   Promise.resolve(famBoot).then(dropOldSamples).then(() => tagSweep()).then(() => { if (current === 'list') renderResults(); }).catch(e => console.warn(e));

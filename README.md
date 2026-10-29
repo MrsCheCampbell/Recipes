@@ -93,6 +93,8 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 - **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
 - **Avatars**: each person picks a drawn avatar and a colour.
 - **Cocktails** have their own section (and illustration).
+- **Family code**: every family has a short code (like `K7P-M2Q`) shown in *More → Family* with **Copy**; the invite message sends it with the steps. To join: install the app, *More → Family*, type the code, tap **I'm new here**, pick a name and a 4-digit code.
+- **Coming back after deleting the app or changing phones**: type the family code, tap your name, type your 4-digit code. You're back as yourself, with your recipes, notebooks and favorites. The 4-digit code is only ever asked then. People who joined before codes existed get a one-time "Pick your 4-digit code" card in *More → Family*.
 - **Renaming the family**: whoever created it can change the name in *More → Family*; everyone sees it the next time they open the app.
 - **Adding someone later** (your brother): *More → Family → Invite someone* shares a message with the steps and the invite link (the same link is shown under the button, with **Copy link**). They pick a name and avatar; everything already there stays.
 - Works offline: everything is cached on the phone, and changes sync when the connection comes back.

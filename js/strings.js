@@ -80,8 +80,17 @@ const STR = {
     recoSent: n => `Recommended to ${n}`, recoFor: n => `${n} recommends`, recoLater: 'Later', you: 'You', like: 'Like',
     feedEmptyT: 'Nothing cooking yet', feedEmpty: 'When someone cooks something (or spots a lovely plate), the photo lands here.',
     agoNow: 'just now', agoMin: n => `${n} min ago`, agoH: n => `${n} h ago`, agoYesterday: 'yesterday', agoD: n => `${n} days ago`,
-    family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. Any recipe can stay private or be hidden from someone.',
+    family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. One family cookbook, everyone’s recipes in one place.',
     famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Copy it, then tap the button.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family', pasteInvite: 'Paste invite link',
+    codeJoinText: 'Type the family code someone sent you.', famCodeLbl: 'Family code', codeGo: 'Continue', haveLink: 'I have an invite link instead',
+    codeBad: 'That family code doesn’t exist. Check the letters and try again.', copyCode: 'Copy', codeCopied: 'Code copied',
+    famCodeHint: 'Send this code to anyone you want in the family. They type it in More → Family.', invLinkLbl2: 'Or send the invite link',
+    backT: 'Already in the family?', backText: 'Tap your name and type your 4-digit code to get everything back.', backGo: 'That’s me', newHereT: 'I’m new here',
+    pinLbl: 'Your 4-digit code', pinHint: 'Only asked if you ever reinstall the app, so you come back as you.', pinNeed: 'Choose 4 digits.',
+    pinWrong: 'That’s not the right code.', pinTooMany: 'Too many tries. Wait a few minutes and try again.', pinFail: 'Couldn’t save the code. Try again in More → Family.',
+    pinNotEnabled: 'Codes need one switch in Firebase: Authentication → Sign-in method → Email/Password → Enable.', pinSaved: 'Code saved. You can always come back as you.',
+    secureT: 'Pick your 4-digit code', secureText: 'If you ever delete the app or change phones, this gets you back in as you, with your recipes and notebooks. You only need it then.',
+    welcomeBack: n => n ? `Welcome back, ${n}!` : 'Welcome back!',
     fbCardT: 'Ideas & suggestions', fbCardText: 'Anything at all you’d change, add or take away. Big or tiny, it all helps.',
     fbTitle: 'Ideas & suggestions', fbHeroT: 'Literally anything can change', fbHero: 'This app was made for us, so it should work the way you like. Any single thing can be changed, added or removed: a word, a colour, a button, a whole new page.',
     fbIdeas: ['“This button is too small.”', '“I never use the Fridge tab, hide it.”', '“Can it remind me to buy challah on Fridays?”', '“I wish I could see who cooked my recipe.”', '“The text is hard to read.”', '“This bit confuses me.”'],
@@ -92,15 +101,23 @@ const STR = {
     iosJoinT: 'On iPhone, do this first', iosJoinSteps: ['Tap Share (the square with an arrow pointing up), then <b>Add to Home Screen</b>, then <b>Add</b>.', 'Tap <b>Copy link</b> below.', 'Open <b>Our Kitchen</b> from your home screen, go to More → Family, and tap <b>Paste invite link</b>.'],
     famCreateT: 'Create the family (only once, for everyone)', famSteps: ['At <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, create a project (free). Google Analytics isn’t needed.', '<b>Authentication</b> → Get started → enable <b>Anonymous</b>.', '<b>Firestore Database</b> → Create database (production mode, any region).', '<b>Rules</b> tab: replace everything with <a href="firestore.rules" target="_blank" rel="noopener">these rules</a>, then <b>Publish</b>.', '<b>Project settings</b> → Your apps → Web icon <b>&lt;/&gt;</b> → register the app, then copy the <b>firebaseConfig</b> block below.'],
     famCfg: 'Firebase configuration', famName: 'Family name', famNameDefault: 'The family', yourAvatar: 'Your avatar', famCreateBtn: 'Create the family',
-    famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Send the link by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
-    yourProfile: 'My profile', feedT: 'Instagram', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
+    famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Sends the family code and the steps by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
+    yourProfile: 'My profile', feedT: 'Instagram', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back, type the family code, tap your name and your 4-digit code.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
     famCfgBad: 'I can’t find apiKey, projectId and appId in this text.', famErr: 'The family couldn’t be created. Check the configuration and that anonymous sign-in is enabled.',
     famJoinBad: 'This invite link isn’t valid.', invitation: 'Invitation', joinTitle: n => `Join “${n}”`, yourNamePh: '', needName: 'Choose a name',
     welcomeFam: n => `Welcome to “${n}”!`, famJoinErr: 'Couldn’t join. Check the internet connection, or ask for a new link.',
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in Our Kitchen to see and share our recipes. The invite link is below.
+    famCardText: 'Share your recipes with your family.', inviteText: (n, code) => code ? `Join “${n}” in Our Kitchen to see and share our recipes!
+
+Our family code: ${code}
+
+1. Put the app on your phone:
+- iPhone: open the link below in Safari, tap Share (the square with an arrow), then “Add to Home Screen”, then “Add”.
+- Android: open the link below in Chrome, tap ⋮ at the top right, then “Install app”.
+2. Open Our Kitchen, go to More → Family, and type the code ${code}.
+3. Tap “I’m new here”, pick your name, and choose a 4-digit code (only needed if you ever reinstall the app).` : `Join “${n}” in Our Kitchen to see and share our recipes. The invite link is below.
 
 On iPhone:
 1. Open the link in Safari, tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
