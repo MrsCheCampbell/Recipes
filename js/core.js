@@ -14,7 +14,7 @@ const ls = {
   del(k) { try { localStorage.removeItem('abe:' + k); } catch {} },
 };
 let S = ls.get('settings', {});
-S = Object.assign({ lang: (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr', name: 'Abe', size: 'large', theme: 'auto', city: 'paris' }, S);
+S = Object.assign({ lang: (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr', name: '', size: 'large', theme: 'auto', city: 'paris' }, S);
 const saveSettings = () => ls.set('settings', S);
 const T = () => STR[S.lang];
 const locale = () => S.lang === 'fr' ? 'fr-FR' : 'en-GB';
@@ -195,11 +195,6 @@ function hebParts(d) {
     const p = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(d);
     return { day: +p.find(x => x.type === 'day').value, month: p.find(x => x.type === 'month').value };
   } catch { return null; }
-}
-function hebDateLabel(d) {
-  try {
-    return new Intl.DateTimeFormat(S.lang === 'fr' ? 'fr-u-ca-hebrew' : 'en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' }).format(d).replace(/\s*A\.\s*M\.?$/i, '').replace(/\s*AM$/, '');
-  } catch { return ''; }
 }
 function nextHoliday(now = new Date()) {
   const base = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);

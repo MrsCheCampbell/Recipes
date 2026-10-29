@@ -318,7 +318,7 @@ function renderFamily() {
 async function famCreate() {
   const t = T(), cfg = parseFirebaseConfig($('#cfgIn').value);
   if (!cfg) { toast(t.famCfgBad); $('#cfgIn').focus(); return; }
-  const name = $('#meNameIn').value.trim() || S.name || 'Abe', st = renderFamily.st;
+  const name = $('#meNameIn').value.trim() || S.name || t.someone, st = renderFamily.st;
   try {
     await fbInit(cfg);
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
@@ -343,7 +343,7 @@ function renderJoin(code) {
   const st = { avatar: 'teapot', color: AV_COLORS[1] };
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
-    <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name && S.name !== 'Abe' ? S.name : '')}" placeholder="${esc(t.yourNamePh)}"></div>
+    <section class="panel"><div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}" placeholder="${esc(t.yourNamePh)}"></div>
       <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
       <button class="btn primary block" data-act="famjoin">${esc(t.famJoinBtn)}</button></section>
   </div>`;

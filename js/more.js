@@ -44,7 +44,7 @@ const codeFromText = txt => (String(txt).match(/#\/recu\/([A-Za-z0-9_-]{8,})/) |
 async function sendRecipe(r) {
   const t = T();
   const url = location.origin + location.pathname + '#/recu/' + await packRecipe(r);
-  const text = t.sendText(S.name || 'Abe', r.title);
+  const text = t.sendText(S.name || t.someone, r.title);
   if (navigator.share) { try { await navigator.share({ title: r.title, text, url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
   try { await navigator.clipboard.writeText(text + '\n' + url); toast(t.copied); } catch { toast(t.copied); }
 }
@@ -172,7 +172,7 @@ function renderMore() {
       ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(isIOS ? t.installIos : t.installHow)}</p>`}</section>`}
     <section class="panel"><h2>${esc(t.settings)}</h2>
       <div class="form" style="padding:0;gap:14px">
-        <div class="field"><label for="sName">${esc(t.yourName)}</label><input class="input" id="sName" list="nameList" autocomplete="given-name" value="${esc(S.name || '')}"><datalist id="nameList">${['Abe', 'Abraham', 'Papa', 'Dad', 'Avraham'].map(n => `<option value="${n}">`).join('')}</datalist></div>
+        <div class="field"><label for="sName">${esc(t.yourName)}</label><input class="input" id="sName" autocomplete="given-name" value="${esc(S.name || '')}"></div>
         <div class="field"><label for="sLang">${esc(t.language)}</label><select id="sLang">${opt('fr', 'Français', S.lang)}${opt('en', 'English', S.lang)}</select></div>
         <div class="field"><label for="sSize">${esc(t.textSize)}</label><select id="sSize">${Object.entries(t.sizes).map(([k, v]) => opt(k, v, S.size)).join('')}</select></div>
         <div class="field"><label for="sTheme">${esc(t.theme)}</label><select id="sTheme">${Object.entries(t.themes).map(([k, v]) => opt(k, v, S.theme)).join('')}</select></div>
@@ -217,12 +217,11 @@ function renderMore() {
     <section class="panel"><h2>${esc(t.samples)}</h2>
       ${hasSamples ? `<button class="btn" data-act="rmsamples">${esc(t.samplesDel)}</button>` : `<button class="btn" data-act="samples">${esc(t.samplesAdd)}</button>`}
       ${FAM.on ? '' : `<button class="btn danger" data-act="erase">${ico('trash')}${esc(t.eraseAll)}</button>`}</section>
-    <p class="love">${esc(t.madeFor)} <b>${esc(S.name === 'Abe' || S.name === 'Abraham' || S.name === 'Avraham' ? S.name : t.withLove)}</b>${ico('heart')}</p>
   </div>`;
   const upd = () => { const a = parseNum($('#cAmt').value.replace(',', '.')) || parseFloat($('#cAmt').value.replace(',', '.')); $('#cOut').textContent = isFinite(a) ? convert(a, $('#cUnit').value, $('#cIng').value) : '—'; $('#cIng').closest('.field').hidden = !['cup', 'tbsp', 'tsp'].includes($('#cUnit').value); };
   ['cAmt', 'cUnit', 'cIng'].forEach(id => $('#' + id).addEventListener('input', upd)); upd();
   const bind = (id, key, after) => $('#' + id).addEventListener('change', e => { S[key] = e.target.value; saveSettings(); applyLook(); after?.(); });
-  $('#sName').addEventListener('change', e => { S.name = e.target.value.trim() || 'Abe'; saveSettings(); toast(T().saved); }); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city', () => { wx = null; refreshWeather(); });
+  $('#sName').addEventListener('change', e => { S.name = e.target.value.trim(); saveSettings(); toast(T().saved); }); bind('sLang', 'lang', renderMore); bind('sSize', 'size'); bind('sTheme', 'theme'); bind('sCity', 'city', () => { wx = null; refreshWeather(); });
 }
 async function exportBackup(share) {
   const t = T();

@@ -1,6 +1,6 @@
 # Our Kitchen
 
-A recipe app for Dad (Abraham, "Abe"). It installs on an Android phone straight from Chrome, works offline, and keeps every recipe on the phone.
+A recipe app for our family. It installs on a phone straight from Chrome or Safari, works offline, and keeps every recipe on the phone.
 
 ## Putting it online (one time, ~2 minutes)
 
@@ -60,14 +60,13 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Shopping list: add a recipe's ingredients in one tap, check items off, share the list.
 
 **Jewish touches (kept discreet)**
-- Hebrew date under the greeting.
-- One quiet line under the greeting: the Hebrew date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
+- One quiet line under the greeting: the date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
 - Jewish holidays are one group of occasions; kashrut sits in a fold-away section of the recipe form and in Filters.
 
 **Occasions with dates**
 - Thanksgiving and New Year's Eve are dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
 - Two weeks before, a quiet line under the greeting says e.g. "Thanksgiving dans 9 jours". Tapping it shows the recipes tagged for it.
-- "Chabbat Chalom, Abe" greeting on Friday afternoon and Shabbat.
+- "Chabbat Chalom" greeting on Friday afternoon and Shabbat.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Look**

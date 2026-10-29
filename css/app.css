@@ -1,5 +1,5 @@
-/* La Cuisine d'Abe: all the styles. */
-/* La Cuisine d'Abe — "Le Carnet"
+/* Our Kitchen: all the styles. */
+/* Our Kitchen — "Le Carnet"
    Concept: grandma's recipe box, re-engineered. Printed-card materials (paper grain, gingham, polaroids, ruled lines,
    crop marks, catalogue numbers) set with editorial precision: Bodoni display, IBM Plex Mono for data, hairline grid.
    Accent: tomato. Ink-black for selection states. Mustard as the single warm highlight. */
@@ -461,9 +461,6 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
 .occ-list { display: grid; gap: 8px; }
 .occ-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 9.5em) 46px; gap: 8px; align-items: center; font-weight: 700; }
 .occ-row .input { width: 100%; min-width: 0; padding: 8px 6px; font-size: .88rem; }
-.love { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); padding: 12px 0 0; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
-.love b { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; letter-spacing: 0; text-transform: none; color: var(--accent); font-weight: 500; }
-.love svg.i { color: var(--accent); width: 16px; height: 16px; }
 
 /* ---------- Sheets, toasts, timers ---------- */
 .scrim { position: fixed; inset: 0; background: rgba(20,14,10,.42); backdrop-filter: blur(2px); z-index: 100; display: flex; align-items: flex-end; justify-content: center; animation: fade .2s; }

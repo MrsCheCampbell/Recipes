@@ -38,9 +38,9 @@ function datedOccasions(now = new Date()) {
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
 function calHTML() {
-  // A quiet line under the greeting: date, Hebrew date, and Shabbat/holiday only when near.
+  // A quiet line under the greeting: the date, and Shabbat/holiday only when near.
   const t = T(), now = new Date(), dow = now.getDay();
-  const bits = [`<span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`, `<span class="soft">${esc(hebDateLabel(now))}</span>`];
+  const bits = [`<span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   if (dow >= 4 && dow <= 6) {
     const st = shabbatTimes(now);
     if (st && !(dow === 6 && now > st.endAt)) bits.push(`<span title="${esc(st.city)} · ${esc(t.approx)}">${esc(t.hol.shabbat)} · ${esc(t.candlesShort(st.candles))}</span>`);
@@ -232,7 +232,7 @@ function renderList(favOnly) {
     <div class="wrap">
       <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
         <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
-      ${favOnly ? carnetTabs('fav') : `<p class="hello">${esc(greeting())}, ${esc(S.name || 'Abe')}</p>${calHTML()}${bannerHTML()}`}
+      ${favOnly ? carnetTabs('fav') : `<p class="hello">${esc(S.name ? `${greeting()}, ${S.name}` : greeting())}</p>${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}

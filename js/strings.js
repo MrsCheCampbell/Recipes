@@ -64,7 +64,7 @@ const STR = {
     installIos: 'Dans Safari : touchez le bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».',
     iosNudge: 'Pour l’avoir comme une vraie appli : Partager, puis « Sur l’écran d’accueil ».', ok: 'OK',
     eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
-    madeFor: 'Fait avec amour pour', withLove: 'Papa',
+    
     // jewish calendar
     candles: 'Allumage des bougies', havdala: 'Fin de Chabbat', approx: 'Horaires approximatifs',
     
@@ -133,14 +133,14 @@ ${url}
     copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
     kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
-    lockHello: n => `Bonjour ${n}`, lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
+    lockHello: n => n ? `Bonjour ${n}` : 'Bonjour', lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
     lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
     lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: '',
     lockSaved: 'Code enregistré', lockRedo: 'Petite mise à jour : choisissez à nouveau votre code. Vos recettes ne changent pas.', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
     lockChange: 'Changer le code', lockRemove: 'Retirer le code', lockAdd: 'Ajouter un code', lockRemoveQ: 'Retirer le code d’accès ?', lockRemoved: 'Code retiré', lockNow: 'Verrouiller maintenant', erase: 'Effacer', later: 'Plus tard',
   },
   en: {
-    appName: "Abe's Kitchen",
+    appName: 'Our Kitchen',
     hello: ['Good night', 'Good morning', 'Good afternoon', 'Good evening'], shabbatShalom: 'Shabbat Shalom',
     nav: { list: 'Recipes', fav: 'Favorites', fridge: 'Fridge', shop: 'Shopping', more: 'More' },
     searchPh: 'Search', voice: 'Search by voice', clear: 'Clear',
@@ -190,7 +190,7 @@ ${url}
     installIos: 'In Safari: tap the Share button (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.',
     iosNudge: 'To use it like a real app: tap Share, then “Add to Home Screen”.', ok: 'OK',
     eraseAll: 'Erase everything', eraseQ: 'Erase every recipe from this phone? This can’t be undone.', erased: 'Everything erased',
-    madeFor: 'Made with love for', withLove: 'Dad',
+    
     candles: 'Candle lighting', havdala: 'Shabbat ends', approx: 'Approximate times',
     
     
@@ -257,7 +257,7 @@ ${url}
     copyForApp: 'Copy for my app', someone: 'Someone',
     kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
-    lockHello: n => `Hello ${n}`, lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
+    lockHello: n => n ? `Hello ${n}` : 'Hello', lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
     lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
