@@ -29,13 +29,30 @@ function datedOccasions(now = new Date()) {
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
-// Harold's birthday (Oct 28): a little card that goes away by itself after Oct 31, 2026, wherever the phone is
-// (midnight on the phone's own clock, so Spain and France alike). While it shows, the date line stays on Oct 28.
-const BDAY_END = new Date(2026, 10, 1).getTime(), BDAY_DAY = new Date(2026, 9, 28, 12);
+// Harold's birthday (Oct 28): the card waits for Harold. Once his phone has shown it, it stays two more days
+// (on everyone's phone), then goes away. It ends on Dec 31, 2026 whatever happens. While it shows, the date line says Oct 28.
+const BDAY_DAY = new Date(2026, 9, 28, 12), BDAY_CAP = new Date(2027, 0, 1).getTime(), BDAY_KEEP = 2 * 864e5;
+const isHarold = name => /^harold\b/i.test(norm(name || '').trim());
+function bdaySeenAt() {
+  const mine = ls.get('bdaySeen', 0); if (mine) return mine;
+  if (!FAM.on) return 0;
+  return Object.values(FAM.members || {}).filter(m => isHarold(m.name)).reduce((t, m) => Math.max(t, m.bdaySeen || 0), 0);
+}
+function bdayOn() {
+  const now = Date.now(), seen = bdaySeenAt();
+  return now < BDAY_CAP && (!seen || now < seen + BDAY_KEEP);
+}
+// Harold's own phone notes the first time he sees it, and tells the family.
+function bdayMarkSeen() {
+  const me = FAM.on ? member(FAM.uid).name : S.name;
+  if (!isHarold(me) || ls.get('bdaySeen', 0)) return;
+  const now = Date.now(); ls.set('bdaySeen', now);
+  if (FAM.on) quiet(FB.updateDoc(fref('members', FAM.uid), { bdaySeen: now }));
+}
 // A shower of confetti over the whole screen each time the app opens, while the card is up.
 let bdayShown = false;
 function bdayConfetti() {
-  if (bdayShown || Date.now() >= BDAY_END || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (bdayShown || !bdayOn() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   bdayShown = true;
   const el = document.createElement('div'); el.className = 'bday-rain'; el.setAttribute('aria-hidden', 'true');
   const cols = ['#FFD23F', '#FF8FA3', '#2EC4B6', '#F0412E', '#7B5CFA', '#FFF4E0'];
@@ -43,16 +60,16 @@ function bdayConfetti() {
   document.body.appendChild(el); setTimeout(() => el.remove(), 4800);
 }
 function bdayHTML() {
-  if (Date.now() >= BDAY_END) return '';
-  setTimeout(bdayConfetti, 300);
+  if (!bdayOn()) return '';
+  setTimeout(bdayConfetti, 300); bdayMarkSeen();
   const t = T();
   return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
-    <img src="icons/logo-128.png" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
+    <div><span class="bdate">${esc(t.bdayAge)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
 }
 function calHTML() {
   // A quiet line at the top: the date, and an occasion only when near.
   const t = T(), now = new Date();
-  const bits = [`<span>${esc(fmtDate(Date.now() < BDAY_END ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
+  const bits = [`<span>${esc(fmtDate(bdayOn() ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   for (const o of datedOccasions(now).filter(o => o.days <= 14).slice(0, 2)) {
     const n = recipes.filter(r => (r.holidays || []).includes(o.key)).length, label = t.occSoon(occLabel(o.key), o.days);
     bits.push(n ? `<button data-act="holfilter" data-h="${o.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);

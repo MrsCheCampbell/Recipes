@@ -120,7 +120,7 @@ On Android:
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
-    bdayT: '¡Feliz cumpleaños, Harold!', bdayDate: '28 de octubre', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
+    bdayT: '¡Feliz cumpleaños, Harold!', bdayAge: '¡41 años!', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     erase: 'Delete', later: 'Later',
   }
 };

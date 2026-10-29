@@ -702,12 +702,11 @@ a.chip { text-decoration: none; color: inherit; }
 /* Birthday card (temporary) */
 .bday { position: relative; overflow: hidden; display: flex; align-items: center; gap: 14px; margin: 10px 0 10px; padding: 16px; border-radius: 18px;
   background: linear-gradient(135deg, #2EC4B6, #22A59A); color: #fff; box-shadow: 0 6px 18px rgba(46,196,182,.35); animation: bdayIn .6s var(--ease) both; }
-.bday img { flex: none; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.18); position: relative; animation: bdayBob 2.4s ease-in-out infinite; }
 .bday h2 { margin: 0; font-family: var(--font-display); font-style: italic; font-size: 1.4rem; line-height: 1.1; position: relative; text-shadow: 0 1px 6px rgba(0,0,0,.18); }
 .bday .bdate { display: inline-block; margin-bottom: 4px; padding: 2px 9px; border-radius: 99px; background: #FFD23F; color: #1E1A2E; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; position: relative; }
 .bday p { margin: 4px 0 0; font-size: .92rem; opacity: .95; position: relative; }
 .bday .confetti { position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .85; }
-.bday > div, .bday > img { z-index: 1; position: relative; }
+.bday > div { z-index: 1; position: relative; }
 .bday .confetti i { position: absolute; top: -12px; width: 7px; height: 12px; border-radius: 2px; background: #FFD23F; animation: bdayFall 4s linear infinite; }
 .bday .confetti i:nth-child(3n) { background: #FF8FA3; } .bday .confetti i:nth-child(3n+1) { background: #FFF4E0; } .bday .confetti i:nth-child(4n) { background: #F0412E; }
 .bday .confetti i:nth-child(1) { left: 4%; animation-delay: 0.00s; animation-duration: 3.2s; }

@@ -55,8 +55,8 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Two weeks before, a quiet line at the top says e.g. "Réveillon du Nouvel An dans 9 jours". Tapping it shows the recipes tagged for it.
 - The app is in English. It still reads French recipes (links, pasted text, photos). Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
-**Birthday (until October 31, 2026)**
-- A teal *¡Feliz cumpleaños, Harold!* card (with a *28 de octubre* tag) at the top of Recipes, and a shower of confetti every time the app opens. While the card is up, the date line reads Wednesday, October 28. Both go away at midnight after October 31, on the phone's own clock, so it works the same in Spain and France.
+**Harold's birthday (temporary)**
+- A teal *¡Feliz cumpleaños, Harold!* card (with a *¡41 años!* tag) at the top of Recipes, and a shower of confetti every time the app opens. While the card is up, the date line reads Wednesday, October 28. It waits for Harold: once his phone has shown it, it stays two more days on everyone's phone, then goes away (and in any case after December 31, 2026).
 - A phone in Spain uses Madrid for the weather (Barcelona, Valencia, Sevilla, Málaga and Bilbao are in *More → Settings*, or use your location).
 
 **Look**
