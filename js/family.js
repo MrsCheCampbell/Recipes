@@ -64,6 +64,9 @@ async function famStart() {
   FAM.unsub.push(FB.onSnapshot(fcol('members', FAM.uid, 'saved'), s => { FAM.saved = new Map(); s.forEach(d => FAM.saved.set(d.id, d.data())); rebuild(); }, e => console.warn(e)));
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('recos'), FB.where('to', '==', FAM.uid)), s => { FAM.recos = []; s.forEach(d => FAM.recos.push({ ...d.data(), id: d.id })); FAM.recos.sort((a, b) => b.at - a.at); famChanged(); }, e => console.warn(e)));
   psListen();
+  // The family's name can be changed by whoever created it; everyone picks it up here.
+  FB.getDoc(fref()).then(d => { if (!d.exists()) return; const f = d.data(); FAM.createdBy = f.createdBy;
+    if (f.name && f.name !== FAM.name) { FAM.name = f.name; ls.set('famName', f.name); if (current === 'famille') renderFamily(); } }).catch(() => {});
   FB.getDoc(fref('secrets', 'claude')).then(d => { const k = d.exists() ? d.data().key : ''; if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey'); }).catch(() => {});
   await ready;
   FAM.ready = true;
@@ -308,6 +311,8 @@ function renderFamily() {
         <button class="btn primary" data-act="faminvite">${ico('reco')}${esc(t.famInvite)}</button>
         <p class="hint" style="margin:0">${esc(t.famInviteHint)}</p>
         <div class="field"><label for="invLink">${esc(t.invLinkLbl)}</label><div class="invbox"><input class="input" id="invLink" readonly value="${esc(famInviteLink())}"><button class="btn" data-act="invcopy">${esc(t.copyLink)}</button></div></div></section>
+      ${FAM.createdBy === FAM.uid ? `<section class="panel"><div class="field"><label for="famRenameIn">${esc(t.famName)}</label><input class="input" id="famRenameIn" value="${esc(FAM.name || '')}"></div>
+        <button class="btn" data-act="famrename">${esc(t.famRename)}</button><p class="hint" style="margin:0">${esc(t.famRenameHint)}</p></section>` : ''}
       <section class="panel"><h2>${esc(t.yourProfile)}</h2>
         <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(me.name || '')}"></div>
         <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
@@ -332,6 +337,11 @@ async function famCreate() {
     await famStart(); await offerMigration();
     go('#/famille');
   } catch (e) { console.warn(e); toast(t.famErr); }
+}
+async function famRename() {
+  const t = T(), name = $('#famRenameIn').value.trim().slice(0, 60); if (!name || name === FAM.name) return;
+  try { await FB.updateDoc(fref(), { name }); FAM.name = name; ls.set('famName', name); toast(t.saved); renderFamily(); }
+  catch (e) { console.warn(e); toast(t.famRenameFail); }
 }
 function famSaveLocal(cfg, fid, name, code) {
   FAM.cfg = cfg; FAM.fid = fid; FAM.name = name; FAM.code = code;
