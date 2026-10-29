@@ -427,6 +427,7 @@ function route() {
   $('#nav').hidden = a === 'edit';
   commentUnsub?.(); commentUnsub = null;
   if (a === 'famille') return renderFamily();
+  if (a === 'feedback') return renderFeedback();
   if (a === 'join' && b) return renderJoin(b);
   if (a === 'r' && byId(b)) return renderRecipe(byId(b));
   if (a === 'cook' && byId(b)) { renderRecipe(byId(b)); return openCook(byId(b)); }

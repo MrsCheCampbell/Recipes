@@ -736,3 +736,16 @@ a.chip { text-decoration: none; color: inherit; }
 .invbox { display: flex; gap: 8px; } .invbox .input { flex: 1; min-width: 0; font-size: .85rem; color: var(--muted); }
 .newfam summary { font-weight: 700; cursor: pointer; }
 .iosjoin { border: 2px solid var(--accent); }
+
+/* Folded cards on More */
+details.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-display); font-style: italic; font-size: 1.25rem; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s; margin-right: 4px; }
+details.fold[open] > summary::after { transform: rotate(-135deg); }
+details.fold[open] > summary { margin-bottom: 12px; }
+details.fold:not([open]) { padding-block: 14px; }
+/* Feedback */
+.fbcard { border: 2px solid var(--accent); }
+.fbhero h2 { font-size: 1.5rem; }
+.fbideas { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; color: var(--muted); font-style: italic; }
+.fblist { display: grid; gap: 12px; } .fbitem { display: flex; gap: 10px; align-items: flex-start; } .fbitem p { margin: 4px 0 0; white-space: pre-wrap; }

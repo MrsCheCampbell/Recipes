@@ -92,6 +92,8 @@ document.addEventListener('click', async e => {
       if (navigator.share) { try { await navigator.share({ title: FAM.name, text, url }); break; } catch (e) { if (e.name === 'AbortError') break; } }
       try { await navigator.clipboard.writeText(text + '\n\n' + url); } catch {} toast(t.copied); break; }
     case 'famrename': famRename(); break;
+    case 'fbsend': sendFeedback(); break;
+    case 'fbdone': if (FAM.createdBy === FAM.uid) { try { await FB.deleteDoc(fref('feedback', b.dataset.id)); } catch (e) { console.warn(e); } loadFeedback(); } break;
     case 'invcopy': try { await navigator.clipboard.writeText(famInviteLink()); toast(t.linkCopied); } catch { $('#invLink').select(); } break;
     case 'invcopyhere': try { await navigator.clipboard.writeText(location.href); toast(t.linkCopied); } catch {} break;
     case 'joinclip': { let v = ''; try { v = await navigator.clipboard.readText(); } catch {} const m = (v.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1];

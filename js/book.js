@@ -66,6 +66,8 @@ function bdayHTML() {
   return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
     <div><span class="bdate">${esc(t.bdayAge)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
 }
+// The inbox is for recipes sent by link from outside the family: in a family, the envelope only shows when one is waiting.
+const mailBtn = () => FAM.on && !inbox.length ? '' : `<a href="#/inbox" class="mailbtn" aria-label="${esc(T().inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a>`;
 function calHTML() {
   // A quiet line at the top: the date, and an occasion only when near.
   const t = T(), now = new Date();
@@ -231,7 +233,7 @@ function renderFeed() {
   $('#view').innerHTML = `
     <div class="wrap">
       <header class="top">
-        <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}<a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></span></div>
+        <div class="mast"><span>${esc(FAM.name || t.appName)}</span><span class="mast-r">${Object.keys(FAM.members).slice(0, 5).map(id => avatarHTML(id, 'xs')).join('')}${mailBtn()}</span></div>
         <h1 class="greet">${esc(t.tabFeed)}</h1>
       </header>
       ${FAM.on ? composerHTML() + feedHTML() : feedIntroHTML()}
@@ -249,7 +251,7 @@ function renderList(favOnly) {
   $('#view').innerHTML = `
     <div class="wrap">
       <header class="hbar"><span class="hname">${favOnly ? '' : '<img class="hlogo" src="icons/logo-128.png" alt="" width="34" height="34">'}${esc(favOnly ? t.carnets : t.appName)}</span>
-        <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
+        ${mailBtn()}</header>
       ${favOnly ? carnetTabs('fav') : `${bdayHTML()}${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">

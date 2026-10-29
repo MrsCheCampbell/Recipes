@@ -104,6 +104,14 @@ service cloud.firestore {
           || (resource.data.get('rid', null) != null && recipe(fid, resource.data.rid).owner == uid()));
       }
 
+      // Ideas and suggestions: anyone in the family can send one; only whoever set up the family reads them.
+      match /feedback/{id} {
+        allow create: if isMember(fid) && request.resource.data.by == uid()
+          && request.resource.data.text is string && request.resource.data.text.size() <= 4000;
+        allow read: if isMember(fid) && (family(fid).createdBy == uid() || resource.data.by == uid());
+        allow delete: if isMember(fid) && family(fid).createdBy == uid();
+      }
+
       // One Claude key shared by the family, so nobody has to set it up on their own phone.
       match /secrets/{id} {
         allow read, write: if isMember(fid);
