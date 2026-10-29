@@ -5,7 +5,6 @@
 // ---------- Fridge: what can I make? ----------
 let pantry = ls.get('pantry', []);
 const savePantry = () => ls.set('pantry', pantry);
-const QUICK_FR = ['œufs', 'beurre', 'oignons', 'ail', 'tomates', 'pommes de terre', 'pâtes', 'riz', 'poulet', 'crème', 'fromage', 'citron', 'carottes', 'farine', 'lait', 'courgettes'];
 const QUICK_EN = ['eggs', 'butter', 'onions', 'garlic', 'tomatoes', 'potatoes', 'pasta', 'rice', 'chicken', 'cream', 'cheese', 'lemon', 'carrots', 'flour', 'milk', 'courgettes'];
 // Basics everyone has: a line made only of these (plus measures) doesn't count as missing.
 const STAPLE_W = new Set('sel poivre eau huile olive tournesol neutre fleur noir moulu salt pepper water oil black ground'.split(' '));
@@ -39,7 +38,7 @@ function bookMatches() {
 let claudeBusy = false, claudeTimer = null;
 function renderFridge() {
   current = 'frigo'; navHTML('frigo');
-  const t = T(), quick = (S.lang === 'en' ? QUICK_EN : QUICK_FR).filter(q => !pantry.some(p => norm(p) === norm(q)));
+  const t = T(), quick = QUICK_EN.filter(q => !pantry.some(p => norm(p) === norm(q)));
   const last = ls.get('claudeLast', null);
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><div class="mast"><span>${esc(t.nav.fridge)}</span><span>${esc(String(pantry.length).padStart(2, '0'))}</span></div><h1 class="greet" style="font-style:italic">${esc(t.fridgeTitle)}</h1></header>
@@ -96,17 +95,16 @@ async function claudeClient() {
   return new AnthropicSDK({ apiKey: claudeKey(), dangerouslyAllowBrowser: true });
 }
 function claudePrompt() {
-  const kosher = recipes.filter(r => r.kashrut).length >= Math.max(2, recipes.length * 0.3);
   const local = bookMatches().slice(0, 8);
   const shortlist = [...new Set([...local.map(x => x.r), ...[...recipes].sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.cookCount || 0) - (a.cookCount || 0))])].slice(0, 60);
   const book = shortlist.map(r => ({ id: r.id, title: r.title, category: r.category || undefined, rating: r.rating || 0, favorite: !!r.favorite, cooked: r.cookCount || 0,
     ingredients: lines(r.ingredients).filter(l => !isHeading(l)).slice(0, 14).map(l => splitQty(l, 1).rest.trim()) }));
   const season = seasonNow(), w = wx && Date.now() - wx.at < 3 * 3600e3 ? `${wx.temp}°C in ${wx.city}` : 'unknown';
-  const lang = S.lang === 'fr' ? 'French' : 'English';
+  const lang = 'English';
   const system = `You help a home cook decide what to make with what they have. Write everything for the cook in ${lang}, warmly and briefly, like a friend who cooks well.
-Use the web_search tool to find 3 to 5 real recipe pages that use the ingredients on hand${S.lang === 'fr' ? ' (prefer French-language recipe sites such as Marmiton, 750g, Cuisine AZ, Ricardo, Journal des Femmes, or good French blogs)' : ''}. Only suggest a page you actually found in your search results, and give its exact URL. Choose individual recipe pages, not home pages or lists.
+Use the web_search tool to find 3 to 5 real recipe pages that use the ingredients on hand. Only suggest a page you actually found in your search results, and give its exact URL. Choose individual recipe pages, not home pages or lists.
 Also pick up to 4 of the cook's own saved recipes that fit, using their ids exactly as given. Favour the cook's highly rated and often-cooked recipes when the ingredients fit.
-${kosher ? 'Many of the cook\'s recipes are kosher, so prefer suggestions that fit kashrut: no pork or shellfish, and no meat cooked with dairy.\n' : ''}When you are done, reply with only one JSON object between <json> and </json>, with this shape:
+When you are done, reply with only one JSON object between <json> and </json>, with this shape:
 {"summary": "2 to 4 sentences: what to cook tonight and why", "fromBook": [{"id": "saved recipe id", "why": "one short sentence"}], "newIdeas": [{"title": "recipe name", "url": "https://...", "site": "site name", "why": "one short sentence", "uses": ["ingredients on hand it uses"], "missing": ["what they would need to buy"], "time": "approximate total time, e.g. 40 min"}]}`;
   const user = `Ingredients on hand: ${pantry.join(', ')}.
 Season: ${season}. Current weather: ${w}. Date: ${new Date().toDateString()}.

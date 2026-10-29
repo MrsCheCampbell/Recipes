@@ -3,12 +3,6 @@
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- List view ----------
-function greeting() {
-  const now = new Date(), h = now.getHours(), dow = now.getDay();
-  const st = shabbatTimes(now);
-  if ((dow === 5 && h >= 12) || (dow === 6 && (!st || now < st.endAt))) return T().shabbatShalom;
-  return T().hello[h < 5 ? 0 : h < 12 ? 1 : h < 18 ? 2 : 3].replace('-', '\u2011');
-}
 const occChip = (h, sel = []) => { const on = (sel || []).includes(h); return `<button type="button" class="chip ${on ? 'on' : ''}" data-h="${h}" aria-pressed="${on}">${esc(occLabel(h))}</button>`; };
 function addOccasion(onAdded) {
   const t = T();
@@ -27,30 +21,38 @@ function addOccasion(onAdded) {
     };
   });
 }
-// Next date for occasions that have one (Thanksgiving, New Year's Eve, birthdays the user dated).
+// Next date for occasions that have one (New Year's Eve, birthdays the user dated).
 function datedOccasions(now = new Date()) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const next = (mmdd) => { const [m, d] = mmdd.split('-').map(Number); let x = new Date(today.getFullYear(), m - 1, d); if (x < today) x = new Date(today.getFullYear() + 1, m - 1, d); return x; };
-  const thanks = y => { const d = new Date(y, 10, 1); d.setDate(1 + ((4 - d.getDay() + 7) % 7) + 21); return d; };
-  let tg = thanks(today.getFullYear()); if (tg < today) tg = thanks(today.getFullYear() + 1);
-  const list = [{ key: 'thanksgiving', date: tg }, { key: 'newyear', date: next('12-31') }];
+  const list = [{ key: 'newyear', date: next('12-31') }];
   for (const c of customOcc()) if (c.date) list.push({ key: c.key, date: next(c.date) });
   return list.map(o => ({ ...o, days: Math.round((o.date - today) / 864e5) })).sort((a, b) => a.days - b.days);
 }
+// Harold's birthday (Oct 28): a little card that goes away by itself after Oct 31, 2026, wherever the phone is
+// (midnight on the phone's own clock, so Spain and France alike). While it shows, the date line stays on Oct 28.
+const BDAY_END = new Date(2026, 10, 1).getTime(), BDAY_DAY = new Date(2026, 9, 28, 12);
+// A shower of confetti over the whole screen each time the app opens, while the card is up.
+let bdayShown = false;
+function bdayConfetti() {
+  if (bdayShown || Date.now() >= BDAY_END || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  bdayShown = true;
+  const el = document.createElement('div'); el.className = 'bday-rain'; el.setAttribute('aria-hidden', 'true');
+  const cols = ['#FFD23F', '#FF8FA3', '#2EC4B6', '#F0412E', '#7B5CFA', '#FFF4E0'];
+  el.innerHTML = Array.from({ length: 70 }, (_, i) => `<i style="left:${Math.random() * 100}%;background:${cols[i % cols.length]};animation-delay:${(Math.random() * .9).toFixed(2)}s;animation-duration:${(2.2 + Math.random() * 1.6).toFixed(2)}s;--x:${Math.round(Math.random() * 120 - 60)}px;--r:${Math.round(360 + Math.random() * 720)}deg"></i>`).join('');
+  document.body.appendChild(el); setTimeout(() => el.remove(), 4800);
+}
+function bdayHTML() {
+  if (Date.now() >= BDAY_END) return '';
+  setTimeout(bdayConfetti, 300);
+  const t = T();
+  return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
+    <img src="icons/icon.svg" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
+}
 function calHTML() {
-  // A quiet line under the greeting: the date, and Shabbat/holiday only when near.
-  const t = T(), now = new Date(), dow = now.getDay();
-  const bits = [`<span>${esc(fmtDate(now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
-  if (dow >= 4 && dow <= 6) {
-    const st = shabbatTimes(now);
-    if (st && !(dow === 6 && now > st.endAt)) bits.push(`<span title="${esc(st.city)} · ${esc(t.approx)}">${esc(t.hol.shabbat)} · ${esc(t.candlesShort(st.candles))}</span>`);
-  }
-  const hol = nextHoliday(now);
-  if (hol && hol.offset <= 14) {
-    const name = t.hol[hol.key], n = recipes.filter(r => (r.holidays || []).includes(hol.key)).length;
-    const label = t.holSoon(name, hol.offset - 1);
-    bits.push(n ? `<button data-act="holfilter" data-h="${hol.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);
-  }
+  // A quiet line at the top: the date, and an occasion only when near.
+  const t = T(), now = new Date();
+  const bits = [`<span>${esc(fmtDate(Date.now() < BDAY_END ? BDAY_DAY : now, { weekday: 'long', day: 'numeric', month: 'long' }))}</span>`];
   for (const o of datedOccasions(now).filter(o => o.days <= 14).slice(0, 2)) {
     const n = recipes.filter(r => (r.holidays || []).includes(o.key)).length, label = t.occSoon(occLabel(o.key), o.days);
     bits.push(n ? `<button data-act="holfilter" data-h="${o.key}">${esc(label)}</button>` : `<span>${esc(label)}</span>`);
@@ -136,7 +138,7 @@ function moodScore(r, key) {
   const title = r._ix.title, body = title + ' ' + r._ix.ing;
   for (const [pat, pts, label] of m.words) {
     let re = moodRe.get(pat); if (!re) { re = new RegExp('\\b(' + pat + ')'); moodRe.set(pat, re); }
-    const lbl = S.lang === 'en' ? (WHY_EN[label] || label) : label;
+    const lbl = WHY_EN[label] || label;
     if (re.test(title)) { score += pts * 2; why ||= lbl; } else if (re.test(body)) { score += pts; why ||= lbl; }
   }
   if (m.long && totalTime(r) >= 60) score += m.long;
@@ -183,7 +185,6 @@ function chipsHTML() {
     L.who && pill('who', avatarHTML(L.who, 'xs') + esc(L.who === FAM.uid ? t.mine : member(L.who).name)),
     L.cat && pill('cat', esc(t.cat[L.cat])),
     L.hol && pill('hol', esc(occLabel(L.hol))),
-    L.kash && pill('kash', esc(t.kash[L.kash])),
     L.quick && pill('quick', '≤ 30 min'),
     L.mood && pill('mood', esc(moodTitle(L.mood))),
   ].filter(Boolean);
@@ -232,7 +233,7 @@ function renderList(favOnly) {
     <div class="wrap">
       <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
         <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
-      ${favOnly ? carnetTabs('fav') : `<p class="hello">${esc(S.name ? `${greeting()}, ${S.name}` : greeting())}</p>${calHTML()}${bannerHTML()}`}
+      ${favOnly ? carnetTabs('fav') : `${bdayHTML()}${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
       <div class="search" role="search">${ico('search', 'lead')}
@@ -267,7 +268,7 @@ function cardHTML(r) {
   const pic = r.thumb || r.photo;
   return `<a class="card ${pic ? 'has-pic' : ''}" href="#/r/${encodeURIComponent(r.id)}">
     <div class="min"><h3>${esc(r.title)}</h3>
-      <div class="meta">${meta.map(m => `<span>${esc(m)}</span>`).join('')}${r.kashrut ? `<span class="kbadge k-${r.kashrut}">${esc(t.kash[r.kashrut])}</span>` : ''}${starsMini(r.rating)}</div>
+      <div class="meta">${meta.map(m => `<span>${esc(m)}</span>`).join('')}${starsMini(r.rating)}</div>
       ${FAM.on && r.owner ? `<div class="by">${avatarHTML(r.owner, 'xs')}<span>${esc(r.owner === FAM.uid ? t.you : member(r.owner).name)}</span></div>` : ''}</div>
     ${pic ? `<img class="cpic" src="${esc(pic)}" alt="" loading="lazy" decoding="async">` : ''}
     ${r.favorite ? `<span class="cfav" aria-label="${esc(t.favorites)}">${ico('bookmark')}</span>` : ''}</a>`;
@@ -331,9 +332,7 @@ function openFilters() {
     ${owners.length > 1 ? group(t.whoAdded, 'who', [['', t.anyF], ...owners.map(id => [id, id === FAM.uid ? t.mine : member(id).name])]) : ''}
     ${group(t.occSeasons, 'hol', SEASONS.map(h => [h, occLabel(h)]))}
     ${group(t.occMoments, 'hol', generalOcc().map(h => [h, occLabel(h)]))}
-    ${group(t.occJewish, 'hol', HOLIDAYS.map(h => [h, occLabel(h)]))}
     ${group(t.category, 'cat', [['', t.anyF], ...CATS.filter(c => c === st.cat || recipes.some(r => r.category === c)).map(c => [c, t.cat[c]])])}
-    ${group(t.kashrutF, 'kash', [['', t.anyF], ...KASHRUT.map(k => [k, t.kashLong[k]])])}
     <div class="row2 fbar"><button class="btn" data-x="reset">${esc(t.resetFilters)}</button><button class="btn primary" data-x="ok">${esc(t.filtersShow(count()))}</button></div>`;
   sheet(body(), (el, close) => {
     el.classList.add('filters');
@@ -381,7 +380,7 @@ function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
 // Voice search (Chrome on Android)
 function voiceSearch() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return;
-  const rec = new SR(); rec.lang = S.lang === 'fr' ? 'fr-FR' : 'en-US'; rec.interimResults = false;
+  const rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
   const btn = $('[data-act="voice"]'); btn.style.color = 'var(--danger)';
   rec.onresult = e => { L.q = e.results[0][0].transcript; $('#q').value = L.q; renderResults(); };
   rec.onend = () => { btn.style.color = ''; };
@@ -409,7 +408,6 @@ function renderRecipe(r) {
   }
 
   const badges = [
-    r.kashrut && `<span class="badge kbadge k-${r.kashrut}">${esc(t.kashLong[r.kashrut])}</span>`,
     r.category && `<span class="badge">${esc(t.cat[r.category])}</span>`,
     ...(r.holidays || []).filter(h => occLabel(h)).map(h => `<span class="badge">${esc(occLabel(h))}</span>`),
     ...(r.tags || []).map(g => `<span class="badge">#${esc(g)}</span>`),
@@ -605,7 +603,6 @@ function renderEdit(r) {
   const draft = ls.get('draft');
   const draftKey = isNew ? 'new' : r.id;
   const showDraft = draft && draft.key === draftKey && draft.ts > (r.updatedAt || 0);
-  const kOpt = ['', ...KASHRUT].map(k => `<label class="${k ? 'k-' + k : ''}"><input type="radio" name="kashrut" value="${k}" ${(r.kashrut || '') === k ? 'checked' : ''}>${esc(k ? t.kash[k] : t.kash.none)}</label>`).join('');
   $('#view').innerHTML = `
     <div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.cancel)}">${ico('x')}</button><h1>${esc(isNew ? t.newRecipe : t.editRecipe)}</h1></div>
     <form class="form wrap" id="form" novalidate>
@@ -629,11 +626,7 @@ function renderEdit(r) {
         <div class="wrapchips occ-chips" id="fSeason">${SEASONS.map(h => occChip(h, r.holidays)).join('')}</div>
         <span class="eyebrow" style="margin-top:6px">${esc(t.occMoments)}</span>
         <div class="wrapchips occ-chips" id="fOcc">${generalOcc().map(h => occChip(h, r.holidays)).join('')}<button type="button" class="chip add" data-act="addocc">${ico('plus')}${esc(t.addOcc)}</button></div>
-        <span class="eyebrow" style="margin-top:6px">${esc(t.occJewish)}</span>
-        <div class="wrapchips occ-chips" id="fHol">${HOLIDAYS.map(h => occChip(h, r.holidays)).join('')}</div></div>
-      <details class="more-box" ${r.kashrut ? 'open' : ''}><summary>${esc(t.kashrut)}</summary><div class="in">
-      <div class="seg">${kOpt}</div>
-      </div></details>
+</div>
       <div class="row3">
         <div class="field"><label for="fServ">${esc(t.servingsF)}</label><input class="input" id="fServ" type="number" inputmode="numeric" min="0" value="${esc(r.servings || '')}"></div>
         <div class="field"><label for="fPrep">${esc(t.prepF)}</label><input class="input" id="fPrep" type="number" inputmode="numeric" min="0" value="${esc(r.prep || '')}"></div>
@@ -666,7 +659,7 @@ function drawPhotoBox() {
 function readForm() {
   const v = id => $('#' + id)?.value?.trim() ?? '';
   return {
-    title: v('fTitle'), link: v('fLink'), category: v('fCat'), kashrut: $('input[name="kashrut"]:checked')?.value || '',
+    title: v('fTitle'), link: v('fLink'), category: v('fCat'), kashrut: '',
     holidays: $$('.occ-chips .chip.on[data-h]').map(b => b.dataset.h),
     servings: +v('fServ') || '', prep: +v('fPrep') || '', cook: +v('fCook') || '',
     ingredients: $('#fIng')?.value || '', steps: $('#fSteps')?.value || '', notes: $('#fNotes')?.value || '', note: $('#fNote')?.value || '', source: v('fSource'),
@@ -678,8 +671,6 @@ function fillForm(d, onlyEmpty = false) {
   set('fTitle', d.title); set('fLink', d.link); set('fCat', d.category); set('fServ', d.servings); set('fPrep', d.prep); set('fCook', d.cook);
   set('fIng', d.ingredients); set('fSteps', d.steps); set('fNotes', d.notes); set('fSource', d.source);
   if (d.tags?.length) set('fTags', d.tags.join(', '));
-  if (d.kashrut !== undefined && !onlyEmpty) { const k = $(`input[name="kashrut"][value="${d.kashrut}"]`); if (k) k.checked = true; }
-  if (!onlyEmpty && d.kashrut) $('.more-box').open = true;
   if (d.holidays && !onlyEmpty) $$('.occ-chips .chip[data-h]').forEach(b => { const on = d.holidays.includes(b.dataset.h); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
   if (d.photo && (!onlyEmpty || !formPhoto)) { formPhoto = d.photo; drawPhotoBox(); if (/^https?:/.test(d.photo)) $('#fPhotoUrl').value = d.photo; }
 }
@@ -739,8 +730,8 @@ async function claudeTags(r) {
     betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
     output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags', 'keywords'], properties: {
       category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } }, keywords: { type: 'array', items: { type: 'string' } } } } } },
-    messages: [{ role: 'user', content: `File this recipe for a family cookbook (French-Jewish-American family in Bordeaux).
-Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, thanksgiving, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner); Jewish holidays only if the dish is traditional for that holiday (shabbat, roshhashana, yomkippur for the meal before or after the fast, sukkot, hanukkah, tubishvat, purim, pesach only if kosher for Passover, shavuot). Usually 2 to 5 tags. Leave out anything doubtful.
+    messages: [{ role: 'user', content: `File this recipe for a family cookbook (an American family in Bordeaux).
+Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner). Usually 2 to 5 tags. Leave out anything doubtful.
 keywords: up to 5 short search words in the recipe's own language (main ingredient, dish type, cuisine), not repeating the title.
 
 <recipe>
@@ -1062,7 +1053,7 @@ async function readBookPages(files) {
   let text = '', cur = 1, worker;
   try {
     await loadTesseract();
-    worker = await Tesseract.createWorker(S.lang === 'fr' ? ['fra', 'eng'] : ['eng', 'fra'], 1, {
+    worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
       workerPath: vendorURL('worker.min.js'), corePath: vendorURL(''), langPath: vendorURL('lang'),
       logger: m => { if (m.status === 'recognizing text') set(t.ocrReading(cur, pages.length, Math.round(m.progress * 100)), m.progress); },
     });

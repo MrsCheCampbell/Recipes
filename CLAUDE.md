@@ -10,6 +10,6 @@ Every merge to `master` deploys the site to Netlify, and the number of deploys p
 
 ## How the app is laid out
 - Plain files, no build step: `index.html` loads `css/app.css` and the scripts in `js/` (one shared scope, loaded in order; the README lists what each holds).
-- Every word shown to people lives in `js/strings.js`, in French and English.
+- Every word shown to people lives in `js/strings.js` (English only).
 - When releasing, bump `VERSION` in `sw.js` and every `?v=` in `index.html` to the same value, or phones keep the old files.
 - Changes to `firestore.rules` must be published by hand in the Firebase console; say so in the pull request.
