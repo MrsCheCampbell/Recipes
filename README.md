@@ -2,13 +2,9 @@
 
 A recipe app for our family. It installs on a phone straight from Chrome or Safari, works offline, and keeps every recipe on the phone.
 
-## Putting it online (one time, ~2 minutes)
+## Putting it online
 
-1. On GitHub, open this repo → **Settings** → **Pages**.
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**, pick **master** and **/ (root)**, then **Save**.
-3. After about a minute the app is live at **https://mrschecampbell.github.io/Recipes/**
-
-(GitHub Pages needs the repo to be public on a free plan.)
+The app is hosted on Netlify: every merge to `master` deploys it (see CLAUDE.md — deploys are limited, so changes go through pull requests).
 
 ## Installing on Dad's Android phone
 
@@ -96,7 +92,8 @@ The feed has its own tab in the bottom bar, **Famille**. A small red number on i
 - **Mute**: in *Plus → La famille*, untick anyone you don't want in your feed, or turn the feed off entirely.
 - **Avatars**: each person picks a drawn avatar and a colour.
 - **Cocktails** have their own section (and illustration).
-- **Adding someone later** (your brother): *Plus → La famille → Inviter quelqu'un* sends a link. They pick a name and avatar; everything already there stays.
+- **Renaming the family**: whoever created it can change the name in *More → Family*; everyone sees it the next time they open the app.
+- **Adding someone later** (your brother): *More → Family → Invite someone* shares a message with the steps and the invite link (the same link is shown under the button, with **Copy link**). They pick a name and avatar; everything already there stays.
 - Works offline: everything is cached on the phone, and changes sync when the connection comes back.
 
 ### Setting up the family (once, about 10 minutes)
@@ -109,7 +106,7 @@ The family's recipes live in your own free Firebase project (Google). Nobody els
 4. In Firestore, open the **Rules** tab, replace everything with the contents of [`firestore.rules`](firestore.rules), and click **Publish**.
 5. **Project settings (gear) → Your apps → Web (`</>`)** → register an app (no hosting needed) → copy the `firebaseConfig = { ... }` block.
 6. In the app: **Plus → La famille → Créer la famille**, paste that block, name the family, pick your name and avatar.
-7. **Inviter quelqu'un** → send the link to Mom and Dad. When they tap it, the app opens on "Rejoindre", they choose their name and avatar, done.
+7. **Invite someone** → send the message to everyone. On Android they tap the link, pick a name, done. On iPhone the home-screen app keeps its own data, separate from Safari, so they add the app to the home screen first, copy the link, then tap **Paste invite link** in *More → Family* inside the app (the join page in Safari says so).
 
 When joining, the app offers to add the recipes already on that phone to the family cookbook.
 

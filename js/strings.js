@@ -80,8 +80,9 @@ const STR = {
     feedEmptyT: 'Nothing cooking yet', feedEmpty: 'When someone cooks something (or spots a lovely plate), the photo lands here.',
     agoNow: 'just now', agoMin: n => `${n} min ago`, agoH: n => `${n} h ago`, agoYesterday: 'yesterday', agoD: n => `${n} days ago`,
     family: 'Family', famIntroT: 'Cooking together, each at home', famIntro: 'Everyone keeps their own book and sees what the others are cooking: a recipe feed, hearts, stars, comments and recommendations. Any recipe can stay private or be hidden from someone.',
-    famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Tap it, or paste it here.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family',
-    famCreateT: 'Create the family (once)', famSteps: ['At <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, create a project (free). Google Analytics isn’t needed.', '<b>Authentication</b> → Get started → enable <b>Anonymous</b>.', '<b>Firestore Database</b> → Create database (production mode, any region).', '<b>Rules</b> tab: replace everything with <a href="https://raw.githubusercontent.com/MrsCheCampbell/Recipes/master/firestore.rules" target="_blank" rel="noopener">these rules</a>, then <b>Publish</b>.', '<b>Project settings</b> → Your apps → Web icon <b>&lt;/&gt;</b> → register the app, then copy the <b>firebaseConfig</b> block below.'],
+    famJoinT: 'Join my family', famJoinText: 'Did someone send you an invite link? Copy it, then tap the button.', famJoinPh: 'Paste the invite link', famJoinBtn: 'Join the family', pasteInvite: 'Paste invite link', famRename: 'Rename the family', famRenameHint: 'Everyone sees the new name the next time they open the app.', famRenameFail: 'Couldn’t rename. Check the internet connection.', famNewT: 'Set up a new family instead', invLinkLbl: 'Or copy the invite link', copyLink: 'Copy link', linkCopied: 'Link copied',
+    iosJoinT: 'On iPhone, do this first', iosJoinSteps: ['Tap Share (the square with an arrow pointing up), then <b>Add to Home Screen</b>, then <b>Add</b>.', 'Tap <b>Copy link</b> below.', 'Open <b>Our Kitchen</b> from your home screen, go to More → Family, and tap <b>Paste invite link</b>.'],
+    famCreateT: 'Create the family (only once, for everyone)', famSteps: ['At <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, create a project (free). Google Analytics isn’t needed.', '<b>Authentication</b> → Get started → enable <b>Anonymous</b>.', '<b>Firestore Database</b> → Create database (production mode, any region).', '<b>Rules</b> tab: replace everything with <a href="firestore.rules" target="_blank" rel="noopener">these rules</a>, then <b>Publish</b>.', '<b>Project settings</b> → Your apps → Web icon <b>&lt;/&gt;</b> → register the app, then copy the <b>firebaseConfig</b> block below.'],
     famCfg: 'Firebase configuration', famName: 'Family name', famNameDefault: 'The family', yourAvatar: 'Your avatar', famCreateBtn: 'Create the family',
     famMembers: 'The family', nRecipesBy: n => n === 1 ? '1 recipe' : `${n} recipes`, inMyFeed: 'In my feed', famInvite: 'Invite someone', famInviteHint: 'Send the link by WhatsApp, SMS or email. They pick a name and an avatar, and everything already there stays.',
     yourProfile: 'My profile', feedT: 'Feed', feedShow: 'Show the family feed on the home screen', famLeaveT: 'Leave on this phone', famLeaveText: 'Your recipes stay in the family. To come back you’ll need a new invite link.', famLeave: 'Leave the family', famLeaveQ: 'Leave the family on this phone?',
@@ -91,16 +92,16 @@ const STR = {
     migrateT: n => n === 1 ? 'Share your recipe?' : `Share your ${n} recipes?`, migrateText: 'The recipes already on this phone join the family cookbook.',
     migrateAll: 'Add them to the family cookbook', migrated: n => n === 1 ? '1 recipe added' : `${n} recipes added`,
     
-    famCardText: 'Share your recipes with your family.', inviteText: (n, url) => `Join “${n}” in Our Kitchen to see and share our recipes.
+    famCardText: 'Share your recipes with your family.', inviteText: n => `Join “${n}” in Our Kitchen to see and share our recipes. The invite link is below.
 
-1. Tap this link (on iPhone, open it in Safari; on Android, in Chrome):
-${url}
+On iPhone:
+1. Open the link in Safari, tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
+2. Come back here, press and hold the link, and tap “Copy Link”.
+3. Open Our Kitchen from your home screen, go to More → Family, and tap “Paste invite link”. Pick your name and you’re in.
 
-2. Pick your name, then tap “Join the family”.
-
-3. To put it on your home screen like a real app:
-- iPhone: tap Share (the square with an arrow pointing up), then “Add to Home Screen”, then “Add”.
-- Android: tap the ⋮ menu at the top right, then “Install app”.`,
+On Android:
+1. Open the link in Chrome, pick your name and tap “Join the family”.
+2. Tap the ⋮ menu at the top right, then “Install app”.`,
     fridgeTitle: 'What’s in the fridge?', fridgeAddPh: 'Add an ingredient', fridgeClear: 'Clear all', fridgeQuick: 'Often on hand',
     fridgeEmpty: 'Add what you have, and the app looks through your recipes.', inYourBook: 'In your book', noBookMatch: 'None of your recipes fit yet. Ask Claude for ideas!',
     haveOf: (h, n) => `${h} of ${n} ingredients`, missing: 'Missing', nothingMissing: 'You have everything!',

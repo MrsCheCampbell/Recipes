@@ -743,3 +743,8 @@ a.chip { text-decoration: none; color: inherit; }
 @keyframes bdayBob { 50% { transform: translateY(-4px) rotate(-4deg); } }
 @keyframes bdayIn { from { opacity: 0; transform: scale(.96); } }
 @media (prefers-reduced-motion: reduce) { .bday, .bday img, .bday .confetti i { animation: none; } .bday .confetti { display: none; } }
+
+/* Invite link box */
+.invbox { display: flex; gap: 8px; } .invbox .input { flex: 1; min-width: 0; font-size: .85rem; color: var(--muted); }
+.newfam summary { font-weight: 700; cursor: pointer; }
+.iosjoin { border: 2px solid var(--accent); }
