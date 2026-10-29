@@ -1,5 +1,5 @@
 'use strict';
-// Our Kitchen: Every word the app shows, in French and English.
+// Our Kitchen: Every word the app shows (English).
 // The scripts share one scope and load in order (see index.html).
 
 // ---------- Vocabulary ----------
@@ -10,126 +10,6 @@ const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winte
 const KASHRUT = [];
 
 const STR = {
-  fr: {
-    appName: 'Our Kitchen',
-    
-    nav: { list: 'Recettes', fav: 'Favoris', fridge: 'Frigo', shop: 'Courses', more: 'Plus' },
-    searchPh: 'Chercher', voice: 'Chercher à la voix', clear: 'Effacer',
-    all: 'Toutes', favorites: 'Favoris', filters: 'Filtres', quick: 'Rapide (≤ 30 min)', 
-    sort: { az: 'De A à Z', recent: 'Ajoutées récemment', cooked: 'Les plus cuisinées', rating: 'Les mieux notées', time: 'Les plus rapides' },
-    nRecipes: n => n === 0 ? 'Aucune recette' : n === 1 ? '1 recette' : `${n} recettes`,
-    nOf: (n, total) => `${n} sur ${total}`,
-    add: 'Ajouter', newRecipe: 'Nouvelle recette', editRecipe: 'Modifier la recette',
-    emptyTitle: 'Votre livre de recettes est prêt', emptyText: 'Ajoutez une recette avec une photo, un lien, ou en copiant un texte. Tout reste sur votre téléphone.',
-    firstRecipe: 'Ajouter ma première recette', loadSamples: 'Voir des recettes d’exemple',
-    noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
-    cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', cocktails: 'Cocktails', other: 'Autre' },
-    hol: { friends: 'Recevoir des amis', family: 'Repas de famille', birthday: 'Anniversaires', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
-      hotday: 'Jour de canicule', coldday: 'Jour de grand froid', rainyday: 'Jour de pluie', spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver', garden: 'Du potager' },
-    prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
-    servings: n => n === 1 ? '1 personne' : `${fmtNum(n)} personnes`, times: x => `Quantités ×${fmtNum(x)}`,
-    ingredients: 'Ingrédients', steps: 'Préparation', notes: 'Notes', source: 'Recette de',
-    cookMode: 'Mode cuisine', addToShop: 'Ajouter aux courses', addedToShop: n => `${n} ingrédient${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} aux courses`,
-    openLink: 'Ouvrir le lien d’origine', edit: 'Modifier', share: 'Partager', print: 'Imprimer / PDF', duplicate: 'Dupliquer', del: 'Supprimer',
-    copyText: 'Copier le texte', copied: 'Copié', deleteQ: t => `Supprimer « ${t} » ?`, deleteYes: 'Oui, supprimer', cancel: 'Annuler', deleted: 'Recette supprimée', undo: 'Annuler',
-    cookedN: (n, d) => n ? `Cuisinée ${n} fois${d ? ' · dernière fois le ' + d : ''}` : 'Pas encore cuisinée', bravo: 'Bravo ! Bon appétit',
-    addedOn: d => `Ajoutée le ${d}`,
-    // form
-    photo: 'Photo', addPhoto: 'Prendre ou choisir une photo', changePhoto: 'Changer', removePhoto: 'Retirer', photoUrl: 'ou coller le lien d’une image',
-    importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : collez le texte de la recette, ou faites des captures d’écran et touchez « Photos ».',
-    title: 'Nom de la recette', titlePh: '', link: 'Lien (site, vidéo…)', category: 'Catégorie', holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
-    ingF: 'Ingrédients', stepsF: 'Étapes', notesF: 'Notes de la recette', noteF: 'Vos notes', sourceF: 'Recette de (qui ?)', sourcePh: '',
-    save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
-    draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
-    // shop
-    shopTitle: 'Liste de courses', shopAddPh: 'Ajouter un article…', shopEmpty: 'La liste est vide. Depuis une recette, touchez « Ajouter aux courses ».',
-    clearDone: 'Retirer les articles cochés', clearAll: 'Vider la liste', shareList: 'Partager la liste', other: 'Divers', clearAllQ: 'Vider toute la liste ?',
-    // more
-    moreTitle: 'Plus', settings: 'Réglages', yourName: 'Prénom affiché', language: 'Langue', textSize: 'Taille du texte', sizes: { normal: 'Normale', large: 'Grande', xl: 'Très grande' },
-    theme: 'Apparence', themes: { auto: 'Automatique', light: 'Clair', dark: 'Sombre' },
-    city: 'Ville (pour la météo)', useGps: 'Utiliser ma position', myPos: 'Ma position', gpsFail: 'Position indisponible',
-    backup: 'Sauvegarde', backupText: 'Vos recettes sont gardées sur ce téléphone. Faites une sauvegarde de temps en temps et envoyez-la par e-mail ou sur Google Drive.',
-    exportB: 'Télécharger une sauvegarde', shareB: 'Envoyer la sauvegarde', importB: 'Restaurer une sauvegarde', importedN: n => `${n} recette${n > 1 ? 's' : ''} restaurée${n > 1 ? 's' : ''}`, badFile: 'Ce fichier n’est pas une sauvegarde valide',
-    lastBackup: d => d ? `Dernière sauvegarde : ${d}` : 'Aucune sauvegarde pour l’instant',
-    backupNudge: 'Pensez à faire une sauvegarde de vos recettes.', backupNow: 'Sauvegarder',
-    samples: 'Recettes d’exemple', samplesAdd: 'Ajouter les exemples', samplesDel: 'Retirer les exemples', samplesAdded: 'Exemples ajoutés', samplesRemoved: 'Exemples retirés',
-    stats: 'En chiffres', statRecipes: 'recettes', statFav: 'favoris', statCooked: 'fois cuisiné',
-    tools: 'Conversions', convFrom: 'Quantité', convIngr: 'Ingrédient (pour les tasses)', ovenTitle: 'Températures du four',
-    install: 'Installer l’appli sur le téléphone', installText: 'Pour l’avoir sur l’écran d’accueil, comme une vraie appli.',
-    installHow: 'Dans Chrome : touchez le menu (les trois points) puis « Installer l’application » (ou « Ajouter à l’écran d’accueil »).',
-    installIos: 'Dans Safari : touchez le bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».',
-    iosNudge: 'Pour l’avoir comme une vraie appli : Partager, puis « Sur l’écran d’accueil ».', ok: 'OK',
-    eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
-    
-    // jewish calendar
-    // cook
-    step: (i, n) => `Étape ${i} sur ${n}`, prev: 'Précédente', next: 'Suivante', finish: 'Terminé !', showIng: 'Ingrédients', close: 'Fermer',
-    timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
-    offlineSave: 'Le stockage n’est pas disponible : les recettes ne seront pas gardées.',
-    units: { orig: 'Comme écrit', metric: 'Métrique', us: 'Tasses & oz' }, unitsLabel: 'Unités', unitsNote: 'Conversions approximatives. Touchez une quantité pour voir l’originale.',
-    ocrLoading: 'Préparation de la lecture… (la première fois prend un peu plus de temps)', ocrReading: (i, n, p) => n > 1 ? `Lecture de la page ${i} sur ${n}… ${p} %` : `Lecture de la page… ${p} %`,
-    ocrOk: 'Page lue ! Vérifiez le texte, puis enregistrez.', ocrFail: 'Le texte n’a pas pu être lu. La photo de la page est quand même gardée avec la recette.', ocrEmpty: 'Aucun texte trouvé. La photo de la page est quand même gardée avec la recette.',
-    pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
-    occSeasons: 'Saisons, météo & potager', seasonRail: { spring: 'Recettes de printemps', summer: 'Recettes d’été', autumn: 'Recettes d’automne', winter: 'Recettes d’hiver' },
-    wxHot: (d, c) => `Il fait ${d}° à ${c} : de quoi se rafraîchir`, wxCold: (d, c) => `Il fait ${d}° à ${c} : de quoi se réchauffer`, wxRain: c => `Il pleut à ${c} : un bon petit plat`,
-    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: '',
-    occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
-    occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
-    collection: n => `Recueil · ${String(n).padStart(3, '0')}`, added: 'Ajoutée',
-    tabFeed: 'La famille', addedBy: n => `Ajoutée par ${n}`, famStars: (a, n) => `Famille : ${a} sur 5 (${n} avis)`,
-    recommend: 'Recommander', 
-    copyToMine: 'Copier pour la modifier',
-    comments: 'Commentaires', commentPh: 'Un commentaire', triedIt: 'Je l’ai essayée', noComments: 'Pas encore de commentaire.', commentSent: 'Commentaire publié',
-    recommendTo: 'Recommander à…', nobodyYet: 'Personne d’autre dans la famille pour l’instant.', recoNote: 'Un petit mot (facultatif)', recoNotePh: '',
-    recoSent: n => `Recommandée à ${n}`, recoFor: n => `${n} vous recommande`, recoLater: 'Plus tard', you: 'Vous', like: 'J’aime',
-    feedEmptyT: 'Rien en cuisine pour l’instant', feedEmpty: 'Quand quelqu’un cuisine quelque chose (ou voit une jolie assiette), la photo arrive ici.',
-    agoNow: 'à l’instant', agoMin: n => `il y a ${n} min`, agoH: n => `il y a ${n} h`, agoYesterday: 'hier', agoD: n => `il y a ${n} jours`,
-    family: 'La famille', famIntroT: 'Cuisiner ensemble, chacun chez soi', famIntro: 'Chacun garde son livre, et on voit ce que les autres cuisinent : un fil de recettes, des cœurs, des étoiles, des commentaires et des recommandations. Chaque recette peut rester privée ou être cachée à quelqu’un.',
-    famJoinT: 'Rejoindre ma famille', famJoinText: 'Quelqu’un vous a envoyé un lien d’invitation ? Touchez-le, ou collez-le ici.', famJoinPh: 'Collez le lien d’invitation', famJoinBtn: 'Rejoindre la famille',
-    famCreateT: 'Créer la famille (à faire une seule fois)', famSteps: ['Sur <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a>, créez un projet (gratuit). Google Analytics n’est pas nécessaire.', 'Menu <b>Authentication</b> → Commencer → activez <b>Anonyme</b>.', 'Menu <b>Firestore Database</b> → Créer une base de données (mode production, région Europe).', 'Onglet <b>Règles</b> : remplacez tout par <a href="https://raw.githubusercontent.com/MrsCheCampbell/Recipes/master/firestore.rules" target="_blank" rel="noopener">ces règles</a>, puis <b>Publier</b>.', '<b>Paramètres du projet</b> → Vos applications → icône Web <b>&lt;/&gt;</b> → enregistrez l’appli, puis copiez le bloc <b>firebaseConfig</b> ci-dessous.'],
-    famCfg: 'Configuration Firebase', famName: 'Nom de la famille', famNameDefault: 'La famille', yourAvatar: 'Votre avatar', famCreateBtn: 'Créer la famille',
-    famMembers: 'La famille', nRecipesBy: n => n === 1 ? '1 recette' : `${n} recettes`, inMyFeed: 'Dans mon fil', famInvite: 'Inviter quelqu’un', famInviteHint: 'Envoyez le lien par WhatsApp, SMS ou e-mail. La personne choisit son nom et son avatar, et tout ce qui existe déjà reste en place.',
-    yourProfile: 'Mon profil', feedT: 'Le fil', feedShow: 'Afficher le fil de la famille sur l’accueil', famLeaveT: 'Quitter sur ce téléphone', famLeaveText: 'Vos recettes restent dans la famille. Pour revenir, il faudra un nouveau lien d’invitation.', famLeave: 'Quitter la famille', famLeaveQ: 'Quitter la famille sur ce téléphone ?',
-    famCfgBad: 'Je ne trouve pas apiKey, projectId et appId dans ce texte.', famErr: 'La famille n’a pas pu être créée. Vérifiez la configuration et que la connexion anonyme est activée.',
-    famJoinBad: 'Ce lien d’invitation n’est pas valide.', invitation: 'Invitation', joinTitle: n => `Rejoindre « ${n} »`, yourNamePh: '', needName: 'Choisissez un prénom',
-    welcomeFam: n => `Bienvenue dans « ${n} » !`, famJoinErr: 'Impossible de rejoindre. Vérifiez la connexion internet, ou demandez un nouveau lien.',
-    migrateT: n => n === 1 ? 'Partager votre recette ?' : `Partager vos ${n} recettes ?`, migrateText: 'Les recettes déjà sur ce téléphone rejoignent le livre de la famille.',
-    migrateAll: 'Les ajouter au livre de la famille', migrated: n => n === 1 ? '1 recette ajoutée' : `${n} recettes ajoutées`,
-    
-    famCardText: 'Partager vos recettes avec vos proches.', inviteText: (n, url) => `Rejoins « ${n} » dans Our Kitchen, pour voir et partager nos recettes.
-
-1. Touche ce lien (sur iPhone, ouvre-le dans Safari ; sur Android, dans Chrome) :
-${url}
-
-2. Choisis ton prénom, puis touche « Rejoindre la famille ».
-
-3. Pour l’avoir sur l’écran d’accueil, comme une vraie appli :
-- iPhone : bouton Partager (le carré avec une flèche vers le haut), puis « Sur l’écran d’accueil », puis « Ajouter ».
-- Android : menu ⋮ en haut à droite, puis « Installer l’application ».`,
-    fridgeTitle: 'Qu’y a-t-il dans le frigo ?', fridgeAddPh: 'Ajouter un ingrédient', fridgeClear: 'Tout enlever', fridgeQuick: 'Souvent sous la main',
-    fridgeEmpty: 'Ajoutez ce que vous avez, et l’appli cherche dans vos recettes.', inYourBook: 'Dans votre livre', noBookMatch: 'Aucune de vos recettes ne colle encore. Demandez des idées à Claude !',
-    haveOf: (h, n) => `${h} ingrédient${h > 1 ? 's' : ''} sur ${n}`, missing: 'Il manque', nothingMissing: 'Vous avez tout !',
-    askClaude: 'Demander des idées à Claude', askAgain: 'Redemander à Claude', claudeThinking: 'Claude regarde votre frigo et cherche des recettes…', claudeSec: s => `${s} s`,
-    claudeSummary: 'L’avis de Claude', claudeFromBook: 'Dans votre livre', claudeNew: 'Nouvelles idées', openSite: 'Voir le site', saveIdea: 'Enregistrer', claudeUses: 'Utilise', claudeOld: d => `Réponse du ${d}`,
-    claudeNoKey: 'Pour demander des idées à Claude, ajoutez une clé dans Plus → Claude.', claudeSetup: 'Configurer Claude', claudeErr: 'Claude n’a pas pu répondre. Vérifiez la connexion internet et la clé, puis réessayez.',
-    claudeErrKey: 'La clé n’est pas acceptée. Vérifiez-la dans Plus → Claude.', claudeRefused: 'Claude n’a pas pu répondre à cette demande.', claudeOffline: 'Pas de connexion internet.',
-    claudePanel: 'Claude', claudeText: 'Claude peut proposer des recettes à partir de ce que vous avez : il regarde votre livre et cherche de nouvelles idées sur internet. Il faut une clé (console.anthropic.com → API keys). Elle reste sur ce téléphone. Chaque demande coûte quelques centimes.',
-    claudeKey: 'Clé Claude', claudeKeySaved: 'Clé enregistrée', claudeKeyRemove: 'Retirer la clé', claudeKeyOn: 'Claude est prêt.', 
-    inbox: 'Boîte de réception', parAvion: 'Par avion', inboxEmpty: 'Rien pour l’instant. Quand quelqu’un vous envoie une recette depuis son appli, elle arrive ici.',
-    fromWho: n => `De la part de ${n}`, receivedOn: d => `reçue le ${d}`, keep: 'Garder', toss: 'Supprimer', kept: 'Ajoutée à vos recettes', tossed: 'Recette supprimée',
-    send: 'Envoyer', sendText: (n, title) => `${n} vous envoie une recette : « ${title} ». Touchez le lien pour l’ajouter à votre appli Our Kitchen :`,
-    inboxBanner: (n, from) => n === 1 ? `${from} vous a envoyé une recette` : `${n} recettes vous attendent`, open: 'Ouvrir', preview: 'Voir la recette',
-    pasteLink: 'Coller une recette reçue', pasteHelp: 'Sur iPhone, ou si le lien s’est ouvert ailleurs : copiez le message reçu, puis touchez ce bouton.', pastePh: 'Collez ici le message ou le lien reçu',
-    pasteGo: 'Ajouter à la boîte', pasteBad: 'Aucune recette trouvée dans ce texte.', alreadyIn: 'Cette recette est déjà dans votre boîte.', gotOne: 'Nouvelle recette reçue !',
-    iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez Our Kitchen, puis Boîte de réception → « Coller une recette reçue ».',
-    copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
-    bdayT: 'Joyeux anniversaire !', bdaySub: 'Our Kitchen ouvre ses portes aujourd’hui, en ton honneur.', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
-    lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
-    lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
-    lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: '',
-    lockSaved: 'Code enregistré', lockRedo: 'Petite mise à jour : choisissez à nouveau votre code. Vos recettes ne changent pas.', lockTitle: 'Code d’accès', lockOnText: 'L’appli demande un code à 4 chiffres à l’ouverture.', lockOffText: 'Aucun code demandé à l’ouverture.',
-    lockChange: 'Changer le code', lockRemove: 'Retirer le code', lockAdd: 'Ajouter un code', lockRemoveQ: 'Retirer le code d’accès ?', lockRemoved: 'Code retiré', lockNow: 'Verrouiller maintenant', erase: 'Effacer', later: 'Plus tard',
-  },
   en: {
     appName: 'Our Kitchen',
     
@@ -238,7 +118,7 @@ ${url}
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
-    bdayT: 'Happy birthday!', bdaySub: 'Our Kitchen opens its doors today, in your honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
+    bdayT: '¡Feliz cumpleaños!', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
@@ -247,41 +127,6 @@ ${url}
   }
 };
 // Notebooks and "I made it" vocabulary.
-Object.assign(STR.fr, {
-  none: '—', done: 'Terminé', optional: 'facultatif', theRecipe: 'La recette',
-  carnets: 'Carnets', carnet: 'Carnet', carnetsSub: 'Vos soirées, vos invités, et tout ce que vous avez servi.',
-  tabEvents: 'Soirées', tabGuests: 'Invités', upcoming: 'À venir', memories: 'Souvenirs',
-  nEvents: n => n ? `${n} soirée${n > 1 ? 's' : ''}` : 'Carnet neuf',
-  newEvent: 'Nouvelle soirée', newGuest: 'Nouveaux invités',
-  eventsEmptyT: 'Un carnet tout neuf', eventsEmpty: 'Préparez un dîner entre amis, un anniversaire ou le Nouvel An : les idées de menu, ce qui a été fait, et le souvenir de la soirée. Tout reste là pour l’an prochain.',
-  guestsEmptyT: 'Le livre des invités', guestsEmpty: 'Pour chaque couple d’amis, ce que vous leur avez servi : pour ne pas refaire le même plat, ou refaire leur préféré.',
-  untitled: 'Soirée sans titre', unnamedGuests: 'Invités sans nom', evTitlePh: 'Quelle occasion ?',
-  evDate: 'Date', evOcc: 'Occasion', evGuests: 'Les invités', addGuests: 'Ajouter des invités',
-  servedBefore: 'Déjà servi à ces invités', servedNone: 'Rien de noté pour l’instant. Cochez les plats faits dans le menu, ils apparaîtront ici la prochaine fois.',
-  servedTimes: (n, d) => `${n} fois · dernière le ${d}`, inMenu: 'au menu', addToMenu: 'Ajouter au menu',
-  menu: 'Le menu', menuEmpty: 'Ajoutez les recettes auxquelles vous pensez, puis cochez ce que vous avez fait.',
-  addRecipes: 'Des recettes', otherDishPh: 'Autre plat', reuseMenu: (title, y) => `Reprendre le menu de « ${title} » (${y})`,
-  made: 'Fait', verdicts: { loved: 'Adoré', ok: 'Bien', meh: 'Bof' }, itemNotePh: 'Note',
-  evening: 'La soirée', eveningPh: '',
-  privateNote: 'Ce carnet est à vous : personne d’autre ne le voit.',
-  delEvent: 'Supprimer cette soirée', delEventQ: title => `Supprimer « ${title} » ?`,
-  guestPickT: 'Qui vient ?', guestNewPh: 'Nom', dinnerWith: name => `Dîner avec ${name}`,
-  guestNamePh: 'Nom', guestNotes: 'À savoir', guestNotesPh: '',
-  planWith: 'Organiser une soirée avec eux', servedToThem: 'Ce qu’on leur a servi', theirEvenings: 'Leurs soirées', noEveningsYet: 'Pas encore de soirée.',
-  delGuest: 'Supprimer ces invités', delGuestQ: name => `Supprimer « ${name} » du livre des invités ? Leurs soirées restent.`,
-  nEvenings: n => `${n} soirée${n > 1 ? 's' : ''}`, lastOn: d => `dernière le ${d}`, nDishes: n => `${n} plat${n > 1 ? 's' : ''}`, nMade: n => `${n} fait${n > 1 ? 's' : ''}`,
-  addToEvent: 'Ajouter à une soirée', addedToEvent: title => `Ajouté à « ${title} »`, servedAt: 'Servi :',
-  madeIt: 'J’ai cuisiné', madeItQ: 'J’ai cuisiné…', madeItSub: 'Une photo, un mot, la recette. Et c’est dans le fil.', madeItToo: 'Moi aussi', madeItStamp: 'Fait maison',
-  fabQ: 'Qu’est-ce qu’on ajoute ?', newRecipeChoice: 'Une nouvelle recette', newRecipeSub: 'À taper, depuis un lien, une photo de livre…',
-  cookT: title => `J’ai cuisiné « ${title} »`, cookPhotoOnlyT: 'Une photo pour la famille', cookPhotoBtn: 'Prendre ou choisir une photo',
-  cookNote: 'Un mot ?', cookNotePh: '', cookEvent: 'Pour une soirée ?', cookPost: 'Publier',
-  cookVisAll: 'Toute la famille le verra.', 
-  cookLocal: 'Rangé avec la recette, sur ce téléphone.', cookPosted: 'Publié dans le fil', cookNoRecipe: 'Sans recette, juste une photo',
-  pickRecipeT: 'Quelle recette ?', pickSearchPh: 'Chercher', pickDone: n => n ? `Ajouter (${n})` : 'Ajouter',
-  madeByFam: 'Fait par la famille', madeByMe: 'Mes essais', nTimes: n => `${n} fois`, cookedVerb: 'a cuisiné', photoVerb: 'a partagé une photo',
-  delCookQ: 'Supprimer cette photo et ce mot ?', reusedN: n => n ? `${n} plat${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} au menu` : 'Tout est déjà au menu',
-});
-STR.fr.nav.carnets = 'Carnets';
 Object.assign(STR.en, {
   none: '—', done: 'Done', optional: 'optional', theRecipe: 'The recipe',
   carnets: 'Notebooks', carnet: 'Notebook', carnetsSub: 'Your evenings, your guests, and everything you served.',
@@ -317,47 +162,21 @@ Object.assign(STR.en, {
   delCookQ: 'Delete this photo and note?', reusedN: n => n ? `${n} dish${n > 1 ? 'es' : ''} added to the menu` : 'Everything is already on the menu',
 });
 STR.en.nav.carnets = 'Notebooks';
-STR.fr.nav.feed = 'Famille'; STR.en.nav.feed = 'Family';
-Object.assign(STR.fr, { mine: 'Les miennes', whoAdded: 'Ajoutées par' });
-Object.assign(STR.fr, { smartLabel: 'Lien ou texte de la recette', smartFill: 'Remplir', photosBtn: 'Photos',
-  filledWithoutClaude: 'Rempli sans Claude : vérifiez les champs.', noRecipeInPhotos: 'Claude n’a pas trouvé de recette sur ces photos.',
-  claudeErrCredit: 'Le compte Claude n’a plus de crédit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude est très occupé, réessayez dans un instant.',
-  claudeKeyFam: 'Claude est prêt (clé de la famille).', claudeShared: 'Toute la famille utilise cette clé.', claudeNotShared: 'Seul ce téléphone utilise cette clé.',
-  claudeShare: 'Partager avec la famille', claudeUnshare: 'Ne plus partager', claudeShareToo: 'La partager avec la famille (personne d’autre n’aura à la saisir)', claudeShareRules: 'Pas encore partagée : publiez les nouvelles règles dans la console Firebase, puis touchez « Partager avec la famille ».', claudeShareFail: 'Pas encore partagée (pas de connexion ?). Réessayez avec « Partager avec la famille ».', claudeSharedToast: 'Clé partagée avec la famille' });
+STR.en.nav.feed = 'Family';
 Object.assign(STR.en, { smartLabel: 'Recipe link or text', smartFill: 'Fill in', photosBtn: 'Photos',
   filledWithoutClaude: 'Filled in without Claude: check the fields.', noRecipeInPhotos: 'Claude didn’t find a recipe in these photos.',
   claudeErrCredit: 'The Claude account is out of credit (console.anthropic.com → Billing).', claudeErrBusy: 'Claude is very busy, try again in a moment.',
   claudeKeyFam: 'Claude is ready (family key).', claudeShared: 'The whole family uses this key.', claudeNotShared: 'Only this phone uses this key.',
   claudeShare: 'Share with the family', claudeUnshare: 'Stop sharing', claudeShareToo: 'Share it with the family (nobody else will have to type it)', claudeShareRules: 'Not shared yet: publish the new rules in the Firebase console, then tap “Share with the family”.', claudeShareFail: 'Not shared yet (no connection?). Try again with “Share with the family”.', claudeSharedToast: 'Key shared with the family' });
 Object.assign(STR.en, { mine: 'Mine', whoAdded: 'Added by' });
-Object.assign(STR.fr, { updateReady: 'Nouvelle version de l’appli prête', reload: 'Recharger' });
 Object.assign(STR.en, { updateReady: 'A new version of the app is ready', reload: 'Reload' });
-Object.assign(STR.fr, { autoTagBtn: 'Ranger automatiquement', autoTagBusy: 'Claude range la recette…',
-  autoTagDone: n => `${n} étiquette${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''} : touchez pour retirer`, autoTagNone: 'Rien de plus à ajouter', autoTagEmpty: 'Ajoutez d’abord le titre ou les ingrédients' });
 Object.assign(STR.en, { autoTagBtn: 'Sort automatically', autoTagBusy: 'Claude is sorting the recipe…',
   autoTagDone: n => `${n} tag${n > 1 ? 's' : ''} added: tap one to remove it`, autoTagNone: 'Nothing more to add', autoTagEmpty: 'Add the title or ingredients first' });
-Object.assign(STR.fr, { recipeNotes: 'Notes de la recette', notesOf: n => !n ? 'Vos notes' : /^[aeiouyhâàéèêëîïôûü]/i.test(n) ? `Notes d’${n}` : `Notes de ${n}` });
 Object.assign(STR.en, { recipeNotes: 'Notes from the recipe', notesOf: n => !n ? 'Your notes' : `${n}’s notes` });
-Object.assign(STR.fr, { addedLine: (who, n) => `${who ? who + ' a ajouté' : 'Vous avez ajouté'} ${n === 1 ? 'une recette' : n + ' recettes'}`, tonightRail: 'Idées pour ce soir',
-  tagAll: 'Ranger toutes mes recettes avec Claude', tagAllProgress: (i, n) => `Claude range les recettes… ${i} / ${n}`, tagAllDone: n => n ? `${n} recette${n > 1 ? 's' : ''} rangée${n > 1 ? 's' : ''}` : 'Tout est déjà rangé' });
 Object.assign(STR.en, { addedLine: (who, n) => `${who ? who + ' added' : 'You added'} ${n === 1 ? 'a recipe' : n + ' recipes'}`, tonightRail: 'Ideas for tonight',
   tagAll: 'Sort all my recipes with Claude', tagAllProgress: (i, n) => `Claude is sorting recipes… ${i} / ${n}`, tagAllDone: n => n ? `${n} recipe${n > 1 ? 's' : ''} sorted` : 'Everything is already sorted' });
-Object.assign(STR.fr, { claudeReading: 'Claude lit la recette…', claudeReadOk: 'Recette lue par Claude. Vérifiez, puis enregistrez.', claudeTip: 'Astuce : avec une clé Claude (Plus → Claude), les captures d’écran et les sites difficiles sont bien mieux lus.' });
-Object.assign(STR.en, { claudeReading: 'Claude is reading the recipe…', claudeReadOk: 'Recipe read by Claude. Check it, then save.', claudeTip: 'Tip: with a Claude key (More → Claude), screenshots and difficult sites are read much better.' }); STR.fr.sortBy = 'Trier par'; STR.en.sortBy = 'Sort by';
-Object.assign(STR.fr, { newPosts: n => `${n} nouveauté${n > 1 ? 's' : ''} dans la famille`, composerPh: 'Une photo à partager ?', photoPost: 'Une photo, juste comme ça', photoPostSub: 'Au restaurant, chez des amis, une assiette trop belle ou trop drôle.', cookPlace: 'Où ?', choose: 'Choisir', anyF: 'Tout', filtersShow: n => n ? `Voir ${n} recette${n > 1 ? 's' : ''}` : 'Aucune recette' });
+Object.assign(STR.en, { claudeReading: 'Claude is reading the recipe…', claudeReadOk: 'Recipe read by Claude. Check it, then save.', claudeTip: 'Tip: with a Claude key (More → Claude), screenshots and difficult sites are read much better.' }); STR.en.sortBy = 'Sort by';
 Object.assign(STR.en, { newPosts: n => `${n} new in the family`, composerPh: 'A photo to share?', photoPost: 'Just a photo', photoPostSub: 'At a restaurant, at friends’, a plate too pretty or too funny not to share.', cookPlace: 'Where?', choose: 'Choose', anyF: 'Any', filtersShow: n => n ? `Show ${n} recipe${n > 1 ? 's' : ''}` : 'No recipes' });
-Object.assign(STR.fr, {
-  occOne: { birthday: 'Anniversaire' },
-  tabWines: 'Cave', allWines: 'Tous', newWine: 'Nouveau vin', unnamedWine: 'Vin sans nom',
-  winesEmptyT: 'La cave', winesEmpty: 'Photographiez l’étiquette des vins que vous aimez, avec une note. Vous saurez lequel c’était, à quelle soirée et avec quel plat.',
-  snapLabel: 'Photographier l’étiquette', wineNamePh: 'Nom du vin', wineColor: 'Couleur', wcol: { red: 'Rouge', white: 'Blanc', rose: 'Rosé', sparkling: 'Bulles', sweet: 'Doux' },
-  vintage: 'Millésime', appellation: 'Appellation', producer: 'Château ou domaine', wineRating: 'Note', wineNotes: 'Notes',
-  pairsWith: 'Avec quels plats', aRecipe: 'Une recette', drunkAt: 'Servi lors de', delWineQ: name => `Supprimer « ${name} » de la cave ?`,
-  wines: 'Les vins', aWine: 'Un vin', pairings: 'Accords :', pairWine: 'Accorder un vin', winesServed: 'Vins servis', pickWinesT: 'Quels vins ?',
-  feedIntroT: 'Le fil de la famille', feedIntro: 'Ici apparaissent les recettes et les photos de toute la famille : qui a cuisiné quoi, les cœurs, les commentaires, les recommandations.',
-  feedIntroHow: 'Pour l’activer, une personne crée la famille (une seule fois, environ 10 minutes), puis envoie un lien aux autres. Ceux qui reçoivent le lien n’ont qu’à toucher « Rejoindre ».',
-  feedIntroBtn: 'Créer ou rejoindre la famille', example: 'Exemple', exampleWho: 'Maman', exampleNote: 'Le gâteau de dimanche, tout le monde en a repris.',
-});
 Object.assign(STR.en, {
   occOne: { birthday: 'Birthday' },
   tabWines: 'Cellar', allWines: 'All', newWine: 'New wine', unnamedWine: 'Unnamed wine',

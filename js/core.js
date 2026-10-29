@@ -14,12 +14,13 @@ const ls = {
   del(k) { try { localStorage.removeItem('abe:' + k); } catch {} },
 };
 let S = ls.get('settings', {});
-S = Object.assign({ lang: (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr', name: '', size: 'large', theme: 'auto', city: 'paris' }, S);
+S = Object.assign({ name: '', size: 'large', theme: 'auto', city: 'paris' }, S);
 // "Abe" was the default name in early versions; nobody chose it.
 if (S.name === 'Abe') S.name = '';
 const saveSettings = () => ls.set('settings', S);
-const T = () => STR[S.lang];
-const locale = () => S.lang === 'fr' ? 'fr-FR' : 'en-GB';
+S.lang = 'en';  // The app is English only.
+const T = () => STR.en;
+const locale = () => 'en-US';
 function fmtNum(n) {
   if (!isFinite(n)) return '';
   if (n >= 10) return String(Math.round(n));
@@ -77,7 +78,7 @@ const DB = {
 let recipes = [];
 const byId = id => recipes.find(r => r.id === id) || (FAM.on ? FAM.all.find(r => r.id === id) : undefined);
 const customOcc = () => S.customOcc || [];
-const occLabel = (k, lang = S.lang) => (OCCASIONS.includes(k) || SEASONS.includes(k) ? STR[lang].hol[k] : '') || customOcc().find(c => c.key === k)?.label || '';
+const occLabel = (k, lang = S.lang) => (OCCASIONS.includes(k) || SEASONS.includes(k) ? STR.en.hol[k] : '') || customOcc().find(c => c.key === k)?.label || '';
 const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
 // Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
 // "Mom's birthday" was folded into Birthdays.
@@ -123,10 +124,10 @@ function lev1(a, b, max) {
   return prev[b.length] <= max;
 }
 function indexRecipe(r) {
-  const both = (dict, k) => k ? [STR.fr[dict][k], STR.en[dict][k]].join(' ') : '';
+  const both = (dict, k) => k ? STR.en[dict][k] : '';
   const f = {
     title: norm(r.title),
-    meta: norm([r.tags?.join(' '), both('cat', r.category), (r.holidays || []).map(h => occLabel(h, 'fr') + ' ' + occLabel(h, 'en')).join(' '), r.source].join(' ')),
+    meta: norm([r.tags?.join(' '), both('cat', r.category), (r.holidays || []).map(h => occLabel(h)).join(' '), r.source].join(' ')),
     ing: norm(r.ingredients),
     rest: norm([r.steps, r.notes, r.note, r.link].join(' ')),
   };
@@ -251,9 +252,9 @@ const round5 = x => x < 20 ? Math.round(x) : x < 100 ? Math.round(x / 5) * 5 : M
 const asG = x => x >= 1000 ? { v: fmt1(x / 1000), u: 'kg' } : { v: String(round5(x)), u: 'g' };
 const asMl = x => x >= 1000 ? { v: fmt1(x / 1000), u: 'l' } : { v: String(round5(x)), u: 'ml' };
 const niceFrac = v => { const q = Math.round(v * 4) / 4, t = Math.round(v * 3) / 3; return Math.abs(q - v) <= Math.abs(t - v) ? q : t; };
-const UL = { fr: { cup: ['tasse', 'tasses'], tbsp: 'c. à soupe', tsp: 'c. à café' }, en: { cup: ['cup', 'cups'], tbsp: 'tbsp', tsp: 'tsp' } };
+const UL = { en: { cup: ['cup', 'cups'], tbsp: 'tbsp', tsp: 'tsp' } };
 function usVolume(cups) {
-  const ul = UL[S.lang];
+  const ul = UL.en;
   if (cups >= 0.25) { const v = niceFrac(cups); return { v: fmtNum(v), u: ul.cup[v > 1 ? 1 : 0] }; }
   const tbsp = cups * 16;
   if (tbsp >= 1) return { v: fmtNum(niceFrac(tbsp)), u: ul.tbsp };

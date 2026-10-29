@@ -62,10 +62,10 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 **Occasions with dates**
 - New Year's Eve is dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
 - Two weeks before, a quiet line at the top says e.g. "Réveillon du Nouvel An dans 9 jours". Tapping it shows the recipes tagged for it.
-- French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
+- The app is in English. It still reads French recipes (links, pasted text, photos). Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
 
 **Birthday (until October 31, 2026)**
-- A teal *Joyeux anniversaire !* card at the top of Recettes, and a shower of confetti every time the app opens. Both go away on their own after October 31.
+- A teal *¡Feliz cumpleaños!* card at the top of Recipes, and a shower of confetti every time the app opens. Both go away on their own after October 31.
 
 **Look**
 - Calm and classic: the home page is the date, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.

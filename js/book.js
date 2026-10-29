@@ -137,7 +137,7 @@ function moodScore(r, key) {
   const title = r._ix.title, body = title + ' ' + r._ix.ing;
   for (const [pat, pts, label] of m.words) {
     let re = moodRe.get(pat); if (!re) { re = new RegExp('\\b(' + pat + ')'); moodRe.set(pat, re); }
-    const lbl = S.lang === 'en' ? (WHY_EN[label] || label) : label;
+    const lbl = WHY_EN[label] || label;
     if (re.test(title)) { score += pts * 2; why ||= lbl; } else if (re.test(body)) { score += pts; why ||= lbl; }
   }
   if (m.long && totalTime(r) >= 60) score += m.long;
@@ -379,7 +379,7 @@ function refreshList() { $('#chips').innerHTML = chipsHTML(); renderResults(); }
 // Voice search (Chrome on Android)
 function voiceSearch() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return;
-  const rec = new SR(); rec.lang = S.lang === 'fr' ? 'fr-FR' : 'en-US'; rec.interimResults = false;
+  const rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
   const btn = $('[data-act="voice"]'); btn.style.color = 'var(--danger)';
   rec.onresult = e => { L.q = e.results[0][0].transcript; $('#q').value = L.q; renderResults(); };
   rec.onend = () => { btn.style.color = ''; };
@@ -1052,7 +1052,7 @@ async function readBookPages(files) {
   let text = '', cur = 1, worker;
   try {
     await loadTesseract();
-    worker = await Tesseract.createWorker(S.lang === 'fr' ? ['fra', 'eng'] : ['eng', 'fra'], 1, {
+    worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
       workerPath: vendorURL('worker.min.js'), corePath: vendorURL(''), langPath: vendorURL('lang'),
       logger: m => { if (m.status === 'recognizing text') set(t.ocrReading(cur, pages.length, Math.round(m.progress * 100)), m.progress); },
     });
