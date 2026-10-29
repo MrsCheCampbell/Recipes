@@ -11,13 +11,13 @@ The app is hosted on Netlify: every merge to `master` deploys it (see CLAUDE.md 
 1. Open the link above in **Chrome**.
 2. Tap **⋮** → **Installer l'application** / **Install app** (or "Ajouter à l'écran d'accueil").
 3. The green pot icon appears on his home screen. It opens full screen like any other app.
-4. The first time it opens, it asks to **choose a 4-digit code** (and an optional hint). Set it up with him, or pick it for him and tell him.
+4. Open it. There's no code to set up.
 
 ## Installing on an iPhone
 
 1. Open the same link in **Safari**.
 2. Tap the **Share** button (the square with an arrow pointing up) → **Add to Home Screen** / **Sur l'écran d'accueil** → **Add**.
-3. Open it from the home screen icon. It runs full screen and asks for its own 4-digit code.
+3. Open it from the home screen icon. It runs full screen.
 
 Install it to the home screen rather than using it in a Safari tab: Safari can clear data from websites you haven't visited for a while, but it keeps data for home-screen apps.
 
@@ -25,17 +25,12 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 ## What it does
 
-**Passcode**
-- A 4-digit code is asked each time the app opens, and again after 15 minutes in the background.
-- "Code oublié ?" shows the hint he saved. The code can be changed, removed, or the app locked straight away from *Plus → Code d'accès*.
-- This is a privacy lock for the phone. The recipes never leave his phone, so nobody visiting the website sees them.
-
 **Recipes**
 - **One box at the top of the form** (*Lien ou texte de la recette*): paste a link, or a whole recipe from an email or a WhatsApp message, and tap **Remplir**. Or tap **Photos** to photograph a cookbook page or pick screenshots. A line under the box always says what happened (read by Claude, filled without Claude, site blocked…), so nothing fails silently.
 - Ingredients typed or pasted on one line with commas ("200 g de farine, 3 œufs, 100 g de sucre") are split into one per line. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom).
 - Add a photo of the dish with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
 - **Share to the app**: in Chrome or any app, tap *Share → Our Kitchen* on a recipe page to start a new recipe from it.
-- Category, **occasions** (having friends over, family dinner, birthdays, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, birthdays, New Year's Eve, brunch, BBQ & picnic, weeknight, Shabbat dinner and the Jewish holidays, plus your own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
@@ -65,6 +60,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - A phone in Spain uses Madrid for the weather (Barcelona, Valencia, Sevilla, Málaga and Bilbao are in *More → Settings*, or use your location).
 
 **Look**
+- Dark mode by default (Automatic or Light in *More → Settings*).
 - Calm and classic: the home page is the date, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.
 - Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
 - Illustrations (category drawings, family avatars, bottom bar, empty pages) are flat kitchen doodles in `art/`, one file per name, so a purchased set can be dropped in with the same file names. See [`art/README.md`](art/README.md). Small button icons are drawn in code. No emoji anywhere.
@@ -174,7 +170,7 @@ No build step. The app is plain files that Netlify serves as they are:
 - `index.html`: the page skeleton; it loads the styles and scripts below.
 - `css/app.css`: all the styles ("Le Carnet" design).
 - `js/`: the app, split by feature. The scripts share one scope and load in order:
-  `icons.js` (icons, artwork) · `strings.js` (every French/English word) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
+  `icons.js` (icons, artwork) · `strings.js` (every word, English) · `core.js` (helpers, storage, search, calendar, units, images, navigation) · `book.js` (recipe list, suggestions, recipe page, cook mode, timers, form, smart tags, importing) · `fridge.js` (Frigo and Claude) · `family.js` (Firebase sync, hearts, comments, recommendations, feed, joining) · `notebooks.js` ("J'ai cuisiné" photos, evenings, guests, wine) · `more.js` (sending recipes, share target, shopping list, settings, examples) · `app.js` (taps, passcode, start).
 - `sw.js`: the service worker. The app opens from its saved copy (fast, and works offline); new versions download in the background and the app offers to reload. **When releasing, bump `VERSION` in `sw.js` and the `?v=` numbers in `index.html` together.**
 - `netlify/functions/fetch-page.mjs`: fetches recipe pages for link imports.
 - `firestore.rules`: the family's security rules.

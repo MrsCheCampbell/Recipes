@@ -196,9 +196,6 @@ function renderMore() {
         return `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div>
           ${FAM.on ? `<label class="tried-toggle"><input type="checkbox" id="claudeShareIn" checked><span>${esc(t.claudeShareToo)}</span></label>` : ''}
           <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</section>
-    <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
-      ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
-        <button class="btn" data-act="locknow">${esc(t.lockNow)}</button>` : `<button class="btn primary" data-act="lockchange">${esc(t.lockAdd)}</button>`}</section>
     <section class="panel"><h2>${esc(t.backup)}</h2><p class="muted" style="margin:0">${esc(t.backupText)}</p>
       <p style="margin:0;font-weight:700">${esc(t.lastBackup(ls.get('lastBackup', 0) && fmtDate(ls.get('lastBackup', 0))))}</p>
       ${navigator.canShare ? `<button class="btn primary" data-act="backupshare">${ico('share')}${esc(t.shareB)}</button>` : ''}

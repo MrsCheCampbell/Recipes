@@ -16,7 +16,9 @@ const ls = {
 let S = ls.get('settings', {});
 // Weather city: a phone in Spain starts on Madrid, anywhere else on Paris (both can be changed in More).
 const homeCity = () => { try { return /^(Europe\/Madrid|Atlantic\/Canary|Africa\/Ceuta)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone) ? 'madrid' : 'paris'; } catch { return 'paris'; } };
-S = Object.assign({ name: '', size: 'large', theme: 'auto', city: homeCity() }, S);
+S = Object.assign({ name: '', size: 'large', theme: 'dark', city: homeCity() }, S);
+// Dark is the default now: phones that were left on Automatic switch once (they can pick Automatic again).
+if (!S.darkDefault) { if (S.theme === 'auto') S.theme = 'dark'; S.darkDefault = true; }
 // "Abe" was the default name in early versions; nobody chose it.
 if (S.name === 'Abe') S.name = '';
 const saveSettings = () => ls.set('settings', S);
@@ -80,17 +82,24 @@ const DB = {
 let recipes = [];
 const byId = id => recipes.find(r => r.id === id) || (FAM.on ? FAM.all.find(r => r.id === id) : undefined);
 const customOcc = () => S.customOcc || [];
-const occLabel = (k, lang = S.lang) => (OCCASIONS.includes(k) || SEASONS.includes(k) ? STR.en.hol[k] : '') || customOcc().find(c => c.key === k)?.label || '';
-const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
+const occLabel = (k, lang = S.lang) => (OCCASIONS.includes(k) || SEASONS.includes(k) || HOLIDAYS.includes(k) ? STR.en.hol[k] : '') || customOcc().find(c => c.key === k)?.label || '';
+const generalOcc = () => [...OCCASIONS, ...HOLIDAYS, ...customOcc().map(c => c.key)];
+// Occasions someone added that "Birthdays" already covers ("Harold's birthday"…) are folded into it, once.
+if (customOcc().some(c => /birthday|bday|anniversaire|cumplea/i.test(norm(c.label)))) {
+  const alias = { ...(S.occAlias || {}) };
+  S.customOcc = customOcc().filter(c => { if (!/birthday|bday|anniversaire|cumplea/i.test(norm(c.label))) return true; alias[c.key] = 'birthday'; return false; });
+  S.occAlias = alias; ls.set('settings', S);
+}
+// Old occasion keys that now mean another one ("Mom's birthday" and the above → Birthdays).
+const mapOcc = list => [...new Set((list || []).map(h => h === 'momsbday' ? 'birthday' : (S.occAlias || {})[h] || h))];
 // Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
-// "Mom's birthday" was folded into Birthdays.
 function migrate(r) {
   let changed = false;
   if ('pesach' in r) {
     if (r.pesach && !(r.holidays || []).includes('pesach')) r.holidays = [...(r.holidays || []), 'pesach'];
     delete r.pesach; changed = true;
   }
-  if ((r.holidays || []).includes('momsbday')) { r.holidays = [...new Set(r.holidays.map(h => h === 'momsbday' ? 'birthday' : h))]; changed = true; }
+  if (r.holidays && mapOcc(r.holidays).join() !== r.holidays.join()) { r.holidays = mapOcc(r.holidays); changed = true; }
   return changed;
 }
 const L = { q: '', kash: '', cat: '', hol: '', mood: '', fav: false, quick: false, who: '', sort: 'az', scroll: 0 };

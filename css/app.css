@@ -505,18 +505,6 @@ table.ref th { font-family: var(--font-mono); font-size: .64rem; letter-spacing:
 .viewer .close { position: absolute; z-index: 2; top: calc(10px + env(safe-area-inset-top, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
 
 /* ---------- Lock ---------- */
-.lock { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; overflow: auto;
-  padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(20px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
-  background-color: var(--surface); background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%); background-size: 22px 22px; }
-.lock-in { position: relative; width: 100%; max-width: 350px; display: grid; justify-items: center; gap: 12px; text-align: center; background: var(--surface); padding: 30px 18px 24px; box-shadow: var(--shadow-lift); }
-.lock-in.intro { animation: fadein .35s var(--ease) both; }
-@keyframes fadein { from { opacity: 0; } }
-.lock-in::before, .lock-in::after { content: ""; position: absolute; top: 9px; width: 12px; height: 12px; border-top: 1px solid var(--muted); opacity: .6; }
-.lock-in::before { left: 9px; border-left: 1px solid var(--muted); } .lock-in::after { right: 9px; border-right: 1px solid var(--muted); }
-.lock .mono { width: 74px; height: 74px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-family: var(--font-display); font-style: italic; font-size: 2.5rem; box-shadow: 0 0 0 4px var(--surface), 0 0 0 5px var(--accent); }
-.lock h1 { font-size: 1.7rem; font-weight: 500; }
-.lock p { margin: 0; color: var(--muted); min-height: 1.5em; }
-.lock p.err { color: var(--danger); font-weight: 700; }
 .dots { display: flex; gap: 18px; margin: 6px 0 12px; }
 .dots span { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--accent); transition: background .15s, transform .2s var(--ease); }
 .dots span.on { background: var(--accent); transform: scale(1.15); }

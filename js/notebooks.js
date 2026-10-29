@@ -330,7 +330,7 @@ function renderEvent(id) {
   const e = PS.events.get(id); if (!e) return go('#/carnets');
   curEv = e; current = 'carnet'; navHTML('carnets');
   const t = T();
-  const occs = [...generalOcc(), ...HOLIDAYS];
+  const occs = generalOcc();
   const served = e.guests.length ? servedTo(e.guests, e.id) : [];
   const inMenu = new Set(e.items.map(itemKey));
   const prev = e.occ ? eventsSorted().find(x => x.id !== e.id && x.occ === e.occ && x.items.length && evTime(x) <= evTime(e)) : null;

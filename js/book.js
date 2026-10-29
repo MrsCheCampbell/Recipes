@@ -731,7 +731,7 @@ async function claudeTags(r) {
     output_config: { effort: 'low', format: { type: 'json_schema', schema: { type: 'object', additionalProperties: false, required: ['category', 'tags', 'keywords'], properties: {
       category: { type: 'string', enum: [...CATS, ''] }, tags: { type: 'array', items: { type: 'string', enum: TAG_KEYS } }, keywords: { type: 'array', items: { type: 'string' } } } } } },
     messages: [{ role: 'user', content: `File this recipe for a family cookbook (an American family in Bordeaux).
-Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner). Usually 2 to 5 tags. Leave out anything doubtful.
+Pick the category, and the tags that clearly fit: seasons by its main produce (spring, summer, autumn, winter, garden for vegetable-garden dishes); weather (hotday: a scorching day, coldday: a cold winter day, rainyday); occasions (friends: having friends over, family: family dinner, birthday, newyear, brunch, bbq: barbecue or picnic, weeknight: quick weeknight dinner; Jewish holidays only if the dish is traditional for them: shabbat, roshhashana, yomkippur for the break-fast, sukkot, hanukkah, purim, pesach, shavuot). Usually 2 to 5 tags. Leave out anything doubtful.
 keywords: up to 5 short search words in the recipe's own language (main ingredient, dish type, cuisine), not repeating the title.
 
 <recipe>

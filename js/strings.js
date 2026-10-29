@@ -4,7 +4,7 @@
 
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
-const HOLIDAYS = [];
+const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','purim','pesach','shavuot'];
 const OCCASIONS = ['friends','family','birthday','newyear','brunch','bbq','weeknight'];
 const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
 const KASHRUT = [];
@@ -24,7 +24,8 @@ const STR = {
     firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', cocktails: 'Cocktails', other: 'Other' },
-    hol: { friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+    hol: { shabbat: 'Shabbat dinner', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur break-fast', sukkot: 'Sukkot', hanukkah: 'Hanukkah', purim: 'Purim', pesach: 'Passover', shavuot: 'Shavuot',
+      friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
       hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 serving' : `${fmtNum(n)} servings`, times: x => `Amounts ×${fmtNum(x)}`,
@@ -120,11 +121,7 @@ On Android:
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
     bdayT: '¡Feliz cumpleaños, Harold!', bdayDate: '28 de octubre', bdaySub: 'Our Kitchen abre sus puertas hoy, en tu honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
-    lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
-    lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
-    lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
-    lockSaved: 'Code saved', lockRedo: 'Small update: please choose your code again. Your recipes are unchanged.', lockTitle: 'Passcode', lockOnText: 'The app asks for a 4-digit code when it opens.', lockOffText: 'No code is asked when the app opens.',
-    lockChange: 'Change the code', lockRemove: 'Remove the code', lockAdd: 'Add a code', lockRemoveQ: 'Remove the passcode?', lockRemoved: 'Code removed', lockNow: 'Lock now', erase: 'Delete', later: 'Later',
+    erase: 'Delete', later: 'Later',
   }
 };
 // Notebooks and "I made it" vocabulary.

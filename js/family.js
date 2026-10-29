@@ -78,7 +78,7 @@ async function famStart() {
 }
 function famRecipe(d) {
   const o = FAM.saved.get(d.id) || {}, ratings = d.ratings || {}, vals = Object.values(ratings);
-  if ((d.holidays || []).includes('momsbday')) d = { ...d, holidays: [...new Set(d.holidays.map(h => h === 'momsbday' ? 'birthday' : h))] };
+  if (d.holidays && mapOcc(d.holidays).join() !== d.holidays.join()) d = { ...d, holidays: mapOcc(d.holidays) };
   return { ...d, favorite: !!o.favorite, cookCount: o.cookCount || 0, lastCooked: o.lastCooked || 0, rating: ratings[FAM.uid] || 0,
     famRating: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0, famCount: vals.length,
     hearts: d.hearts || {}, mine: d.owner === FAM.uid };
@@ -119,7 +119,7 @@ function famChanged() {
   famTimer = setTimeout(() => {
     const a = document.activeElement;
     if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.closest('#view')) return;
-    if ($('.scrim') || lockState || cookState) return;
+    if ($('.scrim') || cookState) return;
     if (!['list', 'fav', 'recipe', 'feed', 'famille', 'carnets'].includes(current)) { updateNavCount(); return; }
     const y = window.scrollY; route(); window.scrollTo(0, y);
   }, 200);
