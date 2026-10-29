@@ -255,8 +255,8 @@ function renderList(favOnly) {
       ${favOnly ? carnetTabs('fav') : `${bdayHTML()}${calHTML()}${bannerHTML()}`}
     </div>
     <div class="searchbar"><div class="wrap">
-      <div class="search" role="search">${ico('search', 'lead')}
-        <input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="${esc(t.searchPh)}" value="${esc(L.q)}" aria-label="${esc(t.searchPh)}">
+      <div class="search" role="search">
+        <input id="q" type="search" enterkeyhint="search" autocomplete="off" value="${esc(L.q)}" aria-label="${esc(t.searchPh)}">
         <button class="icon-btn" data-act="clearq" aria-label="${esc(t.clear)}" ${L.q ? '' : 'hidden'}>${ico('x')}</button>
         ${hasSpeech ? `<button class="icon-btn" data-act="voice" aria-label="${esc(t.voice)}">${ico('mic')}</button>` : ''}
       </div>

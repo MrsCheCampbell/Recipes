@@ -127,7 +127,7 @@ function renderShop() {
   for (const it of shop) { const k = it.recipe || t.other; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(it); }
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.shopTitle)}</h1></header>
-    <form class="shop-add" id="shopAdd"><input class="input" id="shopIn" style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" placeholder="${esc(t.shopAddPh)}" enterkeyhint="done"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    <form class="shop-add" id="shopAdd"><input class="input" id="shopIn" style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" aria-label="${esc(t.shopAddPh)}" enterkeyhint="done"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
     ${shop.length ? [...groups].map(([g, items]) => `<div class="shop-group"><h3>${esc(g)}</h3>${items.map(it => `<div class="shop-item ${it.done ? 'done' : ''}"><label><input type="checkbox" data-act="shoptoggle" data-id="${it.id}" ${it.done ? 'checked' : ''}><span>${esc(it.text)}</span></label><button class="icon-btn" data-act="shopdel" data-id="${it.id}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}</div>`).join('')
       : `<div class="empty"><p>${esc(t.shopEmpty)}</p></div>`}
     ${shop.length ? `<div class="stack" style="padding-top:4px"><button class="btn primary" data-act="shopshare">${ico('share')}${esc(t.shareList)}</button>

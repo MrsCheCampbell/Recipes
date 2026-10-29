@@ -42,7 +42,7 @@ function renderFridge() {
   const last = ls.get('claudeLast', null);
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><div class="mast"><span>${esc(t.nav.fridge)}</span><span>${esc(String(pantry.length).padStart(2, '0'))}</span></div><h1 class="greet" style="font-style:italic">${esc(t.fridgeTitle)}</h1></header>
-    <form class="shop-add" id="pantryAdd"><input class="input" id="pantryIn" placeholder="${esc(t.fridgeAddPh)}" enterkeyhint="done" autocomplete="off"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    <form class="shop-add" id="pantryAdd"><input class="input" id="pantryIn" aria-label="${esc(t.fridgeAddPh)}" enterkeyhint="done" autocomplete="off"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
     <div class="wrapchips pantry">${pantry.map((p, i) => `<button class="chip on" data-act="pantryrm" data-i="${i}">${esc(p)}${ico('x')}</button>`).join('')}${pantry.length ? `<button class="chip add" data-act="pantryclear">${esc(t.fridgeClear)}</button>` : ''}</div>
     ${quick.length ? `<div><span class="eyebrow">${esc(t.fridgeQuick)}</span><div class="chips" style="flex-wrap:wrap">${quick.map(q => `<button class="chip" data-act="pantryquick" data-q="${esc(q)}">${ico('plus')}${esc(q)}</button>`).join('')}</div></div>` : ''}
     <section class="section" style="margin-top:6px"><div class="section-h"><h2>${esc(t.inYourBook)}</h2></div><div id="bookMatches"></div></section>
