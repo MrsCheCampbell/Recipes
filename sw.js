@@ -3,7 +3,7 @@
 const VERSION = 'abe-v29';
 const SCRIPTS = ['icons', 'strings', 'core', 'book', 'fridge', 'family', 'notebooks', 'more', 'app'].map(n => `./js/${n}.js?v=${VERSION}`);
 const SHELL = ['./', './index.html', `./css/app.css?v=${VERSION}`, ...SCRIPTS, './manifest.webmanifest',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/icon.svg', './icons/apple-touch-icon.png'];
+  './icons/icon-192.png', './icons/icon-512.png', './icons/logo-128.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

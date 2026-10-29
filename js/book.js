@@ -47,7 +47,7 @@ function bdayHTML() {
   setTimeout(bdayConfetti, 300);
   const t = T();
   return `<section class="bday" role="note"><span class="confetti" aria-hidden="true">${'<i></i>'.repeat(14)}</span>
-    <img src="icons/icon.svg" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
+    <img src="icons/logo-128.png" alt="" width="56" height="56"><div><span class="bdate">${esc(t.bdayDate)}</span><h2>${esc(t.bdayT)}</h2><p>${esc(t.bdaySub)}</p></div></section>`;
 }
 function calHTML() {
   // A quiet line at the top: the date, and an occasion only when near.
@@ -231,7 +231,7 @@ function renderList(favOnly) {
   const hasSpeech = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   $('#view').innerHTML = `
     <div class="wrap">
-      <header class="hbar"><span class="hname">${esc(favOnly ? t.carnets : t.appName)}</span>
+      <header class="hbar"><span class="hname">${favOnly ? '' : '<img class="hlogo" src="icons/logo-128.png" alt="" width="34" height="34">'}${esc(favOnly ? t.carnets : t.appName)}</span>
         <a href="#/inbox" class="mailbtn" aria-label="${esc(t.inbox)}">${ico('mail')}${inbox.length ? `<i>${inbox.length}</i>` : ''}</a></header>
       ${favOnly ? carnetTabs('fav') : `${bdayHTML()}${calHTML()}${bannerHTML()}`}
     </div>
