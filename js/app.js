@@ -304,6 +304,12 @@ navigator.serviceWorker?.addEventListener('message', e => {
   if (e.data !== 'update-ready' || updateOffered) return;
   updateOffered = true; toast(T().updateReady, { label: T().reload, fn: () => location.reload() });
 });
+// The challah and honey cake examples were taken out; remove them from phones that already added them.
+async function dropOldSamples() {
+  const old = recipes.filter(r => r.sample && ['sample-1', 'sample-5'].includes(r.id));
+  for (const r of old) { if (FAM.on) await cloudDelete(r); else await DB.del(r.id).catch(() => {}); }
+  if (old.length && !FAM.on) { recipes = recipes.filter(r => !old.includes(r)); if (current === 'list') route(); }
+}
 (async function start() {
   applyLook();
   readShareParams();
@@ -324,7 +330,7 @@ navigator.serviceWorker?.addEventListener('message', e => {
   route();
   drawTimers();
   refreshWeather();
-  Promise.resolve(famBoot).then(() => tagSweep()).then(() => { if (current === 'list') renderResults(); }).catch(e => console.warn(e));
+  Promise.resolve(famBoot).then(dropOldSamples).then(() => tagSweep()).then(() => { if (current === 'list') renderResults(); }).catch(e => console.warn(e));
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }

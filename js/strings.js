@@ -4,10 +4,10 @@
 
 // ---------- Vocabulary ----------
 const CATS = ['starters','soups','salads','mains','meat','poultry','fish','vegetarian','sides','breads','desserts','pastries','sauces','drinks','cocktails','other'];
-const HOLIDAYS = ['shabbat','roshhashana','yomkippur','sukkot','hanukkah','tubishvat','purim','pesach','shavuot'];
-const OCCASIONS = ['friends','family','birthday','thanksgiving','newyear','brunch','bbq','weeknight'];
+const HOLIDAYS = [];
+const OCCASIONS = ['friends','family','birthday','newyear','brunch','bbq','weeknight'];
 const SEASONS = ['hotday','coldday','rainyday','spring','summer','autumn','winter','garden'];
-const KASHRUT = ['meat','dairy','parve'];
+const KASHRUT = [];
 
 const STR = {
   fr: {
@@ -24,11 +24,8 @@ const STR = {
     firstRecipe: 'Ajouter ma première recette', loadSamples: 'Voir des recettes d’exemple',
     noResults: 'Rien trouvé.', noResultsHint: 'Essayez un autre mot, ou enlevez un filtre.', resetFilters: 'Tout effacer',
     cat: { starters: 'Entrées', soups: 'Soupes', salads: 'Salades', mains: 'Plats', meat: 'Viandes', poultry: 'Volailles', fish: 'Poissons', vegetarian: 'Végétarien', sides: 'Accompagnements', breads: 'Pains & brioches', desserts: 'Desserts', pastries: 'Pâtisseries & gâteaux', sauces: 'Sauces & condiments', drinks: 'Boissons', cocktails: 'Cocktails', other: 'Autre' },
-    hol: { shabbat: 'Chabbat', roshhashana: 'Roch Hachana', yomkippur: 'Yom Kippour', sukkot: 'Souccot', hanukkah: 'Hanoucca', tubishvat: 'Tou Bichvat', purim: 'Pourim', pesach: 'Pessah', shavuot: 'Chavouot',
-      friends: 'Recevoir des amis', family: 'Repas de famille', birthday: 'Anniversaires', thanksgiving: 'Thanksgiving', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
+    hol: { friends: 'Recevoir des amis', family: 'Repas de famille', birthday: 'Anniversaires', newyear: 'Réveillon du Nouvel An', brunch: 'Brunch', bbq: 'Barbecue & pique-nique', weeknight: 'Soir de semaine',
       hotday: 'Jour de canicule', coldday: 'Jour de grand froid', rainyday: 'Jour de pluie', spring: 'Printemps', summer: 'Été', autumn: 'Automne', winter: 'Hiver', garden: 'Du potager' },
-    kash: { meat: 'Bassari', dairy: 'Halavi', parve: 'Parvé', none: 'Non précisé' },
-    kashLong: { meat: 'Bassari (viande)', dairy: 'Halavi (lait)', parve: 'Parvé' },
     prep: 'Préparation', cook: 'Cuisson', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 personne' : `${fmtNum(n)} personnes`, times: x => `Quantités ×${fmtNum(x)}`,
     ingredients: 'Ingrédients', steps: 'Préparation', notes: 'Notes', source: 'Recette de',
@@ -40,8 +37,7 @@ const STR = {
     // form
     photo: 'Photo', addPhoto: 'Prendre ou choisir une photo', changePhoto: 'Changer', removePhoto: 'Retirer', photoUrl: 'ou coller le lien d’une image',
     importing: 'Import en cours…', importOk: 'Recette importée ! Vérifiez et enregistrez.', importFail: 'Ce site ne se laisse pas lire. Le lien est gardé : collez le texte de la recette, ou faites des captures d’écran et touchez « Photos ».',
-    title: 'Nom de la recette', titlePh: '', link: 'Lien (site, vidéo…)', category: 'Catégorie', kashrut: 'Cacheroute',
-    holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
+    title: 'Nom de la recette', titlePh: '', link: 'Lien (site, vidéo…)', category: 'Catégorie', holidays: 'Fêtes', tags: 'Mots-clés', tagsPh: '', servingsF: 'Personnes', prepF: 'Préparation (min)', cookF: 'Cuisson (min)',
     ingF: 'Ingrédients', stepsF: 'Étapes', notesF: 'Notes de la recette', noteF: 'Vos notes', sourceF: 'Recette de (qui ?)', sourcePh: '',
     save: 'Enregistrer', saved: 'Enregistré', needTitle: 'Donnez un nom à la recette',
     draftFound: 'Un brouillon non enregistré a été retrouvé.', restore: 'Reprendre', discard: 'Ignorer',
@@ -51,7 +47,7 @@ const STR = {
     // more
     moreTitle: 'Plus', settings: 'Réglages', yourName: 'Prénom affiché', language: 'Langue', textSize: 'Taille du texte', sizes: { normal: 'Normale', large: 'Grande', xl: 'Très grande' },
     theme: 'Apparence', themes: { auto: 'Automatique', light: 'Clair', dark: 'Sombre' },
-    city: 'Ville pour les horaires de Chabbat', useGps: 'Utiliser ma position', myPos: 'Ma position', gpsFail: 'Position indisponible',
+    city: 'Ville (pour la météo)', useGps: 'Utiliser ma position', myPos: 'Ma position', gpsFail: 'Position indisponible',
     backup: 'Sauvegarde', backupText: 'Vos recettes sont gardées sur ce téléphone. Faites une sauvegarde de temps en temps et envoyez-la par e-mail ou sur Google Drive.',
     exportB: 'Télécharger une sauvegarde', shareB: 'Envoyer la sauvegarde', importB: 'Restaurer une sauvegarde', importedN: n => `${n} recette${n > 1 ? 's' : ''} restaurée${n > 1 ? 's' : ''}`, badFile: 'Ce fichier n’est pas une sauvegarde valide',
     lastBackup: d => d ? `Dernière sauvegarde : ${d}` : 'Aucune sauvegarde pour l’instant',
@@ -66,10 +62,6 @@ const STR = {
     eraseAll: 'Tout effacer', eraseQ: 'Effacer toutes les recettes de ce téléphone ? C’est définitif.', erased: 'Tout est effacé',
     
     // jewish calendar
-    candles: 'Allumage des bougies', havdala: 'Fin de Chabbat', approx: 'Horaires approximatifs',
-    
-    
-    
     // cook
     step: (i, n) => `Étape ${i} sur ${n}`, prev: 'Précédente', next: 'Suivante', finish: 'Terminé !', showIng: 'Ingrédients', close: 'Fermer',
     timerDone: 'Minuteur terminé', stop: 'Arrêter', startTimer: 'Lancer', timerFor: 'Minuteur',
@@ -80,7 +72,7 @@ const STR = {
     pagesN: n => n > 1 ? `Pages du livre (${n})` : 'Page du livre', pageAlt: i => `Page ${i}`, removePage: 'Retirer la page',
     occSeasons: 'Saisons, météo & potager', seasonRail: { spring: 'Recettes de printemps', summer: 'Recettes d’été', autumn: 'Recettes d’automne', winter: 'Recettes d’hiver' },
     wxHot: (d, c) => `Il fait ${d}° à ${c} : de quoi se rafraîchir`, wxCold: (d, c) => `Il fait ${d}° à ${c} : de quoi se réchauffer`, wxRain: c => `Il pleut à ${c} : un bon petit plat`,
-    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', occJewish: 'Fêtes juives', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: '',
+    occasions: 'Occasions', occMoments: 'Recevoir & célébrer', addOcc: 'Autre occasion', occName: 'Nom de l’occasion', occNamePh: '',
     occDate: 'Date (facultatif, pour un petit rappel)', occText: 'Ajoutez une date pour voir un rappel discret quelques jours avant.', occAdd: 'Ajouter une occasion', occDelQ: l => `Supprimer l’occasion « ${l} » ?`,
     occSoon: (h, n) => n === 0 ? `${h} aujourd’hui` : n === 1 ? `${h} demain` : `${h} dans ${n} jours`,
     collection: n => `Recueil · ${String(n).padStart(3, '0')}`, added: 'Ajoutée',
@@ -131,8 +123,7 @@ ${url}
     pasteGo: 'Ajouter à la boîte', pasteBad: 'Aucune recette trouvée dans ce texte.', alreadyIn: 'Cette recette est déjà dans votre boîte.', gotOne: 'Nouvelle recette reçue !',
     iosCopyTitle: 'Une recette pour vous', iosCopyText: 'Pour la mettre dans votre appli : touchez « Copier pour mon appli », ouvrez Our Kitchen, puis Boîte de réception → « Coller une recette reçue ».',
     copyForApp: 'Copier pour mon appli', someone: 'Quelqu’un',
-    kashrutF: 'Cacheroute', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
-    candlesShort: t => `bougies ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} demain soir` : `${h} dans ${n} jours`,
+    bdayT: 'Joyeux anniversaire !', bdaySub: 'Our Kitchen ouvre ses portes aujourd’hui, en ton honneur.', favRail: 'Vos favoris', recentRail: 'Ajoutées récemment', seeAll: 'Tout voir',
     lockEnter: 'Entrez votre code', lockWrong: 'Ce n’est pas le bon code', lockSetup: 'Choisissez un code à 4 chiffres',
     lockSetupSub: 'Il sera demandé à l’ouverture de l’appli.', lockConfirm: 'Retapez le même code', lockMismatch: 'Les deux codes sont différents. On recommence.',
     lockForgot: 'Code oublié ?', lockHintIs: h => `Indice : ${h}`, lockNoHint: 'Pas d’indice enregistré.', lockHintQ: 'Un indice pour s’en souvenir ? (facultatif)', lockHintPh: '',
@@ -153,11 +144,8 @@ ${url}
     firstRecipe: 'Add my first recipe', loadSamples: 'Show example recipes',
     noResults: 'Nothing found.', noResultsHint: 'Try another word, or remove a filter.', resetFilters: 'Clear all',
     cat: { starters: 'Starters', soups: 'Soups', salads: 'Salads', mains: 'Mains', meat: 'Meat', poultry: 'Poultry', fish: 'Fish', vegetarian: 'Vegetarian', sides: 'Sides', breads: 'Breads', desserts: 'Desserts', pastries: 'Cakes & pastries', sauces: 'Sauces & condiments', drinks: 'Drinks', cocktails: 'Cocktails', other: 'Other' },
-    hol: { shabbat: 'Shabbat', roshhashana: 'Rosh Hashanah', yomkippur: 'Yom Kippur', sukkot: 'Sukkot', hanukkah: 'Hanukkah', tubishvat: 'Tu BiShvat', purim: 'Purim', pesach: 'Pesach', shavuot: 'Shavuot',
-      friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', thanksgiving: 'Thanksgiving', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
+    hol: { friends: 'Having friends over', family: 'Family dinner', birthday: 'Birthdays', newyear: 'New Year’s Eve', brunch: 'Brunch', bbq: 'BBQ & picnic', weeknight: 'Weeknight dinner',
       hotday: 'Scorching summer day', coldday: 'Cold winter day', rainyday: 'Rainy day', spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', garden: 'From the garden' },
-    kash: { meat: 'Meat', dairy: 'Dairy', parve: 'Parve', none: 'Not set' },
-    kashLong: { meat: 'Meat (fleishig)', dairy: 'Dairy (milchig)', parve: 'Parve' },
     prep: 'Prep', cook: 'Cook', total: 'Total', min: 'min', h: 'h',
     servings: n => n === 1 ? '1 serving' : `${fmtNum(n)} servings`, times: x => `Amounts ×${fmtNum(x)}`,
     ingredients: 'Ingredients', steps: 'Method', notes: 'Notes', source: 'Recipe from',
@@ -168,8 +156,7 @@ ${url}
     addedOn: d => `Added ${d}`,
     photo: 'Photo', addPhoto: 'Take or choose a photo', changePhoto: 'Change', removePhoto: 'Remove', photoUrl: 'or paste an image link',
     importing: 'Importing…', importOk: 'Recipe imported! Check it and save.', importFail: 'This site can’t be read. The link is kept: paste the recipe text, or take screenshots and tap “Photos”.',
-    title: 'Recipe name', titlePh: '', link: 'Link (website, video…)', category: 'Category', kashrut: 'Kashrut',
-    holidays: 'Holidays', tags: 'Keywords', tagsPh: '', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
+    title: 'Recipe name', titlePh: '', link: 'Link (website, video…)', category: 'Category', holidays: 'Holidays', tags: 'Keywords', tagsPh: '', servingsF: 'Servings', prepF: 'Prep (min)', cookF: 'Cook (min)',
     ingF: 'Ingredients', stepsF: 'Steps', notesF: 'Notes from the recipe', noteF: 'Your notes', sourceF: 'Recipe from (who?)', sourcePh: '',
     save: 'Save', saved: 'Saved', needTitle: 'Give the recipe a name',
     draftFound: 'An unsaved draft was found.', restore: 'Restore', discard: 'Discard',
@@ -177,7 +164,7 @@ ${url}
     clearDone: 'Remove checked items', clearAll: 'Clear the list', shareList: 'Share the list', other: 'Other', clearAllQ: 'Clear the whole list?',
     moreTitle: 'More', settings: 'Settings', yourName: 'Name shown', language: 'Language', textSize: 'Text size', sizes: { normal: 'Normal', large: 'Large', xl: 'Extra large' },
     theme: 'Appearance', themes: { auto: 'Automatic', light: 'Light', dark: 'Dark' },
-    city: 'City for Shabbat times', useGps: 'Use my location', myPos: 'My location', gpsFail: 'Location unavailable',
+    city: 'City (for the weather)', useGps: 'Use my location', myPos: 'My location', gpsFail: 'Location unavailable',
     backup: 'Backup', backupText: 'Your recipes are kept on this phone. Make a backup now and then and email it or save it to Google Drive.',
     exportB: 'Download a backup', shareB: 'Send the backup', importB: 'Restore a backup', importedN: n => `${n} recipe${n > 1 ? 's' : ''} restored`, badFile: 'This file isn’t a valid backup',
     lastBackup: d => d ? `Last backup: ${d}` : 'No backup yet',
@@ -191,10 +178,6 @@ ${url}
     iosNudge: 'To use it like a real app: tap Share, then “Add to Home Screen”.', ok: 'OK',
     eraseAll: 'Erase everything', eraseQ: 'Erase every recipe from this phone? This can’t be undone.', erased: 'Everything erased',
     
-    candles: 'Candle lighting', havdala: 'Shabbat ends', approx: 'Approximate times',
-    
-    
-    
     step: (i, n) => `Step ${i} of ${n}`, prev: 'Back', next: 'Next', finish: 'Done!', showIng: 'Ingredients', close: 'Close',
     timerDone: 'Timer done', stop: 'Stop', startTimer: 'Start', timerFor: 'Timer',
     offlineSave: 'Storage is unavailable: recipes won’t be kept.',
@@ -204,7 +187,7 @@ ${url}
     pagesN: n => n > 1 ? `Cookbook pages (${n})` : 'Cookbook page', pageAlt: i => `Page ${i}`, removePage: 'Remove page',
     occSeasons: 'Seasons, weather & garden', seasonRail: { spring: 'Spring recipes', summer: 'Summer recipes', autumn: 'Autumn recipes', winter: 'Winter recipes' },
     wxHot: (d, c) => `It’s ${d}° in ${c}: something to cool down`, wxCold: (d, c) => `It’s ${d}° in ${c}: something to warm up`, wxRain: c => `It’s raining in ${c}: some comfort food`,
-    occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', occJewish: 'Jewish holidays', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: '',
+    occasions: 'Occasions', occMoments: 'Get-togethers & celebrations', addOcc: 'Other occasion', occName: 'Occasion name', occNamePh: '',
     occDate: 'Date (optional, for a small reminder)', occText: 'Add a date to see a quiet reminder a few days before.', occAdd: 'Add an occasion', occDelQ: l => `Delete the occasion “${l}”?`,
     occSoon: (h, n) => n === 0 ? `${h} today` : n === 1 ? `${h} tomorrow` : `${h} in ${n} days`,
     collection: n => `Collection · ${String(n).padStart(3, '0')}`, added: 'Added',
@@ -255,8 +238,7 @@ ${url}
     pasteGo: 'Add to inbox', pasteBad: 'No recipe found in this text.', alreadyIn: 'This recipe is already in your inbox.', gotOne: 'New recipe received!',
     iosCopyTitle: 'A recipe for you', iosCopyText: 'To put it in your app: tap “Copy for my app”, open Our Kitchen, then Inbox → “Paste a received recipe”.',
     copyForApp: 'Copy for my app', someone: 'Someone',
-    kashrutF: 'Kashrut', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
-    candlesShort: t => `candles ${t}`, holSoon: (h, n) => n <= 0 ? h : n === 1 ? `${h} tomorrow evening` : `${h} in ${n} days`,
+    bdayT: 'Happy birthday!', bdaySub: 'Our Kitchen opens its doors today, in your honor.', favRail: 'Your favorites', recentRail: 'Recently added', seeAll: 'See all',
     lockEnter: 'Enter your code', lockWrong: 'That’s not the right code', lockSetup: 'Choose a 4-digit code',
     lockSetupSub: 'It will be asked when the app opens.', lockConfirm: 'Type the same code again', lockMismatch: 'The two codes are different. Let’s start again.',
     lockForgot: 'Forgot code?', lockHintIs: h => `Hint: ${h}`, lockNoHint: 'No hint saved.', lockHintQ: 'A hint to help remember it? (optional)', lockHintPh: '',
@@ -271,7 +253,7 @@ Object.assign(STR.fr, {
   tabEvents: 'Soirées', tabGuests: 'Invités', upcoming: 'À venir', memories: 'Souvenirs',
   nEvents: n => n ? `${n} soirée${n > 1 ? 's' : ''}` : 'Carnet neuf',
   newEvent: 'Nouvelle soirée', newGuest: 'Nouveaux invités',
-  eventsEmptyT: 'Un carnet tout neuf', eventsEmpty: 'Préparez Thanksgiving, un dîner entre amis ou l’anniversaire de Maman : les idées de menu, ce qui a été fait, et le souvenir de la soirée. Tout reste là pour l’an prochain.',
+  eventsEmptyT: 'Un carnet tout neuf', eventsEmpty: 'Préparez un dîner entre amis, un anniversaire ou le Nouvel An : les idées de menu, ce qui a été fait, et le souvenir de la soirée. Tout reste là pour l’an prochain.',
   guestsEmptyT: 'Le livre des invités', guestsEmpty: 'Pour chaque couple d’amis, ce que vous leur avez servi : pour ne pas refaire le même plat, ou refaire leur préféré.',
   untitled: 'Soirée sans titre', unnamedGuests: 'Invités sans nom', evTitlePh: 'Quelle occasion ?',
   evDate: 'Date', evOcc: 'Occasion', evGuests: 'Les invités', addGuests: 'Ajouter des invités',
@@ -306,7 +288,7 @@ Object.assign(STR.en, {
   tabEvents: 'Events', tabGuests: 'Guests', upcoming: 'Coming up', memories: 'Memories',
   nEvents: n => n ? `${n} event${n > 1 ? 's' : ''}` : 'New notebook',
   newEvent: 'New event', newGuest: 'New guests',
-  eventsEmptyT: 'A brand-new notebook', eventsEmpty: 'Plan Thanksgiving, dinner with friends or Mom’s birthday: menu ideas, what got made, and how the evening went. It all stays here for next year.',
+  eventsEmptyT: 'A brand-new notebook', eventsEmpty: 'Plan dinner with friends, a birthday or New Year’s Eve: menu ideas, what got made, and how the evening went. It all stays here for next year.',
   guestsEmptyT: 'The guest book', guestsEmpty: 'For each couple of friends, what you served them: so you don’t repeat a dish, or so you can make their favourite again.',
   untitled: 'Untitled event', unnamedGuests: 'Unnamed guests', evTitlePh: 'What’s the occasion?',
   evDate: 'Date', evOcc: 'Occasion', evGuests: 'Guests', addGuests: 'Add guests',

@@ -77,7 +77,7 @@ const DB = {
 let recipes = [];
 const byId = id => recipes.find(r => r.id === id) || (FAM.on ? FAM.all.find(r => r.id === id) : undefined);
 const customOcc = () => S.customOcc || [];
-const occLabel = (k, lang = S.lang) => STR[lang].hol[k] || customOcc().find(c => c.key === k)?.label || '';
+const occLabel = (k, lang = S.lang) => (OCCASIONS.includes(k) || SEASONS.includes(k) ? STR[lang].hol[k] : '') || customOcc().find(c => c.key === k)?.label || '';
 const generalOcc = () => [...OCCASIONS, ...customOcc().map(c => c.key)];
 // Older recipes had a separate "kosher for Pesach" box; it is now just the Pesach occasion.
 // "Mom's birthday" was folded into Birthdays.
@@ -126,7 +126,7 @@ function indexRecipe(r) {
   const both = (dict, k) => k ? [STR.fr[dict][k], STR.en[dict][k]].join(' ') : '';
   const f = {
     title: norm(r.title),
-    meta: norm([r.tags?.join(' '), both('cat', r.category), both('kash', r.kashrut), (r.holidays || []).map(h => occLabel(h, 'fr') + ' ' + occLabel(h, 'en')).join(' '), r.source].join(' ')),
+    meta: norm([r.tags?.join(' '), both('cat', r.category), (r.holidays || []).map(h => occLabel(h, 'fr') + ' ' + occLabel(h, 'en')).join(' '), r.source].join(' ')),
     ing: norm(r.ingredients),
     rest: norm([r.steps, r.notes, r.note, r.link].join(' ')),
   };
@@ -190,28 +190,7 @@ function filtered() {
   return list;
 }
 
-// ---------- Hebrew calendar & Shabbat times ----------
-const HEB_START = { roshhashana: [1, ['Tishri'], 2], yomkippur: [10, ['Tishri'], 1], sukkot: [15, ['Tishri'], 8], hanukkah: [25, ['Kislev'], 8], tubishvat: [15, ['Shevat'], 1], purim: [14, ['Adar', 'Adar II'], 1], pesach: [15, ['Nisan'], 8], shavuot: [6, ['Sivan'], 2] };
-function hebParts(d) {
-  try {
-    const p = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(d);
-    return { day: +p.find(x => x.type === 'day').value, month: p.find(x => x.type === 'month').value };
-  } catch { return null; }
-}
-function nextHoliday(now = new Date()) {
-  const base = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
-  for (let off = -9; off <= 40; off++) {
-    const d = new Date(base); d.setDate(d.getDate() + off);
-    const p = hebParts(d); if (!p) return null;
-    for (const [k, [day, months, dur]] of Object.entries(HEB_START)) {
-      if (p.day === day && months.includes(p.month)) {
-        const end = off + dur - 1;
-        if (end >= 0) return { key: k, offset: off, start: d, dayN: off <= 0 ? 1 - off : 0 };
-      }
-    }
-  }
-  return null;
-}
+// ---------- Cities (for the weather) ----------
 const CITIES = {
   paris: ['Paris', 48.8566, 2.3522, 'Europe/Paris'], lyon: ['Lyon', 45.764, 4.8357, 'Europe/Paris'], marseille: ['Marseille', 43.2965, 5.3698, 'Europe/Paris'],
   nice: ['Nice', 43.7102, 7.262, 'Europe/Paris'], toulouse: ['Toulouse', 43.6047, 1.4442, 'Europe/Paris'], strasbourg: ['Strasbourg', 48.5734, 7.7521, 'Europe/Paris'],
@@ -220,33 +199,6 @@ const CITIES = {
   jerusalem: ['Jérusalem', 31.7683, 35.2137, 'Asia/Jerusalem'], telaviv: ['Tel Aviv', 32.0853, 34.7818, 'Asia/Jerusalem'],
   london: ['London', 51.5072, -0.1276, 'Europe/London'], newyork: ['New York', 40.7128, -74.006, 'America/New_York'],
 };
-// Sun altitude crossing (sunrise equation). alt = -0.833 for sunset, -8.5 for nightfall (3 stars).
-function sunTime(date, lat, lng, alt) {
-  const rad = Math.PI / 180;
-  const J = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 12) / 86400000 + 2440587.5;
-  const n = Math.round(J - 2451545 + 0.0008);
-  const Js = n - lng / 360;
-  const M = ((357.5291 + 0.98560028 * Js) % 360 + 360) % 360;
-  const C = 1.9148 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 0.0003 * Math.sin(3 * M * rad);
-  const lam = (M + C + 180 + 102.9372) % 360;
-  const Jt = 2451545 + Js + 0.0053 * Math.sin(M * rad) - 0.0069 * Math.sin(2 * lam * rad);
-  const dec = Math.asin(Math.sin(lam * rad) * Math.sin(23.44 * rad));
-  const cw = (Math.sin(alt * rad) - Math.sin(lat * rad) * Math.sin(dec)) / (Math.cos(lat * rad) * Math.cos(dec));
-  if (cw < -1 || cw > 1) return null;
-  const w = Math.acos(cw) / rad;
-  return new Date((Jt + w / 360 - 2440587.5) * 86400000);
-}
-function shabbatTimes(now = new Date()) {
-  const c = S.city === 'gps' && S.gps ? [T().myPos, S.gps[0], S.gps[1], undefined] : CITIES[S.city] || CITIES.paris;
-  const dow = now.getDay();
-  const fri = new Date(now); fri.setDate(now.getDate() + ((5 - dow + 7) % 7) - (dow === 6 ? 7 : 0));
-  const sat = new Date(fri); sat.setDate(fri.getDate() + 1);
-  const ss = sunTime(fri, c[1], c[2], -0.833), tz = sunTime(sat, c[1], c[2], -8.5);
-  if (!ss || !tz) return null;
-  const candles = new Date(ss.getTime() - 18 * 60000);
-  const f = d => d.toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit', timeZone: c[3] });
-  return { city: c[0], candles: f(candles), havdala: f(tz), friday: fmtDate(fri, { weekday: 'long', day: 'numeric', month: 'long' }), candlesAt: candles, endAt: tz };
-}
 
 // ---------- Ingredient quantities ----------
 const FRAC = { '½': .5, '¼': .25, '¾': .75, '⅓': 1 / 3, '⅔': 2 / 3, '⅛': .125 };

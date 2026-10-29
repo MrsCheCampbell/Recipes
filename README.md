@@ -39,14 +39,14 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - Ingredients typed or pasted on one line with commas ("200 g de farine, 3 œufs, 100 g de sucre") are split into one per line. The page photos stay attached to the recipe so the original is always one tap away (tap to zoom).
 - Add a photo of the dish with the camera or from the gallery, or paste an image link. Photos are compressed so the phone doesn't fill up.
 - **Share to the app**: in Chrome or any app, tap *Share → Our Kitchen* on a recipe page to start a new recipe from it.
-- Category, **occasions** (having friends over, family dinner, birthdays, Thanksgiving, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden; plus the Jewish holidays), kashrut (Bassari / Halavi / Parvé), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
+- Category, **occasions** (having friends over, family dinner, birthdays, New Year's Eve, brunch, BBQ & picnic, weeknight, plus his own; seasons, weather & garden: scorching summer day, cold winter day, rainy day, spring, summer, autumn, winter, from the garden), keywords, notes, "recipe from" (Mom, Aunt Esther…), star rating, favorites.
 - Unsaved drafts are kept if he gets interrupted.
 
 **Finding things**
 - Alphabetical list grouped by letter, with an A–Z rail to slide through.
-- Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English/Hebrew spellings (*Hanoucca / Hanukkah / Chanukah*, *’halla / challah*, *poulet / chicken*).
+- Search across titles, ingredients, steps and notes. It ignores accents (*creme* finds *crème*), tolerates typos, and understands French/English spellings (*poulet / chicken*, *aubergine / eggplant*).
 - Voice search (microphone button).
-- One quiet **Filtres** button next to the sort: favorites, quick (≤ 30 min), who added it, seasons and weather, occasions, Jewish holidays, category and kashrut. Active filters show as small pills under the search bar; tap one to remove it.
+- One quiet **Filtres** button next to the sort: favorites, quick (≤ 30 min), who added it, seasons and weather, occasions and category. Active filters show as small pills under the search bar; tap one to remove it.
 - At the top, a row of ideas that fits the moment, shown every time the app opens, worked out from each recipe itself (name, ingredients, type, cooking time), not only from tags. A small label on each one says why it was picked ("SOUPE", "POMMES", "MIJOTÉ"). Seasons use what's in season in France (asparagus in spring, tomatoes in summer, squash, apples and mushrooms in autumn, leeks and citrus in winter). The moments: on a hot day (28° or more in his city) "Il fait 33° à Paris : de quoi se rafraîchir", on a cold day (5° or less) something warming, on a rainy day comfort food, otherwise the season's recipes. Then his favorites. Weather comes from Open-Meteo (free, no account); offline it just uses the season.
 - Sort A–Z, recently added, most cooked, top rated, or quickest.
 
@@ -59,14 +59,13 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 - "I cooked this today" keeps a count and the last date cooked.
 - Shopping list: add a recipe's ingredients in one tap, check items off, share the list.
 
-**Jewish touches (kept discreet)**
-- One quiet line at the top: the date, Shabbat candle-lighting time from Thursday on (his city or GPS), and an upcoming holiday when it's within two weeks. Tapping the holiday shows his recipes for it.
-- Jewish holidays are one group of occasions; kashrut sits in a fold-away section of the recipe form and in Filters.
-
 **Occasions with dates**
-- Thanksgiving and New Year's Eve are dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
-- Two weeks before, a quiet line at the top says e.g. "Thanksgiving dans 9 jours". Tapping it shows the recipes tagged for it.
+- New Year's Eve is dated automatically. Any occasion he adds (a birthday, say) can be given a date in *Plus → Occasions*.
+- Two weeks before, a quiet line at the top says e.g. "Réveillon du Nouvel An dans 9 jours". Tapping it shows the recipes tagged for it.
 - French by default, English available. Metric units, plus a converter for cups, tbsp, oz, lb and °F → °C, with the French oven **thermostat** number.
+
+**Birthday (until October 31, 2026)**
+- A teal *Joyeux anniversaire !* card at the top of Recettes, and a shower of confetti every time the app opens. Both go away on their own after October 31.
 
 **Look**
 - Calm and classic: the home page is the date, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.
@@ -77,7 +76,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 **Comfort & safety**
 - Large text by default (three sizes), light and dark modes, big tap targets.
 - **Backup**: send a backup file to email or Google Drive, and restore it on a new phone. The app reminds him once a month.
-- Six example recipes (challah, roast chicken, shakshuka, ratatouille, honey cake, tarte Tatin), removable in one tap.
+- Four example recipes (roast chicken, shakshuka, ratatouille, tarte Tatin), removable in one tap.
 
 ## La famille: a recipe feed just for us
 
@@ -119,8 +118,8 @@ Notes: the Firebase web config isn't a secret (security comes from the rules). A
 
 The **Carnets** tab (bottom bar) is private to each person, even in the family.
 
-- **Soirées (events)**: one page per evening: Thanksgiving, friends over, a birthday. Give it a date and an occasion, add the guests, then build **the menu**: recipes you're considering (from your book or the family's), or any other dish typed in ("Sarah's cheese board"). On the night, tick what you actually made, mark it *Adoré / Bien / Bof*, and add a note per dish. **La soirée** is for notes about the evening and up to six photos. "J'ai cuisiné" photos tagged to that evening show up there too.
-- **Next year**: an evening with the same occasion offers **Reprendre le menu de « Thanksgiving 2025 »**, which copies last year's menu in one tap.
+- **Soirées (events)**: one page per evening: friends over, a birthday, New Year's Eve. Give it a date and an occasion, add the guests, then build **the menu**: recipes you're considering (from your book or the family's), or any other dish typed in ("Sarah's cheese board"). On the night, tick what you actually made, mark it *Adoré / Bien / Bof*, and add a note per dish. **La soirée** is for notes about the evening and up to six photos. "J'ai cuisiné" photos tagged to that evening show up there too.
+- **Next year**: an evening with the same occasion offers **Reprendre le menu de « Réveillon 2025 »**, which copies last year's menu in one tap.
 - **Invités (guest book)**: one page per couple or group of friends: what to know about them (allergies, what they love), every evening with them, and **everything you've served them**, with how many times, when last, and whether it was loved. When you plan a new evening with them, **Déjà servi à ces invités** lists it right on the page, so you don't repeat a dish, or so you can make their favourite again. **Organiser une soirée avec eux** starts a new evening with them already invited.
 - On a recipe: *menu → Ajouter à une soirée*, and the recipe shows which evenings it was served at.
 - **Cave (wine notes)**: snap the label, note the name, colour, vintage, appellation, château, stars and a few words. Link a wine to the dishes it went with (the recipe then shows *Accords*), add wines to an evening, and each guest book lists the wines poured for those friends.
@@ -134,9 +133,9 @@ Everything is in the backup file (*Plus → Sauvegarder*). In a family it is als
 
 - **Ranger automatiquement**: a button in the recipe form fills in the category, seasons, weather and occasions right away (and keywords, with a Claude key). New ones are ringed, so you can see them and tap any to remove it before saving. It also runs by itself after importing from a link, screenshots or pasted text.
 - When a recipe is saved without that, the app files it under its seasons, weather (scorching day, cold day, rainy day) and occasions (barbecue, brunch, quick weeknight…), and picks a category if none was chosen. It never removes a tag you set, and you can always change them.
-- With a Claude key, Claude also reads each new recipe and adds the tags that fit, including Jewish holidays when the dish is traditional for them. *Plus → Claude → Ranger toutes mes recettes avec Claude* does the same for older recipes.
+- With a Claude key, Claude also reads each new recipe and adds the tags that fit. *Plus → Claude → Ranger toutes mes recettes avec Claude* does the same for older recipes.
 - The top of **Recettes** always shows a row of ideas for today: from the weather (hot, cold, rainy) or the season, or a daily pick when nothing matches.
-- In **Filtres**, seasons and weather come first, then occasions, Jewish holidays, category and kashrut.
+- In **Filtres**, seasons and weather come first, then occasions and category.
 
 ## Adding recipes from links and screenshots
 

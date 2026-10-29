@@ -709,3 +709,36 @@ a.chip { text-decoration: none; color: inherit; }
 .feedintro .panel p { margin: 0; }
 .post.sample { opacity: .9; pointer-events: none; position: relative; }
 .post.sample::after { content: attr(data-label); position: absolute; top: 14px; right: 14px; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border: 1px dashed var(--line); border-radius: 4px; padding: 3px 6px; }
+
+/* Birthday card (temporary) */
+.bday { position: relative; overflow: hidden; display: flex; align-items: center; gap: 14px; margin: 10px 0 10px; padding: 16px; border-radius: 18px;
+  background: linear-gradient(135deg, #2EC4B6, #22A59A); color: #fff; box-shadow: 0 6px 18px rgba(46,196,182,.35); animation: bdayIn .6s var(--ease) both; }
+.bday img { flex: none; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.18); position: relative; animation: bdayBob 2.4s ease-in-out infinite; }
+.bday h2 { margin: 0; font-family: var(--font-display); font-style: italic; font-size: 1.4rem; line-height: 1.1; position: relative; text-shadow: 0 1px 6px rgba(0,0,0,.18); }
+.bday p { margin: 4px 0 0; font-size: .92rem; opacity: .95; position: relative; }
+.bday .confetti { position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .85; }
+.bday > div, .bday > img { z-index: 1; position: relative; }
+.bday .confetti i { position: absolute; top: -12px; width: 7px; height: 12px; border-radius: 2px; background: #FFD23F; animation: bdayFall 4s linear infinite; }
+.bday .confetti i:nth-child(3n) { background: #FF8FA3; } .bday .confetti i:nth-child(3n+1) { background: #FFF4E0; } .bday .confetti i:nth-child(4n) { background: #F0412E; }
+.bday .confetti i:nth-child(1) { left: 4%; animation-delay: 0.00s; animation-duration: 3.2s; }
+.bday .confetti i:nth-child(2) { left: 11%; animation-delay: 3.47s; animation-duration: 3.7s; }
+.bday .confetti i:nth-child(3) { left: 18%; animation-delay: 2.94s; animation-duration: 4.2s; }
+.bday .confetti i:nth-child(4) { left: 25%; animation-delay: 2.41s; animation-duration: 4.7s; }
+.bday .confetti i:nth-child(5) { left: 32%; animation-delay: 1.88s; animation-duration: 3.2s; }
+.bday .confetti i:nth-child(6) { left: 39%; animation-delay: 1.35s; animation-duration: 3.7s; }
+.bday .confetti i:nth-child(7) { left: 46%; animation-delay: 0.82s; animation-duration: 4.2s; }
+.bday .confetti i:nth-child(8) { left: 53%; animation-delay: 0.29s; animation-duration: 4.7s; }
+.bday .confetti i:nth-child(9) { left: 60%; animation-delay: 3.76s; animation-duration: 3.2s; }
+.bday .confetti i:nth-child(10) { left: 67%; animation-delay: 3.23s; animation-duration: 3.7s; }
+.bday .confetti i:nth-child(11) { left: 74%; animation-delay: 2.70s; animation-duration: 4.2s; }
+.bday .confetti i:nth-child(12) { left: 81%; animation-delay: 2.17s; animation-duration: 4.7s; }
+.bday .confetti i:nth-child(13) { left: 88%; animation-delay: 1.64s; animation-duration: 3.2s; }
+.bday .confetti i:nth-child(14) { left: 95%; animation-delay: 1.11s; animation-duration: 3.7s; }
+.bday-rain { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+.bday-rain i { position: absolute; top: -16px; width: 9px; height: 14px; border-radius: 2px; animation: bdayRain 3s cubic-bezier(.3,.6,.6,1) both; }
+.bday-rain i:nth-child(3n) { width: 10px; height: 10px; border-radius: 50%; }
+@keyframes bdayRain { to { transform: translate(var(--x), 110vh) rotate(var(--r)); } }
+@keyframes bdayFall { to { transform: translateY(150px) rotate(540deg); } }
+@keyframes bdayBob { 50% { transform: translateY(-4px) rotate(-4deg); } }
+@keyframes bdayIn { from { opacity: 0; transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .bday, .bday img, .bday .confetti i { animation: none; } .bday .confetti { display: none; } }
