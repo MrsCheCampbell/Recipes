@@ -75,8 +75,8 @@ const ART_FILES = {};
 const artSrc = name => 'art/' + (ART_FILES[name] || name + '.svg');
 const artImg = (name, cls = '') => `<img class="ill ${cls}" src="${artSrc(name)}" alt="" aria-hidden="true" loading="lazy" decoding="async">`;
 const ART_NAMES = new Set(['soups', 'salads', 'mains', 'meat', 'poultry', 'fish', 'vegetarian', 'sides', 'breads', 'desserts', 'pastries', 'sauces', 'drinks', 'cocktails', 'starters', 'other',
-  'whisk', 'teapot', 'kettle', 'mitt', 'apron', 'pan', 'pot', 'rollingpin', 'grater', 'spoon']);
-const illus = key => artImg(ART_NAMES.has(key) ? key : 'mains');
+  'whisk', 'teapot', 'kettle', 'mitt', 'apron', 'pan', 'pot', 'rollingpin', 'grater', 'spoon', 'chef-pepin', 'chef-julia', 'chef-bocuse', 'chef-bourdain', 'chef-ramsay', 'chef-ina', 'chef-marco']);
+const illus = key => artImg(ART_NAMES.has(key) ? key : 'mains', String(key || '').startsWith('chef-') ? 'chef' : '');
 const CAT_C = { soups: '#C9773A', breads: '#C49A4A', desserts: '#C26B7A', pastries: '#C9963A', salads: '#6E9A55', fish: '#4F86A8', poultry: '#C7823F', meat: '#A85543', vegetarian: '#D9822B', sides: '#B39256', starters: '#7C8F4E', mains: '#8C7A6B', sauces: '#B5412C', drinks: '#5E8C8A', cocktails: '#B04A6A', other: '#8C7A6B' };
 // No category? Guess one from the name so the drawing still fits.
 const GUESS = [[/cocktail|martini|mojito|spritz|margarita|negroni|daiquiri|sangria|punch|old fashioned|gin tonic|mimosa/, 'cocktails'], [/soupe|veloute|potage|bouillon|soup|gaspacho/, 'soups'], [/salade|salad|taboule/, 'salads'], [/tarte|croissant|madeleine|brioche|cookie|biscuit/, 'pastries'],

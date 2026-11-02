@@ -104,7 +104,7 @@ document.addEventListener('click', async e => {
     case 'invcopyhere': try { await navigator.clipboard.writeText(location.href); toast(t.linkCopied); } catch {} break;
     case 'joinclip': { let v = ''; try { v = await navigator.clipboard.readText(); } catch {} const m = (v.match(/#\/join\/([A-Za-z0-9_-]+)/) || [])[1];
       if (m) go('#/join/' + m); else { toast(t.famJoinBad); $('#joinIn').focus(); } break; }
-    case 'famprofile': { const st = renderFamily.st, name = $('#meNameIn').value.trim(); if (!name) break; S.name = name; saveSettings(); quiet(FB.updateDoc(fref('members', FAM.uid), { name, avatar: st.avatar, color: st.color })); FAM.members[FAM.uid] = { ...member(FAM.uid), name, avatar: st.avatar, color: st.color }; toast(t.saved); renderFamily(); break; }
+    case 'famprofile': { const st = renderFamily.st, name = $('#meNameIn').value.trim(); if (!name) break; S.name = name; saveSettings(); quiet(FB.updateDoc(fref('members', FAM.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '' })); FAM.members[FAM.uid] = { ...member(FAM.uid), name, avatar: st.avatar, color: st.color, photo: st.photo || '' }; quiet(savePerson()); toast(t.saved); renderFamily(); break; }
     case 'feedtoggle': S.feedOff = !b.checked; saveSettings(); break;
     case 'mute': { const set = new Set(S.muted || []); if (b.checked) set.delete(b.dataset.id); else set.add(b.dataset.id); S.muted = [...set]; saveSettings(); break; }
     case 'famleave': famLeave(); break;

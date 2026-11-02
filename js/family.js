@@ -10,11 +10,13 @@ const FAM = {
   uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], cooks: new Map(), all: [], unsub: [], fb: null, db: null, auth: null,
 };
 let FB = null;
-const AV_KEYS = ['whisk', 'teapot', 'mitt', 'apron', 'pan', 'pot', 'kettle', 'rollingpin', 'grater', 'spoon', 'desserts', 'cocktails', 'breads', 'salads', 'vegetarian'];
+// Avatars: famous chefs (drawn in art/chef-*.svg), or your own photo. Older kitchen-object avatars still show for people who chose one.
+const AV_KEYS = ['chef-pepin', 'chef-julia', 'chef-bocuse', 'chef-bourdain', 'chef-ramsay', 'chef-ina', 'chef-marco'];
 const AV_COLORS = ['#C2452D', '#3D6C97', '#4C7E59', '#B98316', '#8A4F9E', '#2F7F86', '#B5576F', '#6B5A4C'];
 const CONTENT = ['autoTagged', 'aiTagged', 'title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
 const member = id => FAM.members[id] || { name: T().someone, avatar: 'other', color: '#8C7A6B' };
-const avatarHTML = (id, cls = '') => { const m = member(id); return `<span class="av ${cls}" style="--c:${esc(m.color || '#8C7A6B')}" title="${esc(m.name)}" aria-hidden="true">${illus(m.avatar || 'other')}</span>`; };
+const avatarHTML = (id, cls = '') => { const m = member(id); return `<span class="av ${cls}" style="--c:${esc(m.color || '#8C7A6B')}" title="${esc(m.name)}" aria-hidden="true">${avFace(m)}</span>`; };
+const avFace = m => m.photo ? `<img class="avphoto" src="${esc(m.photo)}" alt="" loading="lazy">` : illus(m.avatar || 'other');
 const isMine = r => !FAM.on || !r.owner || r.owner === FAM.uid;
 const randCode = n => { const a = new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(x => 'abcdefghjkmnpqrstuvwxyz23456789'[x % 31]).join(''); };
 function ago(ts) {
@@ -276,19 +278,39 @@ function famInviteLink() {
   const c = FAM.cfg, payload = { v: 1, f: FAM.fid, k: FAM.code || '', n: FAM.name, c: { apiKey: c.apiKey, authDomain: c.authDomain, projectId: c.projectId, appId: c.appId } };
   return location.origin + location.pathname + '#/join/' + b64url(new TextEncoder().encode(JSON.stringify(payload)));
 }
-function avatarPicker(sel, color) {
-  return `<div class="avpick" id="avPick">${AV_KEYS.map(k => `<button type="button" class="${k === sel ? 'on' : ''}" data-av="${k}" aria-label="${k}"><span class="av" style="--c:${color}">${illus(k)}</span></button>`).join('')}</div>
+function avatarPicker(sel, color, photo = '') {
+  const t = T();
+  return `<div class="avpick" id="avPick">${AV_KEYS.map(k => `<button type="button" class="${!photo && k === sel ? 'on' : ''}" data-av="${k}" aria-label="${esc(t.chefs[k] || k)}"><span class="av" style="--c:${color}">${illus(k)}</span><small>${esc(t.chefs[k] || '')}</small></button>`).join('')}
+      <button type="button" class="avphotobtn ${photo ? 'on' : ''}" data-avphoto="1" aria-label="${esc(t.avPhoto)}"><span class="av" style="--c:${color}">${photo ? `<img class="avphoto" src="${esc(photo)}" alt="">` : ico('camera')}</span><small>${esc(t.avPhoto)}</small></button></div>
     <div class="colpick" id="colPick">${AV_COLORS.map(c => `<button type="button" class="${c === color ? 'on' : ''}" data-col="${c}" style="--c:${c}" aria-label="${c}"></button>`).join('')}</div>`;
 }
+// A square, small photo (about 10 KB) so it travels with the profile.
+async function squarePhoto(file, size = 160) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImg(url), s = Math.min(img.naturalWidth, img.naturalHeight);
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, size, size);
+    return c.toDataURL('image/jpeg', 0.8);
+  } finally { URL.revokeObjectURL(url); }
+}
 function wireAvatarPicker(state) {
-  $('#avPick')?.addEventListener('click', e => { const b = e.target.closest('[data-av]'); if (!b) return; state.avatar = b.dataset.av; $$('#avPick button').forEach(x => x.classList.toggle('on', x === b)); });
+  $('#avPick')?.addEventListener('click', async e => {
+    const b = e.target.closest('[data-av], [data-avphoto]'); if (!b) return;
+    if (b.dataset.avphoto) {
+      const [f] = await pickFile(); if (!f) return;
+      try { state.photo = await squarePhoto(f); } catch { toast(T().photoFail || T().famErr); return; }
+      b.querySelector('.av').innerHTML = `<img class="avphoto" src="${state.photo}" alt="">`;
+    } else { state.avatar = b.dataset.av; state.photo = ''; }
+    $$('#avPick button').forEach(x => x.classList.toggle('on', x === b));
+  });
   $('#colPick')?.addEventListener('click', e => { const b = e.target.closest('[data-col]'); if (!b) return; state.color = b.dataset.col; $$('#colPick button').forEach(x => x.classList.toggle('on', x === b)); $$('#avPick .av').forEach(a => a.style.setProperty('--c', state.color)); });
 }
 function renderFamily() {
   current = 'famille'; navHTML('more');
   const t = T();
   if (!FAM.on) {
-    const st = { avatar: 'whisk', color: AV_COLORS[0] };
+    const st = { avatar: 'chef-pepin', color: AV_COLORS[0], photo: '' };
     $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.family)}</h1></div>
       <div class="wrap stack">
         <section class="panel"><h2>${esc(t.famIntroT)}</h2><p style="margin:0">${esc(t.famIntro)}</p></section>
@@ -310,7 +332,7 @@ function renderFamily() {
       </div>`;
     wireAvatarPicker(st); renderFamily.st = st; return;
   }
-  const me = member(FAM.uid), st = { avatar: me.avatar || 'desserts', color: me.color || AV_COLORS[0] };
+  const me = member(FAM.uid), st = { avatar: me.avatar || 'chef-pepin', color: me.color || AV_COLORS[0], photo: me.photo || '' };
   const muted = new Set(S.muted || []);
   const ids = Object.keys(FAM.members).sort((a, b) => (FAM.members[a].joinedAt || 0) - (FAM.members[b].joinedAt || 0));
   $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(FAM.name || t.family)}</h1></div>
@@ -328,7 +350,7 @@ function renderFamily() {
         <button class="btn" data-act="famrename">${esc(t.famRename)}</button><p class="hint" style="margin:0">${esc(t.famRenameHint)}</p></section>` : ''}
       <section class="panel"><h2>${esc(t.yourProfile)}</h2>
         <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(me.name || '')}"></div>
-        <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
+        <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color, st.photo)}</div>
         <button class="btn" data-act="famprofile">${esc(t.save)}</button></section>
       <section class="panel"><h2>${esc(t.feedT)}</h2>
         <label class="toggle">${esc(t.feedShow)}<input type="checkbox" data-act="feedtoggle" ${S.feedOff ? '' : 'checked'}></label></section>
@@ -347,7 +369,7 @@ async function famCreate() {
     const fid = 'f' + randCode(10), code = randCode(20), famName = $('#famNameIn').value.trim() || t.famNameDefault;
     await FB.setDoc(FB.doc(FAM.db, 'families', fid), { name: famName, code, createdBy: u.uid, createdAt: Date.now() });
     FAM.createdBy = u.uid; ls.set('famCreatedBy', u.uid);
-    await FB.setDoc(FB.doc(FAM.db, 'families', fid, 'members', u.uid), { name, avatar: st.avatar, color: st.color, code, joinedAt: Date.now() });
+    await FB.setDoc(FB.doc(FAM.db, 'families', fid, 'members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code, joinedAt: Date.now() });
     famSaveLocal(cfg, fid, famName, code); S.name = name; saveSettings();
     await famStart(); await makeJoinCode().catch(e => console.warn(e)); await secureMe(pin).catch(e => { console.warn(e); toast(e && e.code === 'auth/operation-not-allowed' ? t.pinNotEnabled : t.pinFail); }); await offerMigration();
     go('#/famille');
@@ -384,7 +406,7 @@ async function makeJoinCode() {
 function savePerson() {
   if (!FAM.joinCode) return Promise.resolve();
   const m = member(FAM.uid);
-  return FB.setDoc(FB.doc(FAM.db, 'joincodes', FAM.joinCode, 'people', FAM.uid), { name: m.name || S.name || '', avatar: m.avatar || '', color: m.color || '' });
+  return FB.setDoc(FB.doc(FAM.db, 'joincodes', FAM.joinCode, 'people', FAM.uid), { name: m.name || S.name || '', avatar: m.avatar || '', color: m.color || '', photo: m.photo || '' });
 }
 async function secureMe(pin) {
   if (!pin) return;
@@ -416,7 +438,7 @@ function renderCodeJoin(j) {
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(j.name || t.family))}</h1></header>
     ${j.people.length ? `<section class="panel"><h2>${esc(t.backT)}</h2><p class="muted" style="margin:0">${esc(t.backText)}</p>
-      <div class="whoback">${j.people.map(p => `<button class="mrow" data-act="backpick" data-id="${esc(p.id)}"><span class="av" style="--c:${esc(p.color || '#8C7A6B')}">${illus(p.avatar || 'other')}</span><b>${esc(p.name)}</b></button>`).join('')}</div>
+      <div class="whoback">${j.people.map(p => `<button class="mrow" data-act="backpick" data-id="${esc(p.id)}"><span class="av" style="--c:${esc(p.color || '#8C7A6B')}">${avFace(p)}</span><b>${esc(p.name)}</b></button>`).join('')}</div>
       <div id="backPin" hidden>${pinFieldHTML('pinBack')}<button class="btn primary" data-act="backgo">${esc(t.backGo)}</button></div></section>` : ''}
     <section class="panel"><h2>${esc(j.people.length ? t.newHereT : t.famJoinT)}</h2>
       <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}"></div>
@@ -434,7 +456,7 @@ async function codeJoinNew() {
   try {
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
     FAM.fid = j.fid;
-    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, code: j.code, joinedAt: Date.now() });
+    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code: j.code, joinedAt: Date.now() });
     famSaveLocal(appCfg(), j.fid, j.name || t.family, j.code); FAM.joinCode = j.joinCode; ls.set('famJoinCode', j.joinCode); S.name = name; saveSettings();
     await famStart();
     await secureMe(pin).catch(e => { console.warn(e); toast(e && e.code === 'auth/operation-not-allowed' ? t.pinNotEnabled : t.pinFail); });
@@ -469,7 +491,7 @@ function renderJoin(code) {
   const t = T(), inv = decodeInvite(code);
   if (!inv) { toast(t.famJoinBad); go('#/famille'); return; }
   if (FAM.on && FAM.fid === inv.f) { go('#/'); return; }
-  const st = { avatar: 'teapot', color: AV_COLORS[1] };
+  const st = { avatar: 'chef-julia', color: AV_COLORS[1], photo: '' };
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
     ${isIOS && !installed() ? `<section class="panel iosjoin"><h2>${esc(t.iosJoinT)}</h2><ol class="howto">${t.iosJoinSteps.map(s => `<li>${s}</li>`).join('')}</ol>
@@ -487,7 +509,7 @@ async function famJoin() {
     await fbInit(inv.c);
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
     FAM.fid = inv.f;
-    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, code: inv.k, joinedAt: Date.now() });
+    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code: inv.k, joinedAt: Date.now() });
     famSaveLocal(inv.c, inv.f, inv.n || t.family, inv.k); S.name = name; saveSettings();
     await famStart(); await offerMigration();
     history.replaceState(null, '', location.pathname + '#/famille');
