@@ -11,7 +11,7 @@ const FAM = {
 };
 let FB = null;
 // Avatars: famous chefs (drawn in art/chef-*.svg), or your own photo. Older kitchen-object avatars still show for people who chose one.
-const AV_KEYS = ['chef-pepin', 'chef-julia', 'chef-bocuse', 'chef-bourdain', 'chef-ramsay', 'chef-ina', 'chef-marco'];
+const AV_KEYS = ['chef-pepin', 'chef-julia', 'chef-bocuse', 'chef-bourdain', 'chef-ramsay', 'chef-ina', 'chef-marco', 'chef-solomonov', 'chef-asma'];
 const AV_COLORS = ['#C2452D', '#3D6C97', '#4C7E59', '#B98316', '#8A4F9E', '#2F7F86', '#B5576F', '#6B5A4C'];
 const CONTENT = ['autoTagged', 'aiTagged', 'title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
 const member = id => FAM.members[id] || { name: T().someone, avatar: 'other', color: '#8C7A6B' };
