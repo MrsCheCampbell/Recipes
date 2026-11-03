@@ -1,3 +1,9 @@
 # The app is plain static files at the repo root; the only server code is the page fetcher.
 [functions]
   directory = "netlify/functions"
+
+# The Firebase web key in js/family.js is public by design (every Firebase web app ships it;
+# the family's data is protected by firestore.rules). Only this exact value is excused from
+# Netlify's secret scan; everything else is still scanned.
+[build.environment]
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyCR0AwihglCxrzNBSZjhLF-CWo6AcrdXxk"

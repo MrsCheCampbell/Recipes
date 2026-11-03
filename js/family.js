@@ -6,15 +6,17 @@
 // Backend: the family's own Firebase project (Firestore + anonymous sign-in).
 // Data lives in /families/{fid}; firestore.rules decides who sees what, on the server.
 const FAM = {
-  cfg: ls.get('fbConfig', null), fid: ls.get('famId', null), name: ls.get('famName', ''), code: ls.get('famCode', ''), on: false, ready: false,
+  cfg: ls.get('fbConfig', null), fid: ls.get('famId', null), name: ls.get('famName', ''), code: ls.get('famCode', ''), createdBy: ls.get('famCreatedBy', ''), joinCode: ls.get('famJoinCode', ''), on: false, ready: false,
   uid: null, members: {}, raw: new Map(), saved: new Map(), recos: [], cooks: new Map(), all: [], unsub: [], fb: null, db: null, auth: null,
 };
 let FB = null;
-const AV_KEYS = ['whisk', 'teapot', 'mitt', 'apron', 'pan', 'pot', 'kettle', 'rollingpin', 'grater', 'spoon', 'desserts', 'cocktails', 'breads', 'salads', 'vegetarian'];
+// Avatars: famous chefs (drawn in art/chef-*.svg), or your own photo. Older kitchen-object avatars still show for people who chose one.
+const AV_KEYS = ['chef-pepin', 'chef-julia', 'chef-bocuse', 'chef-bourdain', 'chef-ramsay', 'chef-ina', 'chef-marco', 'chef-solomonov', 'chef-asma'];
 const AV_COLORS = ['#C2452D', '#3D6C97', '#4C7E59', '#B98316', '#8A4F9E', '#2F7F86', '#B5576F', '#6B5A4C'];
 const CONTENT = ['autoTagged', 'aiTagged', 'title', 'category', 'kashrut', 'servings', 'prep', 'cook', 'ingredients', 'steps', 'notes', 'source', 'link', 'tags', 'holidays', 'photo', 'thumb', 'note', 'audience', 'createdAt', 'updatedAt', 'sample', 'pageCount'];
 const member = id => FAM.members[id] || { name: T().someone, avatar: 'other', color: '#8C7A6B' };
-const avatarHTML = (id, cls = '') => { const m = member(id); return `<span class="av ${cls}" style="--c:${esc(m.color || '#8C7A6B')}" title="${esc(m.name)}" aria-hidden="true">${illus(m.avatar || 'other')}</span>`; };
+const avatarHTML = (id, cls = '') => { const m = member(id); return `<span class="av ${cls}" style="--c:${esc(m.color || '#8C7A6B')}" title="${esc(m.name)}" aria-hidden="true">${avFace(m)}</span>`; };
+const avFace = m => m.photo ? `<img class="avphoto" src="${esc(m.photo)}" alt="" loading="lazy">` : illus(m.avatar || 'other');
 const isMine = r => !FAM.on || !r.owner || r.owner === FAM.uid;
 const randCode = n => { const a = new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(x => 'abcdefghjkmnpqrstuvwxyz23456789'[x % 31]).join(''); };
 function ago(ts) {
@@ -65,9 +67,16 @@ async function famStart() {
   FAM.unsub.push(FB.onSnapshot(FB.query(fcol('recos'), FB.where('to', '==', FAM.uid)), s => { FAM.recos = []; s.forEach(d => FAM.recos.push({ ...d.data(), id: d.id })); FAM.recos.sort((a, b) => b.at - a.at); famChanged(); }, e => console.warn(e)));
   psListen();
   // The family's name can be changed by whoever created it; everyone picks it up here.
-  FB.getDoc(fref()).then(d => { if (!d.exists()) return; const f = d.data(); FAM.createdBy = f.createdBy;
+  FB.getDoc(fref()).then(d => { if (!d.exists()) return; const f = d.data(); FAM.createdBy = f.createdBy; ls.set('famCreatedBy', f.createdBy || '');
+    if (f.joinCode) { FAM.joinCode = f.joinCode; ls.set('famJoinCode', f.joinCode); } else if (f.createdBy === FAM.uid) makeJoinCode().catch(e => console.warn(e));
+    if (member(FAM.uid).secured) quiet(savePerson());
     if (f.name && f.name !== FAM.name) { FAM.name = f.name; ls.set('famName', f.name); if (current === 'famille') renderFamily(); } }).catch(() => {});
-  FB.getDoc(fref('secrets', 'claude')).then(d => { const k = d.exists() ? d.data().key : ''; if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey'); }).catch(() => {});
+  FB.getDoc(fref('secrets', 'claude')).then(d => {
+    const k = d.exists() ? d.data().key : '', own = ls.get('claudeKey', '');
+    if (k) ls.set('famClaudeKey', k); else ls.del('famClaudeKey');
+    // A key saved on this phone before it joined the family (or before the rules allowed it) is shared now, once.
+    if (!k && own && !ls.get('claudeNoShare', false)) shareClaudeKey(own, true);
+  }).catch(() => {});
   await ready;
   FAM.ready = true;
   for (const r of FAM.raw.values()) if (r.owner === FAM.uid && !r.sample && !(r.audience || []).includes('all')) {
@@ -78,7 +87,7 @@ async function famStart() {
 }
 function famRecipe(d) {
   const o = FAM.saved.get(d.id) || {}, ratings = d.ratings || {}, vals = Object.values(ratings);
-  if ((d.holidays || []).includes('momsbday')) d = { ...d, holidays: [...new Set(d.holidays.map(h => h === 'momsbday' ? 'birthday' : h))] };
+  if (d.holidays && mapOcc(d.holidays).join() !== d.holidays.join()) d = { ...d, holidays: mapOcc(d.holidays) };
   return { ...d, favorite: !!o.favorite, cookCount: o.cookCount || 0, lastCooked: o.lastCooked || 0, rating: ratings[FAM.uid] || 0,
     famRating: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0, famCount: vals.length,
     hearts: d.hearts || {}, mine: d.owner === FAM.uid };
@@ -119,7 +128,7 @@ function famChanged() {
   famTimer = setTimeout(() => {
     const a = document.activeElement;
     if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.closest('#view')) return;
-    if ($('.scrim') || lockState || cookState) return;
+    if ($('.scrim') || cookState) return;
     if (!['list', 'fav', 'recipe', 'feed', 'famille', 'carnets'].includes(current)) { updateNavCount(); return; }
     const y = window.scrollY; route(); window.scrollTo(0, y);
   }, 200);
@@ -184,13 +193,13 @@ async function loadPages(r) {
 
 // One Claude key for the whole family: stored where only family members can read it (firestore.rules → secrets).
 // Only says "shared" once Firebase has accepted it (old rules refuse it).
-async function shareClaudeKey(k) {
+async function shareClaudeKey(k, quietly = false) {
   if (!k) return; const w = fbWait(); if (w) await w;
-  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); toast(T().claudeSharedToast); }
-  catch (e) { console.warn('share key', e && e.code); toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
+  try { await FB.setDoc(fref('secrets', 'claude'), { key: k, by: FAM.uid, at: Date.now() }); ls.set('famClaudeKey', k); ls.del('claudeNoShare'); toast(T().claudeSharedToast); }
+  catch (e) { console.warn('share key', e && e.code); if (!quietly) toast(e && e.code === 'permission-denied' ? T().claudeShareRules : T().claudeShareFail); }
   if (current === 'more') renderMore();
 }
-function unshareClaudeKey() { ls.del('famClaudeKey'); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
+function unshareClaudeKey() { ls.del('famClaudeKey'); ls.set('claudeNoShare', true); quiet(FB.deleteDoc(fref('secrets', 'claude'))); }
 
 // Comments on the open recipe (live).
 let commentUnsub = null, openComments = [];
@@ -269,25 +278,48 @@ function famInviteLink() {
   const c = FAM.cfg, payload = { v: 1, f: FAM.fid, k: FAM.code || '', n: FAM.name, c: { apiKey: c.apiKey, authDomain: c.authDomain, projectId: c.projectId, appId: c.appId } };
   return location.origin + location.pathname + '#/join/' + b64url(new TextEncoder().encode(JSON.stringify(payload)));
 }
-function avatarPicker(sel, color) {
-  return `<div class="avpick" id="avPick">${AV_KEYS.map(k => `<button type="button" class="${k === sel ? 'on' : ''}" data-av="${k}" aria-label="${k}"><span class="av" style="--c:${color}">${illus(k)}</span></button>`).join('')}</div>
+function avatarPicker(sel, color, photo = '') {
+  const t = T();
+  return `<div class="avpick" id="avPick">${AV_KEYS.map(k => `<button type="button" class="${!photo && k === sel ? 'on' : ''}" data-av="${k}" aria-label="${esc(t.chefs[k] || k)}"><span class="av" style="--c:${color}">${illus(k)}</span><small>${esc(t.chefs[k] || '')}</small></button>`).join('')}
+      <button type="button" class="avphotobtn ${photo ? 'on' : ''}" data-avphoto="1" aria-label="${esc(t.avPhoto)}"><span class="av" style="--c:${color}">${photo ? `<img class="avphoto" src="${esc(photo)}" alt="">` : ico('camera')}</span><small>${esc(t.avPhoto)}</small></button></div>
     <div class="colpick" id="colPick">${AV_COLORS.map(c => `<button type="button" class="${c === color ? 'on' : ''}" data-col="${c}" style="--c:${c}" aria-label="${c}"></button>`).join('')}</div>`;
 }
+// A square, small photo (about 10 KB) so it travels with the profile.
+async function squarePhoto(file, size = 160) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImg(url), s = Math.min(img.naturalWidth, img.naturalHeight);
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, size, size);
+    return c.toDataURL('image/jpeg', 0.8);
+  } finally { URL.revokeObjectURL(url); }
+}
 function wireAvatarPicker(state) {
-  $('#avPick')?.addEventListener('click', e => { const b = e.target.closest('[data-av]'); if (!b) return; state.avatar = b.dataset.av; $$('#avPick button').forEach(x => x.classList.toggle('on', x === b)); });
+  $('#avPick')?.addEventListener('click', async e => {
+    const b = e.target.closest('[data-av], [data-avphoto]'); if (!b) return;
+    if (b.dataset.avphoto) {
+      const [f] = await pickFile(); if (!f) return;
+      try { state.photo = await squarePhoto(f); } catch { toast(T().photoFail || T().famErr); return; }
+      b.querySelector('.av').innerHTML = `<img class="avphoto" src="${state.photo}" alt="">`;
+    } else { state.avatar = b.dataset.av; state.photo = ''; }
+    $$('#avPick button').forEach(x => x.classList.toggle('on', x === b));
+  });
   $('#colPick')?.addEventListener('click', e => { const b = e.target.closest('[data-col]'); if (!b) return; state.color = b.dataset.col; $$('#colPick button').forEach(x => x.classList.toggle('on', x === b)); $$('#avPick .av').forEach(a => a.style.setProperty('--c', state.color)); });
 }
 function renderFamily() {
   current = 'famille'; navHTML('more');
   const t = T();
   if (!FAM.on) {
-    const st = { avatar: 'whisk', color: AV_COLORS[0] };
+    const st = { avatar: 'chef-pepin', color: AV_COLORS[0], photo: '' };
     $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.family)}</h1></div>
       <div class="wrap stack">
         <section class="panel"><h2>${esc(t.famIntroT)}</h2><p style="margin:0">${esc(t.famIntro)}</p></section>
-        <section class="panel"><h2>${esc(t.famJoinT)}</h2><p class="muted" style="margin:0">${esc(t.famJoinText)}</p>
-          ${navigator.clipboard?.readText ? `<button class="btn primary" data-act="joinclip">${esc(t.pasteInvite)}</button>` : ''}
-          <textarea class="input" id="joinIn" rows="2" placeholder="${esc(t.famJoinPh)}"></textarea><button class="btn" data-act="famjoinpaste">${esc(t.famJoinBtn)}</button></section>
+        <section class="panel"><h2>${esc(t.famJoinT)}</h2><p class="muted" style="margin:0">${esc(t.codeJoinText)}</p>
+          <input class="input codein" id="codeIn" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="9" aria-label="${esc(t.famCodeLbl)}">
+          <button class="btn primary" data-act="codejoin">${esc(t.codeGo)}</button>
+          <details class="more-box"><summary>${esc(t.haveLink)}</summary><div class="in stack">
+          ${navigator.clipboard?.readText ? `<button class="btn" data-act="joinclip">${esc(t.pasteInvite)}</button>` : ''}
+          <textarea class="input" id="joinIn" rows="2" aria-label="${esc(t.famJoinPh)}"></textarea><button class="btn" data-act="famjoinpaste">${esc(t.famJoinBtn)}</button></div></details></section>
         <details class="panel more-box newfam"><summary>${esc(t.famNewT)}</summary>
         <section class="stack" style="margin-top:12px"><h2>${esc(t.famCreateT)}</h2>
           <ol class="howto">${t.famSteps.map(s => `<li>${s}</li>`).join('')}</ol>
@@ -295,27 +327,30 @@ function renderFamily() {
           <div class="field"><label for="famNameIn">${esc(t.famName)}</label><input class="input" id="famNameIn"></div>
           <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}"></div>
           <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
+          ${pinFieldHTML('pinNew')}
           <button class="btn primary" data-act="famcreate">${esc(t.famCreateBtn)}</button></section></details>
       </div>`;
     wireAvatarPicker(st); renderFamily.st = st; return;
   }
-  const me = member(FAM.uid), st = { avatar: me.avatar || 'desserts', color: me.color || AV_COLORS[0] };
+  const me = member(FAM.uid), st = { avatar: me.avatar || 'chef-pepin', color: me.color || AV_COLORS[0], photo: me.photo || '' };
   const muted = new Set(S.muted || []);
   const ids = Object.keys(FAM.members).sort((a, b) => (FAM.members[a].joinedAt || 0) - (FAM.members[b].joinedAt || 0));
   $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(FAM.name || t.family)}</h1></div>
     <div class="wrap stack">
+      ${me.secured ? '' : `<section class="panel securecard"><h2>${esc(t.secureT)}</h2><p style="margin:0">${esc(t.secureText)}</p>${pinFieldHTML('pinSet')}<button class="btn primary" data-act="pinsave">${esc(t.save)}</button></section>`}
+      ${FAM.joinCode ? `<section class="panel"><span class="lbl">${esc(t.famCodeLbl)}</span><div class="codebox"><b class="famcode">${esc(fmtJoinCode(FAM.joinCode))}</b><button class="btn" data-act="codecopy">${esc(t.copyCode)}</button></div><p class="hint" style="margin:0">${esc(t.famCodeHint)}</p></section>` : ''}
       <section class="panel"><h2>${esc(t.famMembers)}</h2>
         <div class="members">${ids.map(id => `<div class="mrow">${avatarHTML(id)}<div class="min"><b>${esc(member(id).name)}${id === FAM.uid ? ` <span class="muted">(${esc(t.you)})</span>` : ''}</b>
           <span class="muted">${esc(t.nRecipesBy(FAM.all.filter(r => r.owner === id).length))}</span></div>
           ${id === FAM.uid ? '' : `<label class="mute"><input type="checkbox" data-act="mute" data-id="${id}" ${muted.has(id) ? '' : 'checked'}><span>${esc(t.inMyFeed)}</span></label>`}</div>`).join('')}</div>
         <button class="btn primary" data-act="faminvite">${ico('reco')}${esc(t.famInvite)}</button>
         <p class="hint" style="margin:0">${esc(t.famInviteHint)}</p>
-        <div class="field"><label for="invLink">${esc(t.invLinkLbl)}</label><div class="invbox"><input class="input" id="invLink" readonly value="${esc(famInviteLink())}"><button class="btn" data-act="invcopy">${esc(t.copyLink)}</button></div></div></section>
+        <div class="field"><label for="invLink">${esc(t.invLinkLbl2)}</label><div class="invbox"><input class="input" id="invLink" readonly value="${esc(famInviteLink())}"><button class="btn" data-act="invcopy">${esc(t.copyLink)}</button></div></div></section>
       ${FAM.createdBy === FAM.uid ? `<section class="panel"><div class="field"><label for="famRenameIn">${esc(t.famName)}</label><input class="input" id="famRenameIn" value="${esc(FAM.name || '')}"></div>
         <button class="btn" data-act="famrename">${esc(t.famRename)}</button><p class="hint" style="margin:0">${esc(t.famRenameHint)}</p></section>` : ''}
       <section class="panel"><h2>${esc(t.yourProfile)}</h2>
         <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(me.name || '')}"></div>
-        <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
+        <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color, st.photo)}</div>
         <button class="btn" data-act="famprofile">${esc(t.save)}</button></section>
       <section class="panel"><h2>${esc(t.feedT)}</h2>
         <label class="toggle">${esc(t.feedShow)}<input type="checkbox" data-act="feedtoggle" ${S.feedOff ? '' : 'checked'}></label></section>
@@ -324,24 +359,127 @@ function renderFamily() {
   wireAvatarPicker(st); renderFamily.st = st;
 }
 async function famCreate() {
-  const t = T(), cfg = parseFirebaseConfig($('#cfgIn').value);
+  const t = T(), cfg = parseFirebaseConfig($('#cfgIn').value) || (!$('#cfgIn').value.trim() && appCfg());
   if (!cfg) { toast(t.famCfgBad); $('#cfgIn').focus(); return; }
+  const pin = readPin('pinNew'); if (!pin) { toast(t.pinNeed); $('#pinNew').focus(); return; }
   const name = $('#meNameIn').value.trim() || S.name || t.someone, st = renderFamily.st;
   try {
     await fbInit(cfg);
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
     const fid = 'f' + randCode(10), code = randCode(20), famName = $('#famNameIn').value.trim() || t.famNameDefault;
     await FB.setDoc(FB.doc(FAM.db, 'families', fid), { name: famName, code, createdBy: u.uid, createdAt: Date.now() });
-    await FB.setDoc(FB.doc(FAM.db, 'families', fid, 'members', u.uid), { name, avatar: st.avatar, color: st.color, code, joinedAt: Date.now() });
+    FAM.createdBy = u.uid; ls.set('famCreatedBy', u.uid);
+    await FB.setDoc(FB.doc(FAM.db, 'families', fid, 'members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code, joinedAt: Date.now() });
     famSaveLocal(cfg, fid, famName, code); S.name = name; saveSettings();
-    await famStart(); await offerMigration();
+    await famStart(); await makeJoinCode().catch(e => console.warn(e)); await secureMe(pin).catch(e => { console.warn(e); toast(e && e.code === 'auth/operation-not-allowed' ? t.pinNotEnabled : t.pinFail); }); await offerMigration();
     go('#/famille');
   } catch (e) { console.warn(e); toast(t.famErr); }
 }
 async function famRename() {
   const t = T(), name = $('#famRenameIn').value.trim().slice(0, 60); if (!name || name === FAM.name) return;
-  try { await FB.updateDoc(fref(), { name }); FAM.name = name; ls.set('famName', name); toast(t.saved); renderFamily(); }
+  try { await FB.updateDoc(fref(), { name }); FAM.name = name; ls.set('famName', name); if (FAM.joinCode) quiet(FB.updateDoc(FB.doc(FAM.db, 'joincodes', FAM.joinCode), { name })); toast(t.saved); renderFamily(); }
   catch (e) { console.warn(e); toast(t.famRenameFail); }
+}
+// ---------- Family code and coming back ----------
+// The family code (K7P-M2Q) points to the family; anyone holding it can join, like the invite link.
+// Each person also picks a 4-digit code, asked only if they ever reinstall the app, to come back as themselves
+// (their recipes, notebooks and favorites). It signs them in with an account made from their member id.
+const FB_APP = { apiKey: 'AIzaSyCR0AwihglCxrzNBSZjhLF-CWo6AcrdXxk', authDomain: 'cuisine-abe.firebaseapp.com', projectId: 'cuisine-abe', appId: '1:355800943616:web:7fdc31470b3d9037771ce5' };
+const appCfg = () => FAM.cfg || ls.get('fbDefaultCfg', null) || FB_APP;
+const fmtJoinCode = c => c.slice(0, 3) + '-' + c.slice(3);
+const normJoinCode = v => String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const pinMail = id => id.toLowerCase() + '@members.ourkitchen.app';
+const pinPass = pin => 'ok-' + pin + '-kitchen';
+const pinFieldHTML = id => `<div class="field"><label for="${id}">${esc(T().pinLbl)}</label><input class="input pinin" id="${id}" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"><span class="hint">${esc(T().pinHint)}</span></div>`;
+const readPin = id => { const v = ($('#' + id)?.value || '').replace(/\D/g, ''); return v.length === 4 ? v : ''; };
+async function makeJoinCode() {
+  if (FAM.joinCode || FAM.createdBy !== FAM.uid) return;
+  for (let i = 0; i < 5; i++) {
+    const c = randCode(6).toUpperCase(), ref = FB.doc(FAM.db, 'joincodes', c);
+    if ((await FB.getDoc(ref).catch(() => null))?.exists()) continue;
+    await FB.setDoc(ref, { fid: FAM.fid, code: FAM.code, name: FAM.name, at: Date.now() });
+    await FB.updateDoc(fref(), { joinCode: c });
+    FAM.joinCode = c; ls.set('famJoinCode', c); if (current === 'famille') renderFamily(); return;
+  }
+}
+// Listed under the family code, so a reinstalled phone can show "tap your name".
+function savePerson() {
+  if (!FAM.joinCode) return Promise.resolve();
+  const m = member(FAM.uid);
+  return FB.setDoc(FB.doc(FAM.db, 'joincodes', FAM.joinCode, 'people', FAM.uid), { name: m.name || S.name || '', avatar: m.avatar || '', color: m.color || '', photo: m.photo || '' });
+}
+async function secureMe(pin) {
+  if (!pin) return;
+  const u = FAM.auth.currentUser; if (!u) return;
+  if (u.isAnonymous) await FB.linkWithCredential(u, FB.EmailAuthProvider.credential(pinMail(u.uid), pinPass(pin)));
+  await FB.updateDoc(fref('members', u.uid), { secured: true });
+  await savePerson().catch(e => console.warn(e));
+}
+async function pinSave() {
+  const t = T(), pin = readPin('pinSet'); if (!pin) { toast(t.pinNeed); $('#pinSet').focus(); return; }
+  try { await secureMe(pin); toast(t.pinSaved); renderFamily(); }
+  catch (e) { console.warn(e); toast(e && e.code === 'auth/operation-not-allowed' ? t.pinNotEnabled : t.pinFail); }
+}
+// Step 1: the family code → who's in it.
+async function codeJoin() {
+  const t = T(), c = normJoinCode($('#codeIn').value); if (c.length !== 6) { toast(t.codeBad); $('#codeIn').focus(); return; }
+  try {
+    await fbInit(appCfg());
+    if (!FAM.auth.currentUser) await FB.signInAnonymously(FAM.auth);
+    const d = await FB.getDoc(FB.doc(FAM.db, 'joincodes', c));
+    if (!d.exists()) { toast(t.codeBad); return; }
+    const people = []; (await FB.getDocs(FB.collection(FAM.db, 'joincodes', c, 'people'))).forEach(p => people.push({ ...p.data(), id: p.id }));
+    renderCodeJoin({ ...d.data(), joinCode: c, people });
+  } catch (e) { console.warn(e); toast(t.famJoinErr); }
+}
+function renderCodeJoin(j) {
+  current = 'join'; navHTML('');
+  const t = T(), st = { avatar: 'teapot', color: AV_COLORS[1] };
+  $('#view').innerHTML = `<div class="wrap stack">
+    <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(j.name || t.family))}</h1></header>
+    ${j.people.length ? `<section class="panel"><h2>${esc(t.backT)}</h2><p class="muted" style="margin:0">${esc(t.backText)}</p>
+      <div class="whoback">${j.people.map(p => `<button class="mrow" data-act="backpick" data-id="${esc(p.id)}"><span class="av" style="--c:${esc(p.color || '#8C7A6B')}">${avFace(p)}</span><b>${esc(p.name)}</b></button>`).join('')}</div>
+      <div id="backPin" hidden>${pinFieldHTML('pinBack')}<button class="btn primary" data-act="backgo">${esc(t.backGo)}</button></div></section>` : ''}
+    <section class="panel"><h2>${esc(j.people.length ? t.newHereT : t.famJoinT)}</h2>
+      <div class="field"><label for="meNameIn">${esc(t.yourName)}</label><input class="input" id="meNameIn" value="${esc(S.name || '')}"></div>
+      <div class="field"><span class="lbl">${esc(t.yourAvatar)}</span>${avatarPicker(st.avatar, st.color)}</div>
+      ${pinFieldHTML('pinNew')}
+      <button class="btn primary block" data-act="codejoinnew">${esc(t.famJoinBtn)}</button></section>
+  </div>`;
+  wireAvatarPicker(st); renderCodeJoin.st = st; renderCodeJoin.j = j; renderCodeJoin.who = '';
+}
+// New here: become a member, then lock in the 4-digit code.
+async function codeJoinNew() {
+  const t = T(), j = renderCodeJoin.j, st = renderCodeJoin.st;
+  const name = $('#meNameIn').value.trim(); if (!name) { toast(t.needName); $('#meNameIn').focus(); return; }
+  const pin = readPin('pinNew'); if (!pin) { toast(t.pinNeed); $('#pinNew').focus(); return; }
+  try {
+    const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
+    FAM.fid = j.fid;
+    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code: j.code, joinedAt: Date.now() });
+    famSaveLocal(appCfg(), j.fid, j.name || t.family, j.code); FAM.joinCode = j.joinCode; ls.set('famJoinCode', j.joinCode); S.name = name; saveSettings();
+    await famStart();
+    await secureMe(pin).catch(e => { console.warn(e); toast(e && e.code === 'auth/operation-not-allowed' ? t.pinNotEnabled : t.pinFail); });
+    await offerMigration();
+    history.replaceState(null, '', location.pathname + '#/fil'); route(); toast(t.welcomeFam(j.name || t.family));
+  } catch (e) { console.warn(e); toast(t.famJoinErr); }
+}
+// Coming back: sign in as that person with their 4-digit code.
+async function codeJoinBack() {
+  const t = T(), j = renderCodeJoin.j, id = renderCodeJoin.who, pin = readPin('pinBack');
+  if (!id) return; if (!pin) { toast(t.pinNeed); $('#pinBack').focus(); return; }
+  try {
+    const cred = await FB.signInWithEmailAndPassword(FAM.auth, pinMail(id), pinPass(pin));
+    famSaveLocal(appCfg(), j.fid, j.name || t.family, j.code); FAM.joinCode = j.joinCode; ls.set('famJoinCode', j.joinCode);
+    S.name = (j.people.find(p => p.id === cred.user.uid) || {}).name || S.name; saveSettings();
+    // Start fresh as that person (the data listeners need the new sign-in from the first request).
+    try { sessionStorage.setItem('abe:welcomeBack', S.name || '1'); } catch {}
+    await new Promise(r => setTimeout(r, 400));
+    location.replace(location.pathname + '#/'); location.reload();
+  } catch (e) {
+    console.warn(e);
+    toast(e && /wrong-password|invalid-credential|invalid-login|user-not-found/.test(e.code || '') ? t.pinWrong : e && e.code === 'auth/too-many-requests' ? t.pinTooMany : t.famJoinErr);
+  }
 }
 function famSaveLocal(cfg, fid, name, code) {
   FAM.cfg = cfg; FAM.fid = fid; FAM.name = name; FAM.code = code;
@@ -353,7 +491,7 @@ function renderJoin(code) {
   const t = T(), inv = decodeInvite(code);
   if (!inv) { toast(t.famJoinBad); go('#/famille'); return; }
   if (FAM.on && FAM.fid === inv.f) { go('#/'); return; }
-  const st = { avatar: 'teapot', color: AV_COLORS[1] };
+  const st = { avatar: 'chef-julia', color: AV_COLORS[1], photo: '' };
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top"><div class="mast"><span>${esc(t.appName)}</span><span>${esc(t.invitation)}</span></div><h1 class="greet" style="font-style:italic">${esc(t.joinTitle(inv.n || t.family))}</h1></header>
     ${isIOS && !installed() ? `<section class="panel iosjoin"><h2>${esc(t.iosJoinT)}</h2><ol class="howto">${t.iosJoinSteps.map(s => `<li>${s}</li>`).join('')}</ol>
@@ -371,10 +509,10 @@ async function famJoin() {
     await fbInit(inv.c);
     const u = FAM.auth.currentUser || (await FB.signInAnonymously(FAM.auth)).user;
     FAM.fid = inv.f;
-    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, code: inv.k, joinedAt: Date.now() });
+    await FB.setDoc(fref('members', u.uid), { name, avatar: st.avatar, color: st.color, photo: st.photo || '', code: inv.k, joinedAt: Date.now() });
     famSaveLocal(inv.c, inv.f, inv.n || t.family, inv.k); S.name = name; saveSettings();
     await famStart(); await offerMigration();
-    history.replaceState(null, '', location.pathname + '#/fil');
+    history.replaceState(null, '', location.pathname + '#/famille');
     route(); toast(t.welcomeFam(inv.n || t.family));
   } catch (e) { console.warn(e); toast(t.famJoinErr); }
 }
@@ -403,6 +541,6 @@ async function famLeave() {
   if (!(await confirmBox(t.famLeaveQ, t.famLeave))) return;
   FAM.unsub.forEach(f => f()); FAM.unsub = [];
   try { await FB.signOut(FAM.auth); } catch {}
-  for (const k of ['fbConfig', 'famId', 'famName', 'famCode']) ls.del(k);
+  for (const k of ['fbConfig', 'famId', 'famName', 'famCode', 'famJoinCode', 'famCreatedBy']) ls.del(k);
   location.hash = '#/'; location.reload();
 }

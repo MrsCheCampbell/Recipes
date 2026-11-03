@@ -111,7 +111,7 @@ async function importLink(url, btn) {
     try { const c = await claudeRecipe(lastPageText.length > 300 ? { text: lastPageText, url } : { url }); if (c) d = { ...c, link: url, photo: d?.photo || null }; }
     catch (e) { console.warn(e); failed = claudeErrorText(e); }
   }
-  if (!d || d.partial) { if (d) fillForm(d, true); addStatus((failed ? failed + ' ' : '') + t.importFail + (hasClaude() ? '' : ' ' + t.claudeTip), 'warn'); return; }
+  if (!d || d.partial) { if (d) fillForm(d, true); addStatus((failed ? failed + ' ' : '') + t.importFail + claudeTipFor(), 'warn'); return; }
   if (d.photo) d.photo = await localizePhoto(d.photo);
   fillForm(d, false);
   ls.set('draft', { key: $('#view').dataset.id || 'new', ts: Date.now(), data: readForm() });
@@ -127,7 +127,7 @@ function renderShop() {
   for (const it of shop) { const k = it.recipe || t.other; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(it); }
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.shopTitle)}</h1></header>
-    <form class="shop-add" id="shopAdd"><input class="input" id="shopIn" style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" placeholder="${esc(t.shopAddPh)}" enterkeyhint="done"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
+    <form class="shop-add" id="shopAdd"><input class="input" id="shopIn" style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)" aria-label="${esc(t.shopAddPh)}" enterkeyhint="done"><button class="btn primary" aria-label="${esc(t.add)}">${ico('plus')}</button></form>
     ${shop.length ? [...groups].map(([g, items]) => `<div class="shop-group"><h3>${esc(g)}</h3>${items.map(it => `<div class="shop-item ${it.done ? 'done' : ''}"><label><input type="checkbox" data-act="shoptoggle" data-id="${it.id}" ${it.done ? 'checked' : ''}><span>${esc(it.text)}</span></label><button class="icon-btn" data-act="shopdel" data-id="${it.id}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}</div>`).join('')
       : `<div class="empty"><p>${esc(t.shopEmpty)}</p></div>`}
     ${shop.length ? `<div class="stack" style="padding-top:4px"><button class="btn primary" data-act="shopshare">${ico('share')}${esc(t.shareList)}</button>
@@ -158,7 +158,7 @@ function convert(amount, unit, ingr) {
   }
 }
 function renderMore() {
-  setTimeout(() => { if (sessionStorage.getItem?.('abe:goto') === 'claude') { sessionStorage.removeItem('abe:goto'); $('#claudePanel')?.scrollIntoView({ block: 'start' }); } }, 50);
+  setTimeout(() => { if (sessionStorage.getItem?.('abe:goto') === 'claude') { sessionStorage.removeItem('abe:goto'); const c = $('#claudePanel'); if (c) { c.open = true; c.scrollIntoView({ block: 'start' }); } } }, 50);
   current = 'more'; navHTML('more');
   const t = T();
   const nFav = recipes.filter(r => r.favorite).length, nCooked = recipes.reduce((a, r) => a + (r.cookCount || 0), 0);
@@ -167,44 +167,28 @@ function renderMore() {
   const opt = (v, l, s) => `<option value="${v}" ${s === v ? 'selected' : ''}>${esc(l)}</option>`;
   $('#view').innerHTML = `<div class="wrap stack">
     <header class="top" style="padding-top:8px"><h1 class="greet">${esc(t.moreTitle)}</h1></header>
-    <section class="panel"><h2>${esc(t.stats)}</h2><div class="stats"><div><b>${recipes.length}</b><span>${esc(t.statRecipes)}</span></div><div><b>${nFav}</b><span>${esc(t.statFav)}</span></div><div><b>${nCooked}</b><span>${esc(t.statCooked)}</span></div></div></section>
+    <a class="panel famcard" href="#/famille"><h2>${ico('users')} ${esc(FAM.on ? FAM.name || t.family : t.family)}</h2>
+      ${FAM.on ? `<div class="likers">${Object.keys(FAM.members).map(id => avatarHTML(id)).join('')}</div>` : `<p class="muted" style="margin:0">${esc(t.famCardText)}</p>`}</a>
+    <a class="panel famcard fbcard" href="#/feedback"><h2>${ico('spark')} ${esc(t.fbCardT)}</h2><p class="muted" style="margin:0">${esc(t.fbCardText)}</p></a>
     ${isInstalled ? '' : `<section class="panel"><h2>${esc(t.install)}</h2><p class="muted" style="margin:0">${esc(t.installText)}</p>
       ${installEvt ? `<button class="btn primary" data-act="install">${ico('install')}${esc(t.install)}</button>` : `<p style="margin:0">${esc(isIOS ? t.installIos : t.installHow)}</p>`}</section>`}
-    <section class="panel"><h2>${esc(t.settings)}</h2>
+    <details class="panel fold"><summary>${esc(t.stats)}</summary><div class="stats"><div><b>${recipes.length}</b><span>${esc(t.statRecipes)}</span></div><div><b>${nFav}</b><span>${esc(t.statFav)}</span></div><div><b>${nCooked}</b><span>${esc(t.statCooked)}</span></div></div></details>
+    <details class="panel fold"><summary>${esc(t.settings)}</summary>
       <div class="form" style="padding:0;gap:14px">
         <div class="field"><label for="sName">${esc(t.yourName)}</label><input class="input" id="sName" autocomplete="given-name" value="${esc(S.name || '')}"></div>
         <div class="field"><label for="sSize">${esc(t.textSize)}</label><select id="sSize">${Object.entries(t.sizes).map(([k, v]) => opt(k, v, S.size)).join('')}</select></div>
         <div class="field"><label for="sTheme">${esc(t.theme)}</label><select id="sTheme">${Object.entries(t.themes).map(([k, v]) => opt(k, v, S.theme)).join('')}</select></div>
         <div class="field"><label for="sCity">${esc(t.city)}</label><select id="sCity">${Object.entries(CITIES).map(([k, c]) => opt(k, c[0], S.city)).join('')}${S.gps ? opt('gps', t.myPos, S.city) : ''}</select>
           <button type="button" class="btn small" data-act="gps">${ico('pin')}${esc(t.useGps)}</button></div>
-      </div></section>
-    <a class="panel famcard" href="#/famille"><h2>${ico('users')} ${esc(FAM.on ? FAM.name || t.family : t.family)}</h2>
-      ${FAM.on ? `<div class="likers">${Object.keys(FAM.members).map(id => avatarHTML(id)).join('')}</div>` : `<p class="muted" style="margin:0">${esc(t.famCardText)}</p>`}</a>
-    <a class="btn block" href="#/inbox">${ico('mail')}${esc(t.inbox)}${inbox.length ? ` (${inbox.length})` : ''}</a>
-    <section class="panel"><h2>${esc(t.occasions)}</h2><p class="muted" style="margin:0">${esc(t.occText)}</p>
+      </div></details>
+    ${inbox.length ? `<a class="btn block" href="#/inbox">${ico('mail')}${esc(t.inbox)} (${inbox.length})</a>` : ''}
+    <details class="panel fold"><summary>${esc(t.occasions)}</summary><p class="muted" style="margin:0">${esc(t.occText)}</p>
       <div class="occ-list">
         ${customOcc().map(c => `<div class="occ-row"><span>${esc(c.label)}</span><input class="input" type="date" data-occdate="${c.key}" aria-label="${esc(c.label)}" value="${c.date ? new Date().getFullYear() + '-' + c.date : ''}">
           <button class="icon-btn" data-act="delocc" data-k="${c.key}" aria-label="${esc(t.del)}">${ico('x')}</button></div>`).join('')}
       </div>
-      <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></section>
-    <section class="panel" id="claudePanel"><h2>${ico('spark')} ${esc(t.claudePanel)}</h2><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
-      ${(() => { const own = ls.get('claudeKey', ''), shared = FAM.on && own && ls.get('famClaudeKey', '') === own;
-        if (own) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p>
-          ${FAM.on ? `<p class="muted" style="margin:0">${esc(shared ? t.claudeShared : t.claudeNotShared)}</p><button class="btn" data-act="${shared ? 'claudeunshare' : 'claudeshare'}">${ico('users')}${esc(shared ? t.claudeUnshare : t.claudeShare)}</button>` : ''}
-          <button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`;
-        if (hasClaude()) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyFam)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button>`;
-        return `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div>
-          ${FAM.on ? `<label class="tried-toggle"><input type="checkbox" id="claudeShareIn" checked><span>${esc(t.claudeShareToo)}</span></label>` : ''}
-          <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</section>
-    <section class="panel"><h2>${esc(t.lockTitle)}</h2><p class="muted" style="margin:0">${esc(lockData() ? t.lockOnText : t.lockOffText)}</p>
-      ${lockData() ? `<div class="row2"><button class="btn" data-act="lockchange">${esc(t.lockChange)}</button><button class="btn danger" data-act="lockremove">${esc(t.lockRemove)}</button></div>
-        <button class="btn" data-act="locknow">${esc(t.lockNow)}</button>` : `<button class="btn primary" data-act="lockchange">${esc(t.lockAdd)}</button>`}</section>
-    <section class="panel"><h2>${esc(t.backup)}</h2><p class="muted" style="margin:0">${esc(t.backupText)}</p>
-      <p style="margin:0;font-weight:700">${esc(t.lastBackup(ls.get('lastBackup', 0) && fmtDate(ls.get('lastBackup', 0))))}</p>
-      ${navigator.canShare ? `<button class="btn primary" data-act="backupshare">${ico('share')}${esc(t.shareB)}</button>` : ''}
-      <button class="btn" data-act="backup">${ico('download')}${esc(t.exportB)}</button>
-      <button class="btn" data-act="restore">${ico('upload')}${esc(t.importB)}</button></section>
-    <section class="panel" id="conv"><h2>${esc(t.tools)}</h2>
+      <button class="btn" data-act="addocc">${ico('plus')}${esc(t.occAdd)}</button></details>
+    <details class="panel fold" id="conv"><summary>${esc(t.tools)}</summary>
       <div class="row2"><div class="field"><label for="cAmt">${esc(t.convFrom)}</label><input class="input" id="cAmt" type="text" inputmode="decimal" value="1"></div>
         <div class="field"><label for="cUnit">&nbsp;</label><select class="input" id="cUnit">${Object.entries(UNITS).map(([k, v]) => opt(k, v, 'cup')).join('')}</select></div></div>
       <div class="field"><label for="cIng">${esc(t.convIngr)}</label><select class="input" id="cIng">${Object.entries(CUP_G).map(([k, v]) => opt(k, v[2], 'flour')).join('')}</select></div>
@@ -212,10 +196,24 @@ function renderMore() {
       <h3 style="font-size:1rem">${esc(t.ovenTitle)}</h3>
       <div style="overflow-x:auto"><table class="ref"><tr><th>°F</th><th>°C</th><th>Thermostat</th></tr>
         ${[[250, 120, 4], [300, 150, 5], [350, 180, 6], [375, 190, '6–7'], [400, 200, 7], [425, 220, '7–8'], [450, 230, 8], [475, 240, 8]].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table></div>
-    </section>
-    <section class="panel"><h2>${esc(t.samples)}</h2>
+    </details>
+    <details class="panel fold"><summary>${esc(t.samples)}</summary>
       ${hasSamples ? `<button class="btn" data-act="rmsamples">${esc(t.samplesDel)}</button>` : `<button class="btn" data-act="samples">${esc(t.samplesAdd)}</button>`}
-      ${FAM.on ? '' : `<button class="btn danger" data-act="erase">${ico('trash')}${esc(t.eraseAll)}</button>`}</section>
+      ${FAM.on ? '' : `<button class="btn danger" data-act="erase">${ico('trash')}${esc(t.eraseAll)}</button>`}</details>
+    ${claudeAdmin() ? `<details class="panel fold" id="claudePanel"><summary>${esc(t.claudePanel)}</summary><p class="muted" style="margin:0">${esc(t.claudeText)}</p>
+      ${(() => { const own = ls.get('claudeKey', ''), shared = FAM.on && own && ls.get('famClaudeKey', '') === own;
+        if (own) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyOn)}</p>
+          ${FAM.on ? `<p class="muted" style="margin:0">${esc(shared ? t.claudeShared : t.claudeNotShared)}</p><button class="btn" data-act="${shared ? 'claudeunshare' : 'claudeshare'}">${ico('users')}${esc(shared ? t.claudeUnshare : t.claudeShare)}</button>` : ''}
+          <button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button><button class="btn danger" data-act="claudekeyrm">${esc(t.claudeKeyRemove)}</button>`;
+        if (hasClaude()) return `<p style="margin:0;font-weight:700;color:var(--parve)">${esc(t.claudeKeyFam)}</p><button class="btn" data-act="tagall">${ico('spark')}${esc(t.tagAll)}</button>`;
+        return `<div class="field"><label for="claudeKeyIn">${esc(t.claudeKey)}</label><input class="input" id="claudeKeyIn" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…"></div>
+          ${FAM.on ? `<label class="tried-toggle"><input type="checkbox" id="claudeShareIn" checked><span>${esc(t.claudeShareToo)}</span></label>` : ''}
+          <button class="btn primary" data-act="claudekeysave">${esc(t.save)}</button>`; })()}</details>` : ''}
+    <details class="panel fold"><summary>${esc(t.backup)}</summary><p class="muted" style="margin:0">${esc(t.backupText)}</p>
+      <p style="margin:0;font-weight:700">${esc(t.lastBackup(ls.get('lastBackup', 0) && fmtDate(ls.get('lastBackup', 0))))}</p>
+      ${navigator.canShare ? `<button class="btn primary" data-act="backupshare">${ico('share')}${esc(t.shareB)}</button>` : ''}
+      <button class="btn" data-act="backup">${ico('download')}${esc(t.exportB)}</button>
+      <button class="btn" data-act="restore">${ico('upload')}${esc(t.importB)}</button></details>
   </div>`;
   const upd = () => { const a = parseNum($('#cAmt').value.replace(',', '.')) || parseFloat($('#cAmt').value.replace(',', '.')); $('#cOut').textContent = isFinite(a) ? convert(a, $('#cUnit').value, $('#cIng').value) : '—'; $('#cIng').closest('.field').hidden = !['cup', 'tbsp', 'tsp'].includes($('#cUnit').value); };
   ['cAmt', 'cUnit', 'cIng'].forEach(id => $('#' + id).addEventListener('input', upd)); upd();
@@ -251,6 +249,42 @@ async function importBackup(file) {
     for (const k of PS_KINDS) if (Array.isArray(d[k]) && !(k === 'cooks' && FAM.on)) for (const o of d[k]) if (o && o.id && !PS[k].has(o.id)) psPut(k, o);
     toast(t.importedN(n)); renderMore();
   } catch { toast(t.badFile); }
+}
+
+// ---------- Feedback: any idea, from the tiniest to the biggest, goes to whoever set the app up ----------
+let fbList = [];
+function renderFeedback() {
+  current = 'feedback'; navHTML('more');
+  const t = T(), owner = FAM.on && FAM.createdBy ? member(FAM.createdBy).name : '', isOwner = FAM.on && FAM.createdBy === FAM.uid;
+  $('#view').innerHTML = `<div class="page-h wrap"><button class="icon-btn" data-act="back" aria-label="${esc(t.close)}">${ico('back')}</button><h1>${esc(t.fbTitle)}</h1></div>
+    <div class="wrap stack">
+      <section class="panel fbhero"><h2>${esc(t.fbHeroT)}</h2><p style="margin:0">${esc(t.fbHero)}</p>
+        <ul class="fbideas">${t.fbIdeas.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        <p class="muted" style="margin:0">${esc(t.fbNoWrong)}</p></section>
+      <section class="panel"><div class="field"><label for="fbIn">${esc(owner && !isOwner ? t.fbToName(owner) : t.fbTo)}</label><textarea class="input" id="fbIn" rows="5"></textarea></div>
+        <button class="btn primary" data-act="fbsend">${ico('reco')}${esc(t.fbSend)}</button>
+        <p class="hint" style="margin:0">${esc(t.fbAgain)}</p></section>
+      ${isOwner ? `<section class="panel"><h2>${esc(t.fbInboxT)}</h2><div id="fbList" class="fblist"><p class="muted" style="margin:0">${esc(t.loading)}</p></div></section>` : ''}
+    </div>`;
+  if (isOwner) loadFeedback();
+}
+async function loadFeedback() {
+  const t = T();
+  try { const s = await FB.getDocs(fcol('feedback')); fbList = []; s.forEach(d => fbList.push({ ...d.data(), id: d.id })); fbList.sort((x, y) => (y.at || 0) - (x.at || 0)); }
+  catch (e) { console.warn(e); }
+  const el = $('#fbList'); if (!el) return;
+  el.innerHTML = fbList.length ? fbList.map(f => `<div class="fbitem">${avatarHTML(f.by, 'xs')}<div class="min"><b>${esc(member(f.by).name || f.name || '')}</b> <span class="muted">${esc(fmtDate(f.at))}</span><p>${esc(f.text)}</p></div>
+    <button class="icon-btn" data-act="fbdone" data-id="${f.id}" aria-label="${esc(t.fbDone)}">${ico('check')}</button></div>`).join('') : `<p class="muted" style="margin:0">${esc(t.fbNone)}</p>`;
+}
+async function sendFeedback() {
+  const t = T(), text = $('#fbIn').value.trim().slice(0, 4000); if (!text) { $('#fbIn').focus(); return; }
+  if (FAM.on) {
+    try { await FB.setDoc(fref('feedback', uid()), { by: FAM.uid, name: member(FAM.uid).name || S.name || '', text, at: Date.now() }); $('#fbIn').value = ''; toast(t.fbThanks); if (FAM.createdBy === FAM.uid) loadFeedback(); }
+    catch (e) { console.warn(e); toast(t.fbFail); }
+    return;
+  }
+  // Not in a family yet: send it with the phone's share menu.
+  try { await navigator.share({ title: t.appName, text: t.fbShareIntro + '\n\n' + text }); $('#fbIn').value = ''; toast(t.fbThanks); } catch (e) { if (e.name !== 'AbortError') { try { await navigator.clipboard.writeText(text); toast(t.copied); } catch {} } }
 }
 
 // ---------- Example recipes ----------
