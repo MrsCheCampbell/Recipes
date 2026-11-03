@@ -66,6 +66,7 @@ Each phone keeps its own recipes. To copy recipes from one phone to another, use
 
 **Look**
 - Dark mode by default (Automatic or Light in *More → Settings*).
+- App icon: an onion quiche in its dish, with a slice, cream, cheese, eggs and a red onion.
 - Calm and classic: the home page is the date, a search bar and the day's ideas. Each recipe in the list is a plain index card (title over a thin red rule, then the details), with a small photo when there is one. A recipe page opens on its photo, then the title, details, ingredients and steps; notes sit in a quiet box. No tape, no tilted cards.
 - Typography: Bodoni Moda for titles, IBM Plex Mono for labels and numbers, Atkinson Hyperlegible for ingredients and steps (chosen for readability), Caveat for handwriting.
 - Illustrations (category drawings, family avatars, bottom bar, empty pages) are flat kitchen doodles in `art/`, one file per name, so a purchased set can be dropped in with the same file names. See [`art/README.md`](art/README.md). Small button icons are drawn in code. No emoji anywhere.
